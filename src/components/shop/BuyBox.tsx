@@ -236,12 +236,12 @@ export function BuyBox({
                 </>
               )}
             </a>
-            <p className="mt-2 text-center text-xs text-muted-foreground">Apple Pay · Google Pay · Shop Pay · all major cards</p>
+            <p className="mt-2 text-center text-xs text-muted-foreground">Apple Pay · Google Pay · PayPal · Venmo · Shop Pay · cards</p>
 
             <ul className="mt-4 grid grid-cols-3 gap-2 text-center text-[11px] font-medium leading-tight text-foreground/80 sm:text-xs">
               <li className="trust-tile"><Truck className="mx-auto h-5 w-5 text-turbo" aria-hidden /> Free US shipping</li>
               <li className="trust-tile"><ShieldCheck className="mx-auto h-5 w-5 text-turbo" aria-hidden /> {REVIEW_CARD.returnDays}-day returns</li>
-              <li className="trust-tile"><Lock className="mx-auto h-5 w-5 text-turbo" aria-hidden /> Secure checkout</li>
+              <li className="trust-tile"><Lock className="mx-auto h-5 w-5 text-turbo" aria-hidden /> Secure Shopify checkout</li>
             </ul>
             <p className="mt-3 flex items-start gap-2 text-xs text-muted-foreground">
               <Truck className="mt-0.5 h-4 w-4 shrink-0 text-chrome" aria-hidden />
