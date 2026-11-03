@@ -5,7 +5,7 @@ import { STAND_GALLERY } from "@/content/review-cards";
 import { ProductGallery } from "@/components/shop/ProductGallery";
 import { StandRequest } from "@/components/shop/StandRequest";
 import { createStandCheckout, loadVariants } from "@/lib/shopify";
-import { track } from "@/lib/track";
+import { serverTrack, track } from "@/lib/track";
 import { rememberBusiness } from "@/lib/review-link";
 import { cn } from "@/lib/utils";
 
@@ -30,11 +30,12 @@ export function StandBuyBox({ business }: { business: string }) {
     if (busy) return;
     rememberBusiness(business);
     const ecommerce = { currency: "USD", value: opt.price, items: [{ item_id: opt.sku, item_name: opt.name, price: opt.price, quantity: 1 }] };
-    track("add_to_cart", { product: opt.id }, { ecommerce });
+    const server = { value: ecommerce.value, currency: ecommerce.currency, contentName: opt.name, contentIds: [opt.sku], numItems: 1 };
+    serverTrack("add_to_cart", track("add_to_cart", { product: opt.id }, { ecommerce }), server);
     setBusy(true);
     try {
       const { url } = await createStandCheckout(opt, business);
-      track("begin_checkout", { product: opt.id, checkout: "shopify" }, { ecommerce });
+      serverTrack("begin_checkout", track("begin_checkout", { product: opt.id, checkout: "shopify" }, { ecommerce }), server);
       setTimeout(() => window.location.assign(url), 250);
     } catch {
       setBusy(false);
