@@ -185,7 +185,8 @@ export const fromPriceLabel = `$${fromPrice.toFixed(2)}`;
 export const money2 = (n: number) => `$${n.toFixed(2)}`;
 export const packSavings = (p: ReviewPack) => Math.max(0, +(p.qty * REVIEW_CARD.packs[0].price - p.price).toFixed(2));
 /** Merchant feed / ad link that opens the product page with this variant preselected. */
-export const packPath = (pack: ReviewPack["id"]) => `/google-review-cards?pack=${pack}`;
+/** Feed / Product schema link for one pack. The homepage is the canonical store; its buy box reads ?pack=. */
+export const packPath = (pack: ReviewPack["id"]) => `/?pack=${pack}`;
 /** SKU shared by Shopify, the Merchant feed, JSON-LD and ad events (CT-NFC-REVIEW-2 …). */
 export const packSku = (p: ReviewPack) => `${REVIEW_CARD.sku}-${p.qty}`;
 

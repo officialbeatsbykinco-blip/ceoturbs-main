@@ -47,15 +47,22 @@ describe("page registry (SEO)", () => {
       expect(p.description.length, p.path).toBeLessThanOrEqual(155);
     }
     // Indexable pages: 50–60 character titles and 120–155 character descriptions, so Google shows them uncut.
-    for (const p of PAGES.filter((x) => !x.noindex)) {
+    for (const p of PAGES.filter((x) => !x.noindex && !x.canonical)) {
       expect(p.title.length, p.path).toBeGreaterThanOrEqual(50);
       expect(p.title.length, p.path).toBeLessThanOrEqual(60);
       expect(p.description.length, p.path).toBeGreaterThanOrEqual(120);
     }
   });
 
+  it("indexes the review card store once, at the homepage", () => {
+    const shop = PAGES.find((p) => p.path === SHOP_PATH)!;
+    expect(shop.canonical).toBe("/");
+    expect(JSON.stringify(shop.schema)).not.toMatch(/"ProductGroup"|"FAQPage"/);
+    expect(JSON.stringify(PAGES.find((p) => p.path === "/")!.schema)).toContain('"ProductGroup"');
+  });
+
   it("gives every indexable page breadcrumbs and a dateModified", () => {
-    for (const p of PAGES.filter((x) => !x.noindex && x.path !== "/")) {
+    for (const p of PAGES.filter((x) => !x.noindex && !x.canonical && x.path !== "/")) {
       const json = JSON.stringify(p.schema);
       expect(json, p.path).toContain('"BreadcrumbList"');
       expect(json, p.path).toContain('"dateModified"');
@@ -267,7 +274,7 @@ describe("review card store", () => {
     expect(p.hasVariant).toHaveLength(REVIEW_CARD.packs.length);
     for (const v of p.hasVariant) {
       expect(Number(v.offers.price)).toBeGreaterThan(0);
-      expect(v.offers.url).toMatch(/^https:\/\/www\.ceoturbo\.com\/google-review-cards\?pack=\d+$/);
+      expect(v.offers.url).toMatch(/^https:\/\/www\.ceoturbo\.com\/\?pack=\d+$/);
       expect(existsSync(pub(new URL(v.image).pathname))).toBe(true);
     }
   });

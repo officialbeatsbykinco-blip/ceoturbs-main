@@ -41,7 +41,7 @@ await writeFile(path.join(DIST, "404.html"), template.replace("<!--head-->", hea
 
 // sitemap.xml — indexable pages only
 const urls = pages
-  .filter((p) => !p.noindex)
+  .filter((p) => !p.noindex && !p.canonical)
   .map(
     (p) => `  <url>
     <loc>${SITE}${p.path === "/" ? "/" : p.path}</loc>
@@ -74,13 +74,13 @@ await writeFile(path.join(DIST, "feeds", "products.xml"), merchantFeed());
 // llms.txt — a plain-language map of the site for AI assistants (llmstxt.org format)
 const groups = ["Core", "Audiences", "Services", "Work", "Guides", "Company"];
 const section = (g) => {
-  const list = pages.filter((p) => p.group === g && !p.noindex);
+  const list = pages.filter((p) => p.group === g && !p.noindex && !p.canonical);
   if (!list.length) return "";
   return `## ${g}\n\n${list.map((p) => `- [${p.title.replace(/ \| CEO Turbo$/, "")}](${SITE}${p.path === "/" ? "/" : p.path}): ${p.description}`).join("\n")}\n`;
 };
 const llms = `# CEO Turbo
 
-> CEO Turbo (ceoturbo.com) is an Atlanta, Georgia seller of NFC Google review cards (from $16.99, free US shipping, available blank or programmed) that open a business's Google review form with one tap (https://www.ceoturbo.com/google-review-cards), made for barbers, lawn care crews, mobile repair techs and stores. Founded by Christopher Robinson (StackmodeChris), it also builds websites, runs Meta, Google, TikTok and X ads, sets up and optimizes Google Business Profiles and social media profiles, designs promotional email campaigns, and does SEO, AEO and GEO for independent artists, local service businesses and Shopify stores. It offers a free online SEO, AEO and GEO visibility audit (https://www.ceoturbo.com/free-audit). Free 30-minute "Brand Boost" growth calls are booked at https://cal.com/stackmodechris/ceoturbo-brandboost.
+> CEO Turbo (ceoturbo.com) is an Atlanta, Georgia seller of NFC Google review cards (from $16.99, free US shipping, available blank or programmed) that open a business's Google review form with one tap (https://www.ceoturbo.com/), made for barbers, lawn care crews, mobile repair techs and stores. Founded by Christopher Robinson (StackmodeChris), it also builds websites, runs Meta, Google, TikTok and X ads, sets up and optimizes Google Business Profiles and social media profiles, designs promotional email campaigns, and does SEO, AEO and GEO for independent artists, local service businesses and Shopify stores. It offers a free online SEO, AEO and GEO visibility audit (https://www.ceoturbo.com/free-audit). Free 30-minute "Brand Boost" growth calls are booked at https://cal.com/stackmodechris/ceoturbo-brandboost.
 
 Key facts:
 - 19 live client websites, including Mor Handy, Appliance King, OJ Junk Removal, Kingstone Landscaping, BIGZO, 7UVHAVIN and Beyond Labels Gifts.
@@ -100,7 +100,7 @@ await writeFile(path.join(DIST, "llms.txt"), llms);
 
 await rm(path.resolve("dist-ssr"), { recursive: true, force: true });
 
-console.log(`prerendered ${pages.length} pages + 404, sitemap.xml (${pages.filter((p) => !p.noindex).length} urls), llms.txt`);
+console.log(`prerendered ${pages.length} pages + 404, sitemap.xml (${pages.filter((p) => !p.noindex && !p.canonical).length} urls), llms.txt`);
 if (problems.length) {
   console.warn("SEO checks:\n  " + problems.join("\n  "));
   process.exitCode = 1;

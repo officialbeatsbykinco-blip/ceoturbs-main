@@ -40,6 +40,11 @@ const metaContent = (html, key, val) => {
   return v === undefined ? undefined : decode(v);
 };
 
+const canonicalElsewhere = (html, url) => {
+  const href = html.match(/<link[^>]+rel="canonical"[^>]*href="([^"]+)"/)?.[1];
+  return !!href && href.replace(/\/$/, "") !== url.replace(/\/$/, "");
+};
+
 for (const file of files) {
   const route = routeOf(file);
   if (route === "/404") continue;
@@ -53,20 +58,22 @@ for (const file of files) {
   if (!title) err(route, "missing <title>");
   else {
     if (title.length > 65) err(route, `title ${title.length} chars (max 65)`);
-    if (!noindex) titles.set(title, [...(titles.get(title) || []), route]);
+    if (!noindex && !canonicalElsewhere(html, url)) titles.set(title, [...(titles.get(title) || []), route]);
   }
   const desc = metaContent(html, "name", "description");
   if (!desc) err(route, "missing meta description");
   else {
     if (desc.length > 160) err(route, `description ${desc.length} chars (max 160)`);
-    if (!noindex) descriptions.set(desc, [...(descriptions.get(desc) || []), route]);
+    if (!noindex && !canonicalElsewhere(html, url)) descriptions.set(desc, [...(descriptions.get(desc) || []), route]);
   }
 
   const canonicalTag = html.match(/<link[^>]+rel="canonical"[^>]*>/)?.[0];
   const canonical = canonicalTag && attr(canonicalTag, "href");
   if (!canonical) err(route, "missing canonical");
   else if (!canonical.startsWith(`${ORIGIN}/`) && canonical !== ORIGIN) err(route, `canonical not on ${ORIGIN}: ${canonical}`);
-  else if (!noindex && canonical.replace(/\/$/, "") !== url.replace(/\/$/, "")) err(route, `canonical points elsewhere: ${canonical}`);
+  // A page may hand its ranking to another page (rel=canonical); the target must be an indexable page in the sitemap.
+  const alternate = !noindex && canonical && canonical.replace(/\/$/, "") !== url.replace(/\/$/, "");
+  if (alternate && !sitemapUrls.has(canonical)) err(route, `canonical points to a URL not in the sitemap: ${canonical}`);
 
   const body = html.slice(html.indexOf("<body"));
   const h1s = (body.match(/<h1[\s>]/g) || []).length;
@@ -95,7 +102,8 @@ for (const file of files) {
   }
 
   if (noindex && sitemapUrls.has(url)) err(route, "noindex page is in sitemap.xml");
-  if (!noindex && !sitemapUrls.has(url)) err(route, "indexable page missing from sitemap.xml");
+  if (alternate && sitemapUrls.has(url)) err(route, "canonicalized page is in sitemap.xml");
+  if (!noindex && !alternate && !sitemapUrls.has(url)) err(route, "indexable page missing from sitemap.xml");
 }
 
 for (const u of sitemapUrls) {

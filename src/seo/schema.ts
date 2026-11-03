@@ -3,7 +3,6 @@
 import { SITE, BOOKING, REVIEW_CARD, PITCH_VIDEO, SHIRT, ARTIST_SHIRT, packPath, packSku, shirtSku, type ShirtProduct } from "@/config/site";
 import { SHIRTS_PATH } from "@/content/company-shirts";
 import { ARTIST_MERCH_PATH } from "@/content/artist-merch";
-import { SHOP_PATH } from "@/content/review-cards";
 import { ALL_SETUP_CITIES } from "@/content/service-areas";
 import { CALL_FIRST_SLUGS, type FAQ, type Service } from "@/content/services";
 import type { Client } from "@/content/clients";
@@ -16,7 +15,7 @@ const abs = (path: string) => (path.startsWith("http") ? path : `${SITE.url}${pa
 export const ORG_ID = `${SITE.url}/#organization`;
 export const PERSON_ID = `${SITE.url}/#founder`;
 export const WEBSITE_ID = `${SITE.url}/#website`;
-export const PRODUCT_ID = `${SITE.url}${SHOP_PATH}#product`;
+export const PRODUCT_ID = `${SITE.url}/#product`;
 export const AUDIT_ID = `${SITE.url}/free-audit#tool`;
 
 export type JsonLd = Record<string, unknown>;
@@ -222,7 +221,7 @@ export const reviewCardProduct = (): JsonLd => ({
   brand: { "@type": "Brand", name: SITE.name },
   category: "Business & Industrial > Retail > Retail Display Props & Models",
   material: "PVC",
-  url: abs(SHOP_PATH),
+  url: abs("/"),
   color: "White/Black",
   variesBy: ["https://schema.org/size"],
   hasVariant: REVIEW_CARD.packs.map((p) => ({

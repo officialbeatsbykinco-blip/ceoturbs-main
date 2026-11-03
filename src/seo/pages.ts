@@ -20,6 +20,8 @@ export type PageMeta = {
   description: string;
   ogImage?: string;
   noindex?: boolean;
+  /** Indexed under another URL: the page stays live (ads, old links) but its canonical points there and it stays out of the sitemap and llms.txt. */
+  canonical?: string;
   priority: number;
   changefreq: "weekly" | "monthly" | "yearly";
   /** Section label used to group pages in llms.txt. */
@@ -122,7 +124,9 @@ function build(): PageMeta[] {
     priority: 0.9,
     changefreq: "weekly",
     group: "Core",
-    schema: [...base(), S.webPage(SHOP_PATH, "Google review cards", "NFC Google review cards", "ItemPage"), S.reviewCardProduct(), S.breadcrumbs([{ name: "Google review cards", path: SHOP_PATH }]), S.faqPage(SHOP_FAQS, SHOP_PATH)],
+    // Same buy box and FAQs as the homepage, so it's indexed as "/" instead of competing with it for "NFC Google review cards".
+    canonical: "/",
+    schema: [...base(), S.webPage(SHOP_PATH, "Google review cards", "NFC Google review cards", "ItemPage")],
   });
 
   pages.push({
@@ -156,7 +160,7 @@ function build(): PageMeta[] {
     priority: 0.7,
     changefreq: "monthly",
     group: "Guides",
-    schema: [...base(), S.webPage(SETUP_PATH, "Google review card setup guide", "How to program an NFC Google review card"), S.breadcrumbs([{ name: "Google review cards", path: SHOP_PATH }, { name: "Setup guide", path: SETUP_PATH }]), S.faqPage(SETUP_FAQS, SETUP_PATH)],
+    schema: [...base(), S.webPage(SETUP_PATH, "Google review card setup guide", "How to program an NFC Google review card"), S.breadcrumbs([{ name: "Setup guide", path: SETUP_PATH }]), S.faqPage(SETUP_FAQS, SETUP_PATH)],
   });
 
   pages.push({

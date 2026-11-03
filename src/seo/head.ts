@@ -9,7 +9,7 @@ export const safeJson = (data: unknown) => JSON.stringify(data).replace(/</g, "\
 
 /** Full <head> markup for a prerendered page. */
 export function renderHead(meta: PageMeta): string {
-  const url = abs(meta.path);
+  const url = abs(meta.canonical ?? meta.path);
   const image = abs(meta.ogImage ?? SITE.ogImage);
   const tags = [
     `<title>${esc(meta.title)}</title>`,
@@ -53,7 +53,7 @@ export function applyHead(meta: PageMeta) {
     const el = document.head.querySelector(selector);
     if (el) el.setAttribute(attr, value);
   };
-  const url = abs(meta.path);
+  const url = abs(meta.canonical ?? meta.path);
   const image = abs(meta.ogImage ?? SITE.ogImage);
   set('meta[name="description"]', "content", meta.description);
   set('link[rel="canonical"]', "href", url);

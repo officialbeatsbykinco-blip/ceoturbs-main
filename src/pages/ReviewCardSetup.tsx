@@ -65,7 +65,7 @@ export default function ReviewCardSetup() {
         <div className="pointer-events-none absolute inset-0 bg-grid" aria-hidden />
         <div className="pointer-events-none absolute -top-40 left-1/2 h-[520px] w-[900px] -translate-x-1/2 glow-turbo" aria-hidden />
         <div className="container-x relative max-w-[680px]">
-          <Breadcrumbs items={[{ name: "Google review cards", path: SHOP_PATH }, { name: "Setup guide", path: SETUP_PATH }]} className="max-sm:hidden" />
+          <Breadcrumbs items={[{ name: "Setup guide", path: SETUP_PATH }]} className="max-sm:hidden" />
           <h1 className="mt-2 text-[32px] font-bold leading-[1.05] sm:text-5xl">
             Set up your card <span className="text-turbo-grad">in 2 minutes.</span>
           </h1>
