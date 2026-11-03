@@ -32,7 +32,11 @@ const clip = (s: string, max = 155) => (s.length <= max ? s : `${s.slice(0, s.la
 
 const titleCase = (s: string) => s.replace(/\b([a-z])/g, (c) => c.toUpperCase());
 
-const suffix = (t: string) => (t.length + 13 <= 64 ? `${t} | CEO Turbo` : t);
+/** First candidate that fits Google's 50–60 character title window; else the first one that isn't cut off. */
+const fit = (...candidates: string[]) =>
+  candidates.find((t) => t.length >= 50 && t.length <= 60) ?? candidates.find((t) => t.length <= 60) ?? candidates[0];
+
+const suffix = (t: string) => fit(`${t} | CEO Turbo`, t);
 
 const base = () => [S.organization(), S.website(), S.founder()];
 
@@ -41,7 +45,7 @@ function build(): PageMeta[] {
 
   pages.push({
     path: "/",
-    title: `NFC Google Review Cards, from ${fromPriceLabel} | CEO Turbo`,
+    title: `NFC Google Review Cards from ${fromPriceLabel}, Ships Free | CEO Turbo`,
     description: `Tap-to-review cards for barbers, lawn care, mobile repair and stores. Customers tap and your Google review form opens. From ${fromPriceLabel}, free US shipping.`,
     ogImage: "/og/review-cards.jpg?v=2",
     priority: 1,
@@ -52,13 +56,13 @@ function build(): PageMeta[] {
 
   pages.push({
     path: "/grow",
-    title: "SEO, AEO & GEO Websites + Google, Meta & YouTube Ads | CEO Turbo",
+    title: "SEO, AEO & GEO Websites + Google & Meta Ads | CEO Turbo",
     description:
       "SEO, AEO and GEO websites that get you found on Google and ChatGPT, plus Google, Meta and YouTube ads that book calls. Free strategy call.",
     priority: 0.9,
     changefreq: "weekly",
     group: "Core",
-    schema: [...base(), S.webPage("/grow", "CEO Turbo", "Websites and ads for local businesses, online stores and artists."), S.brandBoost(), S.video("/grow"), S.faqPage(HOME_FAQS, "/grow")],
+    schema: [...base(), S.webPage("/grow", "CEO Turbo", "Websites and ads for local businesses, online stores and artists."), S.brandBoost(), S.video("/grow"), S.breadcrumbs([{ name: "Websites & ads", path: "/grow" }]), S.faqPage(HOME_FAQS, "/grow")],
   });
 
   for (const a of [...AUDIENCES, PRODUCERS, VISUAL_ARTISTS]) {
@@ -89,7 +93,7 @@ function build(): PageMeta[] {
 
   pages.push({
     path: "/pricing",
-    title: `Pricing: Website, SEO & Ads Done for You — ${price("pkg-launch")} | CEO Turbo`,
+    title: `Pricing: Website, SEO & Ads From ${price("pkg-launch")} | CEO Turbo`,
     description: `Website, SEO/AEO/GEO, Google & Bing indexing, tracking, profiles and ad setup for ${price("pkg-launch")} one-time. Plans from ${price("care")}/mo. No contracts.`,
     ogImage: "/og/brand-boost.jpg",
     priority: 0.9,
@@ -112,7 +116,7 @@ function build(): PageMeta[] {
 
   pages.push({
     path: SHOP_PATH,
-    title: `NFC Google Review Cards — Tap to Review, from ${fromPriceLabel} | CEO Turbo`,
+    title: "Google Review Cards: Tap to Review, No App | CEO Turbo",
     description: `Customers tap their phone and your Google review form opens. iPhone & Android, no app, no subscription. From ${fromPriceLabel}, free US shipping.`,
     ogImage: "/og/review-cards.jpg?v=2",
     priority: 0.9,
@@ -123,7 +127,7 @@ function build(): PageMeta[] {
 
   pages.push({
     path: SHIRTS_PATH,
-    title: "Custom Company T-Shirts With Your Logo, No Minimum | CEO Turbo",
+    title: "Custom Company T-Shirts With Your Logo — No Minimums",
     description: "Design company shirts with your logo in 2 minutes. Short & long sleeve, no minimum, from $27.99 with free US shipping. 15% off 24+ for your team.",
     ogImage: "/og/company-shirts.jpg",
     priority: 0.9,
@@ -196,8 +200,16 @@ function build(): PageMeta[] {
     const where = c.location ? ` in ${c.location.split(",")[0]}` : "";
     pages.push({
       path,
-      title: suffix(`${c.name} — ${titleCase(c.industry)} Website`.length > 58 ? `${c.name} Website Case Study` : `${c.name} — ${titleCase(c.industry)} Website`),
-      description: clip(`${c.name}${where ? ` (${c.location})` : ""}: the ${c.industry.toLowerCase()} website CEO Turbo built, and the design decisions that turn visitors into customers.`),
+      title: fit(
+        `${c.name} — ${titleCase(c.industry)} Website | CEO Turbo`,
+        `${c.name} — ${titleCase(c.industry)} Website Case Study | CEO Turbo`,
+        `${c.name} — ${titleCase(c.industry)} Website Case Study`,
+        `${c.name} — ${titleCase(c.industry)} Website`,
+        `${c.name} Website Case Study | CEO Turbo`,
+      ),
+      description: clip(
+        `${c.name}${where ? ` (${c.location})` : ""}: the ${c.industry.toLowerCase()} website CEO Turbo built, and the ${where ? "" : "layout, copy and "}design decisions that turn visitors into customers.`,
+      ),
       ogImage: `/img/work/${c.slug}.webp`,
       priority: 0.6,
       changefreq: "yearly",
@@ -208,7 +220,7 @@ function build(): PageMeta[] {
 
   pages.push({
     path: "/results",
-    title: "Results — Real Ad Dashboards & Search Console Data | CEO Turbo",
+    title: "Real Results: Ad Dashboards & Search Console Proof",
     description:
       "Unedited Meta Ads Manager and Google Search Console screenshots: 161 leads at $7.42 average, lowest $4.31, 165 artist profile visits at $0.32.",
     ogImage: "/og/results.jpg",
@@ -220,7 +232,7 @@ function build(): PageMeta[] {
 
   pages.push({
     path: "/guides",
-    title: "Guides — SEO, AEO, GEO, Ads & Growth | CEO Turbo",
+    title: "Guides: SEO, AEO, GEO, Ads & Growth Answers | CEO Turbo",
     description: "Straight answers on SEO vs AEO vs GEO, Facebook lead costs, Google Business Profile, Spotify growth, Shopify conversions and getting more Google reviews.",
     priority: 0.7,
     changefreq: "weekly",
@@ -238,7 +250,7 @@ function build(): PageMeta[] {
       priority: 0.7,
       changefreq: "monthly",
       group: "Guides",
-      schema: [...base(), S.webPage(path, g.title, g.metaDescription), S.article(g), S.breadcrumbs([{ name: "Guides", path: "/guides" }, { name: g.title, path }]), S.faqPage(g.faqs, path)],
+      schema: [...base(), S.webPage(path, g.title, g.metaDescription, "WebPage", g.updated), S.article(g), S.breadcrumbs([{ name: "Guides", path: "/guides" }, { name: g.title, path }]), S.faqPage(g.faqs, path)],
     });
   }
 
@@ -255,7 +267,7 @@ function build(): PageMeta[] {
 
   pages.push({
     path: "/about",
-    title: "About Christopher Robinson & CEO Turbo",
+    title: "About Christopher Robinson, Atlanta Founder | CEO Turbo",
     description:
       "Christopher Robinson (StackmodeChris) founded CEO Turbo to help artists, local businesses and stores win customers with websites, ads and AI search.",
     priority: 0.6,
@@ -266,8 +278,8 @@ function build(): PageMeta[] {
 
   pages.push({
     path: "/contact",
-    title: "Contact CEO Turbo",
-    description: "Book a free Brand Boost call, order Google review cards, or reach CEO Turbo in Atlanta, Georgia.",
+    title: "Contact CEO Turbo: Call, Text, Email or Book a Call",
+    description: `Call or text ${SITE.phone.display}, email us, or book a free 30-minute Brand Boost call. Order Google review cards or reach CEO Turbo in Atlanta, GA.`,
     priority: 0.5,
     changefreq: "yearly",
     group: "Company",
@@ -275,13 +287,13 @@ function build(): PageMeta[] {
   });
 
   pages.push(
-    { path: "/privacy-policy", title: "Privacy Policy | CEO Turbo", description: "How CEO Turbo collects, uses and protects your personal information, including what we collect, why, and how you can control it.", priority: 0.2, changefreq: "yearly", group: "Company", schema: base() },
-    { path: "/terms", title: "Terms & Conditions | CEO Turbo", description: "Terms for using ceoturbo.com and buying CEO Turbo products and services.", priority: 0.2, changefreq: "yearly", group: "Company", schema: base() },
-    { path: "/shipping-returns", title: "Shipping & Returns | CEO Turbo", description: "Shipping times, costs and the 5-day return policy for CEO Turbo Google review cards.", priority: 0.3, changefreq: "yearly", group: "Company", schema: base() },
+    { path: "/privacy-policy", title: "Privacy Policy: What Data CEO Turbo Collects and Why", description: "How CEO Turbo collects, uses and protects your personal information, including what we collect, why, and how you can control it.", priority: 0.2, changefreq: "yearly", group: "Company", schema: [...base(), S.webPage("/privacy-policy", "Privacy Policy", "How CEO Turbo handles personal information.", "WebPage", "2026-10-10"), S.breadcrumbs([{ name: "Privacy Policy", path: "/privacy-policy" }])] },
+    { path: "/terms", title: "Terms & Conditions for CEO Turbo Products & Services", description: "Terms for using ceoturbo.com and buying CEO Turbo products and services: payments, review cards, the free audit, results, liability and SMS terms.", priority: 0.2, changefreq: "yearly", group: "Company", schema: [...base(), S.webPage("/terms", "Terms & Conditions", "Terms for CEO Turbo products and services.", "WebPage", "2026-10-10"), S.breadcrumbs([{ name: "Terms", path: "/terms" }])] },
+    { path: "/shipping-returns", title: "Shipping & Returns for Google Review Cards | CEO Turbo", description: "Shipping times and costs, the 5-day return policy for Google review cards, custom t-shirt terms, and what to do if a CEO Turbo card doesn't work.", priority: 0.3, changefreq: "yearly", group: "Company", schema: [...base(), S.webPage("/shipping-returns", "Shipping & Returns", "Shipping and return policy.", "WebPage", "2026-10-14"), S.breadcrumbs([{ name: "Shipping & Returns", path: "/shipping-returns" }])] },
     { path: "/watch", title: "Watch: How to Get More Customers in 2026 | CEO Turbo", description: "A 1-minute video from Christopher Robinson of CEO Turbo on getting found on Google, Maps and AI assistants, and turning that attention into customers.", ogImage: "/media/brand-boost-poster.webp", priority: 0.6, changefreq: "monthly", group: "Core", schema: [...base(), S.webPage("/watch", "Watch: how to get more customers in 2026", PITCH_VIDEO.description), S.video("/watch"), S.breadcrumbs([{ name: "Watch", path: "/watch" }])] },
     {
       path: "/how-to-get-more-customers",
-      title: "How to Get More Customers in 2026: Free Step-by-Step | CEO Turbo",
+      title: "How to Get More Customers in 2026: Step by Step | CEO Turbo",
       description: "Free visibility score, then 8 steps to get found on Google, Bing, ChatGPT & Claude, get reviews, track every lead and run the right ads — or we do it all.",
       ogImage: "/og/how-to-get-more-customers.jpg",
       priority: 0.9,
@@ -331,7 +343,7 @@ function build(): PageMeta[] {
     { path: "/booked", title: "You're Booked | CEO Turbo", description: "Your Brand Boost call is booked. Here's how to get the most from it.", noindex: true, priority: 0.1, changefreq: "yearly", group: "Core", schema: base() },
     {
       path: RESTAURANTS_PATH,
-      title: "Restaurant Marketing: DoorDash, TV Menus & Reviews | CEO Turbo",
+      title: "Restaurant Marketing: DoorDash, TV Menus & Reviews",
       description: "We get restaurants on DoorDash, Uber Eats & Grubhub, design TV menus, fix Google & Apple Maps and put tap-to-review cards on every table. Free call.",
       ogImage: "/og/restaurants.jpg",
       priority: 0.9,

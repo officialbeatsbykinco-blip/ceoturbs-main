@@ -4,6 +4,8 @@
 export const SITE = {
   name: "CEO Turbo",
   url: "https://www.ceoturbo.com",
+  /** dateModified for page schema. Bump when page copy is refreshed (guides carry their own dates). */
+  contentUpdated: "2026-11-03",
   tagline: "Tap-to-review Google cards for people who work on the move.",
   description:
     "CEO Turbo sells NFC Google review cards for barbers, lawn care crews, mobile repair techs and stores: customers tap their phone and your review form opens. We also build websites and run ads.",

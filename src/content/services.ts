@@ -30,9 +30,9 @@ export const SERVICES: Service[] = [
     name: "Home office & computer setup",
     short: "Office setup",
     icon: "layout",
-    metaTitle: "Home Office & Computer Setup — Atlanta Metro Area",
+    metaTitle: "Home Office & Computer Setup in Atlanta",
     metaDescription:
-      "Home office, computer, desk, Wi-Fi and device setup in Atlanta, Gwinnett and Athens. From $99. Call 678-558-4327.",
+      "We set up your home office: desk, computer, monitors, Wi-Fi and devices, in Atlanta, Gwinnett and Athens. From $99. Call 678-558-4327.",
     h1: "Home office and computer setup — we build your workspace so you can get to work",
     answer:
       "CEO Turbo provides complete home office and computer setup services for Atlanta metro area residents and businesses. We assemble desks and chairs, set up monitors and computers, configure internet and networks, install software, connect tablets and devices, and organize your entire workspace. Built for new home offices, business setups, school computer labs, and anyone who needs a professional tech workspace without the hassle.",
@@ -72,7 +72,7 @@ export const SERVICES: Service[] = [
     name: "Office transformation & build-out",
     short: "Office transformation",
     icon: "layout",
-    metaTitle: "Office Build-Out & Setup Labor — Atlanta Metro Area",
+    metaTitle: "Office Build-Out & Setup Labor in Atlanta",
     metaDescription:
       "Office build-out, network and POS system install from $1,599. Framing, cameras, computers, cleanup. Atlanta metro. Call 678-558-4327.",
     h1: "Office transformation — we build your entire workspace from frame to finish",
@@ -195,7 +195,7 @@ export const SERVICES: Service[] = [
     name: "Custom computer build & setup",
     short: "Computer build",
     icon: "layout",
-    metaTitle: "Custom Computer Build & Setup — Atlanta Metro | Call 678-558-4327",
+    metaTitle: "Custom PC Build & Setup in Atlanta | Call 678-558-4327",
     metaDescription: "We assemble your PC from the parts you choose, install Windows and drivers, and get it ready to use. Labor only, Atlanta metro. Call 678-558-4327.",
     h1: "Custom computer build — we assemble it, install it and hand it over ready to use",
     answer: "CEO Turbo assembles custom desktop computers for homes, offices, studios and gaming setups in the Atlanta metro area. You choose the parts, or fund an order up front and we purchase them with receipts. We assemble the machine, route the cables, install the operating system and drivers, test it under load, and set up your monitors and peripherals. You pay a flat labor price confirmed in writing before we begin.",
@@ -222,7 +222,7 @@ export const SERVICES: Service[] = [
     name: "POS system setup & terminal installation",
     short: "POS setup",
     icon: "layout",
-    metaTitle: "POS System Installation — Atlanta Metro | Square, Toast, Clover",
+    metaTitle: "POS Installation in Atlanta: Square, Toast, Clover",
     metaDescription:
       "We install Square, Toast, Clover, Stripe, DoorDash & UberEats POS systems, terminals, kitchen printers and cash drawers. From $149. Call 678-558-4327.",
     h1: "POS system installation — terminals wired, printers connected, orders flowing",
@@ -512,7 +512,7 @@ export const SERVICES: Service[] = [
     name: "Social media profile optimization",
     short: "Social profiles",
     icon: "profile",
-    metaTitle: "Social Media Profile Optimization — Instagram, TikTok, YouTube",
+    metaTitle: "Social Media Profile Optimization: IG, TikTok & YouTube",
     metaDescription:
       "Instagram, TikTok, YouTube, Facebook and Spotify profile optimization: bios, links, highlights and branding that turn visitors into followers.",
     h1: "Social media profile optimization that turns visitors into followers and buyers",
@@ -546,7 +546,7 @@ export const SERVICES: Service[] = [
     name: "Promotional email campaigns",
     short: "Email campaigns",
     icon: "mail",
-    metaTitle: "Promotional Email Campaign Design — Flows That Sell",
+    metaTitle: "Email Campaign Design: Promos & Flows That Sell",
     metaDescription:
       "Promotional email design and automation for Shopify stores, artists and local businesses: welcome, abandoned cart, launch and win-back flows.",
     h1: "Promotional email campaigns that turn past customers into repeat sales",
@@ -580,7 +580,7 @@ export const SERVICES: Service[] = [
     name: "Conversion tracking & ad rescue",
     short: "Fix my ads",
     icon: "search",
-    metaTitle: "Ads Not Converting? Conversion Tracking & Ad Rescue",
+    metaTitle: "Ads Not Converting? Conversion Tracking Fixes",
     metaDescription:
       `Find out why your ads aren't converting: GA4, Tag Manager, Clarity, Meta and Google tracking audited and fixed. One-time fix ${price("conversion-rescue")}, then ${price("tracking-watch")}/mo.`,
     h1: "Ads not converting? Fix the tracking first, then stop the wasted spend",

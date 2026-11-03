@@ -46,6 +46,20 @@ describe("page registry (SEO)", () => {
       expect(p.title.length, p.path).toBeLessThanOrEqual(65);
       expect(p.description.length, p.path).toBeLessThanOrEqual(155);
     }
+    // Indexable pages: 50–60 character titles and 120–155 character descriptions, so Google shows them uncut.
+    for (const p of PAGES.filter((x) => !x.noindex)) {
+      expect(p.title.length, p.path).toBeGreaterThanOrEqual(50);
+      expect(p.title.length, p.path).toBeLessThanOrEqual(60);
+      expect(p.description.length, p.path).toBeGreaterThanOrEqual(120);
+    }
+  });
+
+  it("gives every indexable page breadcrumbs and a dateModified", () => {
+    for (const p of PAGES.filter((x) => !x.noindex && x.path !== "/")) {
+      const json = JSON.stringify(p.schema);
+      expect(json, p.path).toContain('"BreadcrumbList"');
+      expect(json, p.path).toContain('"dateModified"');
+    }
   });
 
   it("gives every indexable page structured data", () => {

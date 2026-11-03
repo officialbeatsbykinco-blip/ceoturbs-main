@@ -160,7 +160,7 @@ export function GoogleAdProof({ compact = false, result = GOOGLE_AD_RESULT }: { 
         <p className="text-sm font-medium text-turbo">
           Google Ads · <Link to={`/portfolio/${g.clientSlug}`} className="underline-offset-4 hover:underline">{g.client}</Link>
         </p>
-        <h3 className="mt-1 font-display text-lg font-bold sm:text-xl">{g.headline}</h3>
+        <p className="mt-1 font-display text-lg font-bold sm:text-xl">{g.headline}</p>
         <p className="mt-1 text-xs text-muted-foreground">
           {g.campaign} · {g.period} · {detail}. Conversions as reported by Google Ads.
         </p>

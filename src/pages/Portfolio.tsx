@@ -21,8 +21,9 @@ export default function Portfolio() {
           <SiteWall />
         </div>
       </section>
-      <section className="section" aria-label="All client websites">
+      <section className="section" aria-labelledby="all-sites">
         <div className="container-x">
+          <h2 id="all-sites" className="sr-only">All client websites</h2>
           <WorkGrid filterable />
         </div>
       </section>

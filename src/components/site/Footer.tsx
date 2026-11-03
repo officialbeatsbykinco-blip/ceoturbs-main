@@ -105,6 +105,7 @@ export function Footer({ focus = false }: { focus?: boolean }) {
               { to: "/shopify", label: "Shopify stores" },
               { to: "/atlanta", label: "Atlanta businesses" },
               { to: "/free-audit", label: "Free SEO, AEO & GEO audit" },
+              { to: "/ads-not-converting", label: "Ads not converting? Fix tracking" },
               { to: SHIRTS_PATH, label: `Company t-shirts with your logo — from ${shirtFromLabel}` },
               { to: ARTIST_MERCH_PATH, label: `Artist merch t-shirts — from ${artistFromLabel}` },
             ]}

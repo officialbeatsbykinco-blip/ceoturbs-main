@@ -38,7 +38,7 @@ export const AUDIENCES: Audience[] = [
     category: "artist",
     nav: "Artists",
     plural: "artists",
-    metaTitle: "Music Artist Marketing — Listeners, Shows & Labels",
+    metaTitle: "Music Artist Marketing: More Listeners, Shows & Labels",
     metaDescription:
       "Artist websites, video ads on Meta, TikTok, YouTube and search, and SEO for more listeners, booked shows and tours, features, labels and merch sales.",
     eyebrow: "For artists & producers",
@@ -118,7 +118,7 @@ export const AUDIENCES: Audience[] = [
     category: "shopify",
     nav: "Shopify stores",
     plural: "Shopify stores",
-    metaTitle: "Shopify Store Marketing — More Sales From the Traffic You Get",
+    metaTitle: "Shopify Marketing: More Sales From Your Traffic",
     metaDescription:
       "Shopify store design, product pages, Meta and TikTok ads, email flows and SEO for stores that get visitors but not enough sales.",
     eyebrow: "For Shopify & online stores",

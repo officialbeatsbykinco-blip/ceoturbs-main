@@ -29,6 +29,7 @@ export default function ServicesHub() {
             <span className="btn-chrome shrink-0">See restaurant services →</span>
           </Link>
           <div className="mt-14">
+            <h2 className="sr-only">All services</h2>
             <ServiceGrid />
           </div>
         </div>

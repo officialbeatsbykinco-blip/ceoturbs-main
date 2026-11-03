@@ -85,7 +85,7 @@ export const website = (): JsonLd => ({
   inLanguage: "en-US",
 });
 
-export const webPage = (path: string, name: string, description: string, type = "WebPage"): JsonLd => ({
+export const webPage = (path: string, name: string, description: string, type = "WebPage", modified: string = SITE.contentUpdated): JsonLd => ({
   "@type": type,
   "@id": `${abs(path)}#webpage`,
   url: abs(path),
@@ -94,6 +94,7 @@ export const webPage = (path: string, name: string, description: string, type = 
   isPartOf: { "@id": WEBSITE_ID },
   about: { "@id": ORG_ID },
   inLanguage: "en-US",
+  dateModified: modified,
 });
 
 /** Step-by-step how-to (the /how-to-get-more-customers tutorial). Steps are [name, text]. */

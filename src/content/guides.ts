@@ -39,7 +39,7 @@ export const GUIDES: Guide[] = [
   {
     slug: "seo-vs-aeo-vs-geo",
     title: "SEO vs AEO vs GEO: what's the difference and which do you need?",
-    metaTitle: "SEO vs AEO vs GEO: The Difference, Explained Simply",
+    metaTitle: "SEO vs AEO vs GEO: The Difference, Explained",
     metaDescription:
       "SEO ranks you, AEO makes you quotable, GEO makes AI trust you. A plain-English breakdown with a checklist for each — and which one to start with.",
     summary:
@@ -118,7 +118,7 @@ export const GUIDES: Guide[] = [
   {
     slug: "facebook-ads-cost-per-lead",
     title: "How much do Facebook ads cost per lead for a local business? (Real 2026 data)",
-    metaTitle: "Facebook Ads Cost Per Lead for Local Businesses — Real 2026 Data",
+    metaTitle: "Facebook Ads Cost Per Lead: Real 2026 Local Data",
     metaDescription:
       "Real Meta lead-form results from 8 campaigns: $4.31 to $19.91 per lead, $7.42 average across 161 leads — and what drove the cheapest ones.",
     summary:
@@ -542,7 +542,7 @@ export const GUIDES: Guide[] = [
   {
     slug: "nfc-google-review-cards",
     title: "NFC Google review cards: do they work, and are they worth it?",
-    metaTitle: "NFC Google Review Cards: Do They Work? (2026 Guide)",
+    metaTitle: "Do NFC Google Review Cards Work? (2026 Guide)",
     metaDescription:
       "How NFC Google review cards work, which phones read them, how they compare to QR codes and stands, what they cost, and how to get the most reviews.",
     summary:
