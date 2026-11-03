@@ -38,3 +38,4 @@ media-source/
 # Apps Script copy with the real lead secret (never commit)
 docs/leads-apps-script.local.js
 ads/youtube/.build/
+ads/meta/.build/
