@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>CEO Turbo - Review Card Offer Ad</title>
+    <script src="assets/gsap.min.js"></script>
+    <style>
+      @font-face { font-family: "Space Grotesk"; src: url("assets/fonts/SpaceGrotesk.woff2") format("woff2"); font-weight: 300 700; }
+      @font-face { font-family: "Inter"; src: url("assets/fonts/Inter.woff2") format("woff2"); font-weight: 100 900; }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #05080c; }
+      #root { position: relative; width: 100%; height: 100%; overflow: hidden; font-family: "Inter", sans-serif; color: #f4f8fc; }
+      .clip { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+      /* 4:5 variant: shrink scene content so it fits 1350px tall */
+      .sc { display: flex; flex-direction: column; align-items: center; justify-content: center; }
+      #root.r45 .sc { transform: scale(0.76); }
+      .display { font-family: "Space Grotesk", sans-serif; font-weight: 700; letter-spacing: -0.03em; text-transform: uppercase; line-height: 0.92; text-align: center; }
+      .blue { color: #1aa3ff; } .orange { color: #ff6a1f; } .gold { color: #fbbc04; } .green { color: #2bd98a; }
+      #bg { position: absolute; inset: 0; background: radial-gradient(900px 900px at 20% 15%, rgba(26,163,255,.28), transparent 60%), radial-gradient(900px 900px at 85% 85%, rgba(255,106,31,.24), transparent 60%), #05080c; }
+      #grid { position: absolute; inset: 0; background-image: linear-gradient(rgba(255,255,255,.035) 2px, transparent 2px), linear-gradient(90deg, rgba(255,255,255,.035) 2px, transparent 2px); background-size: 90px 90px; }
+
+      /* A: competitor face-off */
+      #a-q { font-size: 104px; margin-bottom: 56px; }
+      .biz { width: 900px; padding: 34px 44px; border-radius: 34px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 26px; }
+      .biz .nm { font-size: 44px; font-weight: 800; }
+      .biz .st { font-size: 40px; letter-spacing: .08em; }
+      .biz .ct { font-family: "Space Grotesk"; font-weight: 700; font-size: 110px; letter-spacing: -.03em; line-height: 1; }
+      .biz .ct small { display: block; font-size: 28px; font-family: "Inter"; letter-spacing: 0; font-weight: 600; text-align: right; opacity: .75; }
+      #biz-you { background: rgba(255,255,255,.04); border: 3px solid rgba(255,255,255,.12); color: #7f8b9a; }
+      #biz-them { background: rgba(26,163,255,.12); border: 3px solid #1aa3ff; box-shadow: 0 0 80px rgba(26,163,255,.35); }
+      #a-kick { margin-top: 44px; font-size: 56px; }
+      #a-ex { margin-top: 18px; font-size: 26px; color: #7f8b9a; }
+
+      /* B one tap */
+      #b-top { font-size: 104px; } #b-big { font-size: 225px; margin-top: 10px; }
+      #b-stage { position: relative; width: 900px; height: 700px; margin-top: 30px; display: flex; align-items: center; justify-content: center; }
+      .ring { position: absolute; width: 360px; height: 360px; border-radius: 50%; border: 8px solid #1aa3ff; }
+      #b-card { position: relative; width: 640px; height: 640px; border-radius: 48px; overflow: hidden; box-shadow: 0 40px 120px rgba(26,163,255,.35); }
+      #b-card img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+      /* C phone */
+      #c-wrap { position: relative; width: 1080px; height: 1400px; }
+      #c-steps { position: absolute; left: 70px; top: 470px; display: flex; flex-direction: column; gap: 60px; }
+      .step { font-size: 118px; color: rgba(255,255,255,.55); }
+      #phone { position: absolute; right: 60px; top: 100px; width: 560px; height: 1150px; border-radius: 84px; background: #0d141c; border: 12px solid #1c2733; box-shadow: 0 50px 140px rgba(0,0,0,.6), 0 0 120px rgba(26,163,255,.25); overflow: hidden; }
+      #screen { position: absolute; inset: 0; background: #fff; color: #101826; display: flex; flex-direction: column; align-items: center; padding: 120px 40px 0; }
+      #notch { position: absolute; top: 22px; left: 50%; margin-left: -80px; width: 160px; height: 46px; border-radius: 30px; background: #0d141c; }
+      #q { font-weight: 800; font-size: 46px; text-align: center; letter-spacing: -.02em; }
+      #qs { font-size: 28px; color: #6b7685; margin-top: 12px; }
+      #stars { display: flex; gap: 14px; margin-top: 56px; }
+      .star { width: 74px; height: 74px; } .star path { fill: #dfe3e8; } .star.on path { fill: #fbbc04; }
+      #field { margin-top: 56px; width: 100%; height: 250px; border-radius: 26px; background: #f2f4f6; padding: 26px; font-size: 30px; color: #101826; line-height: 1.3; }
+      #post { margin-top: 44px; width: 100%; height: 100px; border-radius: 50px; background: #1a73e8; color: #fff; font-weight: 800; font-size: 36px; display: flex; align-items: center; justify-content: center; }
+      #done { position: absolute; inset: 0; background: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 30px; }
+      #done .tick { width: 190px; height: 190px; border-radius: 50%; background: #1e9e55; display: flex; align-items: center; justify-content: center; }
+      #done .t { font-size: 52px; font-weight: 800; color: #101826; }
+      #badge { position: absolute; left: 50px; top: 90px; padding: 26px 34px; border-radius: 30px; background: rgba(13,20,28,.95); border: 3px solid rgba(255,255,255,.14); display: flex; align-items: center; gap: 22px; }
+      #badge .r { font-family: "Space Grotesk"; font-weight: 700; font-size: 70px; }
+      #badge .s { font-size: 30px; color: #cfd8e3; line-height: 1.15; }
+      #c-note { position: absolute; left: 70px; bottom: 100px; font-size: 26px; color: #8a97a8; }
+
+      /* D offer */
+      #d-title { font-size: 92px; margin-bottom: 40px; }
+      .pack { position: relative; width: 900px; padding: 34px 44px; border-radius: 34px; background: rgba(255,255,255,.06); border: 3px solid rgba(255,255,255,.16); margin-bottom: 22px; display: flex; align-items: center; justify-content: space-between; }
+      .pack .pn { font-size: 54px; font-weight: 800; } .pack .pd { font-size: 30px; color: #8a97a8; font-weight: 600; margin-top: 4px; }
+      .pack .pp { font-family: "Space Grotesk"; font-weight: 700; font-size: 100px; letter-spacing: -.03em; line-height: 1; }
+      .pack.pop { background: rgba(26,163,255,.14); border-color: #1aa3ff; box-shadow: 0 0 80px rgba(26,163,255,.35); }
+      .pop-tag { position: absolute; top: -26px; left: 40px; background: #ff6a1f; color: #05080c; font-weight: 800; font-size: 28px; padding: 8px 22px; border-radius: 999px; letter-spacing: .06em; text-transform: uppercase; }
+      #d-perks { margin-top: 24px; display: flex; flex-direction: column; gap: 12px; align-items: center; }
+      .perk { font-size: 38px; font-weight: 700; color: #cfd8e3; } .perk b { color: #2bd98a; }
+
+      /* E CTA */
+      #e-logo { width: 440px; }
+      #e-head { font-size: 108px; margin-top: 30px; }
+      #e-sub { margin-top: 24px; font-size: 46px; font-weight: 600; color: #cfd8e3; text-align: center; line-height: 1.25; padding: 0 80px; }
+      #e-cta { margin-top: 56px; padding: 42px 70px; border-radius: 999px; background: linear-gradient(135deg, #ff8a3d, #ff6a1f); color: #05080c; font-size: 62px; font-weight: 800; box-shadow: 0 20px 80px rgba(255,106,31,.55); }
+      #e-url { margin-top: 36px; font-size: 44px; font-weight: 700; color: #1aa3ff; }
+      #e-ship { margin-top: 18px; font-size: 36px; font-weight: 700; color: #2bd98a; letter-spacing: .04em; text-transform: uppercase; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="ad4" data-start="0" data-duration="22" data-width="1080" data-height="1920">
+      <div id="bg"></div>
+      <div id="grid"></div>
+
+      <section id="sceneA" class="clip" data-start="0" data-duration="3"><div class="sc">
+        <div id="a-q" class="display">Why do they<br />get <span class="orange">the call?</span></div>
+        <div id="biz-you" class="biz"><div><div class="nm">Your business</div><div class="st">&#9733;&#9733;&#9733;&#9733;&#9734;</div></div><div class="ct"><span id="yv">12</span><small>reviews</small></div></div>
+        <div id="biz-them" class="biz"><div><div class="nm">Your competitor</div><div class="st gold">&#9733;&#9733;&#9733;&#9733;&#9733;</div></div><div class="ct blue"><span id="tv">0</span><small>reviews</small></div></div>
+        <div id="a-kick" class="display">More reviews <span class="blue">= more customers.</span></div>
+        <div id="a-ex">Example for illustration</div>
+      </div></section>
+
+      <section id="sceneB" class="clip" data-start="3" data-duration="4"><div class="sc">
+        <div id="b-top" class="display">Get them with</div>
+        <div id="b-big" class="display blue">one tap.</div>
+        <div id="b-stage">
+          <div class="ring"></div><div class="ring"></div><div class="ring"></div>
+          <div id="b-card"><img src="assets/img/shop-tap.jpg" alt="NFC Google review card and phone" /></div>
+        </div>
+      </div></section>
+
+      <section id="sceneC" class="clip" data-start="7" data-duration="5"><div class="sc">
+        <div id="c-wrap">
+          <div id="c-steps">
+            <div id="s1" class="display step">Tap.</div>
+            <div id="s2" class="display step">Star.</div>
+            <div id="s3" class="display step">Done.</div>
+          </div>
+          <div id="phone">
+            <div id="screen">
+              <div id="notch"></div>
+              <div id="q">How was your visit?</div>
+              <div id="qs">Tap a star to rate</div>
+              <div id="stars">
+                <svg class="star" viewBox="0 0 24 24"><path d="M12 2l3.1 6.6 7.2.9-5.3 5 1.4 7.2L12 18.1 5.6 21.7 7 14.5 1.7 9.5l7.2-.9z"/></svg>
+                <svg class="star" viewBox="0 0 24 24"><path d="M12 2l3.1 6.6 7.2.9-5.3 5 1.4 7.2L12 18.1 5.6 21.7 7 14.5 1.7 9.5l7.2-.9z"/></svg>
+                <svg class="star" viewBox="0 0 24 24"><path d="M12 2l3.1 6.6 7.2.9-5.3 5 1.4 7.2L12 18.1 5.6 21.7 7 14.5 1.7 9.5l7.2-.9z"/></svg>
+                <svg class="star" viewBox="0 0 24 24"><path d="M12 2l3.1 6.6 7.2.9-5.3 5 1.4 7.2L12 18.1 5.6 21.7 7 14.5 1.7 9.5l7.2-.9z"/></svg>
+                <svg class="star" viewBox="0 0 24 24"><path d="M12 2l3.1 6.6 7.2.9-5.3 5 1.4 7.2L12 18.1 5.6 21.7 7 14.5 1.7 9.5l7.2-.9z"/></svg>
+              </div>
+              <div id="field"><span id="typed"></span></div>
+              <div id="post">Post review</div>
+              <div id="done" data-layout-allow-occlusion>
+                <div class="tick"><svg width="110" height="110" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>
+                <div class="t">Review posted</div>
+              </div>
+            </div>
+          </div>
+          <div id="badge">
+            <div class="r gold">4.8</div>
+            <div class="s"><span class="gold">&#9733;&#9733;&#9733;&#9733;&#9733;</span><br /><span id="count">87</span> Google reviews</div>
+          </div>
+          <div id="c-note">Illustrative example</div>
+        </div>
+      </div></section>
+
+      <section id="sceneD" class="clip" data-start="12" data-duration="5"><div class="sc">
+        <div id="d-title" class="display">Pick your <span class="blue">pack.</span></div>
+        <div class="pack"><div><div class="pn">1 card</div><div class="pd">Your front counter</div></div><div class="pp">$24.99</div></div>
+        <div class="pack pop"><div class="pop-tag">Most popular</div><div><div class="pn">2 cards</div><div class="pd">Counter + door, or shop + truck</div></div><div class="pp blue">$39.99</div></div>
+        <div class="pack"><div><div class="pn">5 cards</div><div class="pd">Every station, chair or location</div></div><div class="pp">$79.99</div></div>
+        <div id="d-perks">
+          <div class="perk"><b>&#10003;</b> Free US shipping</div>
+          <div class="perk"><b>&#10003;</b> Ships in 1-2 business days</div>
+          <div class="perk"><b>&#10003;</b> 5-day return guarantee</div>
+        </div>
+      </div></section>
+
+      <section id="sceneE" class="clip" data-start="17" data-duration="5"><div class="sc">
+        <img id="e-logo" src="assets/img/ceo-turbo-logo.png" alt="CEO Turbo" />
+        <div id="e-head" class="display">Get <span class="orange">more reviews.</span></div>
+        <div id="e-sub">Google Review Tap Card. Customers tap, rate, done.</div>
+        <div id="e-cta">Order my cards</div>
+        <div id="e-url">ceoturbo.com/google-review-cards</div>
+        <div id="e-ship">Free US shipping</div>
+      </div></section>
+
+      <audio id="bgm" src="assets/audio/ad4.wav" data-start="0" data-duration="22" data-volume="0.9"></audio>
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+      const out = (sel, t) => tl.to(sel, { opacity: 0, duration: 0.25, ease: "power2.in" }, t);
+      const count = (id, from, to, dur, at) => { const o = { v: from }; tl.to(o, { v: to, duration: dur, ease: "power2.out", onUpdate() { document.getElementById(id).textContent = Math.round(o.v); } }, at); };
+      tl.fromTo("#bg", { scale: 1 }, { scale: 1.15, duration: 22, ease: "none" }, 0);
+
+      // A face-off
+      tl.from("#a-q", { y: 80, opacity: 0, duration: 0.4, ease: "power4.out" }, 0.05);
+      tl.from("#biz-you", { x: -300, opacity: 0, duration: 0.45, ease: "power4.out" }, 0.5);
+      tl.from("#biz-them", { x: 300, opacity: 0, duration: 0.45, ease: "power4.out" }, 0.8);
+      count("tv", 0, 400, 1.3, 1.0);
+      tl.from("#a-kick", { y: 40, opacity: 0, duration: 0.4, ease: "power3.out" }, 2.0);
+      tl.from("#a-ex", { opacity: 0, duration: 0.3 }, 2.3);
+      out("#sceneA .sc > *", 2.72);
+
+      // B one tap
+      tl.from("#b-top", { y: 80, opacity: 0, duration: 0.35, ease: "power4.out" }, 3.05);
+      tl.from("#b-big", { scale: 1.8, opacity: 0, duration: 0.45, ease: "power4.out" }, 3.4);
+      tl.from("#b-card", { y: 700, rotation: -14, opacity: 0, duration: 0.7, ease: "power4.out" }, 3.8);
+      document.querySelectorAll(".ring").forEach((r, i) => tl.fromTo(r, { scale: 0.5, opacity: 0.9 }, { scale: 2.6, opacity: 0, duration: 1.2, ease: "power2.out" }, 4.5 + i * 0.4));
+      tl.to("#b-card", { scale: 1.06, duration: 0.25, yoyo: true, repeat: 1, ease: "power2.inOut" }, 4.5);
+      out("#sceneB .sc > *", 6.72);
+
+      // C phone
+      tl.from("#phone", { x: 700, rotation: 8, opacity: 0, duration: 0.5, ease: "power4.out" }, 7.0);
+      tl.from("#badge", { y: -60, opacity: 0, duration: 0.45, ease: "power3.out" }, 7.3);
+      tl.from("#c-note", { opacity: 0, duration: 0.4 }, 7.5);
+      tl.to("#s1", { color: "#1aa3ff", duration: 0.2 }, 7.4);
+      tl.to("#s2", { color: "#1aa3ff", duration: 0.2 }, 8.1);
+      document.querySelectorAll("#stars .star").forEach((s, i) => {
+        tl.to(s, { scale: 1.3, duration: 0.1, ease: "power2.out", onStart() { s.classList.add("on"); }, onReverseComplete() { s.classList.remove("on"); } }, 8.2 + i * 0.16);
+        tl.to(s, { scale: 1, duration: 0.12 }, 8.3 + i * 0.16);
+      });
+      const msg = "Fast, friendly and the best in town!"; const typed = { n: 0 };
+      tl.to(typed, { n: msg.length, duration: 0.9, ease: "none", onUpdate() { document.getElementById("typed").textContent = msg.slice(0, Math.round(typed.n)); } }, 9.0);
+      tl.to("#s3", { color: "#ff6a1f", duration: 0.2 }, 10.2);
+      tl.to("#post", { scale: 0.94, duration: 0.1, yoyo: true, repeat: 1 }, 10.3);
+      tl.from("#done", { opacity: 0, duration: 0.25 }, 10.55);
+      tl.from("#done .tick", { scale: 0, duration: 0.45, ease: "back.out(2.4)" }, 10.6);
+      count("count", 87, 88, 0.01, 10.7);
+      tl.to("#badge", { scale: 1.12, duration: 0.2, yoyo: true, repeat: 1, ease: "power2.out" }, 10.7);
+      out("#c-wrap", 11.72);
+
+      // D offer
+      tl.from("#d-title", { y: 70, opacity: 0, duration: 0.4, ease: "power4.out" }, 12.05);
+      tl.from(".pack", { y: 90, opacity: 0, duration: 0.45, stagger: 0.25, ease: "back.out(1.5)" }, 12.4);
+      tl.from(".perk", { x: -60, opacity: 0, duration: 0.35, stagger: 0.2, ease: "power3.out" }, 13.5);
+      tl.to(".pack.pop", { scale: 1.04, duration: 0.35, yoyo: true, repeat: 3, ease: "sine.inOut" }, 14.2);
+      out("#sceneD .sc > *", 16.72);
+
+      // E CTA
+      tl.from("#e-logo", { scale: 0.6, opacity: 0, duration: 0.5, ease: "back.out(1.8)" }, 17.05);
+      tl.from("#e-head", { y: 70, opacity: 0, duration: 0.45, ease: "power4.out" }, 17.5);
+      tl.from("#e-sub", { y: 30, opacity: 0, duration: 0.4 }, 18.1);
+      tl.from("#e-cta", { y: 80, opacity: 0, duration: 0.5, ease: "back.out(1.6)" }, 18.6);
+      tl.from("#e-url", { opacity: 0, duration: 0.4 }, 19.2);
+      tl.from("#e-ship", { opacity: 0, duration: 0.4 }, 19.6);
+      tl.to("#e-cta", { scale: 1.06, duration: 0.45, yoyo: true, repeat: 5, ease: "sine.inOut" }, 19.4);
+
+      window.__timelines["ad4"] = tl;
+    </script>
+  </body>
+</html>

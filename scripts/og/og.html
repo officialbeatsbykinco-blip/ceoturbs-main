@@ -1,0 +1,70 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700&family=Space+Grotesk:wght@600;700&display=block" />
+<style>
+  * { box-sizing: border-box; margin: 0; }
+  html, body { width: 1200px; height: 630px; overflow: hidden; background: #05070b; font-family: Inter, sans-serif; color: #fff; }
+  .wrap { position: relative; width: 1200px; height: 630px; padding: 64px 70px; }
+  .glow { position: absolute; inset: -200px -100px auto auto; width: 900px; height: 700px; background: radial-gradient(closest-side, rgba(26,159,255,.35), transparent); }
+  .glow2 { position: absolute; left: -200px; bottom: -300px; width: 800px; height: 600px; background: radial-gradient(closest-side, rgba(255,107,26,.22), transparent); }
+  .grid { position: absolute; inset: 0; background-image: linear-gradient(rgba(255,255,255,.04) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.04) 1px, transparent 1px); background-size: 56px 56px; }
+  .brand { position: relative; display: flex; align-items: center; gap: 14px; font: 700 26px "Space Grotesk"; }
+  .brand img { height: 46px; }
+  .brand b { color: #1a9fff; }
+  h1 { position: relative; margin-top: 34px; font: 700 84px/0.92 "Space Grotesk"; letter-spacing: -0.045em; max-width: 640px; }
+  h1 .c { background: linear-gradient(180deg,#fff 10%,#c8d3df 60%,#7d8a99); -webkit-background-clip: text; color: transparent; }
+  h1 .t { background: linear-gradient(100deg,#1a9fff,#6cc6ff 45%,#ffb347); -webkit-background-clip: text; color: transparent; }
+  .sub { position: relative; margin-top: 26px; font: 600 26px Inter; color: #c8d3df; }
+  .cta { position: absolute; left: 70px; bottom: 58px; display: inline-flex; align-items: center; gap: 10px; padding: 18px 28px; border-radius: 16px; font: 700 24px Inter; background: linear-gradient(180deg,#ff9a3d,#ff6b1a); box-shadow: 0 16px 40px -10px rgba(255,107,26,.7); }
+  .stage { position: absolute; right: -60px; top: 70px; width: 600px; height: 520px; perspective: 1400px; }
+  .shot { position: absolute; width: 460px; border-radius: 14px; overflow: hidden; background: #0b0f16; box-shadow: 0 40px 80px -20px rgba(0,0,0,.9), 0 0 0 1px rgba(255,255,255,.12); }
+  .shot .bar { height: 22px; display: flex; gap: 6px; align-items: center; padding: 0 10px; border-bottom: 1px solid rgba(255,255,255,.06); }
+  .shot .bar i { width: 7px; height: 7px; border-radius: 50%; background: rgba(255,255,255,.18); }
+  .shot img { display: block; width: 100%; aspect-ratio: 16/10; object-fit: cover; object-position: top; }
+  .s1 { top: 0; left: 90px; transform: rotateY(-22deg) rotateX(8deg) rotateZ(3deg); }
+  .s2 { top: 160px; left: 10px; transform: rotateY(-22deg) rotateX(8deg) rotateZ(3deg); }
+  .s3 { top: 320px; left: 120px; transform: rotateY(-22deg) rotateX(8deg) rotateZ(3deg); }
+  .big { position: absolute; right: 70px; top: 120px; text-align: right; }
+  .big .n { font: 700 170px/0.9 "Space Grotesk"; letter-spacing: -0.06em; background: linear-gradient(180deg,#fff,#8fd3ff); -webkit-background-clip: text; color: transparent; }
+  .big .l { font: 600 26px Inter; color: #c8d3df; }
+  .card { position: absolute; right: 90px; top: 150px; width: 470px; aspect-ratio: 1.586; border-radius: 26px; transform: perspective(1200px) rotateY(-18deg) rotateX(10deg); background: radial-gradient(120% 90% at 30% 20%, #3a4d66, #121a26 45%, #05070b); box-shadow: inset 0 1px 0 rgba(255,255,255,.25), 0 50px 90px -20px rgba(26,159,255,.55); }
+  .card img { position: absolute; left: 30px; top: 30px; height: 52px; }
+  .card .chip { position: absolute; left: 30px; top: 120px; width: 66px; height: 50px; border-radius: 8px; background: linear-gradient(135deg,#e8eef5,#8c98a7 55%,#d7dee6); }
+  .card .nm { position: absolute; left: 30px; bottom: 30px; font: 700 30px "Space Grotesk"; }
+  .card .price { position: absolute; right: 30px; bottom: 30px; font: 700 34px "Space Grotesk"; color: #ffb347; }
+  .portrait { position: absolute; right: 60px; top: 90px; width: 470px; height: 352px; border-radius: 22px; object-fit: cover; box-shadow: 0 40px 80px -20px rgba(26,159,255,.5), 0 0 0 1px rgba(255,255,255,.12); }
+  .dash { position: absolute; right: 50px; top: 60px; width: 500px; border-radius: 16px; box-shadow: 0 40px 80px -20px rgba(0,0,0,.9); transform: perspective(1400px) rotateY(-14deg); }
+</style>
+</head>
+<body>
+<div class="wrap" id="og">
+  <div class="grid"></div><div class="glow"></div><div class="glow2"></div>
+  <div class="brand"><img src="../../public/img/brand/ceo-turbo-logo.webp" alt="" /> CEO <b>Turbo</b></div>
+  <h1 id="h"></h1>
+  <p class="sub" id="sub"></p>
+  <div id="art"></div>
+  <div class="cta" id="cta"></div>
+</div>
+<script>
+  const shot = (slug, cls) => `<div class="shot ${cls}"><div class="bar"><i></i><i></i><i></i></div><img src="../../public/img/work/${slug}-640.webp"/></div>`;
+  const stage = (a, b, c) => `<div class="stage">${shot(a, "s1")}${shot(b, "s2")}${shot(c, "s3")}</div>`;
+  const V = {
+    ceoturbo: { h: '<span class="c">More customers.<br>More reviews.</span><br><span class="t">More listeners.</span>', sub: "Websites · Ads · Google · AI search", cta: "Book a free Brand Boost call", art: stage("mor-handy", "7uvhavin", "beyond-labels-gifts") },
+    artist: { h: '<span class="c">More listeners.</span><br><span class="t">More shows.</span>', sub: "Artist sites, socials & ads that grow fans", cta: "Book an artist growth call", art: stage("bigzo", "7uvhavin", "yari-beats") },
+    "local-business": { h: '<span class="c">More calls.</span><br><span class="t">More booked jobs.</span>', sub: "Google Maps · Websites · Meta & Google ads", cta: "Leads from $4.31 each", art: stage("mor-handy", "appliance-king", "oj-junk-removal") },
+    shopify: { h: '<span class="c">Visitors in.</span><br><span class="t">Sales out.</span>', sub: "Product pages, ads & email that sell", cta: "Book a store growth call", art: stage("beyond-labels-gifts", "focusmode-shop", "ryan-pool") },
+    "brand-boost": { h: '<span class="c">Free 30-min</span><br><span class="t">Brand Boost.</span>', sub: "We find what's costing you customers", cta: "Pick a time", art: '<img class="portrait" src="../../public/img/brand/christopher-robinson.webp"/>' },
+    card: { h: '<span class="c">Tap.<br>Saved.</span><br><span class="t">Booked.</span>', sub: "The NFC business card that books jobs", cta: "Get yours — $27.99", art: '<div class="card"><img src="../../public/img/brand/ceo-turbo-logo.webp"/><div class="chip"></div><div class="nm">Your Name</div><div class="price">$27.99</div></div>' },
+    portfolio: { h: '<span class="c">19 client sites.</span><br><span class="t">All live.</span>', sub: "Artists · Local businesses · Stores", cta: "See the work", art: stage("oj-junk-removal", "kingstone-landscaping", "swole-jd") },
+    results: { h: '<span class="c">105 leads.</span><br><span class="t">$8.01 each.</span>', sub: "Unedited Meta Ads dashboards", cta: "See every result", art: '<img class="dash" src="../../public/img/results/ryan-pool.webp"/>' },
+  };
+  const v = V[location.hash.slice(1)] || V.ceoturbo;
+  document.getElementById("h").innerHTML = v.h;
+  document.getElementById("sub").textContent = v.sub;
+  document.getElementById("cta").textContent = v.cta;
+  document.getElementById("art").innerHTML = v.art;
+</script>
+</body>
+</html>

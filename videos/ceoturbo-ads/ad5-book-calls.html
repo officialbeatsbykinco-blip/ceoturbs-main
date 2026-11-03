@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>CEO Turbo - Book a Call Ad</title>
+    <script src="assets/gsap.min.js"></script>
+    <style>
+      @font-face { font-family: "Space Grotesk"; src: url("assets/fonts/SpaceGrotesk.woff2") format("woff2"); font-weight: 300 700; }
+      @font-face { font-family: "Inter"; src: url("assets/fonts/Inter.woff2") format("woff2"); font-weight: 100 900; }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #05080c; }
+      #root { position: relative; width: 100%; height: 100%; overflow: hidden; font-family: "Inter", sans-serif; color: #f4f8fc; }
+      .clip { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+      .sc { display: flex; flex-direction: column; align-items: center; justify-content: center; }
+      #root.r45 .sc { transform: scale(0.76); }
+      .display { font-family: "Space Grotesk", sans-serif; font-weight: 700; letter-spacing: -0.03em; text-transform: uppercase; line-height: 0.92; text-align: center; }
+      .blue { color: #1aa3ff; } .orange { color: #ff6a1f; } .green { color: #2bd98a; }
+      #bg { position: absolute; inset: 0; background: radial-gradient(900px 900px at 80% 12%, rgba(26,163,255,.28), transparent 60%), radial-gradient(900px 900px at 15% 88%, rgba(255,106,31,.24), transparent 60%), #05080c; }
+      #grid { position: absolute; inset: 0; background-image: linear-gradient(rgba(255,255,255,.035) 2px, transparent 2px), linear-gradient(90deg, rgba(255,255,255,.035) 2px, transparent 2px); background-size: 90px 90px; }
+
+      #a-small { font-size: 62px; margin-bottom: 20px; color: #cfd8e3; }
+      #a-num { font-size: 310px; line-height: .95; }
+      #a-per { font-size: 110px; margin-top: 6px; }
+      #a-src { margin-top: 56px; font-size: 38px; font-weight: 600; color: #8a97a8; letter-spacing: .02em; }
+
+      #b-title { font-size: 96px; margin-bottom: 50px; }
+      #b-shot { position: relative; width: 980px; height: 169px; }
+      #b-shot img { width: 980px; height: 169px; display: block; border-radius: 22px; box-shadow: 0 30px 100px rgba(0,0,0,.6), 0 0 90px rgba(26,163,255,.3); }
+      .hl { position: absolute; border: 6px solid #ff6a1f; border-radius: 14px; box-shadow: 0 0 40px rgba(255,106,31,.7); }
+      #hl1 { left: 8px; top: 55px; width: 258px; height: 72px; } #hl2 { left: 262px; top: 55px; width: 262px; height: 72px; } #hl3 { left: 780px; top: 3px; width: 198px; height: 150px; }
+      #b-line { margin-top: 90px; font-size: 76px; }
+      #b-sub { margin-top: 26px; font-size: 40px; font-weight: 600; color: #cfd8e3; text-align: center; line-height: 1.25; padding: 0 70px; }
+
+      #c-title { font-size: 84px; margin-bottom: 44px; }
+      .card { width: 920px; padding: 36px 44px; border-radius: 36px; background: rgba(255,255,255,.06); border: 3px solid rgba(255,255,255,.16); margin-bottom: 26px; display: flex; align-items: center; justify-content: space-between; }
+      .card .who { font-size: 38px; font-weight: 700; color: #cfd8e3; } .card .what { font-size: 28px; font-weight: 500; color: #8a97a8; margin-top: 6px; }
+      .card .big { font-family: "Space Grotesk"; font-weight: 700; font-size: 104px; letter-spacing: -.03em; line-height: 1; text-align: right; }
+      .card .big small { display: block; font-size: 28px; letter-spacing: 0; font-weight: 600; color: #8a97a8; margin-top: 4px; font-family: "Inter"; }
+      #c-total { margin-top: 24px; font-size: 56px; } #c-total-sub { margin-top: 12px; font-size: 30px; color: #8a97a8; font-weight: 600; }
+
+      /* D: what happens on the call */
+      #d-top { font-size: 64px; color: #cfd8e3; } #d-title { font-size: 120px; margin-top: 8px; margin-bottom: 50px; }
+      .step { width: 920px; padding: 36px 44px; border-radius: 36px; background: rgba(255,255,255,.06); border: 3px solid rgba(255,255,255,.16); margin-bottom: 24px; display: flex; align-items: center; gap: 36px; }
+      .step .n { flex: 0 0 auto; width: 104px; height: 104px; border-radius: 50%; background: linear-gradient(135deg, #1aa3ff, #0d6efd); font-family: "Space Grotesk"; font-weight: 700; font-size: 62px; display: flex; align-items: center; justify-content: center; }
+      .step .t { font-size: 44px; font-weight: 800; line-height: 1.12; } .step .d { font-size: 30px; font-weight: 500; color: #9aa7b8; margin-top: 6px; line-height: 1.25; }
+
+      #e-logo { width: 440px; }
+      #e-head { font-size: 112px; margin-top: 30px; }
+      #e-body { font-size: 46px; margin-top: 26px; color: #cfd8e3; text-align: center; font-weight: 600; line-height: 1.28; padding: 0 90px; }
+      #e-cta { margin-top: 56px; padding: 42px 70px; border-radius: 999px; background: linear-gradient(135deg, #ff8a3d, #ff6a1f); color: #05080c; font-size: 62px; font-weight: 800; box-shadow: 0 20px 80px rgba(255,106,31,.55); }
+      #e-url { margin-top: 36px; font-size: 46px; font-weight: 700; color: #1aa3ff; }
+      #e-fine { margin-top: 18px; font-size: 34px; font-weight: 600; color: #2bd98a; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="ad5" data-start="0" data-duration="22" data-width="1080" data-height="1920">
+      <div id="bg"></div>
+      <div id="grid"></div>
+
+      <section id="sceneA" class="clip" data-start="0" data-duration="3"><div class="sc">
+        <div id="a-small" class="display">Local business. Real ad spend.</div>
+        <div id="a-num" class="display blue">$<span id="a-val">12.00</span></div>
+        <div id="a-per" class="display">per lead.</div>
+        <div id="a-src">Meta Ads Manager, lead-form campaign</div>
+      </div></section>
+
+      <section id="sceneB" class="clip" data-start="3" data-duration="5"><div class="sc">
+        <div id="b-title" class="display">Not a mockup.</div>
+        <div id="b-shot">
+          <img src="assets/img/ryan-pool-top.jpg" alt="Meta Ads Manager: 29 leads at $4.89 each" />
+          <div id="hl1" class="hl"></div><div id="hl2" class="hl"></div><div id="hl3" class="hl"></div>
+        </div>
+        <div id="b-line" class="display"><span class="green">35% cheaper</span><br />than similar ad sets</div>
+        <div id="b-sub">29 leads at $4.89. Meta's peer median: $7.26.</div>
+      </div></section>
+
+      <section id="sceneC" class="clip" data-start="8" data-duration="5"><div class="sc">
+        <div id="c-title" class="display">More leads. <span class="orange">Same story.</span></div>
+        <div class="card" id="k1"><div><div class="who">Appliance King</div><div class="what">Appliance repair</div></div><div class="big blue"><span id="k1v">0</span><small>leads at $6.51</small></div></div>
+        <div class="card" id="k2"><div><div class="who">Stackmode</div><div class="what">Computer repair, 66% below peers</div></div><div class="big blue"><span id="k2v">0</span><small>leads at $4.31</small></div></div>
+        <div class="card" id="k3"><div><div class="who">Ryan Pool Enagic</div><div class="what">Kangen water systems</div></div><div class="big blue"><span id="k3v">0</span><small>leads at $4.89</small></div></div>
+        <div id="c-total" class="display"><span class="green"><span id="tot">0</span> leads</span> across 7 campaigns</div>
+        <div id="c-total-sub">Jul-Aug 2026, Meta Ads Manager</div>
+      </div></section>
+
+      <section id="sceneD" class="clip" data-start="13" data-duration="5"><div class="sc">
+        <div id="d-top" class="display">Your free</div>
+        <div id="d-title" class="display blue">30-min call</div>
+        <div class="step"><div class="n">1</div><div><div class="t">We review it live</div><div class="d">Your website, Google profile, reviews, socials and ads.</div></div></div>
+        <div class="step"><div class="n">2</div><div><div class="t">We name the #1 fix</div><div class="d">The one change that brings the most customers fastest.</div></div></div>
+        <div class="step"><div class="n">3</div><div><div class="t">You get a fixed-price plan</div><div class="d">Keep it whether or not you hire us.</div></div></div>
+      </div></section>
+
+      <section id="sceneE" class="clip" data-start="18" data-duration="4"><div class="sc">
+        <img id="e-logo" src="assets/img/ceo-turbo-logo.png" alt="CEO Turbo" />
+        <div id="e-head" class="display">Want <span class="blue">yours?</span></div>
+        <div id="e-body">Free for local businesses,<br />artists &amp; online stores.</div>
+        <div id="e-cta">Book my free call</div>
+        <div id="e-url">ceoturbo.com/brand-boost</div>
+        <div id="e-fine">Keep the plan either way</div>
+      </div></section>
+
+      <audio id="bgm" src="assets/audio/ad5.wav" data-start="0" data-duration="22" data-volume="0.9"></audio>
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+      tl.fromTo("#bg", { scale: 1 }, { scale: 1.15, duration: 22, ease: "none" }, 0);
+      const out = (sel, t) => tl.to(sel, { opacity: 0, duration: 0.25, ease: "power2.in" }, t);
+      const count = (id, to, dur, at) => { const o = { v: 0 }; tl.to(o, { v: to, duration: dur, ease: "power2.out", onUpdate() { document.getElementById(id).textContent = Math.round(o.v); } }, at); };
+
+      tl.from("#a-small", { y: 60, opacity: 0, duration: 0.4, ease: "power4.out" }, 0.1);
+      tl.from("#a-num", { scale: 1.6, opacity: 0, duration: 0.4, ease: "power4.out" }, 0.3);
+      const price = { v: 12 };
+      tl.to(price, { v: 4.89, duration: 1.5, ease: "power3.inOut", onUpdate() { document.getElementById("a-val").textContent = price.v.toFixed(2); } }, 0.7);
+      tl.from("#a-per", { y: 50, opacity: 0, duration: 0.4, ease: "power4.out" }, 1.4);
+      tl.from("#a-src", { opacity: 0, duration: 0.4 }, 2.0);
+      tl.to("#a-num", { scale: 1.07, duration: 0.15, yoyo: true, repeat: 1 }, 2.25);
+      out("#sceneA .sc > *", 2.72);
+
+      tl.from("#b-title", { y: 70, opacity: 0, duration: 0.4, ease: "power4.out" }, 3.05);
+      tl.from("#b-shot", { y: 120, opacity: 0, scale: 0.9, duration: 0.6, ease: "power4.out" }, 3.4);
+      tl.from("#hl1", { scale: 1.5, opacity: 0, duration: 0.3, ease: "back.out(2)" }, 4.3);
+      tl.from("#hl2", { scale: 1.5, opacity: 0, duration: 0.3, ease: "back.out(2)" }, 4.6);
+      tl.from("#hl3", { scale: 1.3, opacity: 0, duration: 0.3, ease: "back.out(2)" }, 5.2);
+      tl.to("#b-shot", { scale: 1.04, duration: 2.2, ease: "none" }, 4.2);
+      tl.from("#b-line", { y: 60, opacity: 0, duration: 0.45, ease: "power4.out" }, 5.4);
+      tl.from("#b-sub", { opacity: 0, y: 30, duration: 0.4 }, 6.2);
+      out("#sceneB .sc > *", 7.72);
+
+      tl.from("#c-title", { y: 70, opacity: 0, duration: 0.4, ease: "power4.out" }, 8.05);
+      ["#k1", "#k2", "#k3"].forEach((k, i) => tl.from(k, { x: i % 2 ? 400 : -400, opacity: 0, duration: 0.45, ease: "power4.out" }, 8.4 + i * 0.4));
+      count("k1v", 55, 0.8, 8.5); count("k2v", 12, 0.8, 8.9); count("k3v", 29, 0.8, 9.3);
+      tl.from("#c-total", { y: 50, opacity: 0, duration: 0.4, ease: "back.out(1.7)" }, 10.2);
+      count("tot", 147, 1.1, 10.3);
+      tl.from("#c-total-sub", { opacity: 0, duration: 0.4 }, 11.0);
+      out("#sceneC .sc > *", 12.72);
+
+      tl.from("#d-top", { y: 50, opacity: 0, duration: 0.35, ease: "power4.out" }, 13.05);
+      tl.from("#d-title", { scale: 1.6, opacity: 0, duration: 0.45, ease: "power4.out" }, 13.3);
+      tl.from(".step", { x: -500, opacity: 0, duration: 0.45, stagger: 0.55, ease: "power4.out" }, 14.0);
+      out("#sceneD .sc > *", 17.72);
+
+      tl.from("#e-logo", { scale: 0.6, opacity: 0, duration: 0.5, ease: "back.out(1.8)" }, 18.05);
+      tl.from("#e-head", { y: 60, opacity: 0, duration: 0.45, ease: "power4.out" }, 18.45);
+      tl.from("#e-body", { y: 30, opacity: 0, duration: 0.4 }, 18.95);
+      tl.from("#e-cta", { y: 80, opacity: 0, duration: 0.5, ease: "back.out(1.6)" }, 19.4);
+      tl.from("#e-url", { opacity: 0, duration: 0.4 }, 19.9);
+      tl.from("#e-fine", { opacity: 0, duration: 0.4 }, 20.3);
+      tl.to("#e-cta", { scale: 1.06, duration: 0.45, yoyo: true, repeat: 3, ease: "sine.inOut" }, 20.2);
+
+      window.__timelines["ad5"] = tl;
+    </script>
+  </body>
+</html>

@@ -1,0 +1,43 @@
+EVENT LAST MINUTE — voice-over script (18.3 s, 9:16)
+Ad: ads/hyperframes/build.mjs → id "event-last-minute" → ceoturbo.com/custom-company-t-shirts
+
+Timeline is real, not "overnight": company shirts print in 2–4 business days and arrive
+3–6 business days after they ship (src/config/site.ts). Don't promise faster in the voice.
+
+VOICE
+- Woman, 25–35, American, warm. A TikTok creator telling a friend what happened, not an announcer.
+- Talk, don't read: run-on phrasing, a breath before the punchline, slight laugh on "oh my god".
+- Imperfect is good: let "like" and "seriously" land loose. No studio-perfect diction.
+- Arc: panic → embarrassed → surprised → relieved/proud → genuine recommendation.
+- Pace: fast at the top, slows in scene 4, steady and warm at the end.
+
+[SCENE 1 — 0.0–4.1s — on screen: "EVENT IS IN 2 WEEKS" / sticker "and i have ZERO shirts"]
+(Panic, fast, a little breathless. Hit "two weeks" and "zero".)
+"Okay so my event is in two weeks... and I have, like, zero shirts."
+
+[SCENE 2 — 4.1–7.7s — on screen: "SPONSOR ASKED: 'WHERE'S THE MERCH?'"]
+(Storytelling, embarrassed. Quote the sponsor in a slightly prim voice, then drop to a whisper-laugh.)
+"Then the sponsor goes, 'where's the merch?' And I'm like... oh my god."
+
+[SCENE 3 — 7.7–10.5s — on screen: "UPLOADED LOGO. DONE IN 2 MIN." / sticker "no minimum"]
+(Surprised, picking up speed, a bit giddy. Lean on "two minutes".)
+"So I uploaded our logo. Two minutes. Done."
+
+[SCENE 4 — 10.5–14.5s — on screen: "SHOWED UP WITH DAYS TO SPARE." / sticker "prints in 2–4 days"]
+(Slower, relieved, proud. Smile you can hear.)
+"Printed in a few days, showed up with time to spare... and they look so good."
+
+[SCENE 5 — 14.5–18.3s — end card: "NEVER PANIC AGAIN" / "Design yours"]
+(Warm, sincere, not salesy. "Seriously" is a friend talking, not a pitch.)
+"Seriously. Save yourself the panic. Design yours."
+
+GENERATED TAKE
+Kokoro af_heart (American female), speeds 1.12 / 1.1 / 1.05 / 1.0 / 1.0 for scenes 1–5 (fast panic, steady close).
+Lines: videos/ceoturbo-ads/assets/audio/event-vo/l1..l5.wav (silence-trimmed, 3.8 / 3.3 / 2.4 / 3.7 / 3.1 s).
+Mix:   videos/ceoturbo-ads/mix-audio-event.sh → ads/hyperframes/out/event-last-minute-vo.mp4 (-14 LUFS).
+Scene lengths in build.mjs are set so each line ends before the next cut. If you record a real voice,
+drop l1..l5.wav in event-vo/ with the same names and re-run the mix; re-time scenes if a take runs long.
+
+TIMING
+~2.6–3 words per second. If a take runs long, cut fillers ("like") before speeding the voice up.
+Each line starts at its scene start + 0.15s.

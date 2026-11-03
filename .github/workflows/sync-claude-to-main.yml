@@ -1,0 +1,56 @@
+# Safety net: Vercel only deploys `main` to ceoturbo.com. If a Claude session
+# ever pushes work to a claude/* branch instead of main, this merges it into
+# main (after tests + build pass on the merged result) so the live site always
+# matches the latest work.
+name: Sync claude/* branches into main
+
+on:
+  push:
+    branches:
+      - "claude/**"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sync-to-main
+  cancel-in-progress: false
+
+jobs:
+  merge-into-main:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Merge branch into main
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git fetch origin "$GITHUB_REF_NAME"
+          if git merge-base --is-ancestor "origin/$GITHUB_REF_NAME" HEAD; then
+            echo "main already contains $GITHUB_REF_NAME"
+            echo "SKIP=1" >> "$GITHUB_ENV"
+          else
+            git merge --no-edit "origin/$GITHUB_REF_NAME" \
+              -m "Merge $GITHUB_REF_NAME into main (auto-sync for Vercel)"
+          fi
+
+      - uses: actions/setup-node@v4
+        if: env.SKIP != '1'
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Test and build
+        if: env.SKIP != '1'
+        run: |
+          npm ci
+          npx vitest run
+          npm run build
+
+      - name: Push main
+        if: env.SKIP != '1'
+        run: git push origin HEAD:main

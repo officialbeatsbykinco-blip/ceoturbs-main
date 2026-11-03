@@ -1,0 +1,67 @@
+# Re-screenshots every client website shown on ceoturbo.com (portfolio tiles, the moving site wall,
+# case studies) and commits the images to main, which Vercel then deploys.
+# Run it from the Actions tab ("Run workflow") after a client site changes; it also runs when the
+# capture script itself changes. Optional input: space-separated slugs to refresh only those.
+name: Refresh client site screenshots
+
+on:
+  workflow_dispatch:
+    inputs:
+      slugs:
+        description: "Only these client slugs (space-separated). Empty = all."
+        required: false
+        default: ""
+  push:
+    branches: [main]
+    paths:
+      - scripts/capture-site-shots.mjs
+      - .github/workflows/site-shots.yml
+
+permissions:
+  contents: write
+
+concurrency:
+  group: site-shots
+  cancel-in-progress: false
+
+jobs:
+  capture:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install
+        run: |
+          npm ci
+          npm install --no-save playwright@1.49.1
+          npx playwright install --with-deps chromium
+
+      - name: Capture screenshots
+        # A site that is down keeps its old image; the others are still committed.
+        continue-on-error: true
+        run: node scripts/capture-site-shots.mjs ${{ github.event.inputs.slugs }}
+
+      - name: Check tests and build still pass
+        run: |
+          npx vitest run
+          npm run build
+
+      - name: Commit to main
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/img/work
+          if git diff --cached --quiet; then
+            echo "No screenshot changes"
+            exit 0
+          fi
+          git commit -m "Refresh client site screenshots (full width, uncropped)"
+          git pull --rebase origin main
+          git push origin HEAD:main

@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>CEO Turbo - Artist Growth Ad</title>
+    <script src="assets/gsap.min.js"></script>
+    <style>
+      @font-face { font-family: "Space Grotesk"; src: url("assets/fonts/SpaceGrotesk.woff2") format("woff2"); font-weight: 300 700; }
+      @font-face { font-family: "Inter"; src: url("assets/fonts/Inter.woff2") format("woff2"); font-weight: 100 900; }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #05080c; }
+      #root { position: relative; width: 100%; height: 100%; overflow: hidden; font-family: "Inter", sans-serif; color: #f4f8fc; }
+      .clip { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+      .display { font-family: "Space Grotesk", sans-serif; font-weight: 700; letter-spacing: -0.03em; text-transform: uppercase; line-height: 0.92; text-align: center; }
+      .blue { color: #1aa3ff; } .orange { color: #ff6a1f; } .green { color: #2bd98a; } .dim { color: #8a97a8; }
+      #bg { position: absolute; inset: 0; background: radial-gradient(900px 900px at 50% 10%, rgba(255,106,31,.26), transparent 60%), radial-gradient(900px 900px at 50% 95%, rgba(26,163,255,.26), transparent 60%), #05080c; }
+      #grid { position: absolute; inset: 0; background-image: linear-gradient(rgba(255,255,255,.035) 2px, transparent 2px), linear-gradient(90deg, rgba(255,255,255,.035) 2px, transparent 2px); background-size: 90px 90px; }
+
+      #a-top { font-size: 76px; color: #cfd8e3; }
+      #a-num { font-size: 320px; line-height: 1; margin-top: 8px; position: relative; }
+      #a-num .strike { position: absolute; left: -10px; right: -10px; top: 52%; height: 22px; background: #ff6a1f; border-radius: 12px; transform-origin: left center; }
+      #a-lbl { font-size: 76px; margin-top: 10px; }
+      #b-q { font-size: 118px; }
+      #b-num { font-size: 320px; margin-top: 10px; line-height: 1; }
+      #b-lbl { font-size: 80px; margin-top: 10px; }
+      #b-tag { margin-top: 56px; font-size: 44px; font-weight: 700; padding: 20px 40px; border-radius: 999px; background: rgba(43,217,138,.14); border: 3px solid #2bd98a; color: #2bd98a; text-transform: uppercase; letter-spacing: .03em; }
+      #c-title { font-size: 90px; margin-bottom: 44px; }
+      #c-shot { position: relative; width: 980px; height: 169px; }
+      #c-shot img { width: 980px; height: 169px; display: block; border-radius: 22px; box-shadow: 0 30px 100px rgba(0,0,0,.6), 0 0 90px rgba(255,106,31,.3); }
+      .hl { position: absolute; border: 6px solid #ff6a1f; border-radius: 14px; box-shadow: 0 0 40px rgba(255,106,31,.7); }
+      #hl1 { left: 8px; top: 52px; width: 258px; height: 74px; } #hl2 { left: 262px; top: 52px; width: 262px; height: 74px; } #hl3 { left: 780px; top: 3px; width: 198px; height: 150px; }
+      #c-stats { margin-top: 70px; display: flex; gap: 26px; }
+      .stat { width: 440px; padding: 34px 20px; border-radius: 32px; background: rgba(255,255,255,.06); border: 3px solid rgba(255,255,255,.16); text-align: center; }
+      .stat .n { font-family: "Space Grotesk"; font-weight: 700; font-size: 120px; line-height: 1; letter-spacing: -.03em; }
+      .stat .l { font-size: 32px; font-weight: 600; color: #cfd8e3; margin-top: 8px; }
+      #c-note { margin-top: 40px; font-size: 36px; color: #8a97a8; font-weight: 600; text-align: center; padding: 0 80px; line-height: 1.25; }
+      #d-logo { width: 440px; }
+      #d-head { font-size: 88px; margin-top: 34px; }
+      #d-body { font-size: 46px; margin-top: 28px; color: #cfd8e3; text-align: center; font-weight: 600; line-height: 1.28; padding: 0 90px; }
+      #d-cta { margin-top: 60px; padding: 40px 60px; border-radius: 999px; background: linear-gradient(135deg, #ff8a3d, #ff6a1f); color: #05080c; font-size: 52px; font-weight: 800; box-shadow: 0 20px 80px rgba(255,106,31,.5); }
+      #d-url { margin-top: 34px; font-size: 46px; font-weight: 700; color: #1aa3ff; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="ad3" data-start="0" data-duration="16" data-width="1080" data-height="1920">
+      <div id="bg"></div>
+      <div id="grid"></div>
+
+      <!-- A 0-3 -->
+      <section id="sceneA" class="clip" data-start="0" data-duration="3">
+        <div id="a-top" class="display">Going rate for an artist profile visit:</div>
+        <div id="a-num" class="display dim">$0.85<span class="strike"></span></div>
+        <div id="a-lbl" class="display">Meta's peer median</div>
+      </section>
+
+      <!-- B 3-7 -->
+      <section id="sceneB" class="clip" data-start="3" data-duration="4">
+        <div id="b-q" class="display">We got</div>
+        <div id="b-num" class="display orange">$0.32</div>
+        <div id="b-lbl" class="display">per profile visit</div>
+        <div id="b-tag">62% lower than similar ad sets</div>
+      </section>
+
+      <!-- C 7-11 -->
+      <section id="sceneC" class="clip" data-start="7" data-duration="4">
+        <div id="c-title" class="display">Real artist. <span class="orange">Real dashboard.</span></div>
+        <div id="c-shot">
+          <img src="assets/img/bigzo-top.jpg" alt="Meta Ads Manager: 165 profile visits at $0.32" />
+          <div id="hl1" class="hl"></div><div id="hl2" class="hl"></div><div id="hl3" class="hl"></div>
+        </div>
+        <div id="c-stats">
+          <div class="stat"><div class="n blue"><span id="s1">0</span></div><div class="l">profile visits</div></div>
+          <div class="stat"><div class="n green">$<span id="s2">0</span></div><div class="l">total ad spend</div></div>
+        </div>
+        <div id="c-note">BIGZO, Jul-Aug 2026. Results vary by artist and budget.</div>
+      </section>
+
+      <!-- D 11-16 -->
+      <section id="sceneD" class="clip" data-start="11" data-duration="5">
+        <img id="d-logo" src="assets/img/ceo-turbo-logo.png" alt="CEO Turbo" />
+        <div id="d-head" class="display">Grow your <span class="orange">fanbase.</span></div>
+        <div id="d-body">Ads, website and Google presence<br />built for artists.</div>
+        <div id="d-cta">See artist plans</div>
+        <div id="d-url">ceoturbo.com/artist</div>
+      </section>
+
+      <audio id="bgm" src="assets/audio/ad3.wav" data-start="0" data-duration="16" data-volume="0.9"></audio>
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+      tl.fromTo("#bg", { scale: 1 }, { scale: 1.15, duration: 16, ease: "none" }, 0);
+      const out = (sel, t) => tl.to(sel, { opacity: 0, duration: 0.25, ease: "power2.in" }, t);
+      const count = (id, to, dur, at, fmt) => {
+        const o = { v: 0 };
+        tl.to(o, { v: to, duration: dur, ease: "power2.out", onUpdate() { document.getElementById(id).textContent = fmt ? fmt(o.v) : Math.round(o.v); } }, at);
+      };
+
+      tl.from("#a-top", { y: 60, opacity: 0, duration: 0.4, ease: "power4.out" }, 0.1);
+      tl.from("#a-num", { scale: 1.6, opacity: 0, duration: 0.45, ease: "power4.out" }, 0.5);
+      tl.from("#a-num .strike", { scaleX: 0, duration: 0.35, ease: "power3.out" }, 1.7);
+      tl.from("#a-lbl", { y: 40, opacity: 0, duration: 0.4 }, 1.1);
+      out("#sceneA > *", 2.72);
+
+      tl.from("#b-q", { y: 60, opacity: 0, duration: 0.35, ease: "power4.out" }, 3.05);
+      tl.from("#b-num", { scale: 2, opacity: 0, duration: 0.5, ease: "power4.out" }, 3.4);
+      tl.from("#b-lbl", { y: 40, opacity: 0, duration: 0.4 }, 4.0);
+      tl.from("#b-tag", { y: 50, opacity: 0, scale: 0.8, duration: 0.45, ease: "back.out(1.8)" }, 4.7);
+      tl.to("#b-num", { scale: 1.06, duration: 0.2, yoyo: true, repeat: 1 }, 5.2);
+      out("#sceneB > *", 6.72);
+
+      tl.from("#c-title", { y: 60, opacity: 0, duration: 0.4, ease: "power4.out" }, 7.05);
+      tl.from("#c-shot", { y: 100, opacity: 0, scale: 0.9, duration: 0.55, ease: "power4.out" }, 7.4);
+      tl.from("#hl1", { scale: 1.5, opacity: 0, duration: 0.3, ease: "back.out(2)" }, 8.1);
+      tl.from("#hl2", { scale: 1.5, opacity: 0, duration: 0.3, ease: "back.out(2)" }, 8.4);
+      tl.from("#hl3", { scale: 1.3, opacity: 0, duration: 0.3, ease: "back.out(2)" }, 8.7);
+      tl.from(".stat", { y: 60, opacity: 0, duration: 0.45, stagger: 0.25, ease: "back.out(1.7)" }, 8.5);
+      count("s1", 165, 1.0, 8.6); count("s2", 53.59, 1.0, 8.85, (v) => v.toFixed(2));
+      tl.from("#c-note", { opacity: 0, duration: 0.4 }, 9.6);
+      out("#sceneC > *", 10.72);
+
+      tl.from("#d-logo", { scale: 0.6, opacity: 0, duration: 0.5, ease: "back.out(1.8)" }, 11.05);
+      tl.from("#d-head", { y: 60, opacity: 0, duration: 0.45, ease: "power4.out" }, 11.5);
+      tl.from("#d-body", { y: 30, opacity: 0, duration: 0.45 }, 12.1);
+      tl.from("#d-cta", { y: 80, opacity: 0, duration: 0.5, ease: "back.out(1.6)" }, 12.7);
+      tl.from("#d-url", { opacity: 0, duration: 0.4 }, 13.3);
+      tl.to("#d-cta", { scale: 1.06, duration: 0.5, yoyo: true, repeat: 3, ease: "sine.inOut" }, 13.4);
+
+      window.__timelines["ad3"] = tl;
+    </script>
+  </body>
+</html>

@@ -1,0 +1,40 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Local lead capture (dev only) and env files
+.leads
+.env
+.env.*
+!.env.example
+media-source/
+
+# Local MCP config (holds the Cal.com API key)
+.mcp.json
+.vercel
+.env*
+
+# Apps Script copy with the real lead secret (never commit)
+docs/leads-apps-script.local.js
+ads/youtube/.build/

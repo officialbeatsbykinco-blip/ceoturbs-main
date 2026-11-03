@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>CEO Turbo - Review Card Ad</title>
+    <script src="assets/gsap.min.js"></script>
+    <style>
+      @font-face { font-family: "Space Grotesk"; src: url("assets/fonts/SpaceGrotesk.woff2") format("woff2"); font-weight: 300 700; }
+      @font-face { font-family: "Inter"; src: url("assets/fonts/Inter.woff2") format("woff2"); font-weight: 100 900; }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #05080c; }
+      #root { position: relative; width: 100%; height: 100%; overflow: hidden; font-family: "Inter", sans-serif; color: #f4f8fc; }
+      .clip { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+      .display { font-family: "Space Grotesk", sans-serif; font-weight: 700; letter-spacing: -0.03em; text-transform: uppercase; line-height: 0.92; text-align: center; }
+      .blue { color: #1aa3ff; } .orange { color: #ff6a1f; } .gold { color: #fbbc04; }
+
+      /* persistent ground */
+      #bg { position: absolute; inset: 0; background: radial-gradient(900px 900px at 20% 15%, rgba(26,163,255,.28), transparent 60%), radial-gradient(900px 900px at 85% 85%, rgba(255,106,31,.24), transparent 60%), #05080c; }
+      #grid { position: absolute; inset: 0; background-image: linear-gradient(rgba(255,255,255,.035) 2px, transparent 2px), linear-gradient(90deg, rgba(255,255,255,.035) 2px, transparent 2px); background-size: 90px 90px; }
+
+      /* scene A */
+      #a-l1 { font-size: 150px; } #a-l2 { font-size: 150px; } #a-l3 { font-size: 190px; }
+      .word { display: block; }
+      #a-chip { margin-top: 56px; font-size: 40px; font-weight: 700; padding: 18px 34px; border-radius: 999px; border: 3px solid rgba(255,255,255,.25); color: #cfd8e3; letter-spacing: .04em; text-transform: uppercase; }
+
+      /* scene B */
+      #b-top { font-size: 120px; margin-top: -40px; } #b-big { font-size: 225px; margin-top: 10px; }
+      #b-stage { position: relative; width: 900px; height: 700px; margin-top: 30px; display: flex; align-items: center; justify-content: center; }
+      .ring { position: absolute; width: 360px; height: 360px; border-radius: 50%; border: 8px solid #1aa3ff; }
+      #b-card { position: relative; width: 640px; height: 640px; border-radius: 48px; overflow: hidden; box-shadow: 0 40px 120px rgba(26,163,255,.35); }
+      #b-card img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+      /* scene C */
+      #c-wrap { position: relative; width: 1080px; height: 1500px; }
+      #c-steps { position: absolute; left: 70px; top: 520px; display: flex; flex-direction: column; gap: 70px; }
+      .step { font-size: 118px; color: rgba(255,255,255,.22); }
+      #phone { position: absolute; right: 60px; top: 150px; width: 560px; height: 1150px; border-radius: 84px; background: #0d141c; border: 12px solid #1c2733; box-shadow: 0 50px 140px rgba(0,0,0,.6), 0 0 120px rgba(26,163,255,.25); overflow: hidden; }
+      #screen { position: absolute; inset: 0; background: #fff; color: #101826; display: flex; flex-direction: column; align-items: center; padding: 120px 40px 0; }
+      #notch { position: absolute; top: 22px; left: 50%; margin-left: -80px; width: 160px; height: 46px; border-radius: 30px; background: #0d141c; }
+      #q { font-weight: 800; font-size: 46px; text-align: center; letter-spacing: -.02em; }
+      #qs { font-size: 28px; color: #6b7685; margin-top: 12px; }
+      #stars { display: flex; gap: 14px; margin-top: 56px; }
+      .star { width: 74px; height: 74px; }
+      .star path { fill: #dfe3e8; }
+      .star.on path { fill: #fbbc04; }
+      #field { margin-top: 56px; width: 100%; height: 250px; border-radius: 26px; background: #f2f4f6; padding: 26px; font-size: 30px; color: #101826; line-height: 1.3; }
+      #post { margin-top: 44px; width: 100%; height: 100px; border-radius: 50px; background: #1a73e8; color: #fff; font-weight: 800; font-size: 36px; display: flex; align-items: center; justify-content: center; }
+      #done { position: absolute; inset: 0; background: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 30px; }
+      #done .tick { width: 190px; height: 190px; border-radius: 50%; background: #1e9e55; display: flex; align-items: center; justify-content: center; }
+      #done .t { font-size: 52px; font-weight: 800; color: #101826; }
+      #badge { position: absolute; left: 60px; top: 140px; padding: 26px 34px; border-radius: 30px; background: rgba(13,20,28,.92); border: 3px solid rgba(255,255,255,.14); display: flex; align-items: center; gap: 22px; }
+      #badge .r { font-family: "Space Grotesk"; font-weight: 700; font-size: 70px; }
+      #badge .s { font-size: 30px; color: #cfd8e3; line-height: 1.15; }
+      #c-note { position: absolute; left: 70px; bottom: 150px; font-size: 26px; color: #7f8b9a; }
+
+      /* scene D */
+      #d-title { font-size: 92px; } #d-photo { width: 760px; height: 760px; border-radius: 56px; overflow: hidden; margin-top: 40px; box-shadow: 0 40px 120px rgba(255,106,31,.28); }
+      #d-photo img { width: 100%; height: 100%; object-fit: cover; }
+      #d-chips { margin-top: 44px; display: flex; flex-direction: column; gap: 22px; align-items: center; }
+      .chip { font-size: 40px; font-weight: 700; padding: 22px 40px; border-radius: 999px; background: rgba(255,255,255,.07); border: 3px solid rgba(255,255,255,.18); }
+      .chip b { color: #1aa3ff; }
+
+      /* scene E */
+      #e-logo { width: 520px; } #e-sub { font-size: 54px; margin-top: 30px; color: #cfd8e3; }
+      #e-from { font-size: 44px; margin-top: 60px; color: #7f8b9a; letter-spacing: .1em; text-transform: uppercase; font-weight: 700; }
+      #e-price { font-size: 270px; line-height: 1; }
+      #e-ship { font-size: 54px; font-weight: 800; color: #ff6a1f; letter-spacing: .06em; text-transform: uppercase; margin-top: 4px; }
+      #e-cta { margin-top: 70px; padding: 38px 52px; border-radius: 999px; background: linear-gradient(135deg, #1aa3ff, #0d6efd); font-size: 46px; font-weight: 800; box-shadow: 0 20px 80px rgba(26,163,255,.5); }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="ad1" data-start="0" data-duration="24" data-width="1080" data-height="1920">
+      <div id="bg"></div>
+      <div id="grid"></div>
+
+      <!-- A: hook (0-3) -->
+      <section id="sceneA" class="clip" data-start="0" data-duration="3">
+        <div id="a-l1" class="display word">Happy customers</div>
+        <div id="a-l2" class="display word">don't leave</div>
+        <div id="a-l3" class="display word orange">reviews.</div>
+        <div id="a-chip">Because it takes too long</div>
+      </section>
+
+      <!-- B: one tap (3-7) -->
+      <section id="sceneB" class="clip" data-start="3" data-duration="4">
+        <div id="b-top" class="display">Unless it takes</div>
+        <div id="b-big" class="display blue">one tap.</div>
+        <div id="b-stage">
+          <div class="ring"></div><div class="ring"></div><div class="ring"></div>
+          <div id="b-card"><img src="assets/img/shop-tap.jpg" alt="NFC Google review card and phone" /></div>
+        </div>
+      </section>
+
+      <!-- C: phone flow (7-13) -->
+      <section id="sceneC" class="clip" data-start="7" data-duration="6">
+        <div id="c-wrap">
+          <div id="c-steps">
+            <div id="s1" class="display step">Tap.</div>
+            <div id="s2" class="display step">Star.</div>
+            <div id="s3" class="display step">Done.</div>
+          </div>
+          <div id="phone">
+            <div id="screen">
+              <div id="notch"></div>
+              <div id="q">How was your visit?</div>
+              <div id="qs">Tap a star to rate</div>
+              <div id="stars">
+                <svg class="star" viewBox="0 0 24 24"><path d="M12 2l3.1 6.6 7.2.9-5.3 5 1.4 7.2L12 18.1 5.6 21.7 7 14.5 1.7 9.5l7.2-.9z"/></svg>
+                <svg class="star" viewBox="0 0 24 24"><path d="M12 2l3.1 6.6 7.2.9-5.3 5 1.4 7.2L12 18.1 5.6 21.7 7 14.5 1.7 9.5l7.2-.9z"/></svg>
+                <svg class="star" viewBox="0 0 24 24"><path d="M12 2l3.1 6.6 7.2.9-5.3 5 1.4 7.2L12 18.1 5.6 21.7 7 14.5 1.7 9.5l7.2-.9z"/></svg>
+                <svg class="star" viewBox="0 0 24 24"><path d="M12 2l3.1 6.6 7.2.9-5.3 5 1.4 7.2L12 18.1 5.6 21.7 7 14.5 1.7 9.5l7.2-.9z"/></svg>
+                <svg class="star" viewBox="0 0 24 24"><path d="M12 2l3.1 6.6 7.2.9-5.3 5 1.4 7.2L12 18.1 5.6 21.7 7 14.5 1.7 9.5l7.2-.9z"/></svg>
+              </div>
+              <div id="field"><span id="typed"></span></div>
+              <div id="post">Post review</div>
+              <div id="done" data-layout-allow-occlusion>
+                <div class="tick"><svg width="110" height="110" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>
+                <div class="t">Review posted</div>
+              </div>
+            </div>
+          </div>
+          <div id="badge">
+            <div class="r gold" id="rating">4.8</div>
+            <div class="s"><span class="gold">&#9733;&#9733;&#9733;&#9733;&#9733;</span><br /><span id="count">87</span> Google reviews</div>
+          </div>
+          <div id="c-note">Illustrative example</div>
+        </div>
+      </section>
+
+      <!-- D: product proof (13-18) -->
+      <section id="sceneD" class="clip" data-start="13" data-duration="5">
+        <div id="d-title" class="display">Tap <span class="blue">in.</span> Review <span class="orange">done.</span></div>
+        <div id="d-photo"><img src="assets/img/feed-white.jpg" alt="Google review tap card front and back" /></div>
+        <div id="d-chips">
+          <div class="chip"><b>NFC</b> tap. No app for your customer.</div>
+          <div class="chip">Waterproof matte PVC card</div>
+          <div class="chip">Ships in 1-2 days from Atlanta</div>
+        </div>
+      </section>
+
+      <!-- E: offer + CTA (18-24) -->
+      <section id="sceneE" class="clip" data-start="18" data-duration="6">
+        <img id="e-logo" src="assets/img/ceo-turbo-logo.png" alt="CEO Turbo" />
+        <div id="e-sub" class="display">Google Review Tap Card</div>
+        <div id="e-from">From</div>
+        <div id="e-price" class="display blue">$24.99</div>
+        <div id="e-ship">Free US shipping</div>
+        <div id="e-cta">ceoturbo.com/google-review-cards</div>
+      </section>
+
+      <audio id="bgm" src="assets/audio/ad1.wav" data-start="0" data-duration="24" data-volume="0.9"></audio>
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+      const pop = { ease: "back.out(1.8)" };
+
+      // ground drift
+      tl.fromTo("#bg", { scale: 1 }, { scale: 1.15, duration: 24, ease: "none" }, 0);
+
+      // A - hook
+      tl.from("#a-l1", { y: 120, opacity: 0, duration: 0.35, ease: "power4.out" }, 0.1);
+      tl.from("#a-l2", { y: 120, opacity: 0, duration: 0.35, ease: "power4.out" }, 0.5);
+      tl.from("#a-l3", { scale: 2.2, opacity: 0, duration: 0.4, ease: "power4.out" }, 1.0);
+      tl.from("#a-chip", { y: 40, opacity: 0, duration: 0.4, ease: "power3.out" }, 1.8);
+      tl.to("#sceneA .display, #a-chip", { opacity: 0, y: -60, duration: 0.25, ease: "power2.in" }, 2.72);
+
+      // B - one tap
+      tl.from("#b-top", { y: 80, opacity: 0, duration: 0.35, ease: "power4.out" }, 3.05);
+      tl.from("#b-big", { scale: 1.8, opacity: 0, duration: 0.45, ease: "power4.out" }, 3.5);
+      tl.from("#b-card", { y: 700, rotation: -14, opacity: 0, duration: 0.7, ease: "power4.out" }, 4.0);
+      document.querySelectorAll(".ring").forEach((r, i) => {
+        tl.fromTo(r, { scale: 0.5, opacity: 0.9 }, { scale: 2.6, opacity: 0, duration: 1.2, ease: "power2.out" }, 4.7 + i * 0.4);
+      });
+      tl.to("#b-card", { scale: 1.06, duration: 0.25, yoyo: true, repeat: 1, ease: "power2.inOut" }, 4.7);
+      tl.to("#sceneB .display, #b-stage", { opacity: 0, duration: 0.25, ease: "power2.in" }, 6.72);
+
+      // C - phone flow
+      tl.from("#phone", { x: 700, rotation: 8, opacity: 0, duration: 0.6, ease: "power4.out" }, 7.0);
+      tl.from("#badge", { y: -60, opacity: 0, duration: 0.5, ease: "power3.out" }, 7.4);
+      tl.from("#c-note", { opacity: 0, duration: 0.4 }, 7.6);
+      tl.to("#s1", { color: "#1aa3ff", scale: 1.08, transformOrigin: "left center", duration: 0.2 }, 7.5);
+      tl.to("#s1", { color: "#ffffff", scale: 1, duration: 0.2 }, 8.5);
+      tl.to("#s2", { color: "#1aa3ff", scale: 1.08, transformOrigin: "left center", duration: 0.2 }, 8.5);
+      document.querySelectorAll("#stars .star").forEach((s, i) => {
+        tl.to(s, { scale: 1.3, duration: 0.12, ease: "power2.out", onStart() { s.classList.add("on"); }, onReverseComplete() { s.classList.remove("on"); } }, 8.6 + i * 0.22);
+        tl.to(s, { scale: 1, duration: 0.15 }, 8.72 + i * 0.22);
+      });
+      // typed review text (seek-safe: driven by tween progress)
+      const msg = "Fast, friendly and the best in town!";
+      const typed = { n: 0 };
+      tl.to(typed, { n: msg.length, duration: 1.1, ease: "none", onUpdate() { document.getElementById("typed").textContent = msg.slice(0, Math.round(typed.n)); } }, 9.6);
+      tl.to("#s2", { color: "#ffffff", scale: 1, duration: 0.2 }, 10.6);
+      tl.to("#s3", { color: "#ff6a1f", scale: 1.08, transformOrigin: "left center", duration: 0.2 }, 10.7);
+      tl.to("#post", { scale: 0.94, duration: 0.1, yoyo: true, repeat: 1 }, 10.8);
+      tl.from("#done", { opacity: 0, duration: 0.25 }, 11.05);
+      tl.from("#done .tick", { scale: 0, duration: 0.45, ease: "back.out(2.4)" }, 11.1);
+      const cnt = { v: 87 };
+      tl.to(cnt, { v: 88, duration: 0.01, onUpdate() { document.getElementById("count").textContent = Math.round(cnt.v); } }, 11.2);
+      tl.to("#badge", { scale: 1.12, duration: 0.2, yoyo: true, repeat: 1, ease: "power2.out" }, 11.2);
+      tl.to("#c-wrap", { opacity: 0, duration: 0.25, ease: "power2.in" }, 12.72);
+
+      // D - proof
+      tl.from("#d-title", { y: 80, opacity: 0, duration: 0.4, ease: "power4.out" }, 13.05);
+      tl.from("#d-photo", { scale: 0.7, opacity: 0, rotation: 4, duration: 0.6, ease: "back.out(1.6)" }, 13.4);
+      tl.from(".chip", { y: 50, opacity: 0, duration: 0.4, stagger: 0.35, ease: "back.out(1.7)" }, 14.2);
+      tl.to("#sceneD > *", { opacity: 0, duration: 0.25, ease: "power2.in" }, 17.72);
+
+      // E - offer
+      tl.from("#e-logo", { scale: 0.6, opacity: 0, duration: 0.5, ease: "back.out(1.8)" }, 18.05);
+      tl.from("#e-sub", { y: 40, opacity: 0, duration: 0.4 }, 18.5);
+      tl.from("#e-from", { opacity: 0, duration: 0.3 }, 19.0);
+      tl.from("#e-price", { scale: 2, opacity: 0, duration: 0.5, ease: "power4.out" }, 19.2);
+      tl.from("#e-ship", { y: 30, opacity: 0, duration: 0.35 }, 19.9);
+      tl.from("#e-cta", { y: 80, opacity: 0, duration: 0.5, ease: "back.out(1.6)" }, 20.5);
+      tl.to("#e-cta", { scale: 1.06, duration: 0.5, yoyo: true, repeat: 5, ease: "sine.inOut" }, 21.2);
+
+      window.__timelines["ad1"] = tl;
+    </script>
+  </body>
+</html>

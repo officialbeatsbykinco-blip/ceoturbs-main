@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>CEO Turbo: Flawless Tracking Setup</title>
+<style>
+  @page { size: Letter; margin: 0.7in; }
+  body { font: 11.5px/1.5 -apple-system, "Helvetica Neue", Arial, sans-serif; color: #111; }
+  h1 { font-size: 26px; margin: 0 0 4px; }
+  h2 { font-size: 16px; margin: 22px 0 6px; padding: 6px 10px; background: #0f172a; color: #fff; border-radius: 6px; page-break-after: avoid; }
+  h3 { font-size: 12.5px; margin: 12px 0 4px; page-break-after: avoid; }
+  p { margin: 4px 0; }
+  .sub { color: #555; margin-bottom: 14px; }
+  ul { list-style: none; padding: 0; margin: 4px 0; }
+  li { margin: 3px 0; padding-left: 20px; position: relative; }
+  li::before { content: "☐"; position: absolute; left: 0; font-size: 13px; }
+  li.done::before { content: "✔"; color: #0a8f5c; }
+  li.note::before { content: "•"; left: 6px; }
+  .send { background: #fff7d6; border: 1px solid #e6c84a; padding: 1px 5px; border-radius: 4px; font-weight: 600; }
+  code { background: #f1f3f5; padding: 1px 4px; border-radius: 3px; font-size: 10.5px; word-break: break-all; }
+  table { border-collapse: collapse; width: 100%; margin: 6px 0; }
+  th, td { border: 1px solid #ccd; padding: 4px 6px; text-align: left; vertical-align: top; font-size: 10.5px; }
+  th { background: #eef; }
+  .box { border: 1px solid #ccd; border-radius: 6px; padding: 8px 10px; margin: 8px 0; background: #fafbff; }
+  .warn { border-color: #e5a0a0; background: #fff5f5; }
+  .pb { page-break-before: always; }
+</style></head><body>
+
+<h1>Flawless Tracking Setup</h1>
+<p class="sub">CEO Turbo · ceoturbo.com · Google, Meta and Microsoft Ads · booked calls and Shopify review-card purchases</p>
+
+<div class="box">
+<b>How your data flows</b>
+<table>
+<tr><th>Conversion</th><th>Where it happens</th><th>Meta</th><th>Google (GA4 + Ads)</th><th>Microsoft Ads</th><th>Google Sheet tab</th></tr>
+<tr><td>Free check lead</td><td>/free-audit</td><td>Lead (browser + server)</td><td>generate_lead (GA4 direct tag + Ads via GTM)</td><td>submit_lead_form</td><td>Free Check Leads</td></tr>
+<tr><td>Booked call</td><td>Cal.com on your site</td><td>Schedule (browser + server)</td><td>book_call (GA4 direct tag + Ads via GTM)</td><td>book_appointment</td><td>Booked Calls</td></tr>
+<tr><td>Card purchase</td><td>Shopify checkout</td><td>Purchase (Facebook &amp; Instagram app)</td><td>purchase (Shopify custom pixel)</td><td>purchase (Shopify custom pixel)</td><td>Card Orders</td></tr>
+</table>
+<p>Every lead keeps its ad click IDs (gclid, msclkid, fbclid) and UTMs in the sheet, so you can see which ad produced it.</p>
+</div>
+
+<h2>0. Already done</h2>
+<ul>
+<li class="done">Tracking code live on ceoturbo.com: GTM, Meta Pixel (3232222473609236), Microsoft UET hook, server-side Meta events.</li>
+<li class="done">Meta Conversions API token added in Vercel (<code>META_CAPI_TOKEN</code>); ceoturbo.com domain verified in Meta.</li>
+<li class="done">Cal.com webhook created: Booking Created → <code>https://www.ceoturbo.com/api/cal-webhook</code> (signature tested live).</li>
+<li class="done">Google Sheet "FREE Lead Magnet Leads": three tabs, Apps Script live, locked to the owner only. Free check and order-request rows tested.</li>
+<li class="done">Shopify paid-order endpoint built: <code>/api/shopify-webhook</code> (needs step 6.2 below).</li>
+</ul>
+
+<h2>1. Meta (Events Manager)</h2>
+<h3>1.1 Pixel settings (Events Manager → your pixel → Settings)</h3>
+<ul>
+<li>Track events automatically without code: <b>Off</b>.</li>
+<li>Automatic events (AI): <b>Off</b>. Your own code sends exact events; these would add guesses and duplicates.</li>
+<li>Automatic advanced matching: <b>On</b>.</li>
+</ul>
+<h3>1.2 Shopify connection</h3>
+<ul>
+<li>Shopify admin → Apps → <b>Facebook &amp; Instagram</b> → connect pixel 3232222473609236. Data sharing: <b>Maximum</b>.</li>
+<li>This app is the <b>only</b> thing that sends Meta "Purchase". Do not add Meta to the custom pixel or anywhere else in Shopify.</li>
+</ul>
+<h3>1.3 Check events arrive (Events Manager → Test events)</h3>
+<ul>
+<li>Enter <code>ceoturbo.com</code> and open it: PageView, ViewContent appear.</li>
+<li>Run a free check with fake details: <b>Lead</b> appears twice (Browser + Server), marked deduplicated.</li>
+<li>Book a test call: <b>Schedule</b> appears twice (Browser + Server), deduplicated.</li>
+<li>Check "Event match quality" later in Overview. Aim for Good or better on Lead, Schedule and Purchase.</li>
+</ul>
+<h3>1.4 Campaign setup</h3>
+<ul>
+<li>Agency ads: conversion event = <b>Schedule</b> (use <b>Lead</b> while you have few bookings per week).</li>
+<li>Card ads: conversion event = <b>Purchase</b>.</li>
+<li>Send ads to your own booking page (ceoturbo.com/brand-boost or /book), <b>not</b> the raw cal.com link.</li>
+<li>URL parameters on every ad: <code>utm_source=meta&amp;utm_medium=paid&amp;utm_campaign={{campaign.name}}&amp;utm_content={{ad.name}}</code></li>
+</ul>
+
+<h2>2. Google Analytics 4</h2>
+<ul>
+<li>analytics.google.com → Admin (gear) → Data streams → your website stream (create one for ceoturbo.com if none).</li>
+<li>Copy the <b>Measurement ID</b> (<code>G-…</code>). <span class="send">SEND ME</span></li>
+<li>On the stream: Configure tag settings → <b>Configure your domains</b>. Add conditions "contains": <code>ceoturbo.com</code> and your Shopify checkout domain (<code>uweee2-sc.myshopify.com</code>, plus your custom checkout domain if you have one).</li>
+<li>Admin → Product links → <b>Google Ads links</b> → link your Ads account.</li>
+<li>Admin → Events: after your first test, mark <code>book_call</code>, <code>generate_lead</code> and <code>purchase</code> as <b>Key events</b>.</li>
+</ul>
+
+<h2 class="pb">3. Google Ads</h2>
+<h3>3.1 Account basics</h3>
+<ul>
+<li>Admin → Account settings → <b>Auto-tagging: On</b> (this adds the gclid that every lead needs).</li>
+<li>Goals → Settings → <b>Enhanced conversions for web: On</b>, method <b>Google Tag Manager</b>.</li>
+</ul>
+<h3>3.2 Create three conversion actions</h3>
+<p>Goals → Conversions → Summary → + Create conversion action → Website. For each, choose <b>Use Google Tag Manager</b> and copy the Conversion ID and Label.</p>
+<table>
+<tr><th>Name</th><th>Category</th><th>Value</th><th>Count</th><th>Primary?</th></tr>
+<tr><td>Booked call</td><td>Book appointment</td><td>Don't use a value</td><td>One</td><td>Yes</td></tr>
+<tr><td>Lead</td><td>Submit lead form</td><td>Don't use a value</td><td>One</td><td>Secondary (or Primary if you want to optimise for leads)</td></tr>
+<tr><td>Purchase</td><td>Purchase</td><td>Use different values</td><td>Every</td><td>Yes</td></tr>
+</table>
+<ul>
+<li>Booked call: Conversion ID (digits after <code>AW-</code>) <span class="send">SEND ME</span> and label <span class="send">SEND ME</span></li>
+<li>Lead label <span class="send">SEND ME</span></li>
+<li>Purchase label: choose "Use Google tag → Install the tag yourself" and copy the part after the slash in <code>AW-…/LABEL</code>. <span class="send">SEND ME</span></li>
+</ul>
+<h3>3.3 Campaign settings</h3>
+<ul>
+<li>Campaign goal conversions: Booked call (and Purchase for card campaigns).</li>
+<li>Tracking template (Account or Campaign level): <code>{lpurl}?utm_source=google&amp;utm_medium=cpc&amp;utm_campaign={campaignid}&amp;utm_term={keyword}</code></li>
+<li>Final URL: your own booking page, not the raw cal.com link.</li>
+</ul>
+
+<h2>4. Microsoft Advertising</h2>
+<ul>
+<li>ads.microsoft.com → Tools → <b>UET tag</b> → Create (name it "CEO Turbo") → copy the <b>Tag ID</b>. <span class="send">SEND ME</span></li>
+<li>In Vercel, add <code>VITE_UET_TAG_ID</code> with that number (Production), then Redeploy.</li>
+<li>Tools → <b>Conversion goals → Create → Website → Event</b>. Make three goals. The <b>Action</b> text must match exactly or the goal never records:
+<table>
+<tr><th>Goal name</th><th>Action equals</th><th>Revenue</th></tr>
+<tr><td>Booked call</td><td><code>book_appointment</code></td><td>No revenue</td></tr>
+<tr><td>Lead</td><td><code>submit_lead_form</code></td><td>No revenue</td></tr>
+<tr><td>Purchase</td><td><code>purchase</code></td><td>Revenue varies</td></tr>
+</table></li>
+<li>When asked how the tag is installed, choose the option saying it's already installed.</li>
+<li>Turn on <b>Enhanced conversions</b> in the conversion settings when offered.</li>
+<li>Account settings → <b>Auto-tagging: On</b> (adds the msclkid).</li>
+<li>Campaign URL options (tracking template): <code>{lpurl}?utm_source=bing&amp;utm_medium=cpc&amp;utm_campaign={Campaign}&amp;utm_term={keyword}</code></li>
+<li>Allow up to 24 hours for conversion data to appear.</li>
+</ul>
+
+<h2 class="pb">5. Google Tag Manager (container GTM-KRPRZ67Z)</h2>
+<p>I fill your IDs into the container file once you send them. Then you import it:</p>
+<ul>
+<li>tagmanager.google.com → open GTM-KRPRZ67Z → Admin → <b>Export Container</b> (backup).</li>
+<li>Admin → <b>Import Container</b> → <code>docs/gtm-container.json</code> → Existing workspace → <b>Merge</b> → "Rename conflicting tags, triggers, variables" → Confirm.</li>
+<li>Variables: set Const Google Ads Conversion ID and the two Ads labels (Booked call, Lead) if I haven't already. <b>GA4 is not in GTM</b>: it is installed directly on the site (G-XDWPSVBW53), so never add a Google tag or GA4 tag to the container.</li>
+<li>Enhanced conversions: create a <b>User-Provided Data</b> variable (Manual configuration): Email = dataLayer <code>user_data.email</code>, Phone = <code>user_data.phone_number</code>. In both Google Ads tags, tick "Include user-provided data" and choose it.</li>
+<li><b>Preview</b> → enter https://www.ceoturbo.com → book a test call and run a free check. "Google Ads – Booked call" fires once on <code>book_call</code>; "Google Ads – Lead" once on <code>generate_lead</code>.</li>
+<li>Make sure there is <b>no</b> Meta or Microsoft tag in the container (the site already fires them; adding them double counts).</li>
+<li><b>Submit → Publish.</b></li>
+</ul>
+
+<h2>6. Shopify (review-card purchases)</h2>
+<h3>6.1 Purchase tracking for Google and Microsoft (custom pixel)</h3>
+<ul>
+<li>Shopify admin → Settings → <b>Customer events → Add custom pixel</b> → name "CEO Turbo purchase".</li>
+<li>Paste <code>docs/shopify-custom-pixel.js</code> after I've filled in the four IDs (GA4 ID, Ads ID, Purchase label, UET tag ID). Save → <b>Connect</b>.</li>
+<li>Do <b>not</b> install the Google &amp; YouTube app (it would send a second purchase).</li>
+</ul>
+<h3>6.2 Paid orders into your Google Sheet (webhook)</h3>
+<ul>
+<li>Shopify admin → Settings → <b>Notifications → Webhooks → Create webhook</b>.</li>
+<li>Event: <b>Order payment</b>. Format: <b>JSON</b>. URL: <code>https://www.ceoturbo.com/api/shopify-webhook</code>. Latest API version. Save.</li>
+<li>At the top of the Webhooks page, copy the <b>signing secret</b> into Vercel as <code>SHOPIFY_WEBHOOK_SECRET</code> (Production), then <b>Redeploy</b>.</li>
+<li>Use "Send test notification". Orders then appear on the <b>Card Orders</b> tab as "Paid order".</li>
+</ul>
+<h3>6.3 Product and store setup</h3>
+<ul>
+<li>Follow <code>docs/shopify-listing.md</code>. The site's Buy button needs the Pack variants to exist in Shopify.</li>
+</ul>
+
+<h2 class="pb">7. Vercel environment variables (Production, then Redeploy)</h2>
+<table>
+<tr><th>Variable</th><th>Status</th><th>Where it comes from</th></tr>
+<tr><td>META_CAPI_TOKEN</td><td>Done</td><td>Meta Events Manager → Conversions API</td></tr>
+<tr><td>CAL_WEBHOOK_SECRET</td><td>Done</td><td>Your own string, same as in the Cal.com webhook</td></tr>
+<tr><td>LEADS_WEBHOOK_URL</td><td>Done</td><td>Apps Script Web app URL (ends /exec)</td></tr>
+<tr><td>LEADS_WEBHOOK_SECRET</td><td>Done</td><td>Same string as the SECRET line in the Apps Script</td></tr>
+<tr><td>VITE_UET_TAG_ID</td><td><b>To do</b></td><td>Microsoft Ads UET tag ID (section 4)</td></tr>
+<tr><td>SHOPIFY_WEBHOOK_SECRET</td><td><b>To do</b></td><td>Shopify webhook signing secret (section 6.2)</td></tr>
+<tr><td>META_TEST_EVENT_CODE</td><td>Only while testing</td><td>Events Manager → Test events. Delete afterwards.</td></tr>
+</table>
+
+<h2>8. Final test (about 20 minutes)</h2>
+<table>
+<tr><th>Do this</th><th>You should see</th></tr>
+<tr><td>Run a free check with fake details</td><td>Row in Free Check Leads · Meta Lead ×2 (Browser + Server) · GTM Lead tag once · Google Ads Lead conversion within a few hours</td></tr>
+<tr><td>Book a test call on the website's booking page</td><td>Row in Booked Calls with phone and meeting link · Meta Schedule ×2 · GTM Booked call tag once · Google Ads and Microsoft conversion (up to 24 h)</td></tr>
+<tr><td>Place a real $24.99 card order, then refund it</td><td>Meta Purchase · GA4 purchase (Realtime) · Google Ads and Microsoft purchase · row in Card Orders (Paid order) with ship-to and ad source</td></tr>
+<tr><td>Click a test ad or add <code>?gclid=TEST&amp;utm_source=google</code> to a page URL, then submit a form</td><td>The sheet row shows the source and click ID</td></tr>
+</table>
+<ul>
+<li>When everything passes: delete <code>META_TEST_EVENT_CODE</code> in Vercel and Redeploy; delete the TEST rows in the sheet.</li>
+<li>Delete the Cal.com API key (Cal.com → Settings → Developer → API keys) and rotate any secret you pasted into chat.</li>
+</ul>
+
+<h2>9. Keep it accurate</h2>
+<ul>
+<li>Weekly: compare Google Ads / Microsoft / Meta conversion counts with your Booked Calls tab. Small differences are normal; big gaps mean a tag broke.</li>
+<li>Booked calls from the raw cal.com link are counted by Meta and your sheet (webhook) but <b>not</b> by Google or Microsoft. Always send ad traffic to your own booking page.</li>
+<li>If you run ads to the EU, UK or California, add a cookie consent banner. It isn't set up yet.</li>
+<li>Your Google Sheet and Apps Script stay private: keep sharing "Restricted" and use 2-step verification on the owner account.</li>
+</ul>
+
+<h2>What I need from you</h2>
+<table>
+<tr><th>Item</th><th>Looks like</th></tr>
+<tr><td>GA4 Measurement ID</td><td><code>G-XXXXXXXXXX</code></td></tr>
+<tr><td>Google Ads conversion ID</td><td>digits after <code>AW-</code></td></tr>
+<tr><td>Labels: Booked call, Lead, Purchase</td><td>three short codes</td></tr>
+<tr><td>Microsoft UET tag ID</td><td>a number</td></tr>
+</table>
+<p>Paste those in the chat (they are IDs, not passwords) and I'll finish the GTM file and the Shopify pixel and push them to main.</p>
+
+</body></html>

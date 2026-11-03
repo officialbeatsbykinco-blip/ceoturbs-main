@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>CEO Turbo - Lead Gen Results Ad</title>
+    <script src="assets/gsap.min.js"></script>
+    <style>
+      @font-face { font-family: "Space Grotesk"; src: url("assets/fonts/SpaceGrotesk.woff2") format("woff2"); font-weight: 300 700; }
+      @font-face { font-family: "Inter"; src: url("assets/fonts/Inter.woff2") format("woff2"); font-weight: 100 900; }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #05080c; }
+      #root { position: relative; width: 100%; height: 100%; overflow: hidden; font-family: "Inter", sans-serif; color: #f4f8fc; }
+      .clip { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+      .display { font-family: "Space Grotesk", sans-serif; font-weight: 700; letter-spacing: -0.03em; text-transform: uppercase; line-height: 0.92; text-align: center; }
+      .blue { color: #1aa3ff; } .orange { color: #ff6a1f; } .green { color: #2bd98a; }
+      #bg { position: absolute; inset: 0; background: radial-gradient(900px 900px at 80% 12%, rgba(26,163,255,.28), transparent 60%), radial-gradient(900px 900px at 15% 88%, rgba(255,106,31,.24), transparent 60%), #05080c; }
+      #grid { position: absolute; inset: 0; background-image: linear-gradient(rgba(255,255,255,.035) 2px, transparent 2px), linear-gradient(90deg, rgba(255,255,255,.035) 2px, transparent 2px); background-size: 90px 90px; }
+
+      /* A hook */
+      #a-small { font-size: 62px; margin-bottom: 20px; color: #cfd8e3; }
+      #a-num { font-size: 310px; line-height: .95; }
+      #a-per { font-size: 110px; margin-top: 6px; }
+      #a-src { margin-top: 56px; font-size: 38px; font-weight: 600; color: #8a97a8; letter-spacing: .02em; }
+
+      /* B proof */
+      #b-title { font-size: 96px; margin-bottom: 50px; }
+      #b-shot { position: relative; width: 980px; height: 169px; border-radius: 22px; overflow: visible; }
+      #b-shot img { width: 980px; height: 169px; display: block; border-radius: 22px; box-shadow: 0 30px 100px rgba(0,0,0,.6), 0 0 90px rgba(26,163,255,.3); }
+      .hl { position: absolute; border: 6px solid #ff6a1f; border-radius: 14px; box-shadow: 0 0 40px rgba(255,106,31,.7); }
+      #hl1 { left: 8px; top: 55px; width: 258px; height: 72px; }
+      #hl2 { left: 262px; top: 55px; width: 262px; height: 72px; }
+      #hl3 { left: 780px; top: 3px; width: 198px; height: 150px; }
+      #b-line { margin-top: 90px; font-size: 76px; }
+      #b-sub { margin-top: 26px; font-size: 40px; font-weight: 600; color: #cfd8e3; text-align: center; line-height: 1.25; padding: 0 70px; }
+
+      /* C cards */
+      #c-title { font-size: 84px; margin-bottom: 44px; }
+      .card { width: 920px; padding: 36px 44px; border-radius: 36px; background: rgba(255,255,255,.06); border: 3px solid rgba(255,255,255,.16); margin-bottom: 26px; display: flex; align-items: center; justify-content: space-between; }
+      .card .who { font-size: 38px; font-weight: 700; color: #cfd8e3; }
+      .card .what { font-size: 28px; font-weight: 500; color: #8a97a8; margin-top: 6px; }
+      .card .big { font-family: "Space Grotesk"; font-weight: 700; font-size: 104px; letter-spacing: -.03em; line-height: 1; text-align: right; }
+      .card .big small { display: block; font-size: 28px; letter-spacing: 0; font-weight: 600; color: #8a97a8; margin-top: 4px; font-family: "Inter"; }
+      #c-total { margin-top: 24px; font-size: 56px; }
+      #c-total-sub { margin-top: 12px; font-size: 30px; color: #8a97a8; font-weight: 600; }
+
+      /* D artists */
+      #d-top { font-size: 74px; color: #cfd8e3; }
+      #d-num { font-size: 330px; margin-top: 10px; line-height: 1; }
+      #d-lbl { font-size: 70px; margin-top: 8px; }
+      #d-shot { margin-top: 70px; position: relative; width: 980px; height: 169px; }
+      #d-shot img { width: 980px; height: 169px; display: block; border-radius: 22px; box-shadow: 0 30px 100px rgba(0,0,0,.6), 0 0 90px rgba(255,106,31,.28); }
+      #d-note { margin-top: 36px; font-size: 40px; font-weight: 600; color: #cfd8e3; text-align: center; padding: 0 80px; line-height: 1.25; }
+
+      /* E CTA */
+      #e-logo { width: 460px; }
+      #e-head { font-size: 112px; margin-top: 34px; }
+      #e-body { font-size: 46px; margin-top: 30px; color: #cfd8e3; text-align: center; font-weight: 600; line-height: 1.28; padding: 0 90px; }
+      #e-cta { margin-top: 64px; padding: 40px 60px; border-radius: 999px; background: linear-gradient(135deg, #ff8a3d, #ff6a1f); color: #05080c; font-size: 52px; font-weight: 800; box-shadow: 0 20px 80px rgba(255,106,31,.5); }
+      #e-url { margin-top: 36px; font-size: 44px; font-weight: 700; color: #1aa3ff; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="ad2" data-start="0" data-duration="24" data-width="1080" data-height="1920">
+      <div id="bg"></div>
+      <div id="grid"></div>
+
+      <!-- A hook 0-3 -->
+      <section id="sceneA" class="clip" data-start="0" data-duration="3">
+        <div id="a-small" class="display">Local business. Real ad spend.</div>
+        <div id="a-num" class="display blue">$<span id="a-val">12.00</span></div>
+        <div id="a-per" class="display">per lead.</div>
+        <div id="a-src">Meta Ads Manager, lead-form campaign</div>
+      </section>
+
+      <!-- B proof 3-8 -->
+      <section id="sceneB" class="clip" data-start="3" data-duration="5">
+        <div id="b-title" class="display">Not a mockup.</div>
+        <div id="b-shot">
+          <img src="assets/img/ryan-pool-top.jpg" alt="Meta Ads Manager: 29 leads at $4.89 each" />
+          <div id="hl1" class="hl"></div><div id="hl2" class="hl"></div><div id="hl3" class="hl"></div>
+        </div>
+        <div id="b-line" class="display"><span class="green">35% cheaper</span><br />than similar ad sets</div>
+        <div id="b-sub">29 leads at $4.89. Meta's peer median: $7.26.</div>
+      </section>
+
+      <!-- C cards 8-14 -->
+      <section id="sceneC" class="clip" data-start="8" data-duration="6">
+        <div id="c-title" class="display">More leads. <span class="orange">Same story.</span></div>
+        <div class="card" id="k1">
+          <div><div class="who">Appliance King</div><div class="what">Appliance repair</div></div>
+          <div class="big blue"><span id="k1v">0</span><small>leads at $6.51</small></div>
+        </div>
+        <div class="card" id="k2">
+          <div><div class="who">Stackmode</div><div class="what">Computer repair, 66% below peers</div></div>
+          <div class="big blue"><span id="k2v">0</span><small>leads at $4.31</small></div>
+        </div>
+        <div class="card" id="k3">
+          <div><div class="who">Ryan Pool Enagic</div><div class="what">Kangen water systems</div></div>
+          <div class="big blue"><span id="k3v">0</span><small>leads at $4.89</small></div>
+        </div>
+        <div id="c-total" class="display"><span class="green"><span id="tot">0</span> leads</span> across 7 campaigns</div>
+        <div id="c-total-sub">Jul-Aug 2026, Meta Ads Manager</div>
+      </section>
+
+      <!-- D artists 14-19 -->
+      <section id="sceneD" class="clip" data-start="14" data-duration="5">
+        <div id="d-top" class="display">Artists too.</div>
+        <div id="d-num" class="display orange">$0.32</div>
+        <div id="d-lbl" class="display">per profile visit</div>
+        <div id="d-shot"><img src="assets/img/bigzo-top.jpg" alt="Meta Ads Manager: 165 profile visits at $0.32" /></div>
+        <div id="d-note">165 visits for $53.59. Similar ad sets pay $0.85.</div>
+      </section>
+
+      <!-- E CTA 19-24 -->
+      <section id="sceneE" class="clip" data-start="19" data-duration="5">
+        <img id="e-logo" src="assets/img/ceo-turbo-logo.png" alt="CEO Turbo" />
+        <div id="e-head" class="display">Want <span class="blue">yours?</span></div>
+        <div id="e-body">Free SEO, AEO &amp; GEO audit of your site.<br />Then a 30-min Brand Boost call.</div>
+        <div id="e-cta">Get my free audit</div>
+        <div id="e-url">ceoturbo.com/free-audit</div>
+      </section>
+
+      <audio id="bgm" src="assets/audio/ad2.wav" data-start="0" data-duration="24" data-volume="0.9"></audio>
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+      tl.fromTo("#bg", { scale: 1 }, { scale: 1.15, duration: 24, ease: "none" }, 0);
+      const out = (sel, t) => tl.to(sel, { opacity: 0, duration: 0.25, ease: "power2.in" }, t);
+      const count = (id, to, dur, at, fmt) => {
+        const o = { v: 0 };
+        tl.to(o, { v: to, duration: dur, ease: "power2.out", onUpdate() { document.getElementById(id).textContent = fmt ? fmt(o.v) : Math.round(o.v); } }, at);
+      };
+
+      // A hook: price counts DOWN to $4.89
+      tl.from("#a-small", { y: 60, opacity: 0, duration: 0.4, ease: "power4.out" }, 0.1);
+      tl.from("#a-num", { scale: 1.6, opacity: 0, duration: 0.4, ease: "power4.out" }, 0.3);
+      const price = { v: 12 };
+      tl.to(price, { v: 4.89, duration: 1.5, ease: "power3.inOut", onUpdate() { document.getElementById("a-val").textContent = price.v.toFixed(2); } }, 0.7);
+      tl.from("#a-per", { y: 50, opacity: 0, duration: 0.4, ease: "power4.out" }, 1.4);
+      tl.from("#a-src", { opacity: 0, duration: 0.4 }, 2.0);
+      tl.to("#a-num", { scale: 1.07, duration: 0.15, yoyo: true, repeat: 1 }, 2.25);
+      out("#sceneA > *", 2.72);
+
+      // B proof
+      tl.from("#b-title", { y: 70, opacity: 0, duration: 0.4, ease: "power4.out" }, 3.05);
+      tl.from("#b-shot", { y: 120, opacity: 0, scale: 0.9, duration: 0.6, ease: "power4.out" }, 3.4);
+      tl.from("#hl1", { scale: 1.5, opacity: 0, duration: 0.3, ease: "back.out(2)" }, 4.3);
+      tl.from("#hl2", { scale: 1.5, opacity: 0, duration: 0.3, ease: "back.out(2)" }, 4.6);
+      tl.from("#hl3", { scale: 1.3, opacity: 0, duration: 0.3, ease: "back.out(2)" }, 5.2);
+      tl.to("#b-shot", { scale: 1.04, duration: 2.2, ease: "none" }, 4.2);
+      tl.from("#b-line", { y: 60, opacity: 0, duration: 0.45, ease: "power4.out" }, 5.4);
+      tl.from("#b-sub", { opacity: 0, y: 30, duration: 0.4 }, 6.2);
+      out("#sceneB > *", 7.72);
+
+      // C cards
+      tl.from("#c-title", { y: 70, opacity: 0, duration: 0.4, ease: "power4.out" }, 8.05);
+      ["#k1", "#k2", "#k3"].forEach((k, i) => tl.from(k, { x: i % 2 ? 400 : -400, opacity: 0, duration: 0.5, ease: "power4.out" }, 8.5 + i * 0.5));
+      count("k1v", 55, 0.9, 8.6); count("k2v", 12, 0.9, 9.1); count("k3v", 29, 0.9, 9.6);
+      tl.from("#c-total", { y: 50, opacity: 0, duration: 0.45, ease: "back.out(1.7)" }, 10.9);
+      count("tot", 147, 1.2, 11.0);
+      tl.from("#c-total-sub", { opacity: 0, duration: 0.4 }, 11.7);
+      out("#sceneC > *", 13.72);
+
+      // D artists
+      tl.from("#d-top", { y: 60, opacity: 0, duration: 0.4, ease: "power4.out" }, 14.05);
+      tl.from("#d-num", { scale: 1.8, opacity: 0, duration: 0.5, ease: "power4.out" }, 14.4);
+      tl.from("#d-lbl", { y: 40, opacity: 0, duration: 0.4 }, 15.0);
+      tl.from("#d-shot", { y: 100, opacity: 0, duration: 0.55, ease: "power4.out" }, 15.5);
+      tl.from("#d-note", { opacity: 0, y: 30, duration: 0.4 }, 16.4);
+      out("#sceneD > *", 18.72);
+
+      // E CTA
+      tl.from("#e-logo", { scale: 0.6, opacity: 0, duration: 0.5, ease: "back.out(1.8)" }, 19.05);
+      tl.from("#e-head", { y: 60, opacity: 0, duration: 0.45, ease: "power4.out" }, 19.5);
+      tl.from("#e-body", { y: 30, opacity: 0, duration: 0.45 }, 20.1);
+      tl.from("#e-cta", { y: 80, opacity: 0, duration: 0.5, ease: "back.out(1.6)" }, 20.7);
+      tl.from("#e-url", { opacity: 0, duration: 0.4 }, 21.3);
+      tl.to("#e-cta", { scale: 1.06, duration: 0.5, yoyo: true, repeat: 5, ease: "sine.inOut" }, 21.4);
+
+      window.__timelines["ad2"] = tl;
+    </script>
+  </body>
+</html>

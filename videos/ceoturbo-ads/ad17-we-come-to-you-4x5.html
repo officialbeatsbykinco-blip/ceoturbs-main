@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1350" />
+    <title>CEO Turbo - We Come To You (4:5)</title>
+    <script src="assets/gsap.min.js"></script>
+    <style>
+      @font-face { font-family: "Space Grotesk"; src: url("assets/fonts/SpaceGrotesk.woff2") format("woff2"); font-weight: 300 700; }
+      @font-face { font-family: "Inter"; src: url("assets/fonts/Inter.woff2") format("woff2"); font-weight: 100 900; }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1350px; overflow: hidden; background: #04070d; }
+      #root { position: relative; width: 100%; height: 100%; overflow: hidden; font-family: "Inter", sans-serif; color: #fff; background: #04070d; }
+      #bg { position: absolute; inset: 0; background: radial-gradient(900px 620px at 50% 45%, rgba(26,163,255,.2), transparent 70%), radial-gradient(800px 450px at 0% 100%, rgba(255,106,31,.22), transparent 70%), #04070d; }
+      .clip { position: absolute; left: 0; top: 0; width: 1080px; height: 1350px; overflow: hidden; }
+      .abs { position: absolute; }
+      .disp { font-family: "Space Grotesk", sans-serif; font-weight: 700; text-transform: uppercase; letter-spacing: -.02em; line-height: .98; text-align: center; }
+      .ink { opacity: 0; }
+      .glow { text-shadow: 0 0 50px rgba(26,163,255,.55); }
+      #flash { position: absolute; inset: 0; background: #fff; opacity: 0; z-index: 50; }
+
+      /* S1 hook */
+      #hk { left: 40px; right: 40px; top: 150px; font-size: 104px; }
+      #hk b { color: #ff6a1f; }
+      .pain { left: 60px; right: 60px; height: 150px; border-radius: 26px; background: linear-gradient(180deg, rgba(255,255,255,.09), rgba(255,255,255,.03)); border: 2px solid rgba(255,255,255,.16); display: flex; align-items: center; gap: 30px; padding: 0 40px; font-family: "Space Grotesk"; font-weight: 700; font-size: 54px; text-transform: uppercase; position: absolute; opacity: 0; }
+      .pain i { font-style: normal; font-size: 78px; width: 100px; text-align: center; flex: none; }
+      .pain::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 14px; border-radius: 26px 0 0 26px; background: #e5322d; }
+      #hk2 { left: 40px; right: 40px; top: 1000px; font-size: 84px; color: #fff; }
+      #hk2 b { color: #1aa3ff; }
+
+      /* S2 price list */
+      #h2 { left: 40px; right: 40px; top: 70px; font-size: 92px; }
+      #h2 b { color: #1aa3ff; }
+      .row { position: absolute; left: 50px; width: 980px; height: 150px; border-radius: 26px; background: linear-gradient(180deg, rgba(255,255,255,.1), rgba(255,255,255,.03)); border: 2px solid rgba(255,255,255,.18); display: flex; align-items: center; gap: 24px; padding: 0 36px 0 44px; opacity: 0; box-shadow: 0 18px 50px rgba(0,0,0,.5); }
+      .row::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 14px; border-radius: 26px 0 0 26px; background: var(--c); }
+      .row .ic { font-size: 70px; width: 90px; text-align: center; flex: none; }
+      .row .nm { flex: 1; font-family: "Space Grotesk"; font-weight: 700; font-size: 44px; text-transform: uppercase; line-height: 1.02; }
+      .row .pr { font-family: "Space Grotesk"; font-weight: 700; font-size: 62px; color: #ff8a3d; text-align: right; line-height: 1; }
+      .row .pr small { display: block; font-size: 24px; font-weight: 700; color: rgba(255,255,255,.65); letter-spacing: .04em; text-transform: uppercase; }
+      #fin2 { left: 50px; right: 50px; top: 1190px; font-size: 40px; color: rgba(255,255,255,.85); font-family: "Inter"; font-weight: 700; text-transform: none; letter-spacing: 0; line-height: 1.2; }
+
+      /* S3 trust */
+      #h3 { left: 40px; right: 40px; top: 120px; font-size: 100px; }
+      .bd { position: absolute; left: 60px; width: 960px; height: 180px; border-radius: 28px; background: linear-gradient(180deg, rgba(255,255,255,.09), rgba(255,255,255,.03)); border: 2px solid rgba(255,255,255,.18); display: flex; align-items: center; gap: 32px; padding: 0 40px; font-family: "Space Grotesk"; font-weight: 700; font-size: 50px; text-transform: uppercase; line-height: 1.02; opacity: 0; }
+      .bd i { font-style: normal; flex: none; width: 104px; height: 104px; border-radius: 50%; background: #14a04e; display: grid; place-items: center; font-size: 66px; box-shadow: 0 0 40px rgba(20,160,78,.6); }
+      .bd small { display: block; font-family: "Inter"; font-size: 28px; font-weight: 600; text-transform: none; color: rgba(255,255,255,.72); margin-top: 8px; letter-spacing: 0; }
+
+      /* S4 cta */
+      #cLogo { position: absolute; left: 390px; top: 70px; width: 300px; opacity: 0; }
+      #cH1 { position: absolute; left: 40px; right: 40px; top: 360px; font-size: 100px; opacity: 0; }
+      #cH1 b { color: #ff6a1f; }
+      #cPh { position: absolute; left: 0; right: 0; top: 620px; text-align: center; font-family: "Space Grotesk"; font-weight: 700; font-size: 128px; opacity: 0; letter-spacing: -.02em; text-shadow: 0 0 60px rgba(26,163,255,.6); }
+      #cBtn { position: absolute; left: 0; right: 0; top: 820px; margin: 0 auto; width: max-content; padding: 32px 64px; border-radius: 999px; background: linear-gradient(135deg, #ff8a3d, #ff6a1f); color: #111; font-size: 52px; font-weight: 800; box-shadow: 0 0 90px rgba(255,106,31,.6); opacity: 0; }
+      #cUrl { position: absolute; left: 0; right: 0; top: 1000px; text-align: center; font-size: 50px; font-weight: 800; color: #1aa3ff; opacity: 0; }
+      #cTerms { position: absolute; left: 40px; right: 40px; top: 1100px; text-align: center; font-size: 30px; font-weight: 800; text-transform: uppercase; letter-spacing: .02em; color: rgba(255,255,255,.85); opacity: 0; line-height: 1.35; }
+      #cTerms b { color: #ff6a1f; }
+      .wipe { position: absolute; left: 0; top: 0; width: 1080px; height: 1350px; z-index: 60; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="ad17" data-start="0" data-duration="15" data-width="1080" data-height="1350">
+      <div id="bg"></div>
+      <div id="flash"></div>
+
+      <section class="clip" data-start="0" data-duration="4.2">
+        <div id="hk" class="abs disp ink glow">Tech problem at <b>home?</b></div>
+        <div class="pain" id="p0" style="top:400px"><i>📱</i><span>Cracked screen</span></div>
+        <div class="pain" id="p1" style="top:580px"><i>📶</i><span>Wi-Fi keeps dropping</span></div>
+        <div class="pain" id="p2" style="top:760px"><i>📺</i><span>TV still on the floor</span></div>
+        <div id="hk2" class="abs disp ink">Don't drive to a shop. <b>We come to you.</b></div>
+      </section>
+
+      <section class="clip" data-start="4.2" data-duration="5.6">
+        <div id="h2" class="abs disp ink glow">Starting <b>prices</b></div>
+        <div class="row" id="r0" style="top:210px;--c:#1aa3ff"><div class="ic">📱</div><div class="nm">Phone screen</div><div class="pr"><small>from</small>$89</div></div>
+        <div class="row" id="r1" style="top:380px;--c:#7c5cff"><div class="ic">📶</div><div class="nm">Wi-Fi fix</div><div class="pr"><small>from</small>$99</div></div>
+        <div class="row" id="r2" style="top:550px;--c:#14a04e"><div class="ic">📺</div><div class="nm">TV mounting</div><div class="pr"><small>from</small>$99</div></div>
+        <div class="row" id="r3" style="top:720px;--c:#ffb300"><div class="ic">📹</div><div class="nm">Camera install</div><div class="pr"><small>from</small>$149</div></div>
+        <div class="row" id="r4" style="top:890px;--c:#ff6a1f"><div class="ic">💻</div><div class="nm">Computer visit</div><div class="pr"><small>from</small>$79</div></div>
+        <div id="fin2" class="abs disp ink">Price confirmed before we start.</div>
+      </section>
+
+      <section class="clip" data-start="9.8" data-duration="2.6">
+        <div id="h3" class="abs disp ink glow">Easy to trust.</div>
+        <div class="bd" id="bd0" style="top:330px"><i>✓</i><div>In person<small>Never remote access</small></div></div>
+        <div class="bd" id="bd1" style="top:540px"><i>✓</i><div>Price first<small>No surprises at the door</small></div></div>
+        <div class="bd" id="bd2" style="top:750px"><i>✓</i><div>30-day install warranty<small>Installation work</small></div></div>
+        <div class="bd" id="bd3" style="top:960px"><i>✓</i><div>Open 6am to 11pm<small>Emergency calls extra fee</small></div></div>
+      </section>
+
+      <section class="clip" data-start="12.4" data-duration="2.6">
+        <img id="cLogo" src="assets/img/ceo-turbo-logo.png" alt="CEO Turbo" />
+        <div id="cH1" class="abs disp glow">Call or text <b>today</b></div>
+        <div id="cPh">(678) 558-4327</div>
+        <div id="cBtn">Get a price now</div>
+        <div id="cUrl">ceoturbo.com</div>
+        <div id="cTerms">Georgia · within 40 miles of <b>Duluth &amp; Atlanta</b></div>
+      </section>
+
+      <div id="wa" class="wipe" style="background:#ff6a1f"></div>
+      <div id="wb" class="wipe" style="background:#04070d"></div>
+
+      <audio id="bed" src="assets/audio/ad17.wav" data-start="0" data-duration="15" data-volume="1"></audio>
+    </div>
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+      const word = (sel, a, b) => { tl.fromTo(sel, { opacity: 0, y: 50, scale: 0.92 }, { opacity: 1, y: 0, scale: 1, duration: 0.3, ease: "power3.out" }, a); if (b) tl.to(sel, { opacity: 0, duration: 0.15 }, b); };
+      const slam = (sel, t) => { tl.fromTo(sel, { opacity: 0, scale: 1.9 }, { opacity: 1, scale: 1, duration: 0.2, ease: "power4.in" }, t); for (let i = 0; i < 4; i++) tl.to(sel, { x: i % 2 ? 6 : -6, y: i % 2 ? -3 : 3, duration: 0.03 }, t + 0.2 + i * 0.03); tl.to(sel, { x: 0, y: 0, duration: 0.03 }, t + 0.34); };
+
+      // S1 0-4.2
+      word("#hk", 0.05, 4.0);
+      [0.5, 1.1, 1.7].forEach((t, i) => { tl.fromTo("#p" + i, { opacity: 0, x: i % 2 ? 160 : -160 }, { opacity: 1, x: 0, duration: 0.3, ease: "back.out(1.8)" }, t); tl.to("#p" + i, { opacity: 0, duration: 0.15 }, 4.0); });
+      slam("#hk2", 2.5); tl.to("#hk2", { opacity: 0, duration: 0.15 }, 4.0);
+
+      // S2 4.2-9.8
+      word("#h2", 4.35, 9.6);
+      [4.6, 5.3, 6.0, 6.7, 7.4].forEach((t, i) => { slam("#r" + i, t); tl.to("#r" + i, { opacity: 0, duration: 0.15 }, 9.6); });
+      word("#fin2", 8.3, 9.6);
+
+      // S3 9.8-12.4
+      word("#h3", 9.9, 12.2);
+      [10.2, 10.6, 11.0, 11.4].forEach((t, i) => { tl.fromTo("#bd" + i, { opacity: 0, x: i % 2 ? 160 : -160 }, { opacity: 1, x: 0, duration: 0.28, ease: "back.out(1.8)" }, t); tl.to("#bd" + i, { opacity: 0, duration: 0.15 }, 12.25); });
+
+      // S4 12.4-15
+      tl.fromTo("#cLogo", { opacity: 0, scale: 0.5 }, { opacity: 1, scale: 1, duration: 0.3, ease: "back.out(2)" }, 12.5);
+      tl.fromTo("#cH1", { opacity: 0, scale: 1.7 }, { opacity: 1, scale: 1, duration: 0.3, ease: "power4.out" }, 12.6);
+      tl.fromTo("#cPh", { opacity: 0, scale: 1.3 }, { opacity: 1, scale: 1, duration: 0.3, ease: "power3.out" }, 12.95);
+      tl.fromTo("#cBtn", { opacity: 0, y: 60 }, { opacity: 1, y: 0, duration: 0.3, ease: "back.out(1.7)" }, 13.3);
+      tl.fromTo("#cUrl", { opacity: 0 }, { opacity: 1, duration: 0.25 }, 13.6);
+      tl.fromTo("#cTerms", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.25 }, 13.8);
+      tl.to("#cBtn", { scale: 1.05, duration: 0.35, yoyo: true, repeat: 3, ease: "sine.inOut" }, 13.6);
+      tl.to({}, { duration: 0.01 }, 14.95);
+
+      gsap.set(".wipe", { x: 2000 });
+      [4.2, 9.8, 12.4].forEach((tc) => { tl.fromTo("#wa", { x: 2000 }, { x: 0, duration: 0.14, ease: "power2.in" }, tc - 0.2); tl.to("#wa", { x: -2000, duration: 0.24, ease: "power2.out" }, tc + 0.02); tl.fromTo("#wb", { x: 2000 }, { x: 0, duration: 0.14, ease: "power2.in" }, tc - 0.12); tl.to("#wb", { x: -2000, duration: 0.24, ease: "power2.out" }, tc + 0.06); });
+      window.__timelines["ad17"] = tl;
+    </script>
+  </body>
+</html>

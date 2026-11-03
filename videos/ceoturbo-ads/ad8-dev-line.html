@@ -1,0 +1,294 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>CEO Turbo - The Line (Dev)</title>
+    <script src="assets/gsap.min.js"></script>
+    <style>
+      @font-face { font-family: "Space Grotesk"; src: url("assets/fonts/SpaceGrotesk.woff2") format("woff2"); font-weight: 300 700; }
+      @font-face { font-family: "Inter"; src: url("assets/fonts/Inter.woff2") format("woff2"); font-weight: 100 900; }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #f3edda; }
+      #root { position: relative; width: 100%; height: 100%; overflow: hidden; font-family: "Inter", sans-serif; color: #111; background: #f3edda; }
+      #paper { position: absolute; inset: 0; background: radial-gradient(1200px 1200px at 50% 40%, rgba(255,255,255,.55), transparent 70%), radial-gradient(900px 900px at 50% 100%, rgba(120,100,60,.18), transparent 70%), #f1ead5; }
+      .clip { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+      .sc { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 1080px; }
+      .up { margin-bottom: 300px; }
+      #root.r45 .sc { transform: scale(0.8); }
+      #root.r45 .up { margin-bottom: 70px; }
+      .mm { font-family: "Space Grotesk", sans-serif; font-weight: 700; text-transform: uppercase; color: #fff; -webkit-text-stroke: 13px #000; paint-order: stroke fill; text-align: center; letter-spacing: -.02em; line-height: .98; }
+
+      #hl { position: relative; width: 1000px; height: 190px; }
+      .h { position: absolute; left: 0; right: 0; top: 0; height: 190px; display: flex; align-items: center; justify-content: center; font-size: 88px; }
+      #ill { position: relative; width: 1080px; height: 980px; }
+      #svg { position: absolute; left: 0; top: 0; }
+      .lbl { position: absolute; text-align: center; }
+      #lblL { left: 35px; top: 95px; width: 300px; } #lblR { left: 345px; top: 95px; width: 440px; }
+      .lbl .a { font-size: 76px; display: block; } .lbl .b { font-size: 46px; display: block; margin-top: 6px; }
+      #lblR .a { font-size: 66px; }
+      .bub { position: absolute; background: #fff; color: #111; border: 6px solid #111; border-radius: 30px; padding: 16px 24px; font-weight: 800; font-size: 34px; line-height: 1.1; text-align: center; }
+      #bubL { left: 40px; top: 585px; width: 280px; } #bubR1 { left: 715px; top: 255px; width: 320px; } #bubR2 { left: 700px; top: 235px; width: 360px; font-size: 36px; }
+      #card { position: absolute; left: 280px; top: 250px; width: 520px; height: 520px; border-radius: 40px; overflow: hidden; border: 8px solid #111; box-shadow: 0 0 120px rgba(26,163,255,.8), 14px 14px 0 #111; background: #fff; }
+      #plan { width: 100%; height: 100%; padding: 46px 44px; background: #fff; color: #111; display: flex; flex-direction: column; justify-content: center; gap: 22px; } #plan .pt { font-family: 'Space Grotesk'; font-weight: 700; font-size: 62px; text-transform: uppercase; letter-spacing: -.03em; margin-bottom: 6px; } #plan .pi { font-size: 44px; font-weight: 800; } #disc { position: absolute; left: 0; right: 0; bottom: 8px; text-align: center; font-size: 26px; font-weight: 700; color: #6a6450; }
+      .ring { position: absolute; left: 105px; top: 395px; width: 160px; height: 160px; border-radius: 50%; border: 10px solid #1aa3ff; }
+      #tag { position: absolute; left: 280px; top: 770px; width: 520px; text-align: center; font-size: 66px; }
+
+      .cap { position: absolute; left: 36px; right: 96px; bottom: 470px; height: 150px; }
+      #root.r45 .cap { bottom: 50px; height: 130px; }
+      .c { position: absolute; left: 0; right: 0; bottom: 0; text-align: center; font-size: 56px; opacity: 0; white-space: nowrap; }
+
+      #cta .sc { gap: 0; }
+      #cLogo { width: 420px; }
+      #cH { font-size: 100px; margin-top: 26px; }
+      #cPrice { font-family: "Space Grotesk"; font-weight: 700; font-size: 220px; line-height: 1; color: #1aa3ff; margin-top: 8px; letter-spacing: -.03em; -webkit-text-stroke: 10px #000; paint-order: stroke fill; }
+      #cPerk { font-size: 42px; font-weight: 800; color: #0a8a4b; text-transform: uppercase; letter-spacing: .04em; margin-top: 4px; text-align: center; }
+      #cBtn { margin-top: 44px; padding: 38px 64px; border-radius: 999px; background: linear-gradient(135deg, #ff8a3d, #ff6a1f); color: #111; font-size: 58px; font-weight: 800; border: 8px solid #111; box-shadow: 10px 10px 0 #111; }
+      #cUrl { margin-top: 34px; font-size: 44px; font-weight: 800; color: #0b5fd6; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="ad8" data-start="0" data-duration="27" data-width="1080" data-height="1920">
+      <div id="paper"></div>
+
+      <section id="main" class="clip" data-start="0" data-duration="22">
+        <div class="sc up">
+          <div id="hl">
+            <div id="h1" class="h mm">Why does HE get all the users?</div>
+            <div id="h2" class="h mm" style="font-size:80px">People install what they can find and trust</div>
+            <div id="h3" class="h mm" style="font-size:120px">Plot twist.</div>
+            <div id="h4" class="h mm" style="font-size:92px">The line has a new favorite</div>
+          </div>
+          <div id="ill">
+            <svg id="svg" width="1080" height="980" viewBox="0 0 1080 980" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <filter id="wobble" x="-5%" y="-5%" width="110%" height="110%">
+                  <feTurbulence type="fractalNoise" baseFrequency="0.018" numOctaves="2" seed="7" result="n" />
+                  <feDisplacementMap in="SourceGraphic" in2="n" scale="3.2" />
+                </filter>
+                <symbol id="p1" viewBox="0 0 40 100">
+                  <path d="M14 72 L13 96 M26 72 L27 96" stroke="#111" stroke-width="3.2" fill="none" stroke-linecap="round" />
+                  <ellipse cx="12" cy="97.5" rx="7" ry="2.8" fill="#111" /><ellipse cx="28" cy="97.5" rx="7" ry="2.8" fill="#111" />
+                  <path d="M8 27 Q20 20 32 27 L36 73 L4 73 Z" fill="currentColor" stroke="#111" stroke-width="2.6" stroke-linejoin="round" />
+                  <path d="M9 30 L3 64 M31 30 L37 64" stroke="#111" stroke-width="2.6" fill="none" stroke-linecap="round" />
+                  <circle cx="20" cy="13" r="9.5" fill="#f1ead5" stroke="#111" stroke-width="2.6" />
+                  <path d="M11.5 10 Q20 0 28.5 10" stroke="#111" stroke-width="3" fill="none" stroke-linecap="round" />
+                </symbol>
+                <symbol id="p2" viewBox="0 0 40 100">
+                  <path d="M14 72 L13 96 M26 72 L27 96" stroke="#111" stroke-width="3.2" fill="none" stroke-linecap="round" />
+                  <ellipse cx="12" cy="97.5" rx="7" ry="2.8" fill="#111" /><ellipse cx="28" cy="97.5" rx="7" ry="2.8" fill="#111" />
+                  <path d="M8 27 Q20 20 32 27 L36 73 L4 73 Z" fill="currentColor" stroke="#111" stroke-width="2.6" stroke-linejoin="round" />
+                  <path d="M9 30 L3 64 M31 30 L37 64" stroke="#111" stroke-width="2.6" fill="none" stroke-linecap="round" />
+                  <circle cx="20" cy="14" r="9.5" fill="#f1ead5" stroke="#111" stroke-width="2.6" />
+                  <path d="M9 8 H31" stroke="#111" stroke-width="3.5" stroke-linecap="round" /><rect x="12.5" y="-1" width="15" height="9" rx="2" fill="#111" />
+                </symbol>
+                <symbol id="p3" viewBox="0 0 40 100">
+                  <path d="M14 72 L13 96 M26 72 L27 96" stroke="#111" stroke-width="3.2" fill="none" stroke-linecap="round" />
+                  <ellipse cx="12" cy="97.5" rx="7" ry="2.8" fill="#111" /><ellipse cx="28" cy="97.5" rx="7" ry="2.8" fill="#111" />
+                  <path d="M8 27 Q20 20 32 27 L36 73 L4 73 Z" fill="currentColor" stroke="#111" stroke-width="2.6" stroke-linejoin="round" />
+                  <path d="M9 30 L3 64 M31 30 L37 64" stroke="#111" stroke-width="2.6" fill="none" stroke-linecap="round" />
+                  <rect x="31" y="62" width="9" height="12" rx="1.5" fill="#111" />
+                  <circle cx="20" cy="13" r="9.5" fill="#f1ead5" stroke="#111" stroke-width="2.6" />
+                  <path d="M12 9 Q20 4 28 9 M14 13 h3 M23 13 h3" stroke="#111" stroke-width="2" fill="none" stroke-linecap="round" />
+                </symbol>
+                <symbol id="p4" viewBox="0 0 40 100">
+                  <path d="M14 72 L13 96 M26 72 L27 96" stroke="#111" stroke-width="3.2" fill="none" stroke-linecap="round" />
+                  <ellipse cx="12" cy="97.5" rx="7" ry="2.8" fill="#111" /><ellipse cx="28" cy="97.5" rx="7" ry="2.8" fill="#111" />
+                  <path d="M4 28 Q20 19 36 28 L39 75 L1 75 Z" fill="currentColor" stroke="#111" stroke-width="2.6" stroke-linejoin="round" />
+                  <path d="M20 26 L20 70" stroke="#111" stroke-width="2" />
+                  <path d="M5 31 L1 66 M35 31 L39 66" stroke="#111" stroke-width="2.6" fill="none" stroke-linecap="round" />
+                  <circle cx="20" cy="13" r="10" fill="#f1ead5" stroke="#111" stroke-width="2.6" />
+                  <path d="M10 11 Q15 3 20 7 Q26 2 30 11" stroke="#111" stroke-width="3" fill="none" stroke-linecap="round" />
+                </symbol>
+              </defs>
+
+              <g id="ink" filter="url(#wobble)">
+                <line x1="0" y1="522" x2="1080" y2="522" stroke="#111" stroke-width="3.5" stroke-dasharray="0" />
+                <!-- left booth -->
+                <g id="boothL">
+                  <rect x="60" y="250" width="250" height="272" fill="#f1ead5" stroke="#111" stroke-width="4.5" />
+                  <path d="M105 522 V400 a80 80 0 0 1 160 0 V522" fill="#e6dfc6" stroke="#111" stroke-width="4" />
+                  <g id="clerkL" transform="translate(185 440)">
+                    <path d="M-52 82 Q-50 36 0 32 Q50 36 52 82 Z" fill="#cfc8ae" stroke="#111" stroke-width="3.5" />
+                    <circle cx="0" cy="0" r="30" fill="#f1ead5" stroke="#111" stroke-width="3.5" />
+                    <g id="fL-n"><circle cx="-10" cy="-4" r="3.5" fill="#111" /><circle cx="10" cy="-4" r="3.5" fill="#111" /><path d="M-9 13 H9" stroke="#111" stroke-width="3.5" stroke-linecap="round" /></g>
+                    <g id="fL-c" opacity="0"><path d="M-16 -6 l9 3 M16 -6 l-9 3" stroke="#111" stroke-width="3.5" stroke-linecap="round" /><path d="M-10 18 Q0 6 10 18" stroke="#111" stroke-width="3.5" fill="none" stroke-linecap="round" /><circle id="tear1" cx="-14" cy="4" r="4.5" fill="#1aa3ff" stroke="#111" stroke-width="1.5" /><circle id="tear2" cx="14" cy="4" r="4.5" fill="#1aa3ff" stroke="#111" stroke-width="1.5" /></g>
+                    <g id="fL-k" opacity="0"><rect x="-21" y="-12" width="17" height="11" rx="2" fill="#111" /><rect x="4" y="-12" width="17" height="11" rx="2" fill="#111" /><path d="M-4 -8 H4" stroke="#111" stroke-width="3" /><path d="M-12 10 Q0 24 12 10" stroke="#111" stroke-width="3.5" fill="#fff" stroke-linecap="round" /></g>
+                  </g>
+                  <path d="M60 522 H310" stroke="#111" stroke-width="4.5" />
+                </g>
+                <!-- right booth -->
+                <g id="boothR">
+                  <rect x="440" y="250" width="250" height="272" fill="#f1ead5" stroke="#111" stroke-width="4.5" />
+                  <path d="M485 522 V400 a80 80 0 0 1 160 0 V522" fill="#e6dfc6" stroke="#111" stroke-width="4" />
+                  <g id="clerkR" transform="translate(565 440)">
+                    <path d="M-52 82 Q-50 36 0 32 Q50 36 52 82 Z" fill="#cfc8ae" stroke="#111" stroke-width="3.5" />
+                    <circle cx="0" cy="0" r="30" fill="#f1ead5" stroke="#111" stroke-width="3.5" />
+                    <g id="fR-s"><path d="M-17 -5 H-4 M4 -5 H17" stroke="#111" stroke-width="3.5" stroke-linecap="round" /><path d="M-11 9 Q3 20 14 6" stroke="#111" stroke-width="3.5" fill="none" stroke-linecap="round" /></g>
+                    <g id="fR-x" opacity="0"><circle cx="-11" cy="-4" r="7" fill="#fff" stroke="#111" stroke-width="3" /><circle cx="11" cy="-4" r="7" fill="#fff" stroke="#111" stroke-width="3" /><circle cx="-11" cy="-4" r="2.5" fill="#111" /><circle cx="11" cy="-4" r="2.5" fill="#111" /><ellipse cx="0" cy="16" rx="7" ry="9" fill="#111" /></g>
+                  </g>
+                </g>
+                <g id="crowd"></g>
+                <g id="lone"><g id="loneIn"><use href="#p1" x="-30" y="-150" width="60" height="150" style="color:#d9d3bd" /></g></g>
+              </g>
+              <g id="puffs"></g>
+            </svg>
+
+            <div id="lblL" class="lbl mm"><span class="a">You</span><span class="b" id="bL" style="opacity:0"><span id="nL">0</span> installs</span></div>
+            <div id="lblR" class="lbl mm"><span class="a">That dev</span><span class="b" id="bR" style="opacity:0"><span id="nR">0</span> installs</span></div>
+
+            <div id="bubL" class="bub">hmm... only 12 installs?</div>
+            <div id="bubR1" class="bub">...where is everyone?</div>
+            <div id="bubR2" class="bub">WHERE DID YOU GET THAT LAUNCH PLAN?!</div>
+
+            <div class="ring"></div><div class="ring"></div><div class="ring"></div>
+            <div id="card"><div id="plan"><div class="pt">Launch plan</div><div class="pi">&#10003; Landing page</div><div class="pi">&#10003; Tracking set up</div><div class="pi">&#10003; Reddit + Meta ads</div><div class="pi">&#10003; Weekly reports</div></div></div>
+            <div id="tag" class="mm">The plan</div><div id="disc">Illustration, not real data</div>
+          </div>
+        </div>
+        <div id="cap" class="cap">
+          <div class="c mm" id="c1">Same code. Same quality. Same price: free.</div>
+          <div class="c mm" id="c2">12 installs vs 400 installs</div>
+          <div class="c mm" id="c3">Guess where everyone goes.</div>
+          <div class="c mm" id="c4">Even his only user left.</div>
+          <div class="c mm" id="c5">Then he got a launch plan.</div>
+          <div class="c mm" id="c6">Track. Launch. Stampede.</div>
+          <div class="c mm" id="c7">Now he wants one too.</div>
+        </div>
+      </section>
+
+      <section id="cta" class="clip" data-start="22" data-duration="5">
+        <div class="sc up">
+          <img id="cLogo" src="assets/img/ceo-turbo-logo.png" alt="CEO Turbo" />
+          <div id="cH" class="mm">Get more installs</div>
+          <div id="cPrice">Free</div>
+          <div id="cPerk">30-min growth call &middot; keep the plan</div>
+          <div id="cBtn">Get my growth plan</div>
+          <div id="cUrl">ceoturbo.com/app-marketing</div>
+        </div>
+      </section>
+
+      <audio id="bed" src="assets/audio/ad8.wav" data-start="0" data-duration="27" data-volume="1"></audio>
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      // seeded PRNG so every frame/render is identical
+      function mulberry32(a) { return function () { a |= 0; a = (a + 0x6D2B79F5) | 0; let t = Math.imul(a ^ (a >>> 15), 1 | a); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
+      const rnd = mulberry32(20261013);
+      const NS = "http://www.w3.org/2000/svg";
+      const tints = ["#e8e2cc", "#d9d3bd", "#c9c3ad", "#bdb7a1", "#f0ebd9", "#d2ccb4"];
+      const syms = ["p1", "p2", "p3", "p4", "p1", "p2"];
+      const crowd = document.getElementById("crowd");
+      const people = [];
+      const ROWS = 15;
+      for (let r = 0; r < ROWS; r++) {
+        const d = r / (ROWS - 1);
+        const y = 575 + d * 375;
+        const sc = 0.55 + d * 1.55;
+        const n = 6 + Math.floor(d * 10);
+        const x0 = 560 + d * 40, x1 = 700 + d * 380;
+        for (let k = 0; k < n; k++) {
+          const x = x0 + (x1 - x0) * ((k + 0.5 + (rnd() - 0.5) * 0.7) / n);
+          const g = document.createElementNS(NS, "g");
+          const inner = document.createElementNS(NS, "g");
+          const u = document.createElementNS(NS, "use");
+          u.setAttribute("href", "#" + syms[Math.floor(rnd() * syms.length)]);
+          u.setAttribute("x", -20); u.setAttribute("y", -100); u.setAttribute("width", 40); u.setAttribute("height", 100);
+          u.setAttribute("style", "color:" + tints[Math.floor(rnd() * tints.length)]);
+          inner.appendChild(u); g.appendChild(inner); crowd.appendChild(g);
+          people.push({ g, inner, x, y, sc, d });
+        }
+      }
+      people.forEach((p) => gsap.set(p.g, { x: p.x, y: p.y, scale: p.sc, svgOrigin: "0 0" }));
+      gsap.set("#lone", { x: 185, y: 660, scale: 1.15, svgOrigin: "0 0" });
+      gsap.set(people.map((p) => p.g), { x: (i) => people[i].x + 900, opacity: 0 });
+
+      const tl = gsap.timeline({ paused: true });
+      const num = (id, a, b, dur, at, ease) => { const o = { v: a }; tl.to(o, { v: b, duration: dur, ease: ease || "power2.out", onUpdate() { document.getElementById(id).textContent = Math.round(o.v); } }, at); };
+      const pop = (sel, t, from = 0.4) => tl.from(sel, { scale: from, opacity: 0, duration: 0.3, ease: "back.out(2.2)" }, t);
+      const show = (sel, a, b) => { tl.fromTo(sel, { opacity: 0, scale: 0.7 }, { opacity: 1, scale: 1, duration: 0.22, ease: "back.out(2)" }, a); tl.to(sel, { opacity: 0, duration: 0.15 }, b); };
+      const cap = (id, a, b) => show(id, a, b);
+      const shake = (sel, t, amt) => { for (let i = 0; i < 8; i++) tl.to(sel, { x: i % 2 ? amt : -amt, y: i % 2 ? -amt / 2 : amt / 2, duration: 0.04 }, t + i * 0.04); tl.to(sel, { x: 0, y: 0, duration: 0.05 }, t + 0.32); };
+
+      // headlines
+      show("#h1", 0.2, 4.1); show("#h2", 4.3, 13.5); show("#h3", 13.6, 16.8); show("#h4", 16.9, 21.8);
+      // booths + labels + lone customer
+      tl.from("#boothL", { y: 70, opacity: 0, duration: 0.35, ease: "back.out(1.6)" }, 0.1); tl.from("#boothR", { y: 70, opacity: 0, duration: 0.35, ease: "back.out(1.6)" }, 0.2);
+      tl.from("#lone", { y: 840, opacity: 0, duration: 0.5, ease: "power3.out" }, 0.7);
+      pop("#lblL", 1.2); pop("#lblR", 1.6);
+      gsap.set("#bubL, #bubR1, #bubR2, #card, #tag, .ring", { opacity: 0 });
+
+      // captions
+      cap("#c1", 0.5, 4.0); cap("#c2", 4.4, 8.3); cap("#c3", 8.5, 10.8); cap("#c4", 10.9, 13.5); cap("#c5", 13.6, 15.7); cap("#c6", 15.8, 20.4); cap("#c7", 20.6, 21.9);
+
+      // reveal numbers + crowd stream in
+      tl.set("#bL, #bR", { opacity: 1 }, 4.4);
+      num("nR", 0, 400, 2.6, 4.5, "power1.out"); num("nL", 0, 12, 0.8, 4.5);
+      tl.to("#lblR", { scale: 1.12, duration: 0.2, yoyo: true, repeat: 1 }, 5.0);
+      tl.to(people.map((p) => p.g), { x: (i) => people[i].x, opacity: 1, duration: 0.9, ease: "power2.out", stagger: 0.021 }, 4.4);
+      tl.to(people.map((p) => p.inner), { y: -6, duration: 0.18, yoyo: true, repeat: 3, ease: "sine.inOut", stagger: 0.02 }, 5.0);
+      shake("#ill", 7.4, 4);
+
+      // lone customer hesitates then walks to join the line
+      tl.fromTo("#bubL", { opacity: 0, scale: 0.4 }, { opacity: 1, scale: 1, duration: 0.3, ease: "back.out(2)" }, 9.0);
+      tl.to("#bubL", { opacity: 0, duration: 0.15 }, 10.4);
+      tl.to("#loneIn", { rotation: 6, duration: 0.15, yoyo: true, repeat: 5, ease: "sine.inOut", transformOrigin: "0 0" }, 9.2);
+      tl.to("#lone", { x: 1000, y: 950, duration: 2.5, ease: "power1.inOut" }, 10.6);
+      tl.to("#loneIn", { y: -8, duration: 0.14, yoyo: true, repeat: 17, ease: "sine.inOut" }, 10.6);
+      // left clerk: neutral -> crying
+      tl.to("#fL-n", { opacity: 0, duration: 0.05 }, 11.0); tl.to("#fL-c", { opacity: 1, duration: 0.05 }, 11.0);
+      tl.fromTo("#tear1, #tear2", { y: 0 }, { y: 24, duration: 0.5, repeat: 8, ease: "power1.in" }, 11.0);
+      tl.to("#clerkL", { rotation: -4, duration: 0.12, yoyo: true, repeat: 7, svgOrigin: "185 520" }, 11.6);
+
+      // the card slam
+      tl.fromTo("#card", { opacity: 0, scale: 3.4, rotation: -14 }, { opacity: 1, scale: 1, rotation: -3, duration: 0.2, ease: "power4.in" }, 14.0);
+      tl.fromTo("#tag", { opacity: 0, scale: 2 }, { opacity: 1, scale: 1, duration: 0.2, ease: "power4.out" }, 14.25);
+      shake("#ill", 14.2, 14);
+      tl.to("#fL-c", { opacity: 0, duration: 0.05 }, 14.4); tl.to("#fL-k", { opacity: 1, duration: 0.05 }, 14.4);
+      tl.to("#card", { x: -395, y: -15, scale: 0.288, rotation: 0, duration: 0.5, ease: "power3.inOut" }, 15.5);
+      tl.to("#tag", { opacity: 0, duration: 0.15 }, 15.4);
+      tl.to("#card", { boxShadow: "0 0 60px rgba(26,163,255,.9), 6px 6px 0 #111", duration: 0.1 }, 15.5);
+      document.querySelectorAll(".ring").forEach((r, i) => tl.fromTo(r, { opacity: 0.9, scale: 0.4 }, { opacity: 0, scale: 3, duration: 0.9, ease: "power2.out", immediateRender: false }, 16.0 + i * 0.3));
+      // left counter climbs
+      num("nL", 12, 312, 1.8, 16.0, "power2.in");
+      tl.to("#lblL", { scale: 1.15, duration: 0.12, yoyo: true, repeat: 5 }, 16.0);
+
+      // stampede: everyone turns and runs to the left booth
+      const all = people.slice();
+      const tx = all.map(() => 30 + rnd() * 400), ty = all.map(() => 585 + rnd() * 365);
+      tl.to(all.map((p) => p.g), { x: (i) => tx[i], y: (i) => ty[i], scale: (i) => 0.55 + ((ty[i] - 575) / 375) * 1.55, duration: 1.3, ease: "power2.inOut", stagger: { each: 0.011, from: "start" } }, 17.0);
+      tl.to(all.map((p) => p.inner), { y: -10, rotation: 5, duration: 0.11, yoyo: true, repeat: 15, ease: "sine.inOut", stagger: 0.01, transformOrigin: "0 0" }, 17.0);
+      tl.to("#lone", { x: 300, y: 940, duration: 1.4, ease: "power2.inOut" }, 17.2);
+      tl.to("#fR-s", { opacity: 0, duration: 0.05 }, 17.5); tl.to("#fR-x", { opacity: 1, duration: 0.05 }, 17.5);
+      shake("#ill", 17.2, 6); shake("#ill", 18.3, 6);
+      // dust puffs near the booth
+      const puffs = document.getElementById("puffs");
+      for (let i = 0; i < 9; i++) {
+        const c = document.createElementNS(NS, "g");
+        c.innerHTML = '<circle cx="0" cy="0" r="26" fill="#fff" stroke="#111" stroke-width="4"/><circle cx="-28" cy="8" r="18" fill="#fff" stroke="#111" stroke-width="4"/><circle cx="26" cy="10" r="20" fill="#fff" stroke="#111" stroke-width="4"/>';
+        puffs.appendChild(c);
+        gsap.set(c, { x: 480 + (i % 3) * 30 + rnd() * 120, y: 780 + Math.floor(i / 3) * 80, opacity: 0, scale: 0.2 });
+        tl.to(c, { opacity: 1, scale: 0.7 + rnd() * 0.4, x: "-=" + (60 + rnd() * 80), duration: 0.5, ease: "power2.out" }, 17.3 + i * 0.12);
+        tl.to(c, { opacity: 0, duration: 0.5 }, 18.1 + i * 0.12);
+      }
+      // right clerk alone, then the question
+      tl.fromTo("#bubR1", { opacity: 0, scale: 0.4 }, { opacity: 1, scale: 1, duration: 0.3, ease: "back.out(2)" }, 19.3);
+      tl.to("#bubR1", { opacity: 0, duration: 0.15 }, 20.5);
+      tl.fromTo("#bubR2", { opacity: 0, scale: 0.4 }, { opacity: 1, scale: 1, duration: 0.3, ease: "back.out(2)" }, 20.7);
+      tl.to("#clerkR", { rotation: 5, duration: 0.1, yoyo: true, repeat: 7, svgOrigin: "565 520" }, 20.8);
+      tl.to("#main", { opacity: 0, duration: 0.1 }, 21.9);
+
+      // CTA
+      tl.from("#cLogo", { scale: 0.5, opacity: 0, duration: 0.4, ease: "back.out(2)" }, 22.05);
+      tl.from("#cH", { scale: 2.4, opacity: 0, duration: 0.3, ease: "power4.out" }, 22.4);
+      tl.from("#cPrice", { scale: 2, opacity: 0, duration: 0.35, ease: "power4.out" }, 23.0);
+      tl.from("#cPerk", { opacity: 0, duration: 0.3 }, 23.5);
+      tl.from("#cBtn", { y: 80, opacity: 0, duration: 0.4, ease: "back.out(1.6)" }, 23.8);
+      tl.from("#cUrl", { opacity: 0, duration: 0.3 }, 24.3);
+      tl.to("#cBtn", { scale: 1.06, duration: 0.4, yoyo: true, repeat: 5, ease: "sine.inOut" }, 24.5);
+
+      window.__timelines["ad8"] = tl;
+    </script>
+  </body>
+</html>
