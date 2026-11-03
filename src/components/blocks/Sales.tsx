@@ -93,7 +93,7 @@ export function ServiceGrid({ slugs, cards = true }: { slugs?: string[]; cards?:
           <Link to={SHIRTS_PATH} className="group flex h-full flex-col p-6 transition-colors hover:bg-white/[0.025]">
             <span className="text-sm font-semibold text-ignite">From {shirtFromLabel} · no minimum</span>
             <h3 className="mt-3 text-lg font-semibold tracking-tight">Custom company t-shirts</h3>
-            <p className="mt-2 text-sm leading-relaxed text-muted-foreground">Upload your logo, preview it on the shirt, and we press and ship it from Atlanta.</p>
+            <p className="mt-2 text-sm leading-relaxed text-muted-foreground">Upload your logo, preview it on the shirt, and we press and ship it to you.</p>
             <span className="mt-auto pt-5 text-sm font-medium text-foreground/70 group-hover:text-turbo">
               Design your shirt <span aria-hidden>›</span>
             </span>

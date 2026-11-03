@@ -83,7 +83,7 @@ export function NichePage({ niche }: { niche: Niche }) {
       <section id="cards" className="section border-t border-border [&_#buy]:scroll-mt-6">
         <div className="container-x">
           <h2 className="h-section mb-6">Just want the cards first?</h2>
-          <p className="lede mb-8">Tap-to-review cards for the counter, the mirror and the bag. Ships in 1–2 business days from Atlanta.</p>
+          <p className="lede mb-8">Tap-to-review cards for the counter, the mirror and the bag. Ships in 1–2 business days.</p>
           <BuyBox business={name} onBusiness={setName} headingLevel="h2" stickyBar={false} />
         </div>
       </section>

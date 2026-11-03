@@ -152,7 +152,7 @@ export const REVIEW_CARD = {
   shipping: {
     free: true,
     label: "Free US shipping",
-    processing: "Ships in 1–2 business days from Atlanta, GA",
+    processing: "Ships in 1–2 business days",
     delivery: "Arrives 2–5 business days after it ships (USPS)",
     /** Total business days from order to doorstep, used for the "get it by" estimate. */
     minDays: 3,

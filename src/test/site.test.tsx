@@ -54,6 +54,18 @@ describe("page registry (SEO)", () => {
     }
   });
 
+  it("gives every dark surface a light version, so dark text never sits on a dark box", () => {
+    const css = readFileSync(path.resolve("src/index.css"), "utf8");
+    // Classes that paint a hard-coded near-black background. Each one must be re-skinned under .theme-soft.
+    for (const cls of ["panel", "btn-chrome", "field", "opt", "pack-opt", "stand-add", "cta-glow", "audit-card"]) {
+      expect(css, cls).toMatch(new RegExp(`\\.theme-soft \\.${cls}[\\s,:{]`));
+    }
+  });
+
+  it("doesn't say where the cards ship from", () => {
+    expect(REVIEW_CARD.shipping.processing).not.toMatch(/Atlanta/);
+  });
+
   it("indexes the review card store once, at the homepage", () => {
     const shop = PAGES.find((p) => p.path === SHOP_PATH)!;
     expect(shop.canonical).toBe("/");

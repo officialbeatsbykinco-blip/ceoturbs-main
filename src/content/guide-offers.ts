@@ -59,7 +59,7 @@ export const GUIDE_OFFERS: Record<string, GuideOffer> = {
   },
   "nfc-google-review-cards": {
     kicker: "Do they work? Yes",
-    head: "Here's the card we ship from Atlanta.",
+    head: "Here's the card that gets the review.",
     body: "Waterproof, double-sided, no subscription and nothing for your customer to install. Pay once, reuse for years.",
     cta: "Order the card",
   },

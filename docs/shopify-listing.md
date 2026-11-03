@@ -47,7 +47,7 @@ NFC Google Review Card – Tap to Review, Works on iPhone & Android, No App
 </ul>
 
 <h3>Shipping &amp; guarantee</h3>
-<p>Ships in 1–2 business days from Atlanta, GA. Free US shipping. Return a new, unused card within 5 days of delivery for a refund, no restocking fee (see our Shipping & Returns page).</p>
+<p>Ships in 1–2 business days. Free US shipping. Return a new, unused card within 5 days of delivery for a refund, no restocking fee (see our Shipping & Returns page).</p>
 
 <p><em>CEO Turbo review cards are an independent product that links to your Google review page. Google is a trademark of Google LLC; we are not affiliated with or endorsed by Google.</em></p>
 ```

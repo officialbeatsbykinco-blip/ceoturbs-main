@@ -397,7 +397,7 @@ export default function GetMoreReviews() {
               </thead>
               <tbody>
                 {[
-                  ["Ships", "1–2 business days from Atlanta", "Often weeks"],
+                  ["Ships", "1–2 business days", "Often weeks"],
                   ["Stuck setting it up?", `Call a real person: ${SITE.phone.display}`, "Email, maybe"],
                   ["Find your review link", "Free tool + printable QR", "On your own"],
                   ["Returns", "5 days, no restocking fee", "Often none"],

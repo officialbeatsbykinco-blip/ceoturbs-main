@@ -509,7 +509,7 @@ function Result({ answers, quizId, source, prefill, booked, uid, onRestart }: { 
           {move.offer === "cards" ? (
             <>
               <p className="text-sm text-muted-foreground">
-                <span className="font-semibold text-foreground">Want reviews coming in before the call?</span> Our tap-to-review cards start at {fromPriceLabel} and ship from Atlanta.
+                <span className="font-semibold text-foreground">Want reviews coming in before the call?</span> Our tap-to-review cards start at {fromPriceLabel} with free US shipping.
               </p>
               <Link to={SHOP_PATH} onClick={() => track("shop_click", { source: "quiz result" })} className="btn-chrome !py-2.5 !text-sm">
                 See review cards

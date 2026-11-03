@@ -225,7 +225,7 @@ export default function HowToGetMoreCustomers() {
               </ul>
               <div className="mt-7 flex flex-wrap items-center gap-3">
                 <ShopCardsButton className="btn-shine" />
-                <span className="text-sm text-muted-foreground">Ships from Atlanta</span>
+                <span className="text-sm text-muted-foreground">Ships in 1–2 business days</span>
               </div>
             </div>
             <TapDemo />

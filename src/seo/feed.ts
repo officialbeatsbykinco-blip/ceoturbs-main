@@ -7,7 +7,7 @@ const esc = (s: string) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replac
 const abs = (p: string) => `${SITE.url}${p}`;
 
 const DESCRIPTION =
-  "Get more 5-star Google reviews with one tap. Customers hold their phone near the card and your Google review page opens instantly — no app, no searching for your business. Works with iPhone XS and newer and all NFC-enabled Android phones. NTAG215 NFC chip (504 bytes), waterproof PVC, credit-card size 85.5 × 54 × 0.76 mm, double-sided: white matte “Review Us On Google” front and black NFC back. Program it yourself in 2 minutes from your phone, or order it programmed; re-program anytime. Made for barbers, lawn care, mobile repair, cleaners, contractors, stores and restaurants. No subscription. Ships in 1–2 business days from Atlanta with free US shipping.";
+  "Get more 5-star Google reviews with one tap. Customers hold their phone near the card and your Google review page opens instantly — no app, no searching for your business. Works with iPhone XS and newer and all NFC-enabled Android phones. NTAG215 NFC chip (504 bytes), waterproof PVC, credit-card size 85.5 × 54 × 0.76 mm, double-sided: white matte “Review Us On Google” front and black NFC back. Program it yourself in 2 minutes from your phone, or order it programmed; re-program anytime. Made for barbers, lawn care, mobile repair, cleaners, contractors, stores and restaurants. No subscription. Ships in 1–2 business days with free US shipping.";
 
 export type FeedItem = { id: string; title: string; link: string; price: string; color: string; multipack: number; image: string };
 
