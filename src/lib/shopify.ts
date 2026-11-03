@@ -88,20 +88,28 @@ type CartLine = { merchandiseId: string; quantity: number; attributes?: { key: s
  * Creates a Shopify cart and returns its checkout URL. UTMs and ad click ids are added to the
  * checkout URL so Shopify's own reports and the checkout pixels attribute the sale.
  */
-async function cartCheckout(lines: CartLine[], attributes: { key: string; value: string }[]) {
+async function cartCheckout(lines: CartLine[], attributes: { key: string; value: string }[], note?: string) {
   let url: string;
-  try {
+  const create = async () => {
     const d = await gql<{ cartCreate: { cart: { checkoutUrl: string } | null; userErrors: { message: string }[] } }>(
       `mutation Cart($input: CartInput!) { cartCreate(input: $input) { cart { checkoutUrl } userErrors { message } } }`,
-      { input: { lines, attributes } },
+      { input: { lines, attributes, ...(note ? { note } : {}) } },
     );
     if (!d.cartCreate.cart) throw new Error(d.cartCreate.userErrors[0]?.message || "cartCreate failed");
-    url = d.cartCreate.cart.checkoutUrl;
+    return d.cartCreate.cart.checkoutUrl;
+  };
+  try {
+    // One retry: a dropped request on a phone shouldn't cost the sale.
+    url = await create().catch(create);
   } catch (e) {
-    // Cart permalink: works even if the cart mutation is blocked, but drops line properties —
-    // only used when no line carries any (a custom shirt without its design id can't be printed).
-    if (lines.some((l) => l.attributes?.length)) throw e;
-    url = `https://${SHOPIFY.domain}/cart/${lines.map((l) => `${numericId(l.merchandiseId)}:${l.quantity}`).join(",")}`;
+    // Cart permalink: works even if the cart mutation is blocked, but drops line properties. A custom
+    // shirt can't be printed without its design id, so those stop here. Programming details also ride
+    // in the order note and cart attributes, which the permalink keeps.
+    if (lines.some((l) => l.attributes?.length) && !note) throw e;
+    const p = new URL(`https://${SHOPIFY.domain}/cart/${lines.map((l) => `${numericId(l.merchandiseId)}:${l.quantity}`).join(",")}`);
+    if (note) p.searchParams.set("note", note);
+    for (const { key, value } of attributes) if (!key.startsWith("_")) p.searchParams.set(`attributes[${key}]`, value);
+    url = p.toString();
   }
   const a = attribution();
   const u = new URL(url);
@@ -118,16 +126,28 @@ async function cartCheckout(lines: CartLine[], attributes: { key: string; value:
 
 /** What it says on the order when the buyer hasn't given us a link yet. */
 export const LINK_TO_FOLLOW = "Not given yet: contact buyer";
+export const NAME_TO_FOLLOW = "Not given: contact buyer";
 
 /**
- * The $5 "we program it" line. The review link rides on the line so it prints on the order, which also
- * keeps these carts off the permalink fallback (it would drop the link).
+ * The $5 "we program it" line. Business name and review link ride on the line so they print on the
+ * order and packing slip next to the item they belong to.
  */
-async function programmingLine(reviewLink: string): Promise<CartLine> {
+async function programmingLine(reviewLink: string, business: string): Promise<CartLine> {
   const v = (await loadVariants(CARD_PROGRAMMING.productId))[0];
   if (!v) throw new Error(`No Shopify variant for ${CARD_PROGRAMMING.name}`);
-  return { merchandiseId: v.id, quantity: 1, attributes: [{ key: "Review link", value: reviewLink.trim().slice(0, 250) || LINK_TO_FOLLOW }] };
+  return {
+    merchandiseId: v.id,
+    quantity: 1,
+    attributes: [
+      { key: "Business name", value: business.trim().slice(0, 100) || NAME_TO_FOLLOW },
+      { key: "Review link", value: reviewLink.trim().slice(0, 250) || LINK_TO_FOLLOW },
+    ],
+  };
 }
+
+/** Order note for programming orders: the first thing on the order page in Shopify admin. */
+export const programmingNote = (reviewLink: string, business: string) =>
+  `PROGRAM CARDS before shipping. Business: ${business.trim() || NAME_TO_FOLLOW}. Review link: ${reviewLink.trim() || LINK_TO_FOLLOW}`;
 
 /** Creates a Shopify cart for the chosen review card pack (plus the counter stand and programming, if added) and returns the checkout URL. */
 export async function createCheckout(pack: ReviewPack, business: string, addOn?: StandOption, reviewLink?: string) {
@@ -141,8 +161,12 @@ export async function createCheckout(pack: ReviewPack, business: string, addOn?:
     lines.push({ merchandiseId: v.id, quantity: 1 });
     extra = Number(v.price.amount);
   }
-  if (reviewLink !== undefined) lines.push(await programmingLine(reviewLink));
-  const url = await cartCheckout(lines, attributionAttributes({ "Business name": business.trim(), Pack: pack.label, Product: addOn?.name, Program: reviewLink !== undefined ? "Yes" : undefined }));
+  if (reviewLink !== undefined) lines.push(await programmingLine(reviewLink, business));
+  const url = await cartCheckout(
+    lines,
+    attributionAttributes({ "Business name": business.trim(), Pack: pack.label, Product: addOn?.name, Program: reviewLink !== undefined ? "Yes" : undefined, "Review link": reviewLink?.trim() || undefined }),
+    reviewLink !== undefined ? programmingNote(reviewLink, business) : undefined,
+  );
   return { url, variantId: numericId(found.variant.id), price: Number(found.variant.price.amount) * found.quantity + extra, available: found.variant.availableForSale };
 }
 
@@ -190,7 +214,11 @@ export async function createStandCheckout(opt: StandOption, business: string, re
   const variant = variants[0];
   if (!variant) throw new Error(`No Shopify variant for ${opt.name}`);
   const lines: CartLine[] = [{ merchandiseId: variant.id, quantity: 1 }];
-  if (reviewLink !== undefined) lines.push(await programmingLine(reviewLink));
-  const url = await cartCheckout(lines, attributionAttributes({ "Business name": business.trim(), Product: opt.name, Program: reviewLink !== undefined ? "Yes" : undefined }));
+  if (reviewLink !== undefined) lines.push(await programmingLine(reviewLink, business));
+  const url = await cartCheckout(
+    lines,
+    attributionAttributes({ "Business name": business.trim(), Product: opt.name, Program: reviewLink !== undefined ? "Yes" : undefined, "Review link": reviewLink?.trim() || undefined }),
+    reviewLink !== undefined ? programmingNote(reviewLink, business) : undefined,
+  );
   return { url, variantId: numericId(variant.id), price: Number(variant.price.amount), available: variant.availableForSale };
 }

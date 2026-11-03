@@ -21,7 +21,7 @@ import { BOOKING, REVIEW_CARD, SITE, packSavings, packPath } from "@/config/site
 import { merchantFeed, feedItems } from "@/seo/feed";
 import { reviewCardProduct, organization, founder } from "@/seo/schema";
 import { Footer } from "@/components/site/Footer";
-import { findVariant } from "@/lib/shopify";
+import { findVariant, programmingNote } from "@/lib/shopify";
 import { BookButton, ShopCardsButton } from "@/components/cta/Actions";
 import { MobileActionBar } from "@/components/site/MobileActionBar";
 import { OfficeIntake } from "@/components/blocks/OfficeIntake";
@@ -60,6 +60,12 @@ describe("page registry (SEO)", () => {
     for (const cls of ["panel", "btn-chrome", "field", "opt", "pack-opt", "stand-add", "cta-glow", "audit-card"]) {
       expect(css, cls).toMatch(new RegExp(`\\.theme-soft \\.${cls}[\\s,:{]`));
     }
+  });
+
+  it("puts programming details in the Shopify order note", () => {
+    expect(programmingNote("https://g.page/r/abc/review", "Fresh Cuts ")).toBe("PROGRAM CARDS before shipping. Business: Fresh Cuts. Review link: https://g.page/r/abc/review");
+    // Left blank: the order still says programming was bought and that the buyer needs a call.
+    expect(programmingNote("", "")).toMatch(/^PROGRAM CARDS.*contact buyer.*contact buyer$/);
   });
 
   it("doesn't say where the cards ship from", () => {
