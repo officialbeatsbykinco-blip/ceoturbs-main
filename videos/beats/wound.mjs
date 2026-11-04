@@ -1,5 +1,5 @@
 // "WOUND": original dark grunge rage beat, 155 BPM, E phrygian / minor, synthesized from scratch (no samples).
-// Tape-wobbled crushed lead, blown-out 808, distorted power-chord "guitar" in the drops, crunchy drums, vinyl grit.
+// Gritty supersaw riff, dark choir, blown-out 808, distorted power-chord "guitar" in the drops, crunchy drums, vinyl grit.
 //   node wound.mjs   → renders/wound-type-beat.wav and .mp3 (mp3 needs ffmpeg)
 // Form: intro 8 · drop 16 · verse 16 · drop 16 · break 4 · drop 16 · outro 8 bars.
 import { mkdirSync, writeFileSync } from "node:fs";
@@ -39,12 +39,12 @@ const addLR = (sl, sr, t, g, rev = 0, dly = 0) => {
 };
 const duck = (t, depth = 0.6) => { const i0 = Math.round(t * SR); for (let k = 0; k < 0.3 * SR && i0 + k < N; k++) DUCK[i0 + k] = Math.min(DUCK[i0 + k], 1 - depth * Math.exp(-k / SR / 0.08)); };
 
-// ---- drums: everything a little broken ----
-const KICK = grime((() => { let ph = 0; return mk(0.32, (t) => { ph += (2 * Math.PI * (45 + 160 * Math.exp(-t * 40))) / SR; return Math.tanh(Math.sin(ph) * 6) * Math.exp(-t * 10) + (t < 0.006 ? (rand() - 0.5) * 0.8 : 0); }); })(), 7, 2);
-const SNARE = grime((() => { const n = env(lp(hp(noise(0.35)), 6000), (t) => Math.exp(-t * 11)); let ph = 0; return n.map((v, i) => { const t = i / SR; ph += (2 * Math.PI * (180 + 70 * Math.exp(-t * 40))) / SR; return Math.tanh((v + Math.sin(ph) * Math.exp(-t * 18) * 0.8) * 3); }); })(), 5, 3);
-const CLAP = grime((() => { const o = new Float32Array(Math.floor(0.4 * SR)); for (const off of [0, 0.012, 0.025]) { const b = env(hp(hp(noise(0.38))), (t) => Math.exp(-t * (off < 0.02 ? 60 : 9))); const i0 = Math.floor(off * SR); for (let k = 0; k + i0 < o.length && k < b.length; k++) o[k + i0] += b[k]; } return o.map((v) => Math.tanh(v * 2.5)); })(), 6, 2);
-const HAT = grime(env(hp(hp(hp(noise(0.05)))), (t) => Math.exp(-t * 75)), 5, 2);
-const OHAT = grime(env(hp(hp(noise(0.5))), (t) => Math.exp(-t * 5)), 5, 3);
+// ---- drums: punchy, with a little grit ----
+const KICK = grime((() => { let ph = 0; return mk(0.32, (t) => { ph += (2 * Math.PI * (45 + 160 * Math.exp(-t * 40))) / SR; return Math.tanh(Math.sin(ph) * 6) * Math.exp(-t * 10) + (t < 0.006 ? (rand() - 0.5) * 0.8 : 0); }); })(), 10, 1);
+const SNARE = grime((() => { const n = env(lp(hp(noise(0.35)), 6000), (t) => Math.exp(-t * 11)); let ph = 0; return n.map((v, i) => { const t = i / SR; ph += (2 * Math.PI * (180 + 70 * Math.exp(-t * 40))) / SR; return Math.tanh((v + Math.sin(ph) * Math.exp(-t * 18) * 0.8) * 3); }); })(), 8, 1);
+const CLAP = grime((() => { const o = new Float32Array(Math.floor(0.4 * SR)); for (const off of [0, 0.012, 0.025]) { const b = env(hp(hp(noise(0.38))), (t) => Math.exp(-t * (off < 0.02 ? 60 : 9))); const i0 = Math.floor(off * SR); for (let k = 0; k + i0 < o.length && k < b.length; k++) o[k + i0] += b[k]; } return o.map((v) => Math.tanh(v * 2.5)); })(), 8, 1);
+const HAT = grime(env(hp(hp(hp(noise(0.05)))), (t) => Math.exp(-t * 75)), 8, 1);
+const OHAT = grime(env(hp(hp(noise(0.5))), (t) => Math.exp(-t * 5)), 7, 1);
 const CRASH = grime(env(hp(hp(noise(2.5))), (t) => Math.exp(-t * 1.4)), 6, 3);
 const IMPACT = (() => { let ph = 0; return mk(3, (t) => { ph += (2 * Math.PI * (38 + 80 * Math.exp(-t * 6))) / SR; return Math.tanh(Math.sin(ph) * 5) * Math.exp(-t * 1.2); }); })();
 const REVSWELL = (d) => { const x = lp(hp(noise(d)), 5000); return x.map((v, i) => v * (i / x.length) ** 3); };
@@ -62,20 +62,21 @@ function render808(m, dur, from) {
   return sub.map((v, i) => dirt[i] * 0.55 + v * 0.6);
 }
 
-// lead: two detuned square/saw voices with tape wow, crushed, then muffled
-function lead(m, d, { cutoff = 3200, t0 = 0 } = {}) {
-  const f = mtof(m);
-  const side = (det) => {
-    let p1 = rand(), p2 = rand();
-    const x = mk(d + 0.25, (t) => {
-      const wow = 2 ** ((0.14 * Math.sin(2 * Math.PI * 0.6 * (t0 + t)) + 0.05 * Math.sin(2 * Math.PI * 5.2 * t)) / 12);
-      p1 = (p1 + (f * wow * 2 ** (det / 1200)) / SR) % 1; p2 = (p2 + (f * wow * 2 ** (-det / 1200) * 1.002) / SR) % 1;
-      const a = Math.min(t / 0.015, 1) * (t < d ? 1 - 0.3 * Math.min(t / d, 1) : 0.7 * Math.max(0, 1 - (t - d) / 0.25));
-      return Math.tanh(((p1 < 0.5 ? 1 : -1) * 0.6 + (2 * p2 - 1) * 0.6) * 2.5) * a;
+// lead: 7 detuned saws per side, driven hard, partly crushed, a hair of tape wobble
+function lead(m, d, { cutoff = 7000, t0 = 0 } = {}) {
+  const f = mtof(m), det = [-22, -14, -6, 0, 6, 14, 22];
+  const side = (sgn) => {
+    const ph = det.map(() => rand());
+    const x = mk(d + 0.12, (t) => {
+      const wow = 2 ** ((0.04 * Math.sin(2 * Math.PI * 0.6 * (t0 + t))) / 12);
+      let sum = 0;
+      for (let v = 0; v < 7; v++) { ph[v] = (ph[v] + (f * wow * 2 ** ((det[v] * (v === 3 ? 1 : sgn)) / 1200)) / SR) % 1; sum += 2 * ph[v] - 1; }
+      return Math.tanh((sum / 3.5) * 5) * Math.min(t / 0.004, 1) * (t < d ? 1 : Math.max(0, 1 - (t - d) / 0.12));
     });
-    return lp(lp(grime(x, 6, 3), cutoff), cutoff * 1.3);
+    const c = crush(x, 6);
+    return lp(lp(x.map((v, i) => v * 0.7 + c[i] * 0.3), cutoff), cutoff * 1.4);
   };
-  return [side(9), side(-9)];
+  return [side(1), side(-1)];
 }
 
 // grunge "guitar": a clipped power chord through a cab-like band-limit; palm-muted when short
@@ -94,6 +95,17 @@ function guitar(root, d, muted) {
   return [side(6), side(-6)];
 }
 
+// dark choir: vibrato saws through "oh" formants
+const bp = (x, fc, q) => { const w = (2 * Math.PI * fc) / SR, al = Math.sin(w) / (2 * q), a0 = 1 + al, b0 = al / a0, a1 = (-2 * Math.cos(w)) / a0, a2 = (1 - al) / a0; let x1 = 0, x2 = 0, y1 = 0, y2 = 0; return x.map((v) => { const y = b0 * v - b0 * x2 - a1 * y1 - a2 * y2; x2 = x1; x1 = v; y2 = y1; y1 = y; return y; }); };
+const choir = (notes, d) => {
+  const side = (det) => {
+    const ph = notes.map(() => rand());
+    const src = mk(d, (t) => notes.reduce((sum, n, v) => { ph[v] = (ph[v] + (mtof(n) * 2 ** ((det + 12 * Math.sin(2 * Math.PI * (4.8 + v * 0.3) * t)) / 1200)) / SR) % 1; return sum + 2 * ph[v] - 1; }, 0) * Math.min(t / 0.5, 1, (d - t) / 0.4));
+    const f1 = bp(src, 420, 5), f2 = bp(src, 820, 7), f3 = bp(src, 2500, 9);
+    return f1.map((v, i) => v + f2[i] * 0.55 + f3[i] * 0.2);
+  };
+  return [side(-8), side(8)];
+};
 // low drone pad
 const drone = (notes, d) => { const side = (det) => { const ph = notes.map(() => rand()); return lp(lp(mk(d, (t) => notes.reduce((s, n, v) => { ph[v] = (ph[v] + (mtof(n) * 2 ** (det / 1200)) / SR) % 1; return s + 2 * ph[v] - 1; }, 0) * Math.min(t / 1, 1, (d - t) / 0.6)), 700), 700); }; return [side(-7), side(7)]; };
 
@@ -101,14 +113,15 @@ const drone = (notes, d) => { const side = (det) => { const ph = notes.map(() =>
 const CH = [[52, 55, 59], [53, 57, 60], [48, 52, 55], [47, 51, 54]];
 const ROOT = [28, 29, 36, 35];
 const GTR = [40, 41, 36, 35];
-// four-bar lead phrase: [step, 16ths, midi]
-const PHRASE = [
-  [[0, 6, 83], [6, 2, 81], [8, 8, 79]],
-  [[0, 4, 77], [4, 4, 79], [8, 8, 81]],
-  [[0, 6, 79], [6, 2, 77], [8, 4, 76], [12, 4, 72]],
-  [[0, 8, 75], [8, 4, 78], [12, 4, 71]],
+// the riff, one bar per chord: [step, 16ths, midi]; same shape each bar, with a half-step neighbor on 8-9
+const RIFF = [
+  [[0, 2, 83], [2, 1, 83], [3, 2, 79], [6, 2, 76], [8, 1, 77], [9, 1, 76], [10, 2, 79], [12, 2, 88], [14, 2, 83]],
+  [[0, 2, 84], [2, 1, 84], [3, 2, 81], [6, 2, 77], [8, 1, 79], [9, 1, 77], [10, 2, 81], [12, 2, 89], [14, 2, 84]],
+  [[0, 2, 79], [2, 1, 79], [3, 2, 76], [6, 2, 72], [8, 1, 74], [9, 1, 72], [10, 2, 76], [12, 2, 84], [14, 2, 79]],
+  [[0, 2, 78], [2, 1, 78], [3, 2, 75], [6, 2, 71], [8, 1, 72], [9, 1, 71], [10, 2, 75], [12, 4, 78]],
 ];
-const VERSE_PHRASE = [[[0, 12, 79]], [[0, 12, 77]], [[0, 12, 76]], [[0, 8, 75], [8, 6, 71]]];
+// verses keep just the opening of the riff, out of the vocal's way
+const VERSE_RIFF = RIFF.map((bar) => bar.filter(([st]) => st === 0 || st === 3 || st === 6));
 const B808 = {
   drop: [[0, 0, 3], [3, 0, 3], [6, 0, 2], [8, 12, 2, 1], [10, 0, 2], [12, 0, 2], [14, 1, 2, 1]],
   verse: [[0, 0, 6], [6, 0, 4], [10, 0, 2], [12, 7, 4, 1]],
@@ -127,17 +140,18 @@ for (let b = 0; b < BARS; b++) {
   const gap = (st) => lastOfSec && next && st >= 14; // two 16ths of silence before the next section lands
 
   // drone under everything
-  { const [l, r] = drone([...CH[c].map((n) => n - 12), ROOT[c] + 12], BAR + 0.05); addLR(l, r, t0, (s === "intro" ? 0.03 : 0.04) * fade, 0.4); }
+  { const [l, r] = drone([...CH[c].map((n) => n - 12), ROOT[c] + 12], BAR + 0.05); addLR(l, r, t0, 0.025 * fade, 0.4); }
+  { const [l, r] = choir(CH[c].map((n) => n + 12), BAR + 0.05); addLR(l, r, t0, (verse ? 0.09 : 0.12) * fade, 0.6); }
 
   // lead: full phrase except in the verse, where it hangs long notes out of the vocal's way
-  const ph = verse ? VERSE_PHRASE[c] : PHRASE[c];
-  const lg = { intro: 0.2, drop: 0.24, verse: 0.13, break: 0.2, outro: 0.2 }[s] * fade;
-  const cut = s === "intro" ? 900 + 260 * k : verse ? 1800 : s === "break" ? 1400 : 3400;
+  const ph = verse ? VERSE_RIFF[c] : RIFF[c];
+  const lg = { intro: 0.15, drop: 0.2, verse: 0.1, break: 0.15, outro: 0.15 }[s] * fade;
+  const cut = s === "intro" ? 900 + 500 * k : verse ? 3000 : s === "break" ? 2500 : 7000;
   for (const [st, l16, m] of ph) {
     if (gap(st)) continue;
     const [l, r] = lead(m, l16 * S16, { cutoff: cut, t0: at(st) });
-    addLR(l, r, at(st), lg, 0.5, 0.25);
-    if (drop && nth === 3) { const [l2, r2] = lead(m - 12, l16 * S16, { cutoff: 2000, t0: at(st) + 0.3 }); addLR(l2, r2, at(st), lg * 0.5, 0.3); }
+    addLR(l, r, at(st), lg, 0.3, 0.2);
+    if (drop && nth > 1) { const [l2, r2] = lead(m - 12, l16 * S16, { cutoff: 3000, t0: at(st) + 0.3 }); addLR(l2, r2, at(st), lg * 0.5, 0.3); }
   }
   // reversed swell into each four-bar phrase in the drops
   if ((drop || s === "break") && c === 3) add(REVSWELL(BAR / 2), at(8), 0.06, { rev: 0.4, synth: true });
@@ -209,7 +223,7 @@ for (let i = 0; i < n; i++) {
   outL[i] = Math.tanh((HL[i] + (SL[i] + rl[i] * 0.13 + dl[i] * 0.35) * d) * 2) * tail;
   outR[i] = Math.tanh((HR[i] + (SR_[i] + rr[i] * 0.13 + dr[i] * 0.35) * d) * 2) * tail;
 }
-outL = lp(outL, 11000); outR = lp(outR, 11000);
+outL = lp(outL, 16000); outR = lp(outR, 16000);
 let pk = 0;
 for (let i = 0; i < n; i++) pk = Math.max(pk, Math.abs(outL[i]), Math.abs(outR[i]));
 const pcm = Buffer.alloc(44 + n * 4);
