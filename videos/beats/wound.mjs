@@ -1,5 +1,5 @@
 // "WOUND": original dark grunge rage beat, 155 BPM, E phrygian / minor, synthesized from scratch (no samples).
-// Gritty supersaw riff, dark choir, blown-out 808, distorted power-chord "guitar" in the drops, crunchy drums, vinyl grit.
+// Plucky supersaw hook with room for vocals, dark choir, claps on 2 and 4 in the drops, blown-out 808, distorted power-chord "guitar" in the drops, crunchy drums, vinyl grit.
 //   node wound.mjs   → renders/wound-type-beat.wav and .mp3 (mp3 needs ffmpeg)
 // Form: intro 8 · drop 16 · verse 16 · drop 16 · break 4 · drop 16 · outro 8 bars.
 import { mkdirSync, writeFileSync } from "node:fs";
@@ -62,7 +62,7 @@ function render808(m, dur, from) {
   return sub.map((v, i) => dirt[i] * 0.55 + v * 0.6);
 }
 
-// lead: 7 detuned saws per side, driven hard, partly crushed, a hair of tape wobble
+// lead: plucky supersaw, 7 detuned saws per side, lightly driven and crushed, a hair of tape wobble
 function lead(m, d, { cutoff = 7000, t0 = 0 } = {}) {
   const f = mtof(m), det = [-22, -14, -6, 0, 6, 14, 22];
   const side = (sgn) => {
@@ -71,7 +71,7 @@ function lead(m, d, { cutoff = 7000, t0 = 0 } = {}) {
       const wow = 2 ** ((0.04 * Math.sin(2 * Math.PI * 0.6 * (t0 + t))) / 12);
       let sum = 0;
       for (let v = 0; v < 7; v++) { ph[v] = (ph[v] + (f * wow * 2 ** ((det[v] * (v === 3 ? 1 : sgn)) / 1200)) / SR) % 1; sum += 2 * ph[v] - 1; }
-      return Math.tanh((sum / 3.5) * 5) * Math.min(t / 0.004, 1) * (t < d ? 1 : Math.max(0, 1 - (t - d) / 0.12));
+      return Math.tanh((sum / 3.5) * 3) * Math.min(t / 0.004, 1) * Math.exp(-t * 2.2) * (t < d ? 1 : Math.max(0, 1 - (t - d) / 0.15));
     });
     const c = crush(x, 6);
     return lp(lp(x.map((v, i) => v * 0.7 + c[i] * 0.3), cutoff), cutoff * 1.4);
@@ -113,21 +113,20 @@ const drone = (notes, d) => { const side = (det) => { const ph = notes.map(() =>
 const CH = [[52, 55, 59], [53, 57, 60], [48, 52, 55], [47, 51, 54]];
 const ROOT = [28, 29, 36, 35];
 const GTR = [40, 41, 36, 35];
-// the riff, one bar per chord: [step, 16ths, midi]; same shape each bar, with a half-step neighbor on 8-9
+// the hook: the same dotted "da - da - daaa" (steps 0, 3, 6) on every chord, then half a bar left open for the vocal
 const RIFF = [
-  [[0, 2, 83], [2, 1, 83], [3, 2, 79], [6, 2, 76], [8, 1, 77], [9, 1, 76], [10, 2, 79], [12, 2, 88], [14, 2, 83]],
-  [[0, 2, 84], [2, 1, 84], [3, 2, 81], [6, 2, 77], [8, 1, 79], [9, 1, 77], [10, 2, 81], [12, 2, 89], [14, 2, 84]],
-  [[0, 2, 79], [2, 1, 79], [3, 2, 76], [6, 2, 72], [8, 1, 74], [9, 1, 72], [10, 2, 76], [12, 2, 84], [14, 2, 79]],
-  [[0, 2, 78], [2, 1, 78], [3, 2, 75], [6, 2, 71], [8, 1, 72], [9, 1, 71], [10, 2, 75], [12, 4, 78]],
+  [[0, 3, 83], [3, 3, 83], [6, 4, 79]],
+  [[0, 3, 84], [3, 3, 84], [6, 4, 81]],
+  [[0, 3, 79], [3, 3, 79], [6, 4, 76]],
+  [[0, 3, 78], [3, 3, 75], [6, 6, 71], [14, 2, 79]],
 ];
-// verses keep just the opening of the riff, out of the vocal's way
-const VERSE_RIFF = RIFF.map((bar) => bar.filter(([st]) => st === 0 || st === 3 || st === 6));
+// verses: just the first note every other bar, so the vocal owns the space
+const VERSE_RIFF = RIFF.map((bar, i) => (i % 2 ? [] : bar.slice(0, 1)));
 const B808 = {
-  drop: [[0, 0, 3], [3, 0, 3], [6, 0, 2], [8, 12, 2, 1], [10, 0, 2], [12, 0, 2], [14, 1, 2, 1]],
+  drop: [[0, 0, 3], [3, 0, 3], [6, 0, 4], [10, 0, 2], [12, 0, 2], [14, 12, 2, 1]],
   verse: [[0, 0, 6], [6, 0, 4], [10, 0, 2], [12, 7, 4, 1]],
   break: [[0, 0, 16]],
 };
-const CHUGS = [[0, 1], [1, 1], [3, 1], [4, 1], [6, 2], [8, 1], [9, 1], [11, 1], [12, 4, 1]]; // [step, 16ths, ring?]
 
 const BAR_SEC = [];
 { const seen = {}; for (const [s, len] of FORM) { seen[s] = (seen[s] || 0) + 1; for (let k = 0; k < len; k++) BAR_SEC.push({ s, k, len, nth: seen[s] }); } }
@@ -145,27 +144,22 @@ for (let b = 0; b < BARS; b++) {
 
   // lead: full phrase except in the verse, where it hangs long notes out of the vocal's way
   const ph = verse ? VERSE_RIFF[c] : RIFF[c];
-  const lg = { intro: 0.15, drop: 0.2, verse: 0.1, break: 0.15, outro: 0.15 }[s] * fade;
+  const lg = { intro: 0.2, drop: 0.24, verse: 0.14, break: 0.2, outro: 0.2 }[s] * fade;
   const cut = s === "intro" ? 900 + 500 * k : verse ? 3000 : s === "break" ? 2500 : 7000;
   for (const [st, l16, m] of ph) {
     if (gap(st)) continue;
     const [l, r] = lead(m, l16 * S16, { cutoff: cut, t0: at(st) });
     addLR(l, r, at(st), lg, 0.3, 0.2);
-    if (drop && nth > 1) { const [l2, r2] = lead(m - 12, l16 * S16, { cutoff: 3000, t0: at(st) + 0.3 }); addLR(l2, r2, at(st), lg * 0.5, 0.3); }
+    if (drop && nth > 1) { const [l2, r2] = lead(m - 12, l16 * S16, { cutoff: 3000, t0: at(st) + 0.3 }); addLR(l2, r2, at(st), lg * 0.4, 0.3); }
   }
   // reversed swell into each four-bar phrase in the drops
   if ((drop || s === "break") && c === 3) add(REVSWELL(BAR / 2), at(8), 0.06, { rev: 0.4, synth: true });
 
-  // grunge guitar: chugs in drops 2 and 3, ringing chords in the back half of drop 1 and the break
-  if (drop && nth > 1) for (const [st, l16, ring] of CHUGS) {
-    if (gap(st)) continue;
-    const [l, r] = guitar(GTR[c], l16 * S16 * 0.9, !ring);
-    addLR(l, r, at(st), ring ? 0.05 : 0.065, 0.15);
-  }
-  if ((drop && nth === 1 && k >= 8) || s === "break") for (const st of [0, 8]) {
+  // grunge guitar: big ringing power chords under the back half of drop 1, drops 2-3 and the break
+  if ((drop && (nth > 1 || k >= 8)) || s === "break") for (const st of [0, 8]) {
     if (gap(st)) continue;
     const [l, r] = guitar(GTR[c], 8 * S16 * 0.95, false);
-    addLR(l, r, at(st), 0.045, 0.3);
+    addLR(l, r, at(st), 0.04, 0.3);
   }
 
   // 808 + kick (+ sidechain)
@@ -179,7 +173,8 @@ for (let b = 0; b < BARS; b++) {
   }
 
   if (drop || verse) {
-    add(CLAP, at(8), 0.32, { rev: 0.35 }); add(SNARE, at(8), 0.3, { rev: 0.2 });
+    for (const st of drop ? [4, 12] : [8]) { add(CLAP, at(st), 0.32, { rev: 0.35 }); add(SNARE, at(st), 0.28, { rev: 0.2 }); }
+    if (drop && nth === 3) for (const st of [0, 4, 8, 12]) if (!gap(st)) { add(KICK, at(st), 0.3); duck(at(st), 0.4); }
     if (drop && b % 4 === 3) add(SNARE, at(15), 0.14, { rev: 0.3 });
     // hats: 8ths with 16th pickups, rolls on rotating bars, a little lazy
     const hats = [];
