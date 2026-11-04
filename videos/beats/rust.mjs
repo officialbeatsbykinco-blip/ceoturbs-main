@@ -1,5 +1,5 @@
 // "RUST": original swaggy dark grunge rage beat, 160 BPM, G minor (Gm · Ab), synthesized from scratch (no samples).
-// The 808 leads: blown-out, sliding everywhere. Hard stacked drums and horror stabs on the drops. Over it, a slow eerie bell loop, a dark pad, crunchy drums, glitch stutters.
+// The 808 leads: blown-out, sliding everywhere. Hard stacked drums and horror stabs on the drops. Over it, a distorted gliding mono lead, a dark pad, crunchy drums, glitch stutters.
 //   node rust.mjs   → renders/rust-type-beat.wav and .mp3 (mp3 needs ffmpeg)
 // Form: intro 8 · drop 16 · verse 16 · drop 16 · verse 16 · drop 8 · outro 4 bars.
 import { mkdirSync, writeFileSync } from "node:fs";
@@ -64,15 +64,25 @@ function e808(m, dur, from) {
   return sub.map((v, i) => top[i] * 0.7 + v * 0.65);
 }
 
-// eerie bell: detuned FM pair with a little downward "plink" at the attack, slightly crushed
-function bell(m, d) {
-  const f = mtof(m);
-  const side = (det) => crush(mk(d + 1.2, (t) => {
-    const ff = f * 2 ** (det / 1200) * (1 - 0.012 * Math.exp(-t * 30));
-    const a = Math.min(t / 0.003, 1) * Math.exp(-t * 1.6) * (t < d ? 1 : Math.max(0, 1 - (t - d) / 1.2));
-    return Math.sin(2 * Math.PI * ff * t + 2.4 * Math.exp(-t * 3.5) * Math.sin(2 * Math.PI * ff * 2.01 * t)) * a;
-  }), 9);
-  return [side(-8), side(8)];
+// distorted glide lead: one mono voice (3 detuned saws + a square an octave down) that slides into every note,
+// clipped hard and crushed. notes = [[start s, length s, midi]] relative to t = 0
+function glideLead(notes, d, { cutoff = 5000 } = {}) {
+  const side = (det) => {
+    const ph = [rand(), rand(), rand(), rand()];
+    let j = 0;
+    const x = mk(d, (t) => {
+      while (j + 1 < notes.length && t >= notes[j + 1][0]) j++;
+      const [st, len, m] = notes[j], prev = j ? notes[j - 1][2] : m, u = t - st;
+      if (u < 0) return 0;
+      const pitch = prev + (m - prev) * Math.min(u / 0.06, 1) + (u > 0.22 ? 0.22 * Math.sin(2 * Math.PI * 5.5 * u) * Math.min((u - 0.22) / 0.2, 1) : 0);
+      const fr = mtof(pitch);
+      ph[0] = (ph[0] + (fr * 2 ** (-det / 1200)) / SR) % 1; ph[1] = (ph[1] + fr / SR) % 1; ph[2] = (ph[2] + (fr * 2 ** (det / 1200)) / SR) % 1; ph[3] = (ph[3] + fr / 2 / SR) % 1;
+      const a = Math.min(u / 0.006, 1) * (u < len ? 1 : Math.max(0, 1 - (u - len) / 0.06));
+      return Math.tanh((2 * ph[0] + 2 * ph[1] + 2 * ph[2] - 3 + (ph[3] < 0.5 ? 0.7 : -0.7)) * 3) * a;
+    });
+    return lp(lp(hp(crush(x, 7)).map((v, i) => v * 0.5 + x[i] * 0.5), cutoff), cutoff * 1.4);
+  };
+  return [side(12), side(-12)];
 }
 
 // dark pad: detuned saws, low-passed, slow in and out
@@ -84,12 +94,12 @@ const siren = (m, d) => { const side = (det) => { let p1 = rand(), p2 = rand(); 
 // ---- music: Gm · Ab, two bars each ----
 const CH = [[55, 58, 62], [56, 60, 63]];
 const ROOT = [31, 32];
-// slow eerie bell loop over four bars: [step, 16ths, midi]
-const LOOP = [
-  [[0, 4, 86], [6, 2, 82], [8, 8, 79]],
-  [[4, 2, 81], [6, 2, 82], [8, 6, 79]],
-  [[0, 4, 84], [6, 2, 82], [8, 4, 80], [12, 4, 79]],
-  [[0, 6, 77], [8, 4, 79], [12, 2, 80], [14, 2, 82]],
+// the lead line over four bars (Gm Gm Ab Ab): [bar, step, 16ths, midi]; it glides between notes
+const LINE = [
+  [0, 0, 6, 74], [0, 6, 2, 72], [0, 8, 6, 70], [0, 14, 2, 67],
+  [1, 0, 3, 70], [1, 3, 3, 72], [1, 6, 2, 74], [1, 8, 8, 79],
+  [2, 0, 6, 75], [2, 6, 2, 74], [2, 8, 6, 72], [2, 14, 2, 68],
+  [3, 0, 3, 72], [3, 3, 3, 74], [3, 6, 2, 75], [3, 8, 6, 74], [3, 14, 2, 72],
 ];
 const B808 = {
   drop: [[0, 0, 3], [3, 0, 3], [6, 12, 2, 1], [8, 0, 2], [10, 0, 2], [12, -2, 2, 1], [14, 0, 2, 1]],
@@ -108,16 +118,17 @@ for (let b = 0; b < BARS; b++) {
   const fade = s === "outro" ? 1 - k / 4 : 1;
   const gap = (st) => lastOfSec && next && st >= 14;
 
-  // pad under everything, bell loop over it (sparser in the verses: every other bar)
+  // dark pad under everything
   if (b % 2 === 0) { const [l, r] = pad([...CH[c].map((n) => n - 12), ROOT[c] + 24], 2 * BAR); addLR(l, r, t0, (verse ? 0.022 : 0.03) * fade, 0.5); }
-  if (!verse || k % 2 === 0) {
-    const g = { intro: 0.2, drop: 0.24, verse: 0.16, outro: 0.2 }[s] * fade;
-    for (const [st, l16, m] of LOOP[b % 4]) {
-      if (gap(st)) continue;
-      const [l, r] = bell(m, l16 * S16);
-      addLR(s === "intro" && k < 4 ? lp(l, 1500) : l, s === "intro" && k < 4 ? lp(r, 1500) : r, at(st), g, 0.55, 0.35);
-      if (drop) { const [l2, r2] = bell(m - 12, l16 * S16); addLR(l2, r2, at(st), g * 0.35, 0.3); }
-    }
+  // the lead, rendered a four-bar phrase at a time so it can glide; verses keep only its first half, filtered
+  if (b % 4 === 0) {
+    const g = { intro: 0.15, drop: 0.21, verse: 0.1, outro: 0.15 }[s] * fade;
+    const notes = LINE.filter(([bar, st]) => (!verse || bar < 2) && !(BAR_SEC[b + bar]?.k === BAR_SEC[b + bar]?.len - 1 && BAR_SEC[b + bar + 1] && st >= 14))
+      .map(([bar, st, l16, m]) => [(bar * 16 + st) * S16, l16 * S16 * 0.92, m]);
+    const cutoff = s === "intro" ? (k < 4 ? 1500 : 3500) : verse ? 2200 : 5500;
+    const [l, r] = glideLead(notes, 4 * BAR, { cutoff });
+    addLR(l, r, t0, g, 0.35, 0.3);
+    if (drop) { const [l2, r2] = glideLead(notes.map(([a, d2, m]) => [a, d2, m - 12]), 4 * BAR, { cutoff: 2500 }); addLR(l2, r2, t0, g * 0.45, 0.2); }
   }
   // siren bends in the second and third drops, once every four bars
   if (drop && nth > 1 && k % 4 === 0) { const [l, r] = siren(CH[c][2] + 12, 2 * BAR); addLR(l, r, t0, 0.035, 0.4, 0.2); }
