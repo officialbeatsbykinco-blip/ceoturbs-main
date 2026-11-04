@@ -1,5 +1,5 @@
 // "RUST": original swaggy dark grunge rage beat, 160 BPM, G minor (Gm · Ab), synthesized from scratch (no samples).
-// The 808 leads: blown-out, sliding everywhere. Over it, a slow eerie bell loop, a dark pad, crunchy drums, glitch stutters.
+// The 808 leads: blown-out, sliding everywhere. Hard stacked drums and horror stabs on the drops. Over it, a slow eerie bell loop, a dark pad, crunchy drums, glitch stutters.
 //   node rust.mjs   → renders/rust-type-beat.wav and .mp3 (mp3 needs ffmpeg)
 // Form: intro 8 · drop 16 · verse 16 · drop 16 · verse 16 · drop 8 · outro 4 bars.
 import { mkdirSync, writeFileSync } from "node:fs";
@@ -38,7 +38,11 @@ const addLR = (sl, sr, t, g, rev = 0, dly = 0) => {
 const duck = (t, depth = 0.5) => { const i0 = Math.round(t * SR); for (let k = 0; k < 0.3 * SR && i0 + k < N; k++) DUCK[i0 + k] = Math.min(DUCK[i0 + k], 1 - depth * Math.exp(-k / SR / 0.09)); };
 
 // ---- drums ----
-const KICK = (() => { let ph = 0; return mk(0.3, (t) => { ph += (2 * Math.PI * (48 + 190 * Math.exp(-t * 45))) / SR; return Math.tanh(Math.sin(ph) * 7) * Math.exp(-t * 11) + (t < 0.005 ? (rand() - 0.5) : 0); }); })();
+const KICK = (() => { let ph = 0; const x = mk(0.36, (t) => { ph += (2 * Math.PI * (46 + 260 * Math.exp(-t * 50))) / SR; return Math.tanh(Math.sin(ph) * 12 * Math.exp(-t * 7)) * Math.min(1, Math.exp(-(t - 0.05) * 9)); }); const click = env(hp(hp(noise(0.012))), (t) => Math.exp(-t * 400)); for (let i = 0; i < click.length; i++) x[i] += click[i] * 0.9; return x; })();
+// hard snare to stack under the clap: crunchy noise + a punchy tone
+const SNARE = crush((() => { const nz = env(lp(hp(noise(0.3)), 7000), (t) => Math.exp(-t * 14)); let ph = 0; return nz.map((v, i) => { const t = i / SR; ph += (2 * Math.PI * (200 + 120 * Math.exp(-t * 45))) / SR; return Math.tanh((v + Math.sin(ph) * Math.exp(-t * 20)) * 4); }); })(), 6);
+// horror stab: a detuned, clipped minor chord that hits and dies, on the drop downbeats
+const stab = (notes) => { const side = (det) => { const ph = notes.map(() => rand()); return lp(mk(0.7, (t) => Math.tanh(notes.reduce((s2, n, v) => { ph[v] = (ph[v] + (mtof(n) * 2 ** (det / 1200)) / SR) % 1; return s2 + 2 * ph[v] - 1; }, 0) * 3) * Math.exp(-t * 5)), 3500); }; return [side(-14), side(14)]; };
 const CLAP = crush((() => { const o = new Float32Array(Math.floor(0.4 * SR)); for (const off of [0, 0.01, 0.022]) { const b = env(hp(hp(noise(0.38))), (t) => Math.exp(-t * (off < 0.02 ? 65 : 10))); const i0 = Math.floor(off * SR); for (let k = 0; k + i0 < o.length && k < b.length; k++) o[k + i0] += b[k]; } let ph = 0; for (let i = 0; i < 0.1 * SR; i++) { const t = i / SR; ph += (2 * Math.PI * (210 + 90 * Math.exp(-t * 50))) / SR; o[i] += Math.sin(ph) * Math.exp(-t * 28) * 0.6; } return o.map((v) => Math.tanh(v * 3)); })(), 7);
 const HAT = crush(env(hp(hp(hp(noise(0.045)))), (t) => Math.exp(-t * 85)), 7);
 const OHAT = crush(env(hp(hp(hp(noise(0.4)))), (t) => Math.exp(-t * 7)), 7);
@@ -56,8 +60,8 @@ function e808(m, dur, from) {
     ph += (2 * Math.PI * f) / SR;
     return Math.sin(ph) * Math.min(t / 0.002, 1) * Math.exp(-t * 0.3) * (t < dur ? 1 : Math.max(0, 1 - (t - dur) / 0.03));
   });
-  const top = crush(hold(sub.map((v) => Math.tanh((v + 0.3 * v * v) * 16)), 2), 8);
-  return sub.map((v, i) => top[i] * 0.5 + v * 0.65);
+  const top = crush(hold(sub.map((v) => Math.tanh((v + 0.35 * v * v) * 30)), 2), 7);
+  return sub.map((v, i) => top[i] * 0.7 + v * 0.65);
 }
 
 // eerie bell: detuned FM pair with a little downward "plink" at the attack, slightly crushed
@@ -89,7 +93,7 @@ const LOOP = [
 ];
 const B808 = {
   drop: [[0, 0, 3], [3, 0, 3], [6, 12, 2, 1], [8, 0, 2], [10, 0, 2], [12, -2, 2, 1], [14, 0, 2, 1]],
-  dropB: [[0, 0, 4], [4, 0, 2], [6, 0, 2], [8, 12, 3, 1], [11, 7, 1, 1], [12, 0, 4]],
+  dropB: [[0, 0, 3], [3, 0, 1], [4, 12, 2, 1], [6, 0, 2], [8, 0, 2], [10, 12, 1, 1], [11, 7, 1, 1], [12, 0, 2], [14, -2, 2, 1]],
   verse: [[0, 0, 6], [7, 0, 3], [10, 12, 2, 1], [12, 0, 4]],
 };
 
@@ -123,18 +127,20 @@ for (let b = 0; b < BARS; b++) {
   if (pat) for (const [st, off, l16, slide] of pat) {
     if (gap(st)) continue;
     const m = ROOT[c] + off;
-    add(e808(m, l16 * S16, slide ? prev808 : null), at(st), 0.36);
-    if (!slide) { add(KICK, at(st), 0.4); duck(at(st)); }
+    add(e808(m, l16 * S16, slide ? prev808 : null), at(st), 0.4);
+    if (!slide) { add(KICK, at(st), 0.48); duck(at(st), 0.65); }
     prev808 = m;
   }
 
   if (drop || verse) {
-    add(CLAP, at(8), 0.38, { rev: 0.3 });
+    add(CLAP, at(8), 0.42, { rev: 0.3 }); add(SNARE, at(8), 0.32, { rev: 0.15 });
+    if (drop) add(SNARE, at(8) - 0.018, 0.1, { pan: -0.2 });
+    if (drop && k % 2 === 0) { const [l, r] = stab(CH[c].map((n2) => n2 - 12)); addLR(l, r, t0, 0.07, 0.35); }
     if (drop && b % 4 === 3) add(CLAP, at(15), 0.15, { pan: 0.2, rev: 0.3 });
     // hats: 16ths, accented, with triplet and 32nd rolls and the odd skip for swing
     const hats = [];
     const roll = b % 4 === 1 ? 6 : b % 4 === 3 ? 8 : 0;
-    for (let st = 0; st < 16; st++) { if (roll && st >= 12) continue; if (verse && st % 2 && st !== 7 && st !== 15) continue; hats.push([st * S16, st % 4 === 0 ? 1 : st % 2 ? 0.45 : 0.7]); }
+    for (let st = 0; st < 16; st++) { if (roll && st >= 12) continue; if (verse && st % 2 && st !== 7 && st !== 15) continue; if (drop && b % 2 && st >= 4 && st < 6) { hats.push([st * S16, 0.6], [(st + 0.5) * S16, 0.5]); continue; } hats.push([st * S16, st % 4 === 0 ? 1 : st % 2 ? 0.45 : 0.7]); }
     for (let j = 0; j < roll; j++) hats.push([12 * S16 + (j * 4 * S16) / roll, 0.35 + (0.65 * j) / roll]);
     for (const [t, g] of hats) if (!gap(t / S16)) add(HAT, t0 + t, 0.12 * g, { pan: 0.25 });
     if (drop) add(OHAT, at(b % 2 ? 14 : 6), 0.05, { pan: -0.3, rev: 0.15 });
@@ -172,8 +178,8 @@ const outL = new Float32Array(n), outR = new Float32Array(n);
 for (let i = 0; i < n; i++) {
   const tail = i > BARS * BAR * SR ? Math.max(0, 1 - (i - BARS * BAR * SR) / (3 * SR)) : 1;
   const d = DUCK[i];
-  outL[i] = Math.tanh((HL[i] + (SL[i] + rl[i] * 0.13 + dl[i] * 0.33) * d) * 2.1) * tail;
-  outR[i] = Math.tanh((HR[i] + (SR_[i] + rr[i] * 0.13 + dr[i] * 0.33) * d) * 2.1) * tail;
+  outL[i] = Math.tanh((HL[i] + (SL[i] + rl[i] * 0.13 + dl[i] * 0.33) * d) * 2.6) * tail;
+  outR[i] = Math.tanh((HR[i] + (SR_[i] + rr[i] * 0.13 + dr[i] * 0.33) * d) * 2.6) * tail;
 }
 for (const o of [outL, outR]) { const c = crush(o, 9); for (let i = 0; i < n; i++) o[i] = o[i] * 0.75 + c[i] * 0.25; }
 // stutter: repeat the first 32nd of the beat across the whole beat, getting shorter
@@ -194,6 +200,6 @@ const wav = path.join(dir, "rust-type-beat.wav");
 writeFileSync(wav, pcm);
 console.log(`wrote ${wav} (${(n / SR).toFixed(1)}s)`);
 try {
-  execFileSync("ffmpeg", ["-y", "-v", "error", "-i", wav, "-af", "loudnorm=I=-7.5:TP=-0.8:LRA=8", "-ar", "44100", "-b:a", "320k", path.join(dir, "rust-type-beat.mp3")]);
+  execFileSync("ffmpeg", ["-y", "-v", "error", "-i", wav, "-af", "loudnorm=I=-7:TP=-0.8:LRA=7", "-ar", "44100", "-b:a", "320k", path.join(dir, "rust-type-beat.mp3")]);
   console.log("wrote rust-type-beat.mp3");
 } catch { console.log("ffmpeg not found, skipped mp3"); }
