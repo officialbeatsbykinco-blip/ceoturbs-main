@@ -2,10 +2,11 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight, Scissors, Smartphone, Store, Trees, Wrench } from "lucide-react";
 import { BuyBox } from "@/components/shop/BuyBox";
+import { BookButton } from "@/components/cta/Actions";
 import { CompareTable } from "@/components/blocks/CompareTable";
 import { FAQList, SectionHeader } from "@/components/blocks/Basics";
 import { ReviewStats } from "@/components/blocks/ReviewStats";
-import { BulkBand, ContactBand, ReviewGoalCalculator, SpecsAndGuarantee, TrustStrip } from "@/components/shop/StoreSections";
+import { BulkBand, CallBookBand, ContactBand, ReviewGoalCalculator, SpecsAndGuarantee, TrustStrip } from "@/components/shop/StoreSections";
 import { Reveal } from "@/components/blocks/Tutorial";
 import { TapDemo } from "@/components/visuals/ReviewVisuals";
 import { StickTap } from "@/components/visuals/StickTap";
@@ -26,7 +27,7 @@ const STEPS = [
   { t: "You get the review", b: "They pick the stars and post before you leave." },
 ];
 
-/** The store. Everything on this page sells the card; the agency lives at /grow, one quiet link at the bottom. */
+/** The store. The page sells the card first; one band mid-page and a line at the bottom offer a call or a booked call for the agency. */
 export default function Home() {
   const [business, setBusiness] = useState("");
   useEffect(() => setBusiness((b) => b || recallBusiness()), []);
@@ -88,6 +89,8 @@ export default function Home() {
         </div>
       </section>
 
+      <CallBookBand />
+
       <section className="section border-t border-border" aria-labelledby="why-reviews">
         <div className="container-x">
           <ReviewStats id="why-reviews" />
@@ -144,7 +147,10 @@ export default function Home() {
         <Link to="/grow" className="font-semibold text-turbo underline-offset-4 hover:underline">
           We do websites and ads
         </Link>
-        .
+        {" "}·{" "}
+        <BookButton direct variant="link" note="Home footer line">
+          Book a free call
+        </BookButton>
       </p>
       <p className="container-x pb-10 text-center text-xs leading-relaxed text-muted-foreground">Google and the Google logo are trademarks of Google LLC. CEO Turbo is not affiliated with, sponsored or endorsed by Google.</p>
     </>

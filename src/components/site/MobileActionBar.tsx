@@ -127,7 +127,7 @@ export function MobileActionBar() {
         </div>
       </div>
     );
-  // Everywhere else: the cards first, with Text and Call one tap away.
+  // Everywhere else: the cards first, with Book, Text and Call one tap away.
   if (pathname !== SETUP_PATH)
     return (
       <div className="pb-safe fixed inset-x-0 bottom-0 z-40 border-t border-border/80 bg-background/90 px-3 pt-3 backdrop-blur-xl sm:hidden">
@@ -135,6 +135,10 @@ export function MobileActionBar() {
           <Link to={SHOP_PATH} className="btn-ignite flex-1 !py-3.5 !text-base">
             Get cards · from {fromPriceLabel}
           </Link>
+          <BookButton direct note="Mobile bar" variant="chrome" className="grid w-12 shrink-0 place-items-center !rounded-2xl !p-0">
+            <Calendar className="h-5 w-5 text-turbo" aria-hidden />
+            <span className="sr-only">Book a free call</span>
+          </BookButton>
           <a href={smsHref(QUICK_TEXT)} data-call-location="mobile bar text" className="grid w-12 shrink-0 place-items-center rounded-2xl text-foreground ring-1 ring-white/15 hover:bg-white/5">
             <MessageSquare className="h-5 w-5" aria-hidden />
             <span className="sr-only">Text {SITE.name}</span>

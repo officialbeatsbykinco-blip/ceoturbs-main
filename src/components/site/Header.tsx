@@ -1,6 +1,6 @@
 import { Fragment, useEffect, useState } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
-import { ChevronDown, Menu, MessageSquare, Phone, X } from "lucide-react";
+import { Calendar, ChevronDown, Menu, MessageSquare, Phone, X } from "lucide-react";
 import { Logo } from "./Logo";
 import { BookButton, InstallBookButton } from "@/components/cta/Actions";
 import { techBooking } from "@/content/tech-pages";
@@ -127,6 +127,9 @@ export function Header({ focus: focusProp = false }: { focus?: boolean }) {
               Get more reviews
             </NavLink>
             <Dropdown menu={MORE} active={MORE.items.some((i) => i.to === pathname)} />
+            <BookButton direct note="Header nav" variant="chrome" className="ml-1 !px-3 !py-2 !text-[13px] xl:!text-sm">
+              Book a call
+            </BookButton>
           </nav>
         )}
 
@@ -195,6 +198,16 @@ export function Header({ focus: focusProp = false }: { focus?: boolean }) {
               Websites & ads
               <span className="text-turbo" aria-hidden>›</span>
             </Link>
+            <div className="grid grid-cols-2 gap-2">
+              <BookButton direct note="Mobile menu" variant="chrome" className="inline-flex items-center justify-center gap-2 !py-4 !text-base">
+                <Calendar className="h-5 w-5 text-turbo" aria-hidden />
+                Book a call
+              </BookButton>
+              <CallLink location="mobile menu" className="btn-chrome inline-flex items-center justify-center gap-2 !py-4 !text-base">
+                <Phone className="h-5 w-5 text-turbo" aria-hidden />
+                Call now
+              </CallLink>
+            </div>
           </div>
           <Link to="/" onClick={() => { setOpen(false); window.scrollTo({ top: 0, behavior: "smooth" }); }} className="mt-6 block px-1 py-2 text-base font-medium">
             Home
