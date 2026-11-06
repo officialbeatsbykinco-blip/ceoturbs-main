@@ -86,8 +86,7 @@ const SCENES = {
         <div class="rl"><span>Beard trim</span><span>$15.00</span></div>
         <div class="rl"><span>Tip 😊</span><span>$10.00</span></div>
         <div class="rl tot"><span>TOTAL</span><span>$60.00</span></div>
-        <div class="rl miss"><span>Google review</span><span>—</span></div>
-        <div class="circle"></div>
+        <div class="rl miss"><span>Google review</span><span>✗</span></div>
         <div class="bar">||| || ||| | |||| || | ||| ||</div>
       </div>
       ${card(600, 440, 210, 10)}
@@ -176,8 +175,8 @@ h1{font-family:SG;font-weight:700;line-height:.98;letter-spacing:-.025em}
 .rs{font-size:22px;text-align:center;margin:10px 0 40px;opacity:.7}
 .rl{display:flex;justify-content:space-between;font-size:32px;padding:16px 0;border-bottom:2px dashed #ccc}
 .tot{font-weight:700;border-bottom:4px double #333}
-.miss{color:#c5221f;font-weight:700;margin-top:30px;border:none}
-.circle{position:absolute;left:24px;top:516px;width:470px;height:104px;border:7px solid #e53935;border-radius:50%;transform:rotate(-3deg)}
+.miss{position:relative;color:#c5221f;font-weight:700;margin-top:34px;border:none}
+.miss::after{content:"";position:absolute;left:-40px;right:-30px;top:-22px;bottom:-22px;border:7px solid #e53935;border-radius:50%;transform:rotate(-1.5deg)}
 .bar{position:absolute;left:0;right:0;bottom:70px;text-align:center;font-size:44px;letter-spacing:-.1em;opacity:.8}
 /* steps */
 .st5{left:20px;top:60px;width:450px;display:flex;flex-direction:column;gap:20px}
@@ -185,10 +184,10 @@ h1{font-family:SG;font-weight:700;line-height:.98;letter-spacing:-.025em}
 .st5 div::after{content:"";position:absolute;left:18px;right:18px;top:50%;height:5px;background:#e53935;border-radius:3px;transform:rotate(-2deg)}
 .st5 b{display:inline-grid;place-items:center;width:46px;height:46px;border-radius:50%;background:#e7ebf1;color:#7a8394;margin-right:16px;font-size:26px}
 .vs{left:482px;top:330px;font-family:SG;font-size:54px;font-weight:700;color:#ff6a1f}
-.tag1{left:580px;top:670px;font-family:SG;font-size:58px;font-weight:700;color:#fff;background:#188038;border-radius:20px;padding:12px 28px;transform:rotate(-4deg);box-shadow:0 14px 34px rgba(24,128,56,.35);z-index:3}
+.tag1{left:590px;top:540px;font-family:SG;font-size:58px;font-weight:700;color:#fff;background:#188038;border-radius:20px;padding:12px 28px;transform:rotate(-4deg);box-shadow:0 14px 34px rgba(24,128,56,.35);z-index:3}
 /* photo */
 .ph{left:0;top:0;width:900px;height:900px;object-fit:cover;border-radius:40px;box-shadow:0 30px 70px rgba(0,0,0,.5)}
-.burst{left:40px;bottom:40px;font-family:SG;font-size:50px;font-weight:700;line-height:1.05;color:#0a1730;background:#fbbc04;border-radius:24px;padding:22px 30px;box-shadow:0 14px 34px rgba(0,0,0,.35)}
+.burst{left:40px;top:40px;font-family:SG;font-size:50px;font-weight:700;line-height:1.05;color:#0a1730;background:#fbbc04;border-radius:24px;padding:22px 30px;box-shadow:0 14px 34px rgba(0,0,0,.35)}
 `;
 
 /** Places the 900x900 stage and the text for one size. */
