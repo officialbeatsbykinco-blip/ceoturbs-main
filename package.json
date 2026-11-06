@@ -17,6 +17,7 @@
     "ads:render": "node ads/hyperframes/render.mjs",
     "ads:image": "node ads/youtube/build.mjs",
     "ads:meta": "node ads/meta/build.mjs",
+    "ads:demandgen": "node ads/youtube/demandgen.mjs",
     "audit:seo": "node scripts/audit-dist.mjs",
     "audit:pages": "node scripts/audit-pages.mjs",
     "images:cards": "node scripts/review-card-hd.mjs"
