@@ -38,8 +38,9 @@ const STEPS = [
 
 /**
  * Funnel: the review card is the magnet (cheap, instant, Shopify checkout); the agency work is the upsell.
- * Hero shows both steps, then the card store, then the step-2 ladder (social, Google profile, SEO/AEO/GEO site, ads),
- * then proof (real sites, real ad dashboards), then the card details, then both again at the end.
+ * Hero shows both offers, then the card store and the whole card story in one run (how it works, who, compare, FAQ),
+ * so a card buyer never scrolls through agency proof to get answers. Then the step-2 ladder and its proof
+ * (real sites, real ad dashboards), then both again at the end.
  */
 export default function Home() {
   const [business, setBusiness] = useState("");
@@ -52,12 +53,12 @@ export default function Home() {
         <div className="pointer-events-none absolute inset-0 bg-grid" aria-hidden />
         <div className="pointer-events-none absolute -top-40 left-1/2 h-[600px] w-[1100px] -translate-x-1/2 glow-turbo" aria-hidden />
         <div className="container-x relative mx-auto max-w-6xl text-center">
-          <p className="chip">Google Review Cards · Websites · Google &amp; Meta ads</p>
+          <p className="chip">For local businesses</p>
           <h1 id="hero" className="mx-auto mt-3 max-w-4xl text-[34px] font-bold leading-[1.05] sm:mt-5 sm:text-5xl md:text-6xl">
-            <span className="text-chrome-grad">More calls. More sales.</span> <span className="text-turbo-grad">More 5-star reviews.</span>
+            <span className="text-chrome-grad">More 5-star reviews.</span> <span className="text-turbo-grad">More customers.</span>
           </h1>
-          <p className="mx-auto mt-4 hidden max-w-2xl text-lg leading-relaxed text-muted-foreground sm:block">
-            We build websites and run Google &amp; Meta ads that make your phone ring, and sell tap-to-review cards that fill your Google profile with 5 stars.
+          <p className="mx-auto mt-3 max-w-2xl text-[15px] leading-relaxed text-muted-foreground sm:mt-4 sm:text-lg">
+            We sell Google Review Cards and build websites &amp; ads for local businesses.
           </p>
 
           {/* Two doors, one layout: same rows in the same order, so the buttons line up side by side on desktop. */}
@@ -138,6 +139,86 @@ export default function Home() {
 
       <TrustStrip />
 
+      <section className="section border-t border-border" aria-labelledby="hand-it-over">
+        <div className="container-x text-center">
+          <h2 id="hand-it-over" className="h-section mx-auto max-w-3xl">Hand it over. They tap. You get the review.</h2>
+          <p className="lede mx-auto max-w-2xl">No “search for us on Google.” No QR code to scan. Their phone opens your review form, they tap five stars, done.</p>
+          <StickTap className="mx-auto mt-8 w-full max-w-[640px] text-foreground" />
+        </div>
+      </section>
+
+      <section className="section border-t border-border" aria-labelledby="how">
+        <div className="container-x grid items-center gap-12 lg:grid-cols-2">
+          <div>
+            <SectionHeader kicker="How it works" title={<span id="how">One tap. Ten seconds.</span>} />
+            <ol className="mt-8 space-y-5">
+              {STEPS.map((s, i) => (
+                <li key={s.t} className="flex gap-4">
+                  <span className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-turbo/10 font-display font-bold text-turbo ring-1 ring-turbo/30">{i + 1}</span>
+                  <div>
+                    <h3 className="font-body text-lg font-semibold tracking-normal">{s.t}</h3>
+                    <p className="mt-1 leading-relaxed text-muted-foreground">{s.b}</p>
+                  </div>
+                </li>
+              ))}
+            </ol>
+          </div>
+          <Reveal from="zoom">
+            <TapDemo business={business} />
+          </Reveal>
+        </div>
+      </section>
+
+      <section className="section border-t border-border" aria-labelledby="who">
+        <div className="container-x">
+          <SectionHeader kicker="Who it's for" title={<span id="who">Works wherever you work.</span>} lede="Wallet size and waterproof. Keep it on you, or leave it out for customers." />
+          <ul className="mt-10 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            {WHO.map((w) => (
+              <li key={w.t} className="panel p-5">
+                <w.icon className="h-6 w-6 text-turbo" aria-hidden />
+                <h3 className="mt-3 font-display text-lg font-bold">{w.t}</h3>
+                <p className="mt-1.5 text-sm text-muted-foreground">{w.b}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      <section className="section border-t border-border" aria-labelledby="compare">
+        <div className="container-x">
+          <SectionHeader title={<span id="compare">Tap card vs. just asking</span>} lede="Most customers mean it when they say they'll leave a review. The card gets it done before they forget." />
+          <CompareTable className="mt-10" head={["", "Review tap card", "“Please review us”", "Paper QR sign"]} rows={COMPARE.map((r) => [...r])} highlight={1} />
+        </div>
+      </section>
+
+      <section className="section border-t border-border" aria-labelledby="why-reviews">
+        <div className="container-x">
+          <ReviewStats id="why-reviews" />
+        </div>
+      </section>
+
+      <ReviewGoalCalculator />
+
+      <section className="section border-t border-border" aria-labelledby="setup">
+        <div className="container-x grid gap-8 lg:grid-cols-2 lg:items-center">
+          <SectionHeader kicker="Setup" title={<span id="setup">Ready in about 2 minutes.</span>} lede="All you need is your phone. Our guide finds your Google review link and walks you through writing it to the card." />
+          <div className="panel p-6">
+            <Smartphone className="h-6 w-6 text-turbo" aria-hidden />
+            <p className="mt-3 font-semibold">Don't want to set it up?</p>
+            <p className="mt-1 text-sm text-muted-foreground">Tick “Program it for me” for {money2(CARD_PROGRAMMING.price)}. We write your link and test the card, so it arrives ready to tap.</p>
+            <Link to={SETUP_PATH} className="mt-4 inline-flex min-h-[44px] items-center gap-1.5 text-sm font-semibold text-turbo underline-offset-4 hover:underline">
+              See the setup guide <ArrowRight className="h-4 w-4" aria-hidden />
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      <SpecsAndGuarantee />
+
+      <BulkBand />
+
+      <FAQList faqs={SHOP_FAQS} title="Review card questions" lede="Still unsure? Call or text us." />
+
       <UpsellLadder />
 
       {/* PROOF 1 — the websites. */}
@@ -179,86 +260,6 @@ export default function Home() {
         </div>
       </section>
 
-
-      <section className="section border-t border-border" aria-labelledby="hand-it-over">
-        <div className="container-x text-center">
-          <h2 id="hand-it-over" className="h-section mx-auto max-w-3xl">Hand it over. They tap. You get the review.</h2>
-          <p className="lede mx-auto max-w-2xl">No “search for us on Google.” No QR code to scan. Their phone opens your review form, they tap five stars, done.</p>
-          <StickTap className="mx-auto mt-8 w-full max-w-[640px] text-foreground" />
-        </div>
-      </section>
-
-      <section className="section border-t border-border" aria-labelledby="who">
-        <div className="container-x">
-          <SectionHeader kicker="Who it's for" title={<span id="who">Works wherever you work.</span>} lede="Wallet size and waterproof. Keep it on you, or leave it out for customers." />
-          <ul className="mt-10 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-            {WHO.map((w) => (
-              <li key={w.t} className="panel p-5">
-                <w.icon className="h-6 w-6 text-turbo" aria-hidden />
-                <h3 className="mt-3 font-display text-lg font-bold">{w.t}</h3>
-                <p className="mt-1.5 text-sm text-muted-foreground">{w.b}</p>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </section>
-
-      <section className="section border-t border-border" aria-labelledby="how">
-        <div className="container-x grid items-center gap-12 lg:grid-cols-2">
-          <div>
-            <SectionHeader kicker="How it works" title={<span id="how">One tap. Ten seconds.</span>} />
-            <ol className="mt-8 space-y-5">
-              {STEPS.map((s, i) => (
-                <li key={s.t} className="flex gap-4">
-                  <span className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-turbo/10 font-display font-bold text-turbo ring-1 ring-turbo/30">{i + 1}</span>
-                  <div>
-                    <h3 className="font-body text-lg font-semibold tracking-normal">{s.t}</h3>
-                    <p className="mt-1 leading-relaxed text-muted-foreground">{s.b}</p>
-                  </div>
-                </li>
-              ))}
-            </ol>
-          </div>
-          <Reveal from="zoom">
-            <TapDemo business={business} />
-          </Reveal>
-        </div>
-      </section>
-
-      <section className="section border-t border-border" aria-labelledby="why-reviews">
-        <div className="container-x">
-          <ReviewStats id="why-reviews" />
-        </div>
-      </section>
-
-      <ReviewGoalCalculator />
-
-      <section className="section border-t border-border" aria-labelledby="setup">
-        <div className="container-x grid gap-8 lg:grid-cols-2 lg:items-center">
-          <SectionHeader kicker="Setup" title={<span id="setup">Ready in about 2 minutes.</span>} lede="All you need is your phone. Our guide finds your Google review link and walks you through writing it to the card." />
-          <div className="panel p-6">
-            <Smartphone className="h-6 w-6 text-turbo" aria-hidden />
-            <p className="mt-3 font-semibold">Don't want to set it up?</p>
-            <p className="mt-1 text-sm text-muted-foreground">Tick “Program it for me” for {money2(CARD_PROGRAMMING.price)}. We write your link and test the card, so it arrives ready to tap.</p>
-            <Link to={SETUP_PATH} className="mt-4 inline-flex min-h-[44px] items-center gap-1.5 text-sm font-semibold text-turbo underline-offset-4 hover:underline">
-              See the setup guide <ArrowRight className="h-4 w-4" aria-hidden />
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      <section className="section border-t border-border" aria-labelledby="compare">
-        <div className="container-x">
-          <SectionHeader title={<span id="compare">Tap card vs. just asking</span>} lede="Most customers mean it when they say they'll leave a review. The card gets it done before they forget." />
-          <CompareTable className="mt-10" head={["", "Review tap card", "“Please review us”", "Paper QR sign"]} rows={COMPARE.map((r) => [...r])} highlight={1} />
-        </div>
-      </section>
-
-      <SpecsAndGuarantee />
-
-      <BulkBand />
-
-      <FAQList faqs={SHOP_FAQS} title="Review card questions" lede="Still unsure? Call or text us." />
 
       <ContactBand />
 

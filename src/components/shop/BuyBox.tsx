@@ -153,7 +153,7 @@ export function BuyBox({
         <div>
           <p className="chip hidden sm:inline-flex">CEO Turbo · Google review cards</p>
           <H className="text-[28px] font-bold leading-[1.05] sm:mt-4 sm:text-5xl">
-            NFC Google Review Card <span className="text-turbo-grad max-sm:hidden">— tap, review, done.</span>
+            Google Review Card <span className="text-turbo-grad max-sm:hidden">— tap, review, done.</span>
           </H>
 
           <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1.5 sm:mt-5">
