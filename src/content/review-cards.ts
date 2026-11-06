@@ -21,6 +21,15 @@ const hd = (name: string, alt: string): GalleryItem => ({
 
 export const GALLERY: GalleryItem[] = [
   hd("card-hero", "NFC Google review card, both sides: white Review Us On Google front and black NFC back"),
+  // A real photo, not a render: the founder holding the card customers get.
+  {
+    src: `${IMG}/founder-card.jpg`,
+    srcSet: `${IMG}/founder-card-800.webp 800w, ${IMG}/founder-card-1500.webp 1500w`,
+    thumb: `${IMG}/founder-card-thumb.webp`,
+    alt: "Christopher Robinson, founder of CEO Turbo, holding the white Review Us On Google NFC card",
+    w: 1500,
+    h: 1500,
+  },
   hd("card-tap", "Phone next to the review card with the Google review form open after a tap"),
   hd("card-how", "How it works: the customer taps, the review form opens, five stars are posted"),
   hd("card-counter", "Google review card lying on a shop counter next to the register"),

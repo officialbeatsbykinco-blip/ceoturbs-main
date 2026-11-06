@@ -1,6 +1,6 @@
 import { type ReactNode, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { ArrowDown, ArrowRight, CalendarCheck, Check, Globe, MapPin, Megaphone, Phone, Scissors, Search, Share2, Smartphone, Star, Store, Trees, Wrench } from "lucide-react";
+import { ArrowDown, ArrowRight, CalendarCheck, Check, Globe, MapPin, Megaphone, MessageSquare, Phone, Scissors, Search, Share2, Smartphone, Star, Store, Trees, Wrench } from "lucide-react";
 import { BuyBox } from "@/components/shop/BuyBox";
 import { BookButton } from "@/components/cta/Actions";
 import { CompareTable } from "@/components/blocks/CompareTable";
@@ -21,6 +21,7 @@ import { ADS } from "@/content/ads";
 import { AD_TOTALS, money } from "@/content/results";
 import { CLIENTS } from "@/content/clients";
 import { price } from "@/content/pricing";
+import { QUICK_TEXT, smsHref } from "@/lib/sms";
 import { cn } from "@/lib/utils";
 
 const WHO = [
@@ -118,7 +119,23 @@ export default function Home() {
               }
             />
           </div>
-          <a href="#work" className="mt-4 inline-flex min-h-[44px] items-center gap-1.5 text-sm font-semibold text-turbo underline-offset-4 hover:underline">
+          {/* A real person behind both offers: the face, the name and a number that reaches him. */}
+          <div className="mx-auto mt-4 flex max-w-5xl items-center gap-3 rounded-2xl border border-border bg-white/[0.02] p-3 text-left sm:mt-5 sm:gap-4 sm:p-4">
+            <img src="/img/brand/chris-avatar.webp" alt={`${SITE.founder.name}, founder of CEO Turbo`} width={56} height={56} loading="eager" decoding="async" className="h-12 w-12 shrink-0 rounded-full object-cover ring-2 ring-turbo/40 sm:h-14 sm:w-14" />
+            <p className="flex-1 text-sm leading-snug">
+              <span className="font-semibold">Hi, I'm Chris, the founder.</span>{" "}
+              <span className="text-muted-foreground">Questions about the cards or your website? You talk to me, not a sales team.</span>
+            </p>
+            {/* Computers can't send a text, so the bigger screens get the number instead. */}
+            <CallLink location="home hero founder" className="btn-chrome hidden shrink-0 items-center gap-2 !px-4 !py-2.5 !text-sm sm:inline-flex">
+              <Phone className="h-4 w-4 text-turbo" aria-hidden /> {SITE.phone.display}
+            </CallLink>
+            <a href={smsHref(QUICK_TEXT)} data-call-location="home hero founder text" className="grid h-11 w-11 shrink-0 place-items-center rounded-xl ring-1 ring-white/15 sm:hidden">
+              <MessageSquare className="h-5 w-5 text-turbo" aria-hidden />
+              <span className="sr-only">Text {SITE.founder.name}</span>
+            </a>
+          </div>
+          <a href="#work" className="mt-3 inline-flex min-h-[44px] items-center gap-1.5 text-sm font-semibold text-turbo underline-offset-4 hover:underline">
             See the sites and ads we made <ArrowDown className="h-4 w-4" aria-hidden />
           </a>
         </div>
