@@ -73,11 +73,6 @@ export default function Home() {
               points={["iPhone & Android, no app needed", "Pay once, no subscription", `${REVIEW_CARD.returnDays}-day returns, no restocking fee`]}
               proof={
                 <>
-                  <span className="inline-flex gap-0.5">
-                    {[0, 1, 2, 3, 4].map((i) => (
-                      <Star key={i} className="h-4 w-4 fill-current text-amber-400" aria-hidden />
-                    ))}
-                  </span>
                   <span className="font-semibold">From {fromPriceLabel}</span>
                   <span className="text-muted-foreground">· ships free, no app</span>
                 </>
@@ -112,7 +107,7 @@ export default function Home() {
                 </>
               }
               cta={
-                <BookButton direct note="Home hero" className="btn-shine inline-flex w-full items-center justify-center gap-2">
+                <BookButton note="Home hero" className="btn-shine inline-flex w-full items-center justify-center gap-2">
                   <CalendarCheck className="h-5 w-5" aria-hidden /> Book a free call
                 </BookButton>
               }
@@ -270,7 +265,7 @@ export default function Home() {
             <h2 id="last-call" className="h-section">The business that shows up first gets the call.</h2>
             <p className="lede mx-auto max-w-2xl">Book a free 30-minute call and we'll show you the biggest thing holding back your calls and sales. Or grab review cards from {fromPriceLabel}, free US shipping.</p>
             <div className="mt-7 flex flex-col items-center justify-center gap-3 sm:flex-row">
-              <BookButton direct note="Home final CTA" className="btn-shine inline-flex items-center gap-2">
+              <BookButton note="Home final CTA" className="btn-shine inline-flex items-center gap-2">
                 <CalendarCheck className="h-5 w-5" aria-hidden /> Book a free call
               </BookButton>
               <CallLink location="home final CTA" className="btn-chrome inline-flex items-center gap-2">
@@ -379,7 +374,7 @@ function UpsellLadder() {
             <p className="mt-1 text-sm text-muted-foreground">Website, Google profile, social, SEO/AEO/GEO and ads on your 2 best platforms. No long contract.</p>
           </div>
           <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row">
-            <BookButton direct note="Home — step 2 ladder" prefill="I want more calls: website, Google profile, social, SEO and ads." className="inline-flex items-center justify-center gap-2 whitespace-nowrap">
+            <BookButton note="Home — step 2 ladder" prefill="I want more calls: website, Google profile, social, SEO and ads." className="inline-flex items-center justify-center gap-2 whitespace-nowrap">
               <CalendarCheck className="h-5 w-5" aria-hidden /> Book a free call
             </BookButton>
             <Link to="/pricing" className="btn-chrome whitespace-nowrap">
@@ -401,7 +396,7 @@ function BookCallStrip({ note, className }: { note: string; className?: string }
         <p className="mt-1 text-sm text-muted-foreground">Free 30-minute call. We look at your site, Google profile and ads with you, live.</p>
       </div>
       <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row">
-        <BookButton direct note={note} className="inline-flex items-center justify-center gap-2 whitespace-nowrap">
+        <BookButton note={note} className="inline-flex items-center justify-center gap-2 whitespace-nowrap">
           <CalendarCheck className="h-5 w-5" aria-hidden /> Book a free call
         </BookButton>
         <CallLink location={note} className="btn-chrome inline-flex items-center justify-center gap-2">
@@ -424,7 +419,7 @@ function HomeBar() {
   return (
     <div className={cn("pb-safe fixed inset-x-0 bottom-0 z-40 border-t border-border/80 bg-background/90 px-3 pt-3 backdrop-blur-xl transition-transform duration-300 lg:pb-3", show ? "translate-y-0" : "translate-y-full")} aria-hidden={!show}>
       <div className="mx-auto flex max-w-3xl gap-2">
-        <BookButton direct note="Home sticky bar" className="inline-flex flex-1 items-center justify-center gap-1.5 whitespace-nowrap !px-3 !py-3.5 !text-sm sm:!text-base">
+        <BookButton note="Home sticky bar" className="inline-flex flex-1 items-center justify-center gap-1.5 whitespace-nowrap !px-3 !py-3.5 !text-sm sm:!text-base">
           <CalendarCheck className="h-4 w-4 shrink-0 max-[400px]:hidden" aria-hidden /> Book a call
         </BookButton>
         <a href="#buy" tabIndex={show ? undefined : -1} className="btn-chrome inline-flex flex-[1.3] items-center justify-center whitespace-nowrap !px-3 !py-3.5 !text-sm sm:!text-base">

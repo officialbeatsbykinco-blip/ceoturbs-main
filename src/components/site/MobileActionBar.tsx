@@ -135,7 +135,7 @@ export function MobileActionBar() {
           <Link to={SHOP_PATH} className="btn-ignite flex-1 whitespace-nowrap !px-3 !py-3.5 !text-base">
             Buy Google Review Cards
           </Link>
-          <BookButton direct note="Mobile bar" variant="chrome" className="grid w-12 shrink-0 place-items-center !rounded-2xl !p-0">
+          <BookButton note="Mobile bar" variant="chrome" className="grid w-12 shrink-0 place-items-center !rounded-2xl !p-0">
             <Calendar className="h-5 w-5 text-turbo" aria-hidden />
             <span className="sr-only">Book a free call</span>
           </BookButton>

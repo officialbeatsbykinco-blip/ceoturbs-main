@@ -4,7 +4,6 @@ import { InstallCalModal } from "@/components/booking/InstallCalModal";
 import { BOOKING, INSTALL_BOOKING, SITE, fromPriceLabel, type CalEvent } from "@/config/site";
 import { SHOP_PATH } from "@/content/review-cards";
 import { openBooking } from "@/lib/cal";
-import { openTextQuiz } from "@/lib/text-quiz-open";
 import { track } from "@/lib/track";
 import { cn } from "@/lib/utils";
 
@@ -20,8 +19,8 @@ const variantClass: Record<Variant, string> = {
 };
 
 /**
- * Opens the text quiz, the shortest way to reach us, on every device; `direct` skips it and opens the Brand Boost
- * calendar (Cal.com inline embed) in an on-page dialog, tracked as booking_open and, once booked, book_call.
+ * Opens the Brand Boost calendar (Cal.com inline embed) in an on-page dialog, tracked as booking_open and, once
+ * booked, book_call. The button says "book a call", so it goes straight to the times: no quiz in between.
  * Real href so it still works without JS and is crawlable.
  */
 export function BookButton({
@@ -29,12 +28,9 @@ export function BookButton({
   note,
   prefill,
   variant = "ignite",
-  direct = false,
   className,
 }: {
   children?: ReactNode;
-  /** Opens the calendar straight away, for people who have already chosen to pick a time. */
-  direct?: boolean;
   /** Internal source label, stored as hidden booking metadata. */
   note?: string;
   /** Visible text for the booking form's notes field. */
@@ -45,7 +41,6 @@ export function BookButton({
   const onClick = (e: MouseEvent<HTMLAnchorElement>) => {
     if (e.metaKey || e.ctrlKey || e.shiftKey) return;
     e.preventDefault();
-    if (!direct && openTextQuiz({ source: note })) return;
     void openBooking(note, prefill);
   };
   return (

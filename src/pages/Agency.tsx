@@ -53,7 +53,7 @@ export default function Agency() {
               <CallLink location="home hero" icon className="btn-chrome justify-center !px-3 sm:!px-6">
                 Call us
               </CallLink>
-              <BookButton direct note="Home hero" variant="chrome" className="justify-center !px-3 sm:!px-6">
+              <BookButton note="Home hero" variant="chrome" className="justify-center !px-3 sm:!px-6">
                 <CalendarCheck className="h-5 w-5" aria-hidden /> Pick a time
               </BookButton>
             </div>

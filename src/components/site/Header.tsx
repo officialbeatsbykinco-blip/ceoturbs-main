@@ -127,7 +127,7 @@ export function Header({ focus: focusProp = false }: { focus?: boolean }) {
               Get more reviews
             </NavLink>
             <Dropdown menu={MORE} active={MORE.items.some((i) => i.to === pathname)} />
-            <BookButton direct note="Header nav" variant="chrome" className="ml-1 !px-3 !py-2 !text-[13px] xl:!text-sm">
+            <BookButton note="Header nav" variant="chrome" className="ml-1 !px-3 !py-2 !text-[13px] xl:!text-sm">
               Book a call
             </BookButton>
           </nav>
@@ -200,7 +200,7 @@ export function Header({ focus: focusProp = false }: { focus?: boolean }) {
               <span className="text-turbo" aria-hidden>›</span>
             </Link>
             <div className="grid grid-cols-2 gap-2">
-              <BookButton direct note="Mobile menu" variant="chrome" className="inline-flex items-center justify-center gap-2 !py-4 !text-base">
+              <BookButton note="Mobile menu" variant="chrome" className="inline-flex items-center justify-center gap-2 !py-4 !text-base">
                 <Calendar className="h-5 w-5 text-turbo" aria-hidden />
                 Book a call
               </BookButton>

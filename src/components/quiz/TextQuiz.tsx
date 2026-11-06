@@ -188,7 +188,7 @@ export function TextQuiz({ source, audience, variant = "inline", className }: { 
             <AudienceTiles selected={answers.audience} onPick={(a) => go("goal", { audience: a, stage: "grow", goal: undefined })} />
             {variant === "sheet" && (
               <p className="mt-3 text-center text-sm">
-                <BookButton direct note={`${source} — text quiz`} variant="link">
+                <BookButton note={`${source} — text quiz`} variant="link">
                   <CalendarCheck className="h-4 w-4" aria-hidden /> Rather pick a time?
                 </BookButton>
               </p>
@@ -291,7 +291,7 @@ export function TextQuiz({ source, audience, variant = "inline", className }: { 
               <CallLink location="text quiz" className="inline-flex min-h-[44px] items-center font-semibold text-foreground underline underline-offset-2">
                 Call us
               </CallLink>
-              <BookButton direct note={`${source} — text quiz`} prefill={message} variant="link">
+              <BookButton note={`${source} — text quiz`} prefill={message} variant="link">
                 <CalendarCheck className="h-4 w-4" aria-hidden /> Pick a time
               </BookButton>
             </div>
