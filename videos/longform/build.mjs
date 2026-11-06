@@ -11,7 +11,9 @@ import { synthBed } from "./music.mjs";
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const EP = process.argv[2] || "stop-asking";
-const { SCENES, TITLE, LINKS } = await import(`./${EP}.mjs`);
+const mod = await import(`./${EP}.mjs`);
+const { SCENES, TITLE, LINKS } = mod;
+const [W, H] = mod.SIZE ?? [1920, 1080]; // a script can export SIZE = [1080, 1920] for 9:16
 const OUT = path.join(HERE, ".build", EP);
 const ADS = path.join(HERE, "../ceoturbo-ads/assets");
 const IMG = path.join(HERE, "../../public/img/review-cards/hd");
@@ -87,7 +89,7 @@ const css = `
 @font-face { font-family: "Space Grotesk"; src: url("assets/fonts/SpaceGrotesk.woff2") format("woff2"); font-weight: 300 700; }
 @font-face { font-family: "Inter"; src: url("assets/fonts/Inter.woff2") format("woff2"); font-weight: 100 900; }
 * { margin: 0; padding: 0; box-sizing: border-box; }
-html, body { width: 1920px; height: 1080px; overflow: hidden; background: #070b14; }
+html, body { width: ${W}px; height: ${H}px; overflow: hidden; background: #070b14; }
 #root { position: relative; width: 100%; height: 100%; overflow: hidden; font-family: "Inter", sans-serif; color: #f8fafc; }
 .clip { position: absolute; inset: 0; overflow: hidden; }
 .bg { position: absolute; inset: 0; background: radial-gradient(1200px 700px at 20% 10%, #16233f 0%, transparent 60%), radial-gradient(900px 700px at 90% 100%, #2a1608 0%, transparent 60%), #070b14; }
@@ -247,11 +249,11 @@ html, body { width: 1920px; height: 1080px; overflow: hidden; background: #070b1
 `;
 
 const page = `<!doctype html>
-<html lang="en"><head><meta charset="UTF-8" /><meta name="viewport" content="width=1920, height=1080" />
+<html lang="en"><head><meta charset="UTF-8" /><meta name="viewport" content="width=${W}, height=${H}" />
 <title>${esc(TITLE)}</title><script src="assets/gsap.min.js"></script>
-<style>${css}</style></head>
+<style>${css}${mod.CSS ?? ""}</style></head>
 <body>
-<div id="root" data-composition-id="${EP}" data-start="0" data-duration="${T(TOTAL)}" data-width="1920" data-height="1080" data-fps="30">
+<div id="root" data-composition-id="${EP}" data-start="0" data-duration="${T(TOTAL)}" data-width="${W}" data-height="${H}" data-fps="30">
 ${html}
 <div id="vignette"></div><div id="grain"></div>
 <audio id="mix" src="assets/audio/${EP}.wav" data-start="0" data-duration="${T(TOTAL)}" data-volume="1"></audio>
@@ -269,7 +271,7 @@ rmSync(OUT, { recursive: true, force: true });
 for (const d of ["assets/fonts", "assets/audio", "assets/img"]) mkdirSync(path.join(OUT, d), { recursive: true });
 copyFileSync(path.join(ADS, "gsap.min.js"), path.join(OUT, "assets/gsap.min.js"));
 for (const f of ["Inter.woff2", "SpaceGrotesk.woff2"]) copyFileSync(path.join(ADS, "fonts", f), path.join(OUT, "assets/fonts", f));
-for (const f of ["card-tap", "card-counter"]) copyFileSync(path.join(IMG, `${f}-1600.webp`), path.join(OUT, `assets/img/${f}.webp`));
+for (const f of ["card-tap", "card-counter", "card-hero"]) copyFileSync(path.join(IMG, `${f}-1600.webp`), path.join(OUT, `assets/img/${f}.webp`));
 writeFileSync(path.join(OUT, "index.html"), page);
 writeFileSync(path.join(OUT, "hyperframes.json"), JSON.stringify({ paths: { assets: "assets" }, media: { autoProxy: true } }, null, 2) + "\n");
 writeFileSync(path.join(OUT, "meta.json"), JSON.stringify({ id: EP, name: EP }, null, 2) + "\n");
@@ -278,7 +280,7 @@ writeFileSync(path.join(OUT, "meta.json"), JSON.stringify({ id: EP, name: EP }, 
 const mmss = (t) => `${Math.floor(t / 60)}:${String(Math.floor(t % 60)).padStart(2, "0")}`;
 const chapters = scenes.filter((s, i) => i === 0 || s.chapter !== scenes[i - 1].chapter).map((s, i) => `${i === 0 ? "0:00" : mmss(s.S)} ${s.chapter}`);
 mkdirSync(path.join(HERE, "renders"), { recursive: true });
-writeFileSync(path.join(HERE, "renders", `${EP}-youtube.txt`), `${TITLE}
+if (!mod.SIZE) writeFileSync(path.join(HERE, "renders", `${EP}-youtube.txt`), `${TITLE}
 
 Get the one-tap Google review card (from $16.99, free US shipping): https://${LINKS.cards}
 Want more calls, not just reviews? Book a free 30-minute Brand Boost call: https://${LINKS.call}

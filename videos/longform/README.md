@@ -4,7 +4,8 @@ Animated YouTube explainers built on the titles in `ads/viral-video-titles.md`. 
 
 | Script | Title | CTA |
 | --- | --- | --- |
-| `stop-asking.mjs` | I Stopped Asking for Google Reviews. I Started Handing Them This. | ceoturbo.com/google-review-cards, then a free Brand Boost call |
+| `stop-asking.mjs` | I Stopped Asking for Google Reviews. I Started Handing Them This. (16:9, 4:25) | ceoturbo.com/google-review-cards, then a free Brand Boost call |
+| `stop-asking-short.mjs` | Same story as a 9:16 cut for Reels, TikTok and Shorts (1:08) | ceoturbo.com/google-review-cards (link in bio) |
 
 ## Make one
 
@@ -16,4 +17,5 @@ cd .build/stop-asking && npx hyperframes render --quality delivery --output ../.
 
 - A script is data: scenes, narration lines (`say` overrides pronunciation, e.g. prices and "C.E.O."), and a `draw(c)` that returns the scene's HTML and schedules its animation from the real line times.
 - Prices, packs, shipping and returns match `src/config/site.ts`; ad numbers match `src/content/results.ts`. The map-pack listings are labeled "Illustrative example".
+- A script that exports `SIZE = [1080, 1920]` builds vertical; keep content inside y 200–1500 so the app UI never covers it. Social caption: `renders/stop-asking-9x16-caption.txt`.
 - Renders and voice files are gitignored. The YouTube description (links + chapters) is written to `renders/<slug>-youtube.txt`.
