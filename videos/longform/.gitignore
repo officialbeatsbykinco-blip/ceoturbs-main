@@ -1,3 +1,6 @@
 .build/
 vo/
 renders/*.mp4
+renders/work-*/
+renders/.*-transaction-*/
+snaps/
