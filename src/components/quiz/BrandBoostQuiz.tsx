@@ -474,7 +474,7 @@ function Result({ answers, quizId, source, prefill, booked, uid, onRestart }: { 
         <p className="mx-auto mt-3 max-w-md text-muted-foreground">Check your email for the invite. Have your website and Google profile handy — we'll start with: {move.title.toLowerCase()}.</p>
         <div className="mt-6 flex flex-wrap justify-center gap-3">
           <Link to={SHOP_PATH} className="btn-chrome">
-            Get review cards — from {fromPriceLabel}
+            Buy Google Review Cards · {fromPriceLabel}
           </Link>
         </div>
       </div>

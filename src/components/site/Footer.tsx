@@ -85,7 +85,7 @@ export function Footer({ focus = false }: { focus?: boolean }) {
           <FooterCol
             title="Review cards"
             links={[
-              { to: SHOP_PATH, label: `Shop cards, from ${fromPriceLabel}` },
+              { to: SHOP_PATH, label: `Buy Google Review Cards, from ${fromPriceLabel}` },
               { to: SETUP_PATH, label: "Card setup guide" },
               { to: "/how-to-get-more-google-reviews", label: "Get more Google reviews" },
               { to: "/barbershops", label: "For barbers" },

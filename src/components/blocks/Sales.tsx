@@ -80,10 +80,10 @@ export function ServiceGrid({ slugs, cards = true }: { slugs?: string[]; cards?:
       <li className="bg-background">
         <Link to={SHOP_PATH} className="group flex h-full flex-col p-6 transition-colors hover:bg-white/[0.025]">
           <span className="text-sm font-semibold text-ignite">From {fromPriceLabel}</span>
-          <h3 className="mt-3 text-lg font-semibold tracking-tight">Google review tap cards</h3>
+          <h3 className="mt-3 text-lg font-semibold tracking-tight">Google Review Cards</h3>
           <p className="mt-2 text-sm leading-relaxed text-muted-foreground">Customers tap their phone and your Google review form opens.</p>
           <span className="mt-auto pt-5 text-sm font-medium text-foreground/70 group-hover:text-turbo">
-            Shop review cards <span aria-hidden>›</span>
+            Buy Google Review Cards <span aria-hidden>›</span>
           </span>
         </Link>
       </li>
@@ -152,7 +152,7 @@ export function ReviewCardPromo({ headingLevel = "h2", title = "Turn “I'll lea
         </ul>
         <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:gap-4">
           <Link to={SHOP_PATH} className="btn-ignite btn-shine">
-            Shop review cards <ArrowRight className="h-4 w-4" aria-hidden />
+            Buy Google Review Cards <ArrowRight className="h-4 w-4" aria-hidden />
           </Link>
           <Link to={SETUP_PATH} className="inline-flex min-h-[44px] items-center text-sm font-semibold text-turbo underline-offset-4 hover:underline">
             How setup works

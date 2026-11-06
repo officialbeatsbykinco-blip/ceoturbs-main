@@ -206,7 +206,7 @@ describe("conversion buttons", () => {
         </MemoryRouter>,
       );
     const generic = at("/pricing");
-    expect(screen.getByRole("link", { name: /Get cards/ })).toHaveAttribute("href", SHOP_PATH);
+    expect(screen.getByRole("link", { name: /Buy Google Review Cards/ })).toHaveAttribute("href", SHOP_PATH);
     expect(screen.getByRole("link", { name: /^Call/ })).toHaveAttribute("href", "tel:+16785584327");
     generic.unmount();
     const store = at("/");

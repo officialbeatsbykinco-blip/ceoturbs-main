@@ -118,7 +118,7 @@ export function Header({ focus: focusProp = false }: { focus?: boolean }) {
         {!focus && (
           <nav aria-label="Main" className="hidden items-center gap-0.5 xl:flex">
             <NavLink to={SHOP_PATH} className={linkCls}>
-              Shop cards
+              Buy Google Review Cards
             </NavLink>
             <NavLink to={SETUP_PATH} className={linkCls}>
               Setup guide
@@ -151,8 +151,9 @@ export function Header({ focus: focusProp = false }: { focus?: boolean }) {
               Book a visit
             </InstallBookButton>
           ) : pathname === REVIEWS_AD_PATH || pathname === "/" || pathname === SHOP_PATH ? (
-            <a href="#buy" className="btn-ignite whitespace-nowrap !px-3 !py-2.5 !text-sm sm:!px-4">
-              Get cards<span className="hidden sm:inline"> · {fromPriceLabel}</span>
+            <a href="#buy" className="btn-ignite !px-3 !py-1.5 text-center !text-[13px] !leading-tight sm:whitespace-nowrap sm:!px-4 sm:!py-2.5 sm:!text-sm">
+              Buy Google <br className="sm:hidden" />
+              Review Cards
             </a>
           ) : focus ? (
             <BookButton note="Ad page header" className="inline-flex !px-3 !py-2.5 !text-[13px] sm:!px-4 sm:!text-sm">
@@ -161,7 +162,7 @@ export function Header({ focus: focusProp = false }: { focus?: boolean }) {
             </BookButton>
           ) : (
             <Link to={SHOP_PATH} className="btn-ignite whitespace-nowrap !px-3 !py-2.5 !text-sm sm:!px-4 max-sm:!hidden">
-              Get cards · {fromPriceLabel}
+              Buy Google Review Cards
             </Link>
           )}
           {!focus && (
@@ -183,7 +184,7 @@ export function Header({ focus: focusProp = false }: { focus?: boolean }) {
         <div id="mobile-menu" className="container-x h-[calc(100dvh-4rem)] overflow-y-auto pb-32 pt-2 xl:hidden">
           <div className="grid gap-2">
             <Link to={SHOP_PATH} onClick={() => setOpen(false)} className="btn-ignite justify-between !px-4 !py-4 !text-lg">
-              Shop cards · from {fromPriceLabel}
+              Buy Google Review Cards · {fromPriceLabel}
               <span aria-hidden>›</span>
             </Link>
             <Link to={SETUP_PATH} onClick={() => setOpen(false)} className="panel flex items-center justify-between px-4 py-4 text-lg font-semibold">

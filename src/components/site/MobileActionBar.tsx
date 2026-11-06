@@ -132,8 +132,8 @@ export function MobileActionBar() {
     return (
       <div className="pb-safe fixed inset-x-0 bottom-0 z-40 border-t border-border/80 bg-background/90 px-3 pt-3 backdrop-blur-xl sm:hidden">
         <div className="flex gap-2">
-          <Link to={SHOP_PATH} className="btn-ignite flex-1 !py-3.5 !text-base">
-            Get cards · from {fromPriceLabel}
+          <Link to={SHOP_PATH} className="btn-ignite flex-1 whitespace-nowrap !px-3 !py-3.5 !text-base">
+            Buy Google Review Cards
           </Link>
           <BookButton direct note="Mobile bar" variant="chrome" className="grid w-12 shrink-0 place-items-center !rounded-2xl !p-0">
             <Calendar className="h-5 w-5 text-turbo" aria-hidden />

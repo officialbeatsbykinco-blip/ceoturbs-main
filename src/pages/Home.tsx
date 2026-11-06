@@ -52,7 +52,7 @@ export default function Home() {
         <div className="pointer-events-none absolute inset-0 bg-grid" aria-hidden />
         <div className="pointer-events-none absolute -top-40 left-1/2 h-[600px] w-[1100px] -translate-x-1/2 glow-turbo" aria-hidden />
         <div className="container-x relative mx-auto max-w-6xl text-center">
-          <p className="chip">For local businesses &amp; online stores</p>
+          <p className="chip">Google Review Cards · Websites · Google &amp; Meta ads</p>
           <h1 id="hero" className="mx-auto mt-3 max-w-4xl text-[34px] font-bold leading-[1.05] sm:mt-5 sm:text-5xl md:text-6xl">
             <span className="text-chrome-grad">More calls. More sales.</span> <span className="text-turbo-grad">More 5-star reviews.</span>
           </h1>
@@ -66,9 +66,9 @@ export default function Home() {
             <HeroDoor
               featured
               kicker="Want more Google reviews?"
-              title="Tap-to-review Google cards"
+              title="Google Review Cards"
               media={<img src="/img/review-cards/shop-tap-thumb.webp" alt="A phone tapping a CEO Turbo Google review card" width={96} height={96} loading="eager" decoding="async" className="h-16 w-16 rounded-xl object-cover ring-1 ring-white/10 sm:h-20 sm:w-20" />}
-              lede="Customers tap their phone on the card and your review form opens."
+              lede="Your customer taps their phone on the card and your Google review page opens. They leave 5 stars on the spot."
               points={["iPhone & Android, no app needed", "Pay once, no subscription", `${REVIEW_CARD.returnDays}-day returns, no restocking fee`]}
               proof={
                 <>
@@ -83,7 +83,7 @@ export default function Home() {
               }
               cta={
                 <a href="#buy" className="btn-ignite btn-shine inline-flex w-full items-center justify-center gap-2">
-                  Shop review cards <ArrowDown className="h-4 w-4" aria-hidden />
+                  Buy Google Review Cards <ArrowDown className="h-4 w-4" aria-hidden />
                 </a>
               }
               secondary={
@@ -276,7 +276,7 @@ export default function Home() {
                 <Phone className="h-4 w-4 text-turbo" aria-hidden /> Call {SITE.phone.display}
               </CallLink>
               <a href="#buy" className="btn-chrome">
-                Get review cards
+                Buy Google Review Cards
               </a>
             </div>
           </div>
@@ -423,11 +423,11 @@ function HomeBar() {
   return (
     <div className={cn("pb-safe fixed inset-x-0 bottom-0 z-40 border-t border-border/80 bg-background/90 px-3 pt-3 backdrop-blur-xl transition-transform duration-300 lg:pb-3", show ? "translate-y-0" : "translate-y-full")} aria-hidden={!show}>
       <div className="mx-auto flex max-w-3xl gap-2">
-        <BookButton direct note="Home sticky bar" className="inline-flex flex-[1.3] items-center justify-center gap-1.5 whitespace-nowrap !px-3 !py-3.5 !text-sm sm:!text-base">
-          <CalendarCheck className="h-4 w-4 shrink-0" aria-hidden /> Book free call
+        <BookButton direct note="Home sticky bar" className="inline-flex flex-1 items-center justify-center gap-1.5 whitespace-nowrap !px-3 !py-3.5 !text-sm sm:!text-base">
+          <CalendarCheck className="h-4 w-4 shrink-0 max-[400px]:hidden" aria-hidden /> Book a call
         </BookButton>
-        <a href="#buy" tabIndex={show ? undefined : -1} className="btn-chrome inline-flex flex-1 items-center justify-center whitespace-nowrap !px-3 !py-3.5 !text-sm sm:!text-base">
-          Cards · {fromPriceLabel}
+        <a href="#buy" tabIndex={show ? undefined : -1} className="btn-chrome inline-flex flex-[1.3] items-center justify-center whitespace-nowrap !px-3 !py-3.5 !text-sm sm:!text-base">
+          Buy Google Review Cards
         </a>
         <CallLink location="home sticky bar" className="grid w-12 shrink-0 place-items-center rounded-2xl text-foreground ring-1 ring-white/15 hover:bg-white/5">
           <Phone className="h-5 w-5" aria-hidden />

@@ -52,7 +52,7 @@ export function ReviewDuo() {
               })}
             </ul>
             <Link to={SHOP_PATH} className="btn-ignite btn-shine mt-6 inline-flex w-full justify-center sm:w-auto">
-              Shop review cards <ArrowRight className="h-4 w-4" aria-hidden />
+              Buy Google Review Cards <ArrowRight className="h-4 w-4" aria-hidden />
             </Link>
           </div>
         </div>

@@ -226,7 +226,7 @@ export default function GetMoreReviews() {
           </p>
           <div className="mt-8 flex flex-wrap items-center gap-4">
             <a href="#buy" className="btn-ignite btn-shine">
-              Get review cards — from {fromPriceLabel}
+              Buy Google Review Cards · {fromPriceLabel}
             </a>
             <a href="#who" className="inline-flex min-h-[44px] items-center gap-2 text-sm font-semibold text-chrome hover:text-foreground">
               Show me how <ArrowDown className="h-4 w-4 animate-bounce" aria-hidden />
