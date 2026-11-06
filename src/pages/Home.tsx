@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { type ReactNode, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowDown, ArrowRight, CalendarCheck, Check, Globe, MapPin, Megaphone, Phone, Scissors, Search, Share2, Smartphone, Star, Store, Trees, Wrench } from "lucide-react";
 import { BuyBox } from "@/components/shop/BuyBox";
@@ -60,59 +60,71 @@ export default function Home() {
             We build websites and run Google &amp; Meta ads that make your phone ring, and sell tap-to-review cards that fill your Google profile with 5 stars.
           </p>
 
-          <div className="mx-auto mt-7 grid max-w-5xl gap-4 text-left md:grid-cols-2">
+          {/* Two doors, one layout: same rows in the same order, so the buttons line up side by side on desktop. */}
+          <div className="mx-auto mt-5 grid max-w-5xl gap-3 text-left sm:mt-8 sm:gap-4 md:grid-cols-2 md:gap-y-0">
             {/* Door 1: the card. The cheap first yes; everything else is the next step. */}
-            <div className="panel relative flex flex-col p-5 ring-1 ring-turbo/50 sm:p-7">
-              <p className="text-xs font-semibold uppercase tracking-wider text-turbo">Step 1 · Get more Google reviews</p>
-              <div className="mt-1.5 flex items-start gap-4">
-                <h2 className="flex-1 font-display text-2xl font-bold sm:text-3xl">Tap-to-review Google cards</h2>
-                <img src="/img/review-cards/shop-tap-thumb.webp" alt="A phone tapping a CEO Turbo Google review card" width={96} height={96} loading="eager" decoding="async" className="h-20 w-20 shrink-0 rounded-xl object-cover ring-1 ring-white/10 sm:h-24 sm:w-24" />
-              </div>
-              <p className="mt-2 text-sm text-muted-foreground sm:text-base">Customers tap their phone on the card and your review form opens. No app.</p>
-              <p className="mt-3 flex flex-wrap items-center gap-x-1.5 gap-y-1 text-sm">
-                <span className="inline-flex gap-0.5">
-                  {[0, 1, 2, 3, 4].map((i) => (
-                    <Star key={i} className="h-4 w-4 fill-current text-amber-400" aria-hidden />
-                  ))}
-                </span>
-                <span className="whitespace-nowrap font-semibold">From {fromPriceLabel}</span>
-                <span className="whitespace-nowrap text-muted-foreground">· free US shipping</span>
-              </p>
-              <div className="mt-auto pt-5">
-                <a href="#buy" className="btn-ignite inline-flex w-full items-center justify-center gap-2">
+            <HeroDoor
+              featured
+              kicker="Want more Google reviews?"
+              title="Tap-to-review Google cards"
+              media={<img src="/img/review-cards/shop-tap-thumb.webp" alt="A phone tapping a CEO Turbo Google review card" width={96} height={96} loading="eager" decoding="async" className="h-16 w-16 rounded-xl object-cover ring-1 ring-white/10 sm:h-20 sm:w-20" />}
+              lede="Customers tap their phone on the card and your review form opens."
+              points={["iPhone & Android, no app needed", "Pay once, no subscription", `${REVIEW_CARD.returnDays}-day returns, no restocking fee`]}
+              proof={
+                <>
+                  <span className="inline-flex gap-0.5">
+                    {[0, 1, 2, 3, 4].map((i) => (
+                      <Star key={i} className="h-4 w-4 fill-current text-amber-400" aria-hidden />
+                    ))}
+                  </span>
+                  <span className="font-semibold">From {fromPriceLabel}</span>
+                  <span className="text-muted-foreground">· ships free, no app</span>
+                </>
+              }
+              cta={
+                <a href="#buy" className="btn-ignite btn-shine inline-flex w-full items-center justify-center gap-2">
                   Shop review cards <ArrowDown className="h-4 w-4" aria-hidden />
                 </a>
-              </div>
-            </div>
+              }
+              secondary={
+                <a href="#how" className="inline-flex min-h-[44px] items-center gap-1.5 text-sm font-semibold text-muted-foreground underline-offset-4 hover:text-foreground hover:underline">
+                  See how it works <ArrowDown className="h-4 w-4" aria-hidden />
+                </a>
+              }
+            />
             {/* Door 2: the agency, for owners ready to grow now. */}
-            <div className="panel relative p-5 sm:p-7">
-              <p className="text-xs font-semibold uppercase tracking-wider text-turbo">Step 2 · Get more customers</p>
-              <h2 className="mt-1.5 font-display text-2xl font-bold sm:text-3xl">Websites &amp; ads that make your phone ring</h2>
-              <p className="mt-2 text-sm text-muted-foreground sm:text-base">
-                {AD_TOTALS.leads} leads for our clients at {money(AD_TOTALS.avgCpl)} each on average. {CLIENTS.length} client sites live right now.
-              </p>
-              <ul className="mt-4 grid gap-1.5 text-sm">
-                {["Free 30-minute call, plan included", "No long-term contract", "Leads-or-free guarantee"].map((t) => (
-                  <li key={t} className="flex items-center gap-2">
-                    <Check className="h-4 w-4 shrink-0 text-turbo" aria-hidden />
-                    {t}
-                  </li>
-                ))}
-              </ul>
-              <div className="mt-5 grid gap-2 sm:grid-cols-2">
-                <BookButton direct note="Home hero" className="btn-shine inline-flex items-center justify-center gap-2">
+            <HeroDoor
+              kicker="Want more customers?"
+              title="Websites & ads that make your phone ring"
+              media={
+                <div className="grid h-16 w-16 place-content-center rounded-xl bg-turbo/10 text-center ring-1 ring-turbo/30 sm:h-20 sm:w-20">
+                  <span className="font-display text-lg font-bold leading-none text-turbo sm:text-xl">{money(AD_TOTALS.avgCpl)}</span>
+                  <span className="mt-1 text-[10px] font-semibold uppercase leading-none tracking-wide text-muted-foreground">per lead</span>
+                </div>
+              }
+              lede={`${AD_TOTALS.leads} leads for our clients at ${money(AD_TOTALS.avgCpl)} each on average.`}
+              points={["Free 30-minute call, plan included", "No long-term contract", `${CLIENTS.length} client sites live right now`]}
+              proof={
+                <>
+                  <span className="font-semibold">Leads-or-free guarantee</span>
+                  <span className="text-muted-foreground">· no contract</span>
+                </>
+              }
+              cta={
+                <BookButton direct note="Home hero" className="btn-shine inline-flex w-full items-center justify-center gap-2">
                   <CalendarCheck className="h-5 w-5" aria-hidden /> Book a free call
                 </BookButton>
-                <CallLink location="home hero" className="btn-chrome inline-flex items-center justify-center gap-2">
-                  <Phone className="h-4 w-4 text-turbo" aria-hidden /> Call {SITE.phone.display}
+              }
+              secondary={
+                <CallLink location="home hero" className="inline-flex min-h-[44px] items-center gap-1.5 text-sm font-semibold text-muted-foreground underline-offset-4 hover:text-foreground hover:underline">
+                  <Phone className="h-4 w-4 text-turbo" aria-hidden /> or call {SITE.phone.display}
                 </CallLink>
-              </div>
-              <a href="#work" className="mt-3 inline-flex min-h-[44px] items-center gap-1.5 text-sm font-semibold text-turbo underline-offset-4 hover:underline">
-                See the sites and ads we made <ArrowDown className="h-4 w-4" aria-hidden />
-              </a>
-            </div>
-
+              }
+            />
           </div>
+          <a href="#work" className="mt-4 inline-flex min-h-[44px] items-center gap-1.5 text-sm font-semibold text-turbo underline-offset-4 hover:underline">
+            See the sites and ads we made <ArrowDown className="h-4 w-4" aria-hidden />
+          </a>
         </div>
       </section>
 
@@ -275,6 +287,49 @@ export default function Home() {
 
       <p className="container-x pb-10 text-center text-xs leading-relaxed text-muted-foreground">Google and the Google logo are trademarks of Google LLC. CEO Turbo is not affiliated with, sponsored or endorsed by Google.</p>
     </>
+  );
+}
+
+/**
+ * One hero offer. Fixed row order (kicker, title + media, lede, points, proof, buttons) with the buttons pinned to the bottom,
+ * so two doors side by side always line up (subgrid on desktop matches every row, not just the buttons). Lede and points are hidden on phones so both buttons fit on the first screen;
+ * the proof line stays, so each door still carries its strongest reason.
+ */
+function HeroDoor({ featured, kicker, title, media, lede, points, proof, cta, secondary }: {
+  featured?: boolean;
+  kicker: string;
+  title: string;
+  media: ReactNode;
+  lede: string;
+  points: string[];
+  proof: ReactNode;
+  cta: ReactNode;
+  secondary: ReactNode;
+}) {
+  return (
+    <div className={cn("panel flex flex-col p-4 sm:p-7 md:row-span-5 md:grid md:grid-rows-subgrid md:gap-y-0", featured && "ring-1 ring-turbo/50")}>
+      <div className="flex items-start gap-4">
+        <div className="flex-1">
+          <p className="text-xs font-semibold uppercase tracking-wider text-turbo">{kicker}</p>
+          <h2 className="mt-1.5 font-display text-[22px] font-bold leading-tight sm:text-[26px]">{title}</h2>
+        </div>
+        <div className="shrink-0">{media}</div>
+      </div>
+      <p className="mt-2 hidden text-muted-foreground sm:block">{lede}</p>
+      <ul className="mt-4 hidden gap-1.5 text-sm sm:grid">
+        {points.map((t) => (
+          <li key={t} className="flex items-center gap-2">
+            <Check className="h-4 w-4 shrink-0 text-turbo" aria-hidden />
+            {t}
+          </li>
+        ))}
+      </ul>
+      <p className="mt-2 flex flex-wrap items-center gap-x-1.5 gap-y-1 text-sm sm:mt-4">{proof}</p>
+      <div className="mt-auto flex flex-col items-center justify-end pt-3 sm:pt-5">
+        {cta}
+        <div className="sm:mt-1">{secondary}</div>
+      </div>
+    </div>
   );
 }
 
