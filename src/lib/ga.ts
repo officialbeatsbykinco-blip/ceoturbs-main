@@ -9,6 +9,9 @@ export const GA_ID = "G-XDWPSVBW53";
 const envAds = import.meta.env.VITE_GOOGLE_ADS_ID as string | undefined;
 export const GOOGLE_ADS_ID = envAds && /^AW-\d{6,}$/.test(envAds) ? envAds : "AW-18468746701";
 
+/** The combined Google tag from Google Ads → Goals → Google tag. Its config call loads that container on the same data layer. */
+export const GOOGLE_TAG_ID = "GT-5R7RRFRL";
+
 /**
  * Google Ads → Goals → Conversions → each action → Tag setup → "Use Google tag": the part after the slash in
  * send_to "AW-18468746701/LABEL". Empty = that conversion isn't sent yet (GA4 still records the event).
@@ -36,6 +39,7 @@ export function startGa() {
   w.gtag("js", new Date());
   w.gtag("config", GA_ID, { send_page_view: true });
   w.gtag("config", GOOGLE_ADS_ID, { allow_enhanced_conversions: true });
+  w.gtag("config", GOOGLE_TAG_ID);
 }
 
 /** Downloads gtag.js, which sends everything queued since startGa (page view included). */
