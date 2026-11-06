@@ -1,9 +1,7 @@
 import { useId, useState } from "react";
-import { ArrowRight, BadgeCheck, Calendar, Droplets, Mail, MessageSquare, Phone, ShieldCheck, Smartphone, Truck } from "lucide-react";
+import { ArrowRight, BadgeCheck, Droplets, Mail, MessageSquare, Phone, ShieldCheck, Smartphone, Truck } from "lucide-react";
 import { SectionHeader } from "@/components/blocks/Basics";
-import { BookButton } from "@/components/cta/Actions";
-import { CallLink } from "@/components/site/CallLink";
-import { BOOKING, REVIEW_CARD, SITE, money2 } from "@/config/site";
+import { REVIEW_CARD, SITE, money2 } from "@/config/site";
 import { monthlyReviews, monthsToGoal, suggestPack } from "@/lib/review-goal";
 import { smsHref } from "@/lib/sms";
 import { cn } from "@/lib/utils";
@@ -182,28 +180,3 @@ export function ContactBand({ className }: { className?: string }) {
   );
 }
 
-/** The agency sale next to the card sale: call now, or pick a time for the free Brand Boost call. */
-export function CallBookBand({ className }: { className?: string }) {
-  return (
-    <section className={cn("section border-t border-border", className)} aria-labelledby="call-book">
-      <div className="container-x">
-        <div className="cta-glow rounded-3xl p-8 text-center sm:p-12">
-          <p className="text-xs font-semibold uppercase tracking-wider text-turbo">Want more customers calling you?</p>
-          <h2 id="call-book" className="h-section mx-auto mt-2 max-w-3xl">Reviews get you picked. We get you found.</h2>
-          <p className="lede mx-auto max-w-2xl">
-            Websites, Google profile and ads that make your phone ring. Call us now, or book a free {BOOKING.length} call and leave with a plan.
-          </p>
-          <div className="mt-7 flex flex-col items-center justify-center gap-3 sm:flex-row">
-            <BookButton direct note="Call/book band" className="btn-shine inline-flex items-center gap-2">
-              <Calendar className="h-4 w-4" aria-hidden />
-              Book a free call
-            </BookButton>
-            <CallLink location="call/book band" icon className="btn-chrome">
-              Call {SITE.phone.display}
-            </CallLink>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
