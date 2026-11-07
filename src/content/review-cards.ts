@@ -68,7 +68,10 @@ export const USES = [
   { where: "Lawn care & landscaping", why: "Keep it in the truck. Hand it over while they're looking at a fresh yard." },
   { where: "Mobile repair & detailing", why: "Phone, appliance, car: the second it works again is the second to ask." },
   { where: "Cleaners, plumbers & contractors", why: "Tuck one in your wallet and ask at the door before you leave." },
-  { where: "Stores & restaurants", why: "Leave a card on the table or counter. Customers tap while they wait or pay." },
+  { where: "Mechanics & auto shops", why: "Hand it over with the keys, while the car is running right again." },
+  { where: "Restaurants & cafes", why: "Put a card on every table. Guests tap while they wait on the check." },
+  { where: "Retail & counter shops", why: "Set it by the register. Customers tap while they pay." },
+  { where: "Gyms, studios & spas", why: "Leave it at the front desk. Members tap on the way out." },
   { where: "Receipts & invoices", why: "Our free setup tool also makes a QR code for your review link, so people can review later too." },
 ];
 

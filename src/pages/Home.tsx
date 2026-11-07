@@ -1,6 +1,6 @@
 import { type ReactNode, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { ArrowDown, ArrowRight, CalendarCheck, Check, Globe, MapPin, Megaphone, MessageSquare, Phone, Scissors, Search, Share2, Smartphone, Star, Store, Trees, Wrench } from "lucide-react";
+import { ArrowDown, ArrowRight, CalendarCheck, Car, Check, Dumbbell, Hammer, Globe, MapPin, Megaphone, MessageSquare, Phone, Scissors, Search, Share2, Smartphone, Star, Store, Trees, UtensilsCrossed, Wrench } from "lucide-react";
 import { BuyBox } from "@/components/shop/BuyBox";
 import { BookButton } from "@/components/cta/Actions";
 import { CompareTable } from "@/components/blocks/CompareTable";
@@ -26,9 +26,13 @@ import { cn } from "@/lib/utils";
 
 const WHO = [
   { icon: Scissors, t: "Barbers & stylists", b: "Hold it out after the mirror reveal, while they still love the cut." },
+  { icon: Car, t: "Mechanics & auto shops", b: "Hand it over with the keys. Ask while the car is running right again." },
+  { icon: UtensilsCrossed, t: "Restaurants & cafes", b: "Put one on every table. Guests tap while they wait on the check." },
+  { icon: Store, t: "Retail & counter shops", b: "Set it by the register. People tap while they pay or bag up." },
   { icon: Trees, t: "Lawn care crews", b: "Keep one in the truck. Ask while they're looking at the fresh yard." },
+  { icon: Hammer, t: "Contractors & home services", b: "Plumbers, electricians, cleaners: ask when the job is done and they're happy." },
   { icon: Wrench, t: "Mobile repair & detailing", b: "The second it works again is the second to ask." },
-  { icon: Store, t: "Stores & restaurants", b: "Leave it on the table or counter. People tap while they wait or pay." },
+  { icon: Dumbbell, t: "Gyms, studios & spas", b: "Leave it at the front desk. Members tap on the way out." },
 ];
 
 const STEPS = [
