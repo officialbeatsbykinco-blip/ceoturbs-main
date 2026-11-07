@@ -158,8 +158,8 @@ export const REVIEW_CARD = {
     minDays: 3,
     maxDays: 7,
   },
-  guarantee: "Not right for you, or the card won't program or tap? Return it new and unused within 5 days of delivery for a refund. No restocking fee.",
-  returnDays: 5,
+  guarantee: "Not right for you, or the card won't program or tap? Return it new and unused within 30 days of delivery for a refund. No restocking fee.",
+  returnDays: 30,
 } as const;
 
 /** The acrylic counter stand: NFC tap + QR code in one L-shaped display. Request-only until a Shopify product exists. */

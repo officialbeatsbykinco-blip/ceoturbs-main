@@ -400,7 +400,7 @@ export default function GetMoreReviews() {
                   ["Ships", "1–2 business days", "Often weeks"],
                   ["Stuck setting it up?", `Call a real person: ${SITE.phone.display}`, "Email, maybe"],
                   ["Find your review link", "Free tool + printable QR", "On your own"],
-                  ["Returns", "5 days, no restocking fee", "Often none"],
+                  ["Returns", `${REVIEW_CARD.returnDays} days, no restocking fee`, "Often none"],
                   ["Monthly fee", "$0", "Some charge monthly"],
                 ].map(([k, a, b]) => (
                   <tr key={k} className="border-b border-border/60 last:border-0">

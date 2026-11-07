@@ -85,7 +85,7 @@ export function StandBuyBox({ business }: { business: string }) {
           <p className="mt-2 text-center text-xs text-muted-foreground">Apple Pay · Google Pay · PayPal · Venmo · Shop Pay · cards</p>
           <ul className="mt-4 grid grid-cols-3 gap-2 text-center text-[11px] font-medium leading-tight text-foreground/80 sm:text-xs">
             <li className="trust-tile"><Truck className="mx-auto h-5 w-5 text-turbo" aria-hidden /> Free US shipping</li>
-            <li className="trust-tile"><RotateCcw className="mx-auto h-5 w-5 text-turbo" aria-hidden /> 5-day returns</li>
+            <li className="trust-tile"><RotateCcw className="mx-auto h-5 w-5 text-turbo" aria-hidden /> {REVIEW_CARD.returnDays}-day returns</li>
             <li className="trust-tile"><Lock className="mx-auto h-5 w-5 text-turbo" aria-hidden /> Secure Shopify checkout</li>
           </ul>
         </div>
