@@ -79,7 +79,7 @@ GTM (GTM-KRPRZ67Z) stays on the site for anything you add later. Its old Google 
 1. Admin → Events → mark as **key events**: `generate_lead`, `book_call`, `purchase`, `click_to_call`.
 2. Admin → Product links → **Google Ads links** → link your Ads account (and turn on auto-tagging in Google Ads).
 3. Admin → Data settings → Data collection → **Google signals** on; Data retention → **14 months**.
-4. Admin → Data streams → web → Configure tag settings → **List unwanted referrals**: `checkout.shopify.com`, `uweee2-sc.myshopify.com`, `cal.com`, `app.cal.com` (keeps the ad as the source of a purchase/booking).
+4. Admin → Data streams → web → Configure tag settings → **List unwanted referrals**: `checkout.shopify.com`, `ceoturbo.myshopify.com`, `uweee2-sc.myshopify.com`, `cal.com`, `app.cal.com` (keeps the ad as the source of a purchase/booking).
 5. Import GA4 key events into Google Ads **only as Secondary**. The site's Google Ads conversions (section 4) are the Primary ones, so nothing is counted twice.
 
 ## 5. Shopify (purchases)

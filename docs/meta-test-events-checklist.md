@@ -3,7 +3,7 @@
 I can't reach ceoturbo.com from my build environment, so this is the live check only you can run. Pixel: **3232222473609236**.
 
 ## 0. What I already verified (no action)
-- Shopify store `uweee2-sc.myshopify.com` matches `src/config/site.ts`; product `CT-NFC-REVIEW-1/2/5` is ACTIVE, on 9 sales channels, purchasable (inventory untracked).
+- Shopify store `ceoturbo.myshopify.com` matches `src/config/site.ts`; product `CT-NFC-REVIEW-1/2/5` is ACTIVE, on 9 sales channels, purchasable (inventory untracked).
 - **No orders exist yet**, so there is no Purchase to find in Meta. That alone explains "it says it's not tracking".
 - Site code sends PageView, ViewContent, AddToCart, InitiateCheckout, Lead, Schedule, Contact (browser + server, de-duplicated).
 

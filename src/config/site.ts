@@ -115,7 +115,7 @@ export const PITCH_VIDEO = {
  * "Pack" with values "1 card" / "2 cards" / "5 cards" — see docs/shopify-listing.md.
  */
 export const SHOPIFY = {
-  domain: "uweee2-sc.myshopify.com",
+  domain: "ceoturbo.myshopify.com",
   /** Public Storefront API token (safe in the browser; it can only read products and create carts). */
   storefrontToken: "3f8f3d3f7a28ffdf9423ef07ce7e1c8e",
   productId: "15410641502443",

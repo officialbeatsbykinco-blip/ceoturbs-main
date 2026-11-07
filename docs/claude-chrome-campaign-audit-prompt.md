@@ -19,7 +19,7 @@ You are auditing the paid-ads setup for CEO Turbo (ceoturbo.com). Be skeptical a
 - GA4 G-XDWPSVBW53, GTM GTM-KRPRZ67Z. Key events: generate_lead, book_call, purchase, click_to_call.
 - Microsoft Advertising account 189366985. UET tag 187280408. A goal on event action "book_appointment" should exist.
 - Meta Pixel 3232222473609236. Events that should fire: Lead, Schedule, Purchase, InitiateCheckout, AddToCart, ViewContent.
-- Shopify store uweee2-sc.myshopify.com. Products: Google Review Tap Cards (id 15410641502443), Custom Company T-Shirts (id 15418511327467).
+- Shopify store ceoturbo.myshopify.com. Products: Google Review Tap Cards (id 15410641502443), Custom Company T-Shirts (id 15418511327467).
 
 ## Part 1: Google Ads
 For every campaign, report in a table: name, status, daily budget, bid strategy, networks, location option, goal, primary conversion goals, final URLs, and whether it is spending.
