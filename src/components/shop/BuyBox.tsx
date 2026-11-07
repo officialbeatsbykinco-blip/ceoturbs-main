@@ -52,7 +52,8 @@ export function BuyBox({
   stickyBar?: boolean;
 }) {
   const H = headingLevel;
-  const [packId, setPackId] = useState<ReviewPack["id"]>("2");
+  // Opens on the single card so the price matches the "from $16.99" the ads and hero promise; the 2-pack stays badged "Most popular".
+  const [packId, setPackId] = useState<ReviewPack["id"]>("1");
   const [withStand, setWithStand] = useState(false);
   const [program, setProgram] = useState(false);
   const [reviewLink, setReviewLink] = useState("");

@@ -328,7 +328,8 @@ function HeroDoor({ featured, kicker, title, media, lede, points, proof, cta, se
         </div>
         <div className="shrink-0">{media}</div>
       </div>
-      <p className="mt-2 hidden text-muted-foreground sm:block">{lede}</p>
+      {/* Phones keep the card's one-line explainer: without it the first screen never says what the card does. */}
+      <p className={cn("mt-2 text-muted-foreground", featured ? "text-[15px] leading-snug sm:text-base" : "hidden sm:block")}>{lede}</p>
       <ul className="mt-4 hidden gap-1.5 text-sm sm:grid">
         {points.map((t) => (
           <li key={t} className="flex items-center gap-2">
