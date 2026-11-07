@@ -119,9 +119,8 @@ export default function Home() {
               }
             />
           </div>
-          {/* A real person behind both offers: the face, the name and a number that reaches him. */}
+          {/* A real person behind both offers: the name and a number that reaches him. */}
           <div className="mx-auto mt-4 flex max-w-5xl items-center gap-3 rounded-2xl border border-border bg-white/[0.02] p-3 text-left sm:mt-5 sm:gap-4 sm:p-4">
-            <img src="/img/brand/chris-avatar.webp" alt={`${SITE.founder.name}, founder of CEO Turbo`} width={56} height={56} loading="eager" decoding="async" className="h-12 w-12 shrink-0 rounded-full object-cover ring-2 ring-turbo/40 sm:h-14 sm:w-14" />
             <p className="flex-1 text-sm leading-snug">
               <span className="font-semibold">Hi, I'm Chris, the founder.</span>{" "}
               <span className="text-muted-foreground">Questions about the cards or your website? You talk to me, not a sales team.</span>
