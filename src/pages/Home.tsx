@@ -1,6 +1,6 @@
 import { type ReactNode, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { ArrowDown, ArrowRight, CalendarCheck, Car, Check, Dumbbell, Hammer, Globe, MapPin, Megaphone, MessageSquare, Phone, Scissors, Search, Share2, Smartphone, Star, Store, Trees, UtensilsCrossed, Wrench } from "lucide-react";
+import { ArrowDown, ArrowRight, CalendarCheck, Car, Check, Dumbbell, Hammer, Globe, House, MapPin, Megaphone, MessageSquare, Phone, Scissors, Search, Share2, Smartphone, Star, Store, Trees, UtensilsCrossed } from "lucide-react";
 import { BuyBox } from "@/components/shop/BuyBox";
 import { BookButton } from "@/components/cta/Actions";
 import { CompareTable } from "@/components/blocks/CompareTable";
@@ -24,15 +24,16 @@ import { price } from "@/content/pricing";
 import { QUICK_TEXT, smsHref } from "@/lib/sms";
 import { cn } from "@/lib/utils";
 
+// Short on purpose: an icon, who, and where the card goes. People scan this, they don't read it.
 const WHO = [
-  { icon: Scissors, t: "Barbers & stylists", b: "Hold it out after the mirror reveal, while they still love the cut." },
-  { icon: Car, t: "Mechanics & auto shops", b: "Hand it over with the keys. Ask while the car is running right again." },
-  { icon: UtensilsCrossed, t: "Restaurants & cafes", b: "Put one on every table. Guests tap while they wait on the check." },
-  { icon: Store, t: "Retail & counter shops", b: "Set it by the register. People tap while they pay or bag up." },
-  { icon: Trees, t: "Lawn care crews", b: "Keep one in the truck. Ask while they're looking at the fresh yard." },
-  { icon: Hammer, t: "Contractors & home services", b: "Plumbers, electricians, cleaners: ask when the job is done and they're happy." },
-  { icon: Wrench, t: "Mobile repair & detailing", b: "The second it works again is the second to ask." },
-  { icon: Dumbbell, t: "Gyms, studios & spas", b: "Leave it at the front desk. Members tap on the way out." },
+  { icon: Scissors, t: "Barbers & salons", b: "At the chair" },
+  { icon: Car, t: "Mechanics & auto", b: "With the keys" },
+  { icon: UtensilsCrossed, t: "Restaurants & cafes", b: "On every table" },
+  { icon: Store, t: "Shops & retail", b: "By the register" },
+  { icon: House, t: "Real estate", b: "At the closing" },
+  { icon: Hammer, t: "Contractors & repair", b: "When the job's done" },
+  { icon: Trees, t: "Lawn care", b: "In the truck" },
+  { icon: Dumbbell, t: "Gyms, studios & spas", b: "At the front desk" },
 ];
 
 const STEPS = [
@@ -157,7 +158,7 @@ export default function Home() {
       <section className="section border-t border-border" aria-labelledby="hand-it-over">
         <div className="container-x text-center">
           <h2 id="hand-it-over" className="h-section mx-auto max-w-3xl">Hand it over. They tap. You get the review.</h2>
-          <p className="lede mx-auto max-w-2xl">No “search for us on Google.” No QR code to scan. Their phone opens your review form, they tap five stars, done.</p>
+          <p className="lede mx-auto max-w-2xl">No searching. No QR code. Just one tap.</p>
           <StickTap className="mx-auto mt-8 w-full max-w-[640px] text-foreground" />
         </div>
       </section>
@@ -186,22 +187,29 @@ export default function Home() {
 
       <section className="section border-t border-border" aria-labelledby="who">
         <div className="container-x">
-          <SectionHeader kicker="Who it's for" title={<span id="who">Works wherever you work.</span>} lede="Wallet size and waterproof. Keep it on you, or leave it out for customers." />
-          <ul className="mt-10 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+          <SectionHeader kicker="Who it's for" title={<span id="who">Works wherever you work.</span>} lede="Keep it in your pocket or leave it out for customers." />
+          <ul className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-4">
             {WHO.map((w) => (
-              <li key={w.t} className="panel p-5">
-                <w.icon className="h-6 w-6 text-turbo" aria-hidden />
-                <h3 className="mt-3 font-display text-lg font-bold">{w.t}</h3>
-                <p className="mt-1.5 text-sm text-muted-foreground">{w.b}</p>
+              <li key={w.t} className="panel p-4 sm:p-5">
+                <w.icon className="h-7 w-7 text-turbo" aria-hidden />
+                <h3 className="mt-2.5 font-display text-base font-bold leading-tight sm:text-lg">{w.t}</h3>
+                <p className="mt-1 text-sm text-muted-foreground">{w.b}</p>
               </li>
             ))}
+            {/* The catch-all, full width so the grid never ends on one lonely tile. */}
+            <li className="panel col-span-2 flex items-center gap-3 p-4 ring-1 ring-turbo/40 sm:col-span-4 sm:p-5">
+              <MapPin className="h-7 w-7 shrink-0 text-turbo" aria-hidden />
+              <p className="font-display text-base font-bold leading-tight sm:text-lg">
+                Have a Google Business Profile? <span className="text-turbo">The card works for you.</span>
+              </p>
+            </li>
           </ul>
         </div>
       </section>
 
       <section className="section border-t border-border" aria-labelledby="compare">
         <div className="container-x">
-          <SectionHeader title={<span id="compare">Tap card vs. just asking</span>} lede="Most customers mean it when they say they'll leave a review. The card gets it done before they forget." />
+          <SectionHeader title={<span id="compare">Tap card vs. just asking</span>} lede="People forget to leave reviews. The card gets it done on the spot." />
           <CompareTable className="mt-10" head={["", "Review tap card", "“Please review us”", "Paper QR sign"]} rows={COMPARE.map((r) => [...r])} highlight={1} />
         </div>
       </section>
@@ -216,11 +224,11 @@ export default function Home() {
 
       <section className="section border-t border-border" aria-labelledby="setup">
         <div className="container-x grid gap-8 lg:grid-cols-2 lg:items-center">
-          <SectionHeader kicker="Setup" title={<span id="setup">Ready in about 2 minutes.</span>} lede="All you need is your phone. Our guide finds your Google review link and walks you through writing it to the card." />
+          <SectionHeader kicker="Setup" title={<span id="setup">Ready in about 2 minutes.</span>} lede="All you need is your phone. Our free guide walks you through it." />
           <div className="panel p-6">
             <Smartphone className="h-6 w-6 text-turbo" aria-hidden />
             <p className="mt-3 font-semibold">Don't want to set it up?</p>
-            <p className="mt-1 text-sm text-muted-foreground">Tick “Program it for me” for {money2(CARD_PROGRAMMING.price)}. We write your link and test the card, so it arrives ready to tap.</p>
+            <p className="mt-1 text-sm text-muted-foreground">Pick “Program it for me” for {money2(CARD_PROGRAMMING.price)}. It arrives ready to tap.</p>
             <Link to={SETUP_PATH} className="mt-4 inline-flex min-h-[44px] items-center gap-1.5 text-sm font-semibold text-turbo underline-offset-4 hover:underline">
               See the setup guide <ArrowRight className="h-4 w-4" aria-hidden />
             </Link>
@@ -241,7 +249,7 @@ export default function Home() {
         <div className="container-x text-center">
           <p className="text-xs font-semibold uppercase tracking-wider text-turbo">Our work</p>
           <h2 id="work-title" className="h-section mx-auto mt-2 max-w-3xl">{CLIENTS.length} real websites we built. All live.</h2>
-          <p className="lede mx-auto max-w-2xl">Home repair, junk removal, appliance repair, Shopify stores and artists. Tap any site to see how it was built to get calls.</p>
+          <p className="lede mx-auto max-w-2xl">Tap any site to see it.</p>
         </div>
         <div className="relative mt-6">
           <SiteWall eagerCount={0} />
@@ -259,7 +267,7 @@ export default function Home() {
           <SectionHeader
             kicker="Our ads"
             title={<span id="ads-proof">Real leads on small budgets.</span>}
-            lede="Unedited Google Ads, Meta and Search Console dashboards from Appliance King, appliance repair in Macon GA. A few hundred dollars of ads turned into thousands in jobs."
+            lede="Real dashboards from Appliance King in Macon, GA. A few hundred dollars in ads turned into thousands in jobs."
           />
           <div className="mt-8">
             <ProofStats />
@@ -283,7 +291,7 @@ export default function Home() {
         <div className="container-x">
           <div className="cta-glow rounded-3xl p-8 text-center sm:p-12">
             <h2 id="last-call" className="h-section">The business that shows up first gets the call.</h2>
-            <p className="lede mx-auto max-w-2xl">Book a free 30-minute call and we'll show you the biggest thing holding back your calls and sales. Or grab review cards from {fromPriceLabel}, free US shipping.</p>
+            <p className="lede mx-auto max-w-2xl">Book a free 30-minute call, or get review cards from {fromPriceLabel} with free US shipping.</p>
             <div className="mt-7 flex flex-col items-center justify-center gap-3 sm:flex-row">
               <BookButton note="Home final CTA" className="btn-shine inline-flex items-center gap-2">
                 <CalendarCheck className="h-5 w-5" aria-hidden /> Book a free call
@@ -351,11 +359,11 @@ function HeroDoor({ featured, kicker, title, media, lede, points, proof, cta, se
 }
 
 const LADDER = [
-  { icon: Share2, t: "Social media optimization", b: "Facebook, Instagram and TikTok set up to match, with your reviews and booking link on every one.", p: price("social-setup"), to: "/services/social-media-optimization" },
-  { icon: MapPin, t: "Google Business Profile optimization", b: "Categories, services, photos and posts tuned so you show up in the Maps top 3 near you.", p: price("gbp-setup"), to: "/services/google-business-profile" },
-  { icon: Search, t: "SEO, AEO & GEO", b: "Get found on Google and recommended by ChatGPT, Gemini and Perplexity when people ask who to hire.", p: price("visibility-foundation"), to: "/services/seo-aeo-geo" },
-  { icon: Globe, t: "Website that gets calls", b: "Fast, mobile-first, tap-to-call everywhere, built to turn visitors into calls and bookings.", p: price("site-launch"), to: "/services/website-design" },
-  { icon: Megaphone, t: "Google & Meta ads setup", b: "Ads and call tracking set up in your own account, so you see what every dollar brings back.", p: price("tracking-setup"), to: "/services/google-ads" },
+  { icon: Share2, t: "Social media optimization", b: "Facebook, Instagram and TikTok set up to match.", p: price("social-setup"), to: "/services/social-media-optimization" },
+  { icon: MapPin, t: "Google Business Profile optimization", b: "Show up in the top 3 on Google Maps near you.", p: price("gbp-setup"), to: "/services/google-business-profile" },
+  { icon: Search, t: "SEO, AEO & GEO", b: "Get found on Google and recommended by ChatGPT.", p: price("visibility-foundation"), to: "/services/seo-aeo-geo" },
+  { icon: Globe, t: "Website that gets calls", b: "Fast, made for phones, built to get calls.", p: price("site-launch"), to: "/services/website-design" },
+  { icon: Megaphone, t: "Google & Meta ads setup", b: "Set up in your account, so you see what every dollar brings back.", p: price("tracking-setup"), to: "/services/google-ads" },
 ];
 
 /** Step 2 after the card: the services that turn new reviews into calls. One price each, or all of it in Turbo Launch. */
@@ -365,12 +373,12 @@ function UpsellLadder() {
       <div className="container-x">
         <p className="text-xs font-semibold uppercase tracking-wider text-turbo">Reviews are step 1</p>
         <h2 id="step-2" className="h-section mt-2 max-w-3xl">Step 2: turn those 5 stars into calls and sales.</h2>
-        <p className="lede max-w-2xl">Reviews make people pick you. These make sure they find you first. Pick one, or let us do all of it.</p>
+        <p className="lede max-w-2xl">Reviews get you picked. These get you found first.</p>
         <ol className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           <li className="panel flex flex-col p-5 opacity-90">
             <Star className="h-6 w-6 fill-current text-amber-400" aria-hidden />
             <h3 className="mt-3 font-display text-lg font-bold">Google review cards</h3>
-            <p className="mt-1.5 text-sm text-muted-foreground">Every happy customer taps and leaves a review before they leave.</p>
+            <p className="mt-1.5 text-sm text-muted-foreground">Happy customers tap and leave a review.</p>
             <a href="#buy" className="mt-auto inline-flex min-h-[44px] items-center gap-1.5 pt-3 text-sm font-semibold text-turbo underline-offset-4 hover:underline">
               From {fromPriceLabel} <ArrowRight className="h-4 w-4" aria-hidden />
             </a>
@@ -414,7 +422,7 @@ function BookCallStrip({ note, className }: { note: string; className?: string }
     <div className={cn("panel flex flex-col items-center gap-4 p-6 text-center sm:flex-row sm:justify-between sm:text-left", className)}>
       <div>
         <p className="font-display text-lg font-bold sm:text-xl">Want results like these for your business?</p>
-        <p className="mt-1 text-sm text-muted-foreground">Free 30-minute call. We look at your site, Google profile and ads with you, live.</p>
+        <p className="mt-1 text-sm text-muted-foreground">Free 30-minute call. No pressure.</p>
       </div>
       <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row">
         <BookButton note={note} className="inline-flex items-center justify-center gap-2 whitespace-nowrap">

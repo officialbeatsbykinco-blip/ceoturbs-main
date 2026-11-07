@@ -72,6 +72,8 @@ export const USES = [
   { where: "Restaurants & cafes", why: "Put a card on every table. Guests tap while they wait on the check." },
   { where: "Retail & counter shops", why: "Set it by the register. Customers tap while they pay." },
   { where: "Gyms, studios & spas", why: "Leave it at the front desk. Members tap on the way out." },
+  { where: "Real estate agents", why: "Hand it over at the closing, while they're holding the new keys." },
+  { where: "Any business on Google", why: "If you have a Google Business Profile, the card works for you." },
   { where: "Receipts & invoices", why: "Our free setup tool also makes a QR code for your review link, so people can review later too." },
 ];
 
@@ -97,7 +99,7 @@ export const SHOP_FAQS: FAQ[] = [
   { q: "What does “Program it for me” mean?", a: `We write your Google review link to your cards and test them before they ship. It's ${money2(CARD_PROGRAMMING.price)} per order, however many cards you buy. Paste your link when you order, or leave it blank and we'll find it with you afterward.` },
   { q: "Can I just leave a card on the table or counter?", a: "Yes. Stores and restaurants do this all the time. Customers hold their phone over it and the review form opens. Because the card itself has no QR code, you can print the free QR sticker from our setup guide and put it beside the card for anyone who'd rather scan." },
   { q: "I work on the road. Does this still work?", a: "That's who it's built for. It's wallet size and waterproof, so keep it in your pocket or truck and hold it out when the job's done. It needs no battery, and the customer's phone does the rest." },
-  { q: "Does it work for any business?", a: "Any business with a Google Business Profile: barbers, lawn care, mobile repair, cleaners, contractors, shops, restaurants, salons and clinics. If you don't have a profile yet, book a free call and we'll help you set one up." },
+  { q: "Does it work for any business?", a: "Any business with a Google Business Profile: barbers, mechanics, restaurants, shops, real estate agents, contractors, cleaners, lawn care, gyms, salons and clinics. If you don't have a profile yet, book a free call and we'll help you set one up." },
   { q: "Can I change the link later?", a: "Yes. Rewrite the card in the app anytime — for example if you open a second location. The only exception is if you choose to lock the card, which makes it permanent." },
   { q: "Is asking for reviews this way allowed by Google?", a: "Yes. Google encourages businesses to ask customers for reviews and provides the review link for exactly this. What's not allowed is offering incentives, asking only happy customers, or posting fake reviews. The card just makes asking quick." },
   { q: "Is there a QR code on the card?", a: "No — it's a clean NFC tap card, so it looks clean in your hand or on a counter. If you also want a QR code (for receipts, invoices or customers with older phones), our free setup tool makes one for your exact review link that you can print." },
