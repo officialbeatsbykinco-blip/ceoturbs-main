@@ -71,8 +71,8 @@ export default function Home() {
                   <Laptop className="h-8 w-8 text-turbo" aria-hidden />
                 </span>
               }
-              lede="Slow, crashing or won't turn on. Computers, phones and tablets fixed at your door, or sped up remotely."
-              points={[`Speed-up from ${itPrice("it-speedup")}`, `Remote from ${itPrice("it-remote")}`, "No fix, no charge"]}
+              lede="Slow, crashing or won't turn on. Computers, phones and tablets fixed at your door. Slow Windows PCs sped up remotely."
+              points={[`Speed-up from ${itPrice("it-speedup")}`, `Remote speed-up from ${itPrice("it-remote")}`, "No fix, no charge"]}
               proof={
                 <>
                   <span className="font-semibold">Price up front</span>
@@ -194,7 +194,7 @@ export default function Home() {
               <div className="mt-4 flex flex-wrap gap-2 text-xs">
                 {[
                   ["Speed-up", itPrice("it-speedup")],
-                  ["Remote", itPrice("it-remote")],
+                  ["Remote speed-up", itPrice("it-remote")],
                   ["Virus removal", itPrice("it-virus")],
                   ["SSD upgrade", itPrice("it-ssd")],
                   ["iPhone screen", itPrice("it-iphone-screen")],

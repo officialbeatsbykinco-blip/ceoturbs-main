@@ -13,7 +13,7 @@ import { Check } from "lucide-react";
 import { FixMyTechLink } from "@/components/tech/FixMyTechLink";
 
 const FOOTER_POINTS = [
-  "Computers, phones and tablets fixed at your door or remotely",
+  "Computers, phones and tablets fixed at your door. Slow Windows PCs sped up remotely",
   "Offices set up: monitors, cables, printers, Wi-Fi",
   "Websites and ads that make the phone ring",
   "Tampa-based, 40 miles around. Price up front",
@@ -23,7 +23,7 @@ export function Footer({ focus = false }: { focus?: boolean }) {
   const year = 2026;
   if (focus)
     return (
-      <footer className="border-t border-border pb-28 pt-10 text-sm text-muted-foreground sm:pb-10">
+      <footer className="border-t border-border bg-background pb-28 pt-10 text-sm text-muted-foreground sm:pb-10">
         <div className="container-x flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <p>
             © {year} {SITE.name} · {SITE.address.addressLocality}, {SITE.address.addressRegion} ·{" "}
@@ -38,7 +38,7 @@ export function Footer({ focus = false }: { focus?: boolean }) {
       </footer>
     );
   return (
-    <footer className="relative overflow-hidden border-t border-border pb-28 pt-20 sm:pb-12">
+    <footer className="relative overflow-hidden border-t border-border bg-background pb-28 pt-20 sm:pb-12">
       <div className="pointer-events-none absolute -top-40 left-1/2 h-80 w-[900px] -translate-x-1/2 glow-turbo opacity-60" aria-hidden />
       <div className="container-x relative">
         <div className="grid items-center gap-10 border-b border-border pb-14 lg:grid-cols-[1.1fr_1fr]">

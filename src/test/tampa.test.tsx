@@ -3,7 +3,7 @@
 import { describe, it, expect, beforeEach } from "vitest";
 import { readFileSync, readdirSync, statSync } from "node:fs";
 import path from "node:path";
-import { techMessage, EMPTY_TECH, zipOk } from "@/content/tech-quiz";
+import { techMessage, EMPTY_TECH, zipOk, remoteOk, problemsFor } from "@/content/tech-quiz";
 import { techFields } from "../../api/lead.js";
 import { trackPayload } from "../../api/track.js";
 
@@ -12,15 +12,29 @@ const w = window as Win;
 
 describe("tech repair quiz", () => {
   it("writes the whole request into the text, one answer per line", () => {
-    const msg = techMessage({ ...EMPTY_TECH, device: "windows", problem: "slow", when: "asap", where: "home", zip: "33511", details: "Dell, started last week", name: "Pat Lee" });
-    expect(msg).toBe("Hi Chris! I'd like a repair price.\nDevice: Windows PC or laptop\nProblem: Slow or freezing\nDetails: Dell, started last week\nWhen: ASAP\nWhere: Come to me, ZIP 33511\nName: Pat Lee");
+    const msg = techMessage({ ...EMPTY_TECH, device: "windows", problems: ["slow", "virus"], when: "asap", where: "home", zip: "33511", details: "Dell, started last week", name: "Pat Lee" });
+    expect(msg).toBe("Hi Chris! I'd like a repair price.\nDevice: Windows PC or laptop\nProblems: Slow or freezing, Virus, pop-ups or scam warnings\nDetails: Dell, started last week\nWhen: ASAP\nWhere: Come to me, ZIP 33511\nName: Pat Lee");
   });
 
-  it("leaves the ZIP out of remote requests and skips empty details", () => {
-    const msg = techMessage({ ...EMPTY_TECH, device: "windows", problem: "virus", where: "remote", zip: "33602" });
-    expect(msg).toContain("Where: Remote");
-    expect(msg).not.toContain("33602");
-    expect(msg).not.toContain("Details");
+  it("only allows remote for a slow Windows computer", () => {
+    expect(remoteOk({ device: "windows", problems: ["slow"] })).toBe(true);
+    expect(remoteOk({ device: "windows", problems: ["slow", "virus"] })).toBe(false);
+    expect(remoteOk({ device: "mac", problems: ["slow"] })).toBe(false);
+    expect(remoteOk({ device: "iphone", problems: ["slow"] })).toBe(false);
+    const remote = techMessage({ ...EMPTY_TECH, device: "windows", problems: ["slow"], where: "remote", zip: "33602" });
+    expect(remote).toContain("Where: Remote");
+    expect(remote).not.toContain("33602");
+    expect(remote).not.toContain("Details");
+    // A remote answer left over from earlier answers can't slip through for a visit-only job.
+    expect(techMessage({ ...EMPTY_TECH, device: "iphone", problems: ["screen"], where: "remote" })).toContain("Where: Come to me");
+  });
+
+  it("shows each device only the problems it can have", () => {
+    const ids = (d: string) => problemsFor(d).map((p) => p.id);
+    expect(ids("iphone")).not.toContain("crash");
+    expect(ids("iphone")).not.toContain("virus");
+    expect(ids("other")).toEqual(["printer", "wifi", "tv", "other"]);
+    expect(ids("windows")).toContain("virus");
   });
 
   it("only accepts a 5-digit ZIP", () => {

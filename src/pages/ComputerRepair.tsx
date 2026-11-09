@@ -39,7 +39,7 @@ const COMPARE = [
 const STEPS = [
   { icon: MessageSquare, title: "Text, call or book", body: "Tell us the device and what's wrong. Three taps above does it." },
   { icon: ClipboardCheck, title: "Price up front", body: "You get the price before any work starts. Say no and you only pay the diagnosis." },
-  { icon: Home, title: "Fixed at your place", body: "We come to your home or business (or connect remotely), fix it, test it with you, then you pay." },
+  { icon: Home, title: "Fixed at your place", body: "We come to your home or business, fix it, test it with you, then you pay. A slow Windows PC can also be sped up remotely." },
 ];
 
 const FEEL_NEW = [
@@ -53,7 +53,7 @@ const AREA = SETUP_AREAS.flatMap((r) => r.cities).slice(0, 24);
 const FAQS = [
   { q: "How much does it cost?", a: `You get the price before any work starts. Starting prices: Windows speed-up ${itPrice("it-speedup")}, remote speed-up ${itPrice("it-remote")}, virus removal ${itPrice("it-virus")}, computer repair ${itPrice("it-pc-repair")}, SSD upgrade ${itPrice("it-ssd")}, iPhone screen ${itPrice("it-iphone-screen")}, iPhone battery ${itPrice("it-iphone-battery")}. Parts are extra at cost.` },
   { q: "Do you really come to me?", a: "Yes. Computers, phones, tablets, printers, TVs and Wi-Fi are fixed at your home or business. You don't drop anything off or wait at a store." },
-  { q: "Can you fix my computer remotely?", a: `Yes, for Windows speed-ups, cleanups, virus removal and software problems. We connect over the internet while you watch, from ${itPrice("it-remote")}. Remote works anywhere in the US.` },
+  { q: "Can you fix my computer remotely?", a: `Only speed-ups for a slow Windows computer: we clear out junk, startup clutter and old updates over the internet while you watch, from ${itPrice("it-remote")}. It works anywhere in the US. Viruses, crashes, hardware, Macs, phones and tablets need an in-person visit.` },
   { q: "Where do you come to?", a: `Anywhere within about 40 miles of Tampa, including ${AREA.slice(1, 15).join(", ")} and more. Text your ZIP code and we'll confirm.` },
   { q: "How fast can you come?", a: "Usually the same day or the next day. Call or text for the soonest time, or pick a slot on the calendar." },
   { q: "What's the diagnosis fee?", a: `${itPrice("it-visit")}, and it's credited toward the repair. So if we fix it, the diagnosis is free. If it can't be fixed, you don't pay for a repair we didn't do.` },
@@ -109,7 +109,7 @@ export default function ComputerRepair() {
             <div className="mt-5 flex flex-wrap gap-2 text-xs">
               {[
                 ["Speed-up", itPrice("it-speedup")],
-                ["Remote", itPrice("it-remote")],
+                ["Remote speed-up", itPrice("it-remote")],
                 ["Virus removal", itPrice("it-virus")],
                 ["iPhone screen", itPrice("it-iphone-screen")],
               ].map(([k, v]) => (
@@ -188,7 +188,7 @@ export default function ComputerRepair() {
               <Globe className="mt-0.5 h-6 w-6 shrink-0 text-turbo" aria-hidden />
               <div>
                 <p className="font-display text-lg font-bold">Not in Tampa? We can speed it up remotely.</p>
-                <p className="text-sm text-muted-foreground">Windows cleanups, virus removal and software fixes over the internet while you watch, from {itPrice("it-remote")}.</p>
+                <p className="text-sm text-muted-foreground">Slow Windows computer? We clean it up and speed it up over the internet while you watch, from {itPrice("it-remote")}.</p>
               </div>
             </div>
             <a href={smsHref("Hi Chris, I'd like a remote speed-up for my Windows computer. ")} data-call-location="computer repair remote sms" className="btn-ignite inline-flex items-center justify-center gap-2">
@@ -284,7 +284,7 @@ export default function ComputerRepair() {
 
       <section className="section border-t border-border" aria-labelledby="area">
         <div className="container-x">
-          <SectionHeader title={<span id="area">Where we come to you</span>} lede="Tampa and about 40 miles around it. Remote help works anywhere." />
+          <SectionHeader title={<span id="area">Where we come to you</span>} lede="Tampa and about 40 miles around it. Remote speed-ups for slow Windows PCs work anywhere." />
           <ul className="mt-8 flex flex-wrap gap-2">
             {AREA.map((c) => (
               <li key={c} className="inline-flex items-center gap-1.5 rounded-full border border-border/80 bg-card/60 px-3 py-1.5 text-sm">

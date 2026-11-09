@@ -48,7 +48,7 @@ function build(): PageMeta[] {
   pages.push({
     path: "/",
     title: "Computer Repair & Office Setup in Tampa, FL | CEO Turbo",
-    description: `Tampa tech help and growth: computers, phones and tablets fixed at your door or remotely, offices set up, and websites and ads that bring customers.`,
+    description: `Tampa tech help and growth: computers, phones and tablets fixed at your door, offices set up, and websites and ads that bring customers.`,
     priority: 1,
     changefreq: "weekly",
     group: "Core",

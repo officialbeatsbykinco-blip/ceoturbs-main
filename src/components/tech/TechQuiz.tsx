@@ -5,12 +5,12 @@
 import { useEffect, useId, useRef, useState, type FormEvent, type MouseEvent } from "react";
 import { Link } from "react-router-dom";
 import {
-  AlertTriangle, ArrowLeft, ArrowRight, BatteryLow, Check, Gauge, HelpCircle, Laptop, Loader2, Mail, MapPin, MessageSquare, Monitor, Power, Printer, ShieldAlert, Smartphone, Tablet, type LucideIcon,
+  AlertTriangle, ArrowLeft, ArrowRight, BatteryLow, Check, FolderOpen, Gauge, HelpCircle, Laptop, Loader2, Mail, MapPin, MessageSquare, Monitor, Power, Printer, ShieldAlert, Smartphone, Tablet, Tv, Wifi, type LucideIcon,
 } from "lucide-react";
 import { InstallCalEmbed } from "@/components/booking/InstallCalEmbed";
 import { CallLink } from "@/components/site/CallLink";
 import { IT_BOOKING, SITE } from "@/config/site";
-import { DEVICES, EMPTY_TECH, PROBLEMS, WHEN, WHERE, techLabels, techMessage, zipOk, type DeviceId, type ProblemId, type TechAnswers } from "@/content/tech-quiz";
+import { DEVICES, EMPTY_TECH, WHEN, WHERE, problemsFor, remoteOk, techLabels, techMessage, zipOk, type DeviceId, type ProblemId, type TechAnswers } from "@/content/tech-quiz";
 import { sendLead } from "@/lib/lead-outbox";
 import { canText, smsHref } from "@/lib/sms";
 import { attribution, newEventId, track, visitorId } from "@/lib/track";
@@ -21,7 +21,7 @@ type Step = (typeof STEPS)[number];
 const STEP_NAMES: Record<Step, string> = { device: "Device", problem: "Problem", when: "Timing", send: "Send" };
 
 const DEVICE_ICONS: Record<DeviceId, LucideIcon> = { windows: Laptop, mac: Monitor, iphone: Smartphone, android: Smartphone, tablet: Tablet, other: Printer };
-const PROBLEM_ICONS: Record<ProblemId, LucideIcon> = { slow: Gauge, crash: AlertTriangle, dead: Power, virus: ShieldAlert, screen: BatteryLow, setup: Mail, other: HelpCircle };
+const PROBLEM_ICONS: Record<ProblemId, LucideIcon> = { slow: Gauge, crash: AlertTriangle, dead: Power, virus: ShieldAlert, screen: Monitor, battery: BatteryLow, setup: Mail, data: FolderOpen, printer: Printer, wifi: Wifi, tv: Tv, other: HelpCircle };
 
 /** What a tech lead is worth to Meta's optimizer (an average first job). */
 export const TECH_LEAD_VALUE = 150;
@@ -33,7 +33,7 @@ export function TechQuiz({ source = "computer-repair-tampa", className, variant 
   const [texting, setTexting] = useState(true);
   const [done, setDone] = useState(false);
   const [sending, setSending] = useState(false);
-  const [errors, setErrors] = useState<{ name?: string; zip?: string; phone?: string }>({});
+  const [errors, setErrors] = useState<{ name?: string; zip?: string; phone?: string; pick?: string }>({});
   const [honeypot, setHoneypot] = useState("");
   const startedAt = useRef(0);
   const top = useRef<HTMLDivElement>(null);
@@ -56,6 +56,11 @@ export function TechQuiz({ source = "computer-repair-tampa", className, variant 
     setErrors({});
   };
 
+  const toggle = (id: ProblemId) => {
+    setA((prev) => ({ ...prev, problems: prev.problems.includes(id) ? prev.problems.filter((p) => p !== id) : [...prev.problems, id] }));
+    setErrors({});
+  };
+
   const index = STEPS.indexOf(step);
   const message = techMessage(a);
   const nameOk = a.name.trim().length >= 2;
@@ -67,7 +72,7 @@ export function TechQuiz({ source = "computer-repair-tampa", className, variant 
     const user = { name: a.name.trim(), phone: a.phone.trim() || undefined, zip: a.where === "remote" ? undefined : a.zip.trim() || undefined, externalId: visitorId() };
     const eventId = track(
       "generate_lead",
-      { lead_source: "tech-quiz", source, channel, value: TECH_LEAD_VALUE, currency: "USD", content_name: "Computer repair Tampa", content_category: "tech_repair", problem: a.problem, device: a.device, where: a.where, when: a.when },
+      { lead_source: "tech-quiz", source, channel, value: TECH_LEAD_VALUE, currency: "USD", content_name: "Computer repair Tampa", content_category: "tech_repair", problem: a.problems.join(","), device: a.device, where: a.where, when: a.when },
       { user },
     );
     return sendLead({
@@ -150,7 +155,7 @@ export function TechQuiz({ source = "computer-repair-tampa", className, variant 
       <p className="mt-3 flex items-start gap-2 rounded-xl bg-turbo/[0.08] px-3 py-2.5 text-sm leading-snug ring-1 ring-turbo/20">
         <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-turbo" aria-hidden />
         <span>
-          We come to you within <b>40 miles of Tampa</b>, or fix it remotely.
+          We come to you within <b>40 miles of Tampa</b>. Slow Windows PC? We can also speed it up remotely.
         </span>
       </p>
 
@@ -160,7 +165,7 @@ export function TechQuiz({ source = "computer-repair-tampa", className, variant 
             <Title text="What needs fixing?" />
             <div className="grid grid-cols-2 gap-2.5">
               {DEVICES.map((o) => (
-                <Tile key={o.id} icon={DEVICE_ICONS[o.id]} label={o.label} pressed={a.device === o.id} onClick={() => go("problem", { device: o.id })} />
+                <Tile key={o.id} icon={DEVICE_ICONS[o.id]} label={o.label} pressed={a.device === o.id} onClick={() => go("problem", a.device === o.id ? {} : { device: o.id, problems: [], where: "home" })} />
               ))}
             </div>
           </>
@@ -168,20 +173,29 @@ export function TechQuiz({ source = "computer-repair-tampa", className, variant 
 
         {step === "problem" && (
           <>
-            <Title text="What is it doing?" />
+            <Title text="What's going on?" />
+            <p className="-mt-2 mb-3 text-sm text-muted-foreground">Tap all that apply.</p>
             <div className="grid gap-2">
-              {PROBLEMS.map((o) => {
+              {problemsFor(a.device).map((o) => {
                 const Icon = PROBLEM_ICONS[o.id];
+                const on = a.problems.includes(o.id);
                 return (
-                  <button key={o.id} type="button" aria-pressed={a.problem === o.id} onClick={() => go("when", { problem: o.id })} className={cn(row, a.problem === o.id && rowOn)}>
+                  <button key={o.id} type="button" aria-pressed={on} onClick={() => toggle(o.id)} className={cn(row, on && rowOn)}>
                     <Icon className="h-5 w-5 shrink-0 text-turbo" aria-hidden />
                     <span className="min-w-0 flex-1 text-base font-semibold leading-snug">{o.label}</span>
-                    <ArrowRight className="h-5 w-5 shrink-0 text-muted-foreground" aria-hidden />
+                    <span className={cn("grid h-6 w-6 shrink-0 place-items-center rounded-md border-2", on ? "border-turbo bg-turbo text-white" : "border-border")} aria-hidden>
+                      {on && <Check className="h-4 w-4" />}
+                    </span>
                   </button>
                 );
               })}
             </div>
-            <Nav onBack={() => setStep("device")} />
+            {errors.pick && <Err text={errors.pick} />}
+            <Nav
+              onBack={() => setStep("device")}
+              next={() => (a.problems.length ? go("when", remoteOk(a) ? {} : { where: "home" }) : setErrors({ pick: "Tap at least one problem." }))}
+              label={a.problems.length > 1 ? `Continue with ${a.problems.length}` : "Continue"}
+            />
           </>
         )}
 
@@ -193,6 +207,8 @@ export function TechQuiz({ source = "computer-repair-tampa", className, variant 
                 <Chip key={o.id} label={o.label} on={a.when === o.id} onClick={() => set({ when: o.id })} />
               ))}
             </div>
+            {remoteOk(a) && (
+              <>
             <p className="mb-2 mt-5 text-lg font-bold">Where should we fix it?</p>
             <div className="grid grid-cols-2 gap-2">
               {WHERE.map((o) => (
@@ -202,6 +218,8 @@ export function TechQuiz({ source = "computer-repair-tampa", className, variant 
                 </button>
               ))}
             </div>
+              </>
+            )}
             <label htmlFor={`${uid}-details`} className="mb-1.5 mt-5 block text-sm font-semibold">
               Anything else? <span className="font-normal text-muted-foreground">(optional)</span>
             </label>
@@ -315,7 +333,7 @@ function Err({ text }: { text: string }) {
   );
 }
 
-function Nav({ onBack, next }: { onBack: () => void; next?: () => void }) {
+function Nav({ onBack, next, label = "Continue" }: { onBack: () => void; next?: () => void; label?: string }) {
   return (
     <div className="mt-4 flex gap-2">
       <button type="button" onClick={onBack} className="btn-chrome !px-4">
@@ -323,7 +341,7 @@ function Nav({ onBack, next }: { onBack: () => void; next?: () => void }) {
       </button>
       {next && (
         <button type="button" onClick={next} className="btn-ignite flex-1 !text-base">
-          Continue <ArrowRight className="h-4 w-4" aria-hidden />
+          {label} <ArrowRight className="h-4 w-4" aria-hidden />
         </button>
       )}
     </div>
