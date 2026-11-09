@@ -7,15 +7,15 @@ import { Cable, Calendar, Check, ClipboardCheck, FolderTree, Home, Layers, MapPi
 import { CallLink } from "@/components/site/CallLink";
 import { InstallBookButton } from "@/components/cta/Actions";
 import { OfficeIntake } from "@/components/blocks/OfficeIntake";
+import { OfficeTextQuiz } from "@/components/blocks/OfficeTextQuiz";
+import { BookOrText, useTexting } from "@/components/booking/BookOrText";
 import { FAQList, SectionHeader } from "@/components/blocks/Basics";
 import { BeforeAfter, OFFICE_BEFORE_AFTER } from "@/components/visuals/BeforeAfter";
 import { byId, itPrice, usd } from "@/content/pricing";
 import { SETUP_AREAS } from "@/content/service-areas";
 import { INSTALL_BOOKING, SITE } from "@/config/site";
-import { smsHref } from "@/lib/sms";
 import { cn } from "@/lib/utils";
 
-const SMS_QUOTE = smsHref("Hi Chris, I'd like a quote for an office setup in Tampa. Number of desks and what I need: ");
 
 const WHAT: { icon: LucideIcon; title: string; body: string }[] = [
   { icon: Monitor, title: "Multi-monitor workstations", body: "Two or three screens mounted, aligned and set up so your windows land where you want them." },
@@ -61,17 +61,22 @@ const FAQS = [
 ];
 
 function Ctas({ where, className }: { where: string; className?: string }) {
+  // Phones: the tap-question text flow (#book). Computers: the Cal.com calendar.
+  const texting = useTexting();
   return (
     <div className={cn("grid gap-3 sm:flex sm:flex-wrap sm:items-center", className)}>
-      <CallLink location={`office setup ${where}`} icon className="btn-ignite btn-shine justify-center">
+      {texting ? (
+        <a href="#book" data-call-location={`office setup ${where} quiz`} className="btn-ignite btn-shine inline-flex items-center justify-center gap-2">
+          <MessageSquare className="h-4 w-4" aria-hidden /> Get my price by text
+        </a>
+      ) : (
+        <InstallBookButton note={`office-setup-${where}`} booking={INSTALL_BOOKING} title="Book your office setup" variant="ignite" className="btn-shine inline-flex items-center justify-center gap-2">
+          <Calendar className="h-4 w-4" aria-hidden /> Book a time
+        </InstallBookButton>
+      )}
+      <CallLink location={`office setup ${where}`} icon className="btn-chrome justify-center">
         Call {SITE.phone.display}
       </CallLink>
-      <a href={SMS_QUOTE} data-call-location={`office setup ${where} sms`} className="btn-chrome inline-flex items-center justify-center gap-2">
-        <MessageSquare className="h-4 w-4" aria-hidden /> Text a photo for a quote
-      </a>
-      <InstallBookButton note={`office-setup-${where}`} booking={INSTALL_BOOKING} title="Book your office setup" variant="chrome" className="inline-flex items-center justify-center gap-2">
-        <Calendar className="h-4 w-4" aria-hidden /> Book a time
-      </InstallBookButton>
     </div>
   );
 }
@@ -96,7 +101,10 @@ export default function OfficeSetup() {
             <p className="mt-2 text-xs text-muted-foreground">A real desk we set up. Drag to compare.</p>
             <Ctas where="hero" className="mt-6" />
           </div>
-          <OfficeIntake id="book" service="office-transformation" booking={INSTALL_BOOKING} className="min-w-0" />
+          <BookOrText
+            phone={<OfficeTextQuiz id="book" className="min-w-0" />}
+            desktop={<OfficeIntake id="book" service="office-transformation" booking={INSTALL_BOOKING} className="min-w-0" />}
+          />
         </div>
       </section>
 

@@ -9,6 +9,7 @@ import { CallLink } from "@/components/site/CallLink";
 import { InstallBookButton } from "@/components/cta/Actions";
 import { FAQList, SectionHeader } from "@/components/blocks/Basics";
 import { TechQuiz } from "@/components/tech/TechQuiz";
+import { BookOrText, CalCard, useTexting } from "@/components/booking/BookOrText";
 import { IT_SERVICES, itPrice } from "@/content/pricing";
 import { SETUP_AREAS } from "@/content/service-areas";
 import { OFFICE_SETUP_PATH } from "@/content/tech-pages";
@@ -17,7 +18,6 @@ import { smsHref } from "@/lib/sms";
 import { newEventId, serverTrack, track } from "@/lib/track";
 import { cn } from "@/lib/utils";
 
-const SMS_HELP = smsHref("Hi Chris, I need computer help in Tampa. Device and problem: ");
 
 const PRICE_GROUPS: { icon: LucideIcon; title: string; ids: string[] }[] = [
   { icon: Laptop, title: "Computers & laptops", ids: ["it-speedup", "it-remote", "it-virus", "it-pc-repair", "it-ssd", "it-data", "it-printer"] },
@@ -63,17 +63,22 @@ const FAQS = [
 ];
 
 function Ctas({ where, className }: { where: string; className?: string }) {
+  // Phones: the tap-question text flow (#fix). Computers: the Cal.com calendar.
+  const texting = useTexting();
   return (
     <div className={cn("grid gap-3 sm:flex sm:flex-wrap sm:items-center", className)}>
-      <a href={SMS_HELP} data-call-location={`computer repair ${where} sms`} className="btn-ignite btn-shine inline-flex items-center justify-center gap-2">
-        <MessageSquare className="h-4 w-4" aria-hidden /> Text us for a price
-      </a>
+      {texting ? (
+        <a href="#fix" data-call-location={`computer repair ${where} quiz`} className="btn-ignite btn-shine inline-flex items-center justify-center gap-2">
+          <MessageSquare className="h-4 w-4" aria-hidden /> Get my price by text
+        </a>
+      ) : (
+        <InstallBookButton note={`computer-repair-${where}`} booking={IT_BOOKING} title="Book your tech visit" variant="ignite" className="btn-shine inline-flex items-center justify-center gap-2">
+          <Calendar className="h-4 w-4" aria-hidden /> Book a visit
+        </InstallBookButton>
+      )}
       <CallLink location={`computer repair ${where}`} icon className="btn-chrome justify-center">
         Call {SITE.phone.display}
       </CallLink>
-      <InstallBookButton note={`computer-repair-${where}`} booking={IT_BOOKING} title="Book your tech visit" variant="chrome" className="inline-flex items-center justify-center gap-2">
-        <Calendar className="h-4 w-4" aria-hidden /> Book a visit
-      </InstallBookButton>
     </div>
   );
 }
@@ -122,7 +127,10 @@ export default function ComputerRepair() {
               ))}
             </ul>
           </div>
-          <TechQuiz className="min-w-0" />
+          <BookOrText
+            phone={<TechQuiz className="min-w-0" />}
+            desktop={<CalCard title="Book your tech visit" sub="Pick a time. Price up front, no fix no charge." note="computer-repair-hero" booking={IT_BOOKING} className="min-w-0" />}
+          />
         </div>
       </section>
 
