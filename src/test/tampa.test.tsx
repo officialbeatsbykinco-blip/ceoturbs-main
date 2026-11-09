@@ -125,14 +125,15 @@ describe("Tampa install pages", () => {
     expect(INSTALL_PAGES.map((p) => p.path)).toEqual(["/computer-setup-tampa", "/security-camera-installation-tampa", "/wifi-installation-tampa"]);
     for (const p of INSTALL_PAGES) expect(p.prices.length, p.path).toBeGreaterThan(1);
     const cams = INSTALL_PAGES[1];
-    expect(cams.prices.map((x) => x.price)).toEqual([99, 169, 119, 99]);
-    expect(cams.priceNote).toContain("$775");
+    expect(cams.prices.map((x) => x.id)).toEqual(["cam-doorbell", "cam-wifi"]);
+    // No ladder work: the camera page never offers wired, roofline or recorder systems.
+    expect(cams.priceNote).toContain("No second-story, roofline or wired systems");
   });
 
   it("writes the install request into the text, one answer per line", async () => {
     const { INSTALL_PAGES, EMPTY_INSTALL, installMessage } = await import("@/content/install-pages");
-    const msg = installMessage(INSTALL_PAGES[1], { ...EMPTY_INSTALL, jobs: ["new", "doorbell"], picks: { count: "3-4", place: "home", kind: "wifi" }, zip: "33511", name: "Pat" });
-    expect(msg).toBe("Hi Chris! I'd like a price for security camera installation.\nNeed: Install new cameras, Video doorbell\nCameras: 3–4\nFor: Home\nType: Wi-Fi (Ring, Arlo, Wyze…)\nWhen: ASAP\nZIP: 33511\nName: Pat");
+    const msg = installMessage(INSTALL_PAGES[1], { ...EMPTY_INSTALL, jobs: ["doorbell", "porch"], picks: { brand: "ring", count: "2-3", place: "home" }, zip: "33617", name: "Pat" });
+    expect(msg).toBe("Hi Chris! I'd like a price for doorbell and camera installation.\nNeed: Install a video doorbell, Porch, garage or patio cameras\nBrand: Ring\nDevices: 2–3\nFor: Home\nWhen: ASAP\nZIP: 33617\nName: Pat");
   });
 
   it("files install leads as one readable sheet note", async () => {

@@ -471,11 +471,8 @@ export const IT_SERVICES: PriceItem[] = [
 export const INSTALL_PRICES: PriceItem[] = [
   { id: "setup-extra", name: "Each extra computer, same visit", price: 69, billing: "once", summary: "Set up, updated and files moved, on the same trip.", includes: [] },
   { id: "monitor-mount", name: "Monitor arm or wall mount", price: 39, billing: "once", summary: "Per monitor, on an arm or the wall, cables hidden. Mount not included.", includes: [] },
-  { id: "cam-wifi", name: "Wi-Fi camera installed", price: 99, billing: "once", summary: "Per camera: mounted, aimed, on your Wi-Fi and in the app.", includes: [] },
-  { id: "cam-wired", name: "Wired camera installed", price: 169, billing: "once", summary: "Per camera: cable run included, mounted, aimed and weather-sealed.", includes: [] },
+  { id: "cam-wifi", name: "Wi-Fi camera installed", price: 99, billing: "once", summary: "Per camera, indoor or reachable from the ground: mounted, on your Wi-Fi and in the app.", includes: [] },
   { id: "cam-doorbell", name: "Video doorbell installed", price: 119, billing: "once", summary: "Mounted, wired to your chime and set up in the app.", includes: [] },
-  { id: "cam-nvr", name: "Recorder (NVR) & phone app setup", price: 99, billing: "once", summary: "Footage saved, phone viewing and alerts set up for you.", includes: [] },
-  { id: "net-drop", name: "Network cable drop", price: 129, billing: "once", summary: "Per cable: a wired connection run to a desk, TV or camera.", includes: [] },
 ];
 
 /** "from $99" style label for an IT_SERVICES item. */
