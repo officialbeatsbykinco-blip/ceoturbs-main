@@ -38,7 +38,7 @@ h1{font-family:Grot,Inter,sans-serif;font-weight:700;letter-spacing:-.03em;line-
 .chip b{color:#ffb070}
 .btn{display:inline-flex;align-items:center;gap:14px;background:linear-gradient(180deg,#ff9a3c,#ff6a00);color:#1a0d00;font-weight:800;font-size:40px;border-radius:22px;padding:26px 40px;box-shadow:0 14px 40px rgba(255,106,0,.35)}
 .brand{display:flex;align-items:center;gap:16px;font-weight:700;font-size:30px}
-.brand img{width:62px;height:62px;border-radius:14px}
+.brand img{width:72px;height:72px;object-fit:contain}
 .price{font-family:Grot,sans-serif;font-weight:700;letter-spacing:-.04em;line-height:.9}
 .guide{position:absolute;border:4px dashed #22ff88;pointer-events:none}
 .cover{position:absolute;background:rgba(255,0,80,.28);pointer-events:none}
@@ -96,8 +96,8 @@ const text = (b, tall) => `
 /** C: us vs the store. No competitor names, no competitor prices, only how it works. */
 const compare = (b, tall) => {
   const row = (l, r) => `<div style="display:grid;grid-template-columns:1fr 1fr;gap:18px">
-    <div style="background:#1a1f2b;border-radius:20px;padding:22px 24px;font-size:31px;font-weight:600;color:#a8b3c7;display:flex;gap:14px"><span style="color:#ef4444">✕</span>${l}</div>
-    <div style="background:rgba(255,138,42,.12);border:2px solid rgba(255,138,42,.45);border-radius:20px;padding:22px 24px;font-size:31px;font-weight:700;display:flex;gap:14px"><span style="color:#4ade80">✓</span>${r}</div></div>`;
+    <div style="background:#1a1f2b;border-radius:20px;padding:24px 22px;font-size:28px;font-weight:600;color:#a8b3c7;display:flex;align-items:center;gap:12px;white-space:nowrap"><span style="color:#ef4444">✕</span>${l}</div>
+    <div style="background:rgba(255,138,42,.12);border:2px solid rgba(255,138,42,.45);border-radius:20px;padding:24px 22px;font-size:28px;font-weight:700;display:flex;align-items:center;gap:12px;white-space:nowrap"><span style="color:#4ade80">✓</span>${r}</div></div>`;
   return `
 <div class="safe" style="left:${b.x}px;top:${b.y}px;width:${b.w}px;height:${b.h}px;justify-content:space-between">
   <div>
@@ -112,7 +112,7 @@ const compare = (b, tall) => {
     ${row("Wait in line at the counter", "No fix, no charge")}
   </div>
   <div style="display:flex;align-items:center;justify-content:space-between;gap:20px">
-    <div><div class="mu" style="font-size:30px;font-weight:600">Diagnosis</div><div class="price" style="font-size:110px">$79</div><div class="mu" style="font-size:26px;font-weight:600">credited to the repair</div></div>
+    <div><div class="mu" style="font-size:30px;font-weight:600;margin-bottom:10px">Diagnosis</div><div class="price" style="font-size:110px">$79</div><div class="mu" style="font-size:26px;font-weight:600">credited to the repair</div></div>
     <div style="text-align:right"><div class="mu" style="font-size:28px;font-weight:600">Call or text</div><div style="font-size:46px;font-weight:800">${PHONE}</div></div>
   </div>
 </div>`;
@@ -158,7 +158,8 @@ for (const scene of Object.keys(SCENES)) {
     const name = `meta-tech-${scene}-${w}x${h}${GUIDES ? "-guides" : ""}.png`;
     const png = resolve(out, name);
     const profile = mkdtempSync(resolve(tmp, "p-"));
-    execFileSync(CHROME, ["--headless", `--user-data-dir=${profile}`, "--disable-gpu", "--hide-scrollbars", "--force-device-scale-factor=1", "--allow-file-access-from-files", "--virtual-time-budget=3000", `--window-size=${w},${h}`, `--screenshot=${png}`, `file://${page}`], { stdio: "ignore" });
+    execFileSync(CHROME, [`--user-data-dir=${profile}`, "--disable-gpu", "--hide-scrollbars", "--force-device-scale-factor=2", "--headless=new", "--allow-file-access-from-files", "--virtual-time-budget=3000", `--window-size=${w},${h}`, `--screenshot=${png}`, `file://${page}`], { stdio: "ignore" });
+    execFileSync("sips", ["-z", String(h), String(w), png], { stdio: "ignore" }); // 2x render -> exact size, sharper edges
     console.log("wrote", name);
   }
 }
