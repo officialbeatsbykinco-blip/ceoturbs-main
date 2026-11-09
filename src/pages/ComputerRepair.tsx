@@ -12,7 +12,8 @@ import { TechQuiz } from "@/components/tech/TechQuiz";
 import { BookOrText, CalCard, useTexting } from "@/components/booking/BookOrText";
 import { IT_SERVICES, itPrice } from "@/content/pricing";
 import { SETUP_AREAS } from "@/content/service-areas";
-import { OFFICE_SETUP_PATH } from "@/content/tech-pages";
+import { IT_SERVICES_PATH, OFFICE_SETUP_PATH } from "@/content/tech-pages";
+import { FixMyTechLink } from "@/components/tech/FixMyTechLink";
 import { IT_BOOKING, SITE } from "@/config/site";
 import { smsHref } from "@/lib/sms";
 import { newEventId, serverTrack, track } from "@/lib/track";
@@ -68,15 +69,15 @@ function Ctas({ where, className }: { where: string; className?: string }) {
   return (
     <div className={cn("grid gap-3 sm:flex sm:flex-wrap sm:items-center", className)}>
       {texting ? (
-        <a href="#fix" data-call-location={`computer repair ${where} quiz`} className="btn-ignite btn-shine inline-flex items-center justify-center gap-2">
-          <MessageSquare className="h-4 w-4" aria-hidden /> Get my price by text
-        </a>
+        <FixMyTechLink source={`computer repair ${where}`} to={`${IT_SERVICES_PATH}#fix`} className="btn-ignite btn-shine inline-flex items-center justify-center gap-2 !py-4 !text-lg">
+          <MessageSquare className="h-5 w-5" aria-hidden /> Get my price by text
+        </FixMyTechLink>
       ) : (
         <InstallBookButton note={`computer-repair-${where}`} booking={IT_BOOKING} title="Book your tech visit" variant="ignite" className="btn-shine inline-flex items-center justify-center gap-2">
           <Calendar className="h-4 w-4" aria-hidden /> Book a visit
         </InstallBookButton>
       )}
-      <CallLink location={`computer repair ${where}`} icon className="btn-chrome justify-center">
+      <CallLink location={`computer repair ${where}`} icon className={cn("justify-center", texting ? "btn-blue !py-4 !text-lg" : "btn-chrome")}>
         Call {SITE.phone.display}
       </CallLink>
     </div>
@@ -227,7 +228,7 @@ export default function ComputerRepair() {
             {STEPS.map((s, i) => (
               <li key={s.title} className="panel p-6">
                 <div className="flex items-center gap-3">
-                  <span className="grid h-9 w-9 place-items-center rounded-full bg-turbo font-bold text-black">{i + 1}</span>
+                  <span className="grid h-9 w-9 place-items-center rounded-full bg-turbo font-bold text-white">{i + 1}</span>
                   <s.icon className="h-5 w-5 text-turbo" aria-hidden />
                 </div>
                 <h3 className="mt-4 font-display text-lg font-bold">{s.title}</h3>
@@ -309,7 +310,7 @@ export default function ComputerRepair() {
             <p className="relative mt-4 text-sm">
               <a href="#fix" className="font-semibold text-turbo underline underline-offset-4">
                 <Phone className="mr-1 inline h-3.5 w-3.5" aria-hidden />
-                Or answer 3 quick questions for a price
+                Or tap a few answers and get your price by text
               </a>
             </p>
           </div>

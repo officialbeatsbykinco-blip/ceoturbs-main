@@ -3,7 +3,7 @@
 import { describe, it, expect, beforeEach } from "vitest";
 import { readFileSync, readdirSync, statSync } from "node:fs";
 import path from "node:path";
-import { techMessage, EMPTY_TECH } from "@/content/tech-quiz";
+import { techMessage, EMPTY_TECH, zipOk } from "@/content/tech-quiz";
 import { techFields } from "../../api/lead.js";
 import { trackPayload } from "../../api/track.js";
 
@@ -11,19 +11,26 @@ type Win = Window & { fbq?: (...a: unknown[]) => void; gtag?: (...a: unknown[]) 
 const w = window as Win;
 
 describe("tech repair quiz", () => {
-  it("writes the whole request into the text", () => {
-    const msg = techMessage({ ...EMPTY_TECH, problem: "slow", device: "windows", where: "home", city: "Brandon", name: "Pat Lee" });
-    expect(msg).toBe("Hi Chris, my Windows computer is slow and freezing. Can you come to me? I'm in Brandon. What's the price? – Pat");
+  it("writes the whole request into the text, one answer per line", () => {
+    const msg = techMessage({ ...EMPTY_TECH, device: "windows", problem: "slow", when: "asap", where: "home", zip: "33511", details: "Dell, started last week", name: "Pat Lee" });
+    expect(msg).toBe("Hi Chris! I'd like a repair price.\nDevice: Windows PC or laptop\nProblem: Slow or freezing\nDetails: Dell, started last week\nWhen: ASAP\nWhere: Come to me, ZIP 33511\nName: Pat Lee");
   });
 
-  it("leaves the city out of remote requests", () => {
-    const msg = techMessage({ ...EMPTY_TECH, problem: "virus", device: "windows", where: "remote", city: "Tampa" });
-    expect(msg).toContain("Can you fix it remotely?");
-    expect(msg).not.toContain("Tampa");
+  it("leaves the ZIP out of remote requests and skips empty details", () => {
+    const msg = techMessage({ ...EMPTY_TECH, device: "windows", problem: "virus", where: "remote", zip: "33602" });
+    expect(msg).toContain("Where: Remote");
+    expect(msg).not.toContain("33602");
+    expect(msg).not.toContain("Details");
+  });
+
+  it("only accepts a 5-digit ZIP", () => {
+    expect(zipOk("33602")).toBe(true);
+    expect(zipOk("3360")).toBe(false);
+    expect(zipOk("abcde")).toBe(false);
   });
 
   it("files the answers as one readable sheet note", () => {
-    expect(techFields({ problem: "Won't turn on", device: "Mac", where: "Come to me", city: "Clearwater<script>" }).note).toBe("Problem: Won't turn on | Device: Mac | Where: Come to me | City: Clearwater script");
+    expect(techFields({ problem: "Won't turn on", device: "Mac", where: "Come to me", zip: "33755", when: "ASAP", details: "Fell<script>" }).note).toBe("Problem: Won't turn on | Device: Mac | When: ASAP | Where: Come to me | ZIP: 33755 | Details: Fell script");
   });
 
   it("passes the tech_repair category through to the server ViewContent", () => {

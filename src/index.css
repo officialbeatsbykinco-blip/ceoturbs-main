@@ -140,6 +140,16 @@
     box-shadow: inset 0 1px 0 hsl(0 0% 100% / 0.12), 0 0 0 1px hsl(var(--turbo) / 0.5);
   }
 
+  /* Solid blue: the Call button. White on this deep blue is ~7:1. */
+  .btn-blue {
+    @apply inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-xl px-4 py-3 text-[15px] font-semibold text-white transition-[filter,transform] duration-150 active:scale-[0.98] sm:px-5 sm:py-3.5;
+    background: linear-gradient(180deg, hsl(208 90% 45%), hsl(208 100% 36%));
+    box-shadow: inset 0 1px 0 hsl(0 0% 100% / 0.25), 0 8px 22px -10px hsl(208 100% 36% / 0.7);
+  }
+  .btn-blue:hover {
+    filter: brightness(1.08);
+  }
+
   .panel {
     background: linear-gradient(180deg, hsl(218 30% 8%), hsl(220 34% 5%));
     box-shadow: inset 0 1px 0 hsl(0 0% 100% / 0.05), 0 0 0 1px hsl(var(--border));
@@ -799,11 +809,24 @@ input[type="range"] { min-height: 32px; }
     background-clip: text;
     color: transparent;
   }
+  /* Light pages: the second button is a clear blue outline (like a real button), never a faint grey box. */
   .theme-soft .btn-chrome {
-    color: hsl(var(--foreground));
+    color: hsl(208 100% 30%);
     background: #fff;
-    box-shadow: 0 0 0 1px hsl(var(--border)), 0 4px 12px -6px rgb(30 50 90 / 0.3);
+    box-shadow: inset 0 0 0 2px hsl(var(--turbo)), 0 4px 12px -8px rgb(30 50 90 / 0.3);
   }
+  .theme-soft .btn-chrome:hover {
+    background: hsl(var(--turbo) / 0.06);
+    box-shadow: inset 0 0 0 2px hsl(var(--turbo)), 0 6px 16px -8px rgb(30 50 90 / 0.35);
+  }
+  .theme-soft .btn-chrome svg { color: currentColor; }
+  /* Header/menu bits written for the dark pages: faint white rings and a near-black dropdown. */
+  /* Black text was written for the bright dark-theme blue; on the deeper light-theme blue it needs white. */
+  .theme-soft .bg-turbo.text-black { color: #fff; }
+  .theme-soft [class*="ring-white/"] { --tw-ring-color: hsl(var(--border)); }
+  .theme-soft [class*="border-white/"] { border-color: hsl(var(--border)); }
+  .theme-soft [class*="bg-[hsl(218_33%_7%)]"] { background: #fff; box-shadow: 0 24px 60px -24px rgb(30 50 90 / 0.4); }
+  .theme-soft [class*="hover:bg-white/"]:hover, .theme-soft [class*="focus-visible:bg-white/"]:focus-visible { background: hsl(var(--muted)); }
   .theme-soft .opt, .theme-soft .quiz-opt { background: #fff; }
   .theme-soft .opt[aria-checked="true"] { background: linear-gradient(180deg, hsl(var(--turbo) / 0.1), hsl(var(--turbo) / 0.03)), #fff; }
   .theme-soft [class*="bg-white/[0.03]"], .theme-soft [class*="bg-white/[0.02]"] { background: hsl(var(--muted) / 0.6); box-shadow: inset 0 0 0 1px hsl(var(--border)); }

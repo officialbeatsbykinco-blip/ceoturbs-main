@@ -1,7 +1,7 @@
 import { useEffect, useId, useState } from "react";
 import { ExternalLink, Loader2, MessageSquare, ShieldCheck } from "lucide-react";
 import { INSTALL_BOOKING, SITE, type CalEvent } from "@/config/site";
-import { mountInstallBooking } from "@/lib/cal";
+import { calTheme, mountInstallBooking } from "@/lib/cal";
 import { track, serverTrack } from "@/lib/track";
 
 export function InstallCalEmbed({
@@ -19,11 +19,13 @@ export function InstallCalEmbed({
   const calId = `install-cal-${uid}`;
   const [calReady, setCalReady] = useState(false);
   const [showFallback, setShowFallback] = useState(false);
+  const [scheme, setScheme] = useState<"light" | "dark">("dark");
 
   useEffect(() => {
     const id = track("booking_open", { source: `${note} — native cal embed`, content_name: booking?.title || "Install booking" });
     serverTrack("booking_open", id, { contentName: booking?.title || "Install booking" });
     let active = true;
+    setScheme(calTheme());
 
     mountInstallBooking(calId, note, uid, booking).then((r) => {
       if (!active) return;
@@ -44,7 +46,7 @@ export function InstallCalEmbed({
   }, [note, calId, uid, booking]);
 
   return (
-    <div className={`relative flex min-h-[460px] w-full flex-col overflow-hidden rounded-xl border border-border/80 bg-black/40 ${className}`}>
+    <div className={`relative flex min-h-[460px] w-full flex-col overflow-hidden rounded-xl border border-border/80 ${scheme === "light" ? "bg-white" : "bg-black/40"} ${className}`}>
       {!calReady && (
         <div
           className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-3 bg-card/95 p-6 text-center backdrop-blur-md"
@@ -64,9 +66,9 @@ export function InstallCalEmbed({
         </div>
       )}
 
-      {/* color-scheme: dark matches Cal's dark theme, so the iframe is transparent instead of painting a white box around the calendar. */}
-      <div className="relative min-h-0 w-full flex-1 overflow-y-auto" style={{ colorScheme: "dark" }}>
-        <div id={calId} style={{ width: "100%", colorScheme: "dark" }} />
+      {/* color-scheme matches Cal's theme, so the iframe is transparent instead of painting a box around the calendar. */}
+      <div className="relative min-h-0 w-full flex-1 overflow-y-auto" style={{ colorScheme: scheme }}>
+        <div id={calId} style={{ width: "100%", colorScheme: scheme }} />
       </div>
 
       {showFallback && (

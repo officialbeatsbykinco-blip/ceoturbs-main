@@ -7,6 +7,7 @@ import { MobileActionBar } from "./MobileActionBar";
 import { FloatingBookButton } from "./FloatingBookButton";
 import { QuizModalHost } from "@/components/quiz/QuizModalHost";
 import { TextQuizHost } from "@/components/quiz/TextQuizHost";
+import { TechQuizHost } from "@/components/tech/TechQuizHost";
 import { PhoneHost } from "./PhoneHost";
 import { BookingModalHost } from "@/components/booking/BookingModalHost";
 import { FreeCheckPopup } from "@/components/site/FreeCheckPopup";
@@ -30,8 +31,8 @@ const updateHead = async (pathname: string) => {
   applyHead(pageFor(pathname.replace(/\/$/, "") || "/") ?? NOT_FOUND_META);
 };
 
-/** Pages that use the friendly light look (the home page wraps its own sections). */
-const SOFT = /^\/(|pricing|services(\/.*)?|google-review-cards|google-review-card-setup|results|about|restaurants|salons|barbershops)\/?$/;
+/** Pages that use the friendly light look: white background, dark text, orange and blue buttons (easy for every age to read). */
+const SOFT = /^\/(|pricing|services(\/.*)?|google-review-cards|google-review-card-setup|results|about|contact|tampa|book|booked|computer-repair-tampa|office-setup-tampa|restaurants|salons|barbershops)\/?$/;
 
 export function Layout({ children }: { children: ReactNode }) {
   const { pathname } = useLocation();
@@ -72,18 +73,25 @@ export function Layout({ children }: { children: ReactNode }) {
   // Warm up the booking embed on the first interaction, so the first "Book" tap opens fast.
   useEffect(() => onEngaged(() => void loadCal()), []);
 
+  const soft = SOFT.test(pathname);
   return (
     <>
-      <Header />
+      {/* display: contents keeps the fixed header's layout; the light colors still inherit down. */}
+      <div className={soft ? "theme-soft contents" : "contents"}>
+        <Header />
+      </div>
       {/* overflow-x-clip: edge-sliding animations (the review-card phone) never make phones scroll sideways; clip keeps sticky working. */}
-      <main id="main" className={cn("overflow-x-clip", SOFT.test(pathname) && "theme-soft")}>
+      <main id="main" className={cn("overflow-x-clip", soft && "theme-soft")}>
         {children}
       </main>
-      <Footer />
-      <MobileActionBar />
-      <FloatingBookButton />
+      <div className={soft ? "theme-soft contents" : "contents"}>
+        <Footer />
+        <MobileActionBar />
+        <FloatingBookButton />
+      </div>
       <QuizModalHost />
       <TextQuizHost />
+      <TechQuizHost />
       <PhoneHost />
       <BookingModalHost />
       <FreeCheckPopup />

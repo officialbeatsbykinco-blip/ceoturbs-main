@@ -312,7 +312,9 @@ describe("hero booking", () => {
     const read = (f: string) => readFileSync(path.resolve(__dirname, f), "utf8");
     const homePage = read("../pages/Home.tsx");
     expect(homePage).not.toContain("<BuyBox");
-    for (const to of ["to={IT_SERVICES_PATH}", "to={OFFICE_SETUP_PATH}", 'to="/grow"']) expect(homePage).toContain(to);
+    // Repair: phones open the tap-question text sheet, computers go to the repair page (FixMyTechLink's default).
+    for (const to of ['<FixMyTechLink source="home hero"', "to={OFFICE_SETUP_PATH}", 'to="/grow"']) expect(homePage).toContain(to);
+    expect(read("../components/tech/FixMyTechLink.tsx")).toContain("to = IT_SERVICES_PATH");
     expect(read("../App.tsx")).toContain('path="/grow"');
     const home = read("../pages/Agency.tsx");
     expect(home).toContain("<AudienceTiles");

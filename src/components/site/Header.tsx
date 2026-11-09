@@ -13,6 +13,8 @@ import { REVIEWS_AD_PATH, SHOP_PATH, SETUP_PATH } from "@/content/review-cards";
 import { QUICK_TECH_TEXT } from "@/lib/sms";
 import { CARD_TEXT, smsHref } from "@/lib/sms";
 import { cn } from "@/lib/utils";
+import { FixMyTechLink } from "@/components/tech/FixMyTechLink";
+import { useTexting } from "@/components/booking/BookOrText";
 
 type Item = { to: string; label: string; sub?: string; group?: string };
 
@@ -94,6 +96,7 @@ export function Header({ focus: focusProp = false }: { focus?: boolean }) {
   const { pathname } = useLocation();
   // Tech-repair ad pages run in focus mode (no nav to wander off into) and book a tech visit instead of the agency call.
   const tech = techBooking(pathname);
+  const texting = useTexting();
   const focus = focusProp || !!tech;
 
   useEffect(() => setOpen(false), [pathname]);
@@ -148,7 +151,18 @@ export function Header({ focus: focusProp = false }: { focus?: boolean }) {
               <span className="sr-only">Text {SITE.name}</span>
             </a>
           )}
-          {tech ? (
+          {tech && texting ? (
+            // Phones get the tap-question text flow, never the calendar.
+            pathname.replace(/\/$/, "") === IT_SERVICES_PATH ? (
+              <FixMyTechLink source="tech page header" to={`${IT_SERVICES_PATH}#fix`} className="btn-ignite whitespace-nowrap !px-3 !py-2.5 !text-sm">
+                Get my price
+              </FixMyTechLink>
+            ) : (
+              <a href="#book" className="btn-ignite whitespace-nowrap !px-3 !py-2.5 !text-sm">
+                Get a quote
+              </a>
+            )
+          ) : tech ? (
             <InstallBookButton variant="ignite" note="Tech page header" booking={tech.booking} title={tech.title} className="inline-flex whitespace-nowrap !px-3 !py-2.5 !text-[13px] sm:!px-4 sm:!text-sm">
               Book a visit
             </InstallBookButton>
@@ -163,10 +177,10 @@ export function Header({ focus: focusProp = false }: { focus?: boolean }) {
               <span className="hidden min-[400px]:inline">Book a free call</span>
             </BookButton>
           ) : (
-            <Link to={IT_SERVICES_PATH} className="btn-ignite whitespace-nowrap !px-3 !py-2.5 !text-sm sm:!px-4">
+            <FixMyTechLink source="header" className="btn-ignite whitespace-nowrap !px-3 !py-2.5 !text-sm sm:!px-4">
               <span className="sm:hidden">Fix my tech</span>
               <span className="hidden sm:inline">Get a repair price</span>
-            </Link>
+            </FixMyTechLink>
           )}
           {!focus && (
             <button
@@ -186,10 +200,10 @@ export function Header({ focus: focusProp = false }: { focus?: boolean }) {
       {open && !focus && (
         <div id="mobile-menu" className="container-x h-[calc(100dvh-4rem)] overflow-y-auto pb-32 pt-2 xl:hidden">
           <div className="grid gap-2">
-            <Link to={IT_SERVICES_PATH} onClick={() => setOpen(false)} className="btn-ignite justify-between !px-4 !py-4 !text-lg">
+            <FixMyTechLink source="mobile menu" onOpen={() => setOpen(false)} className="btn-ignite justify-between !px-4 !py-4 !text-lg">
               Computer & phone repair
               <span aria-hidden>›</span>
-            </Link>
+            </FixMyTechLink>
             {[
               [OFFICE_SETUP_PATH, "Office setup & cables"],
               ["/grow", "Websites & ads"],

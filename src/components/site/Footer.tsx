@@ -10,6 +10,7 @@ import { ARTIST_MERCH_PATH, artistFromLabel } from "@/content/artist-merch";
 import { CallLink } from "./CallLink";
 import { SocialLinks } from "./SocialLinks";
 import { Check } from "lucide-react";
+import { FixMyTechLink } from "@/components/tech/FixMyTechLink";
 
 const FOOTER_POINTS = [
   "Computers, phones and tablets fixed at your door or remotely",
@@ -56,7 +57,7 @@ export function Footer({ focus = false }: { focus?: boolean }) {
               ))}
             </ul>
             <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:items-center">
-              <Link to={IT_SERVICES_PATH} className="btn-ignite btn-shine">Get a repair price</Link>
+              <FixMyTechLink source="footer" className="btn-ignite btn-shine">Get a repair price</FixMyTechLink>
               <p className="text-sm text-muted-foreground">
                 Or call <CallLink location="footer cta" className="font-semibold text-foreground hover:text-turbo" />
               </p>

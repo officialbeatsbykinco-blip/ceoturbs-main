@@ -61,8 +61,11 @@ function bootstrap() {
  * Matches the inline embed code from the Cal.com dashboard (Embed → Inline, cal.com/ceoturbo): orange #ff7800 on
  * the picked day/time in dark mode, blue #009fff in light, and the event details shown (what it is, how long, where).
  */
+/** Light pages (main.theme-soft: home, repair, office…) get Cal's light calendar; the dark pages keep the dark one. */
+export const calTheme = (): "light" | "dark" => (typeof document !== "undefined" && document.querySelector("main.theme-soft") ? "light" : "dark");
+
 const UI = {
-  theme: "dark" as const,
+  theme: "dark" as "light" | "dark",
   layout: "month_view" as const,
   hideEventTypeDetails: false,
   cssVarsPerTheme: { dark: { "cal-brand": "#ff7800" }, light: { "cal-brand": "#009fff" } },
@@ -114,7 +117,7 @@ function initNamespace(ns: string) {
   const withConfig = Cal as unknown as { config?: Record<string, unknown> };
   withConfig.config = { ...(withConfig.config ?? {}), forwardQueryParams: true };
   Cal("init", ns, { origin: CAL_ORIGIN });
-  Cal.ns[ns]("ui", UI);
+  Cal.ns[ns]("ui", { ...UI, theme: calTheme() });
   for (const [action, status] of [["linkReady", "ready"], ["linkFailed", "failed"]] as const)
     Cal.ns[ns]("on", { action, callback: () => linkListeners.get(ns)?.forEach((fn) => fn(status)) });
   // Real bookings (not just calendar opens) are the conversion the ad platforms should optimize for.
@@ -184,7 +187,7 @@ const defined = (o: Record<string, unknown> = {}) => Object.fromEntries(Object.e
 const calConfig = ({ source, prefill, person, fields, meta }: Prefill = {}) => ({
   layout: "month_view" as const,
   useSlotsViewOnSmallScreen: "true",
-  theme: "dark" as const,
+  theme: calTheme(),
   ...(prefill ? { notes: prefill } : {}),
   ...(person?.name ? { name: person.name } : {}),
   ...(person?.email ? { email: person.email } : {}),

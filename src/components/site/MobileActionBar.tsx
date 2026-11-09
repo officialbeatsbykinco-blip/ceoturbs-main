@@ -1,9 +1,10 @@
 import { Link, useLocation } from "react-router-dom";
 import { BookButton, InstallBookButton } from "@/components/cta/Actions";
 import { CALL_FIRST_SLUGS } from "@/content/services";
-import { Calendar, MessageSquare, Phone } from "lucide-react";
+import { Calendar, MessageSquare, Phone, Wrench } from "lucide-react";
 import { SITE, fromPriceLabel } from "@/config/site";
-import { techBooking } from "@/content/tech-pages";
+import { IT_SERVICES_PATH, techBooking } from "@/content/tech-pages";
+import { FixMyTechLink } from "@/components/tech/FixMyTechLink";
 import { CallLink } from "./CallLink";
 import { REVIEWS_AD_PATH, SETUP_PATH, SHOP_PATH } from "@/content/review-cards";
 import { SHIRTS_PATH } from "@/content/company-shirts";
@@ -64,29 +65,35 @@ export function MobileActionBar() {
       </div>
     );
   }
-  // Tech-repair ad pages: call first, then text, then the visit calendar (not the agency Brand Boost call).
+  // Tech-repair and office ad pages: phones never get the calendar. The orange button opens the tap-question text
+  // flow (repair: the sheet; office: the quiz on the page), then a blue Call and a Text.
   const tech = techBooking(pathname);
   if (tech) {
     const where = pathname.split("/").pop();
+    const repair = pathname.replace(/\/$/, "") === IT_SERVICES_PATH;
+    const main = "btn-ignite flex flex-[1.4] items-center justify-center gap-1.5 whitespace-nowrap !py-3.5 !px-2 !text-base font-bold shadow-lg";
     return (
-      <div className="pb-safe fixed inset-x-0 bottom-0 z-40 border-t border-border/80 bg-background/90 px-2.5 pt-2.5 backdrop-blur-xl sm:hidden">
+      <div className="pb-safe fixed inset-x-0 bottom-0 z-40 border-t border-border/80 bg-background/95 px-2.5 pt-2.5 backdrop-blur-xl sm:hidden">
         <div className="flex items-center gap-1.5">
-          <CallLink location={`${where}-sticky-mobile`} className="btn-ignite flex flex-[1.4] items-center justify-center gap-1.5 whitespace-nowrap !py-3.5 !px-2 !text-sm font-bold shadow-lg">
+          {repair ? (
+            <FixMyTechLink source={`${where}-sticky-mobile`} className={main}>
+              <Wrench className="h-4 w-4 shrink-0" aria-hidden />
+              <span>Get my price</span>
+            </FixMyTechLink>
+          ) : (
+            <a href="#book" className={main}>
+              <MessageSquare className="h-4 w-4 shrink-0" aria-hidden />
+              <span>Get a quote</span>
+            </a>
+          )}
+          <CallLink location={`${where}-sticky-mobile`} className="btn-blue flex flex-1 items-center justify-center gap-1.5 whitespace-nowrap !py-3.5 !px-2 !text-base font-bold">
             <Phone className="h-4 w-4 shrink-0" aria-hidden />
-            <span>Call now</span>
+            <span>Call</span>
           </CallLink>
-          <a
-            href={smsHref(tech.sms)}
-            data-call-location={`${where}-sticky-mobile-sms`}
-            className="btn-chrome flex flex-1 items-center justify-center gap-1.5 whitespace-nowrap !py-3.5 !px-2 !text-sm font-bold text-foreground"
-          >
-            <MessageSquare className="h-4 w-4 shrink-0 text-turbo" aria-hidden />
+          <a href={smsHref(tech.sms)} data-call-location={`${where}-sticky-mobile-sms`} className="btn-chrome flex flex-1 items-center justify-center gap-1.5 whitespace-nowrap !py-3.5 !px-2 !text-base font-bold">
+            <MessageSquare className="h-4 w-4 shrink-0" aria-hidden />
             <span>Text</span>
           </a>
-          <InstallBookButton note={`${where}-sticky-mobile`} booking={tech.booking} title={tech.title} className="flex flex-1 items-center justify-center gap-1.5 whitespace-nowrap !py-3.5 !px-2 !text-sm">
-            <Calendar className="h-4 w-4 shrink-0" aria-hidden />
-            <span>Book</span>
-          </InstallBookButton>
         </div>
       </div>
     );

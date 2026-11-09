@@ -16,9 +16,10 @@ import { CLIENTS } from "@/content/clients";
 import { SHIRTS_PATH, shirtFromLabel } from "@/content/company-shirts";
 import { SHOP_PATH } from "@/content/review-cards";
 import { itPrice, usd, byId } from "@/content/pricing";
-import { IT_SERVICES_PATH, OFFICE_SETUP_PATH } from "@/content/tech-pages";
+import { OFFICE_SETUP_PATH } from "@/content/tech-pages";
 import { smsHref } from "@/lib/sms";
 import { cn } from "@/lib/utils";
+import { FixMyTechLink } from "@/components/tech/FixMyTechLink";
 
 const HOME_TEXT = "Hi Chris, I need help with: ";
 
@@ -79,9 +80,9 @@ export default function Home() {
                 </>
               }
               cta={
-                <Link to={IT_SERVICES_PATH} className="btn-ignite btn-shine inline-flex w-full items-center justify-center gap-2">
+                <FixMyTechLink source="home hero" className="btn-ignite btn-shine inline-flex w-full items-center justify-center gap-2 !py-4 !text-base">
                   Fix my tech <ArrowRight className="h-4 w-4" aria-hidden />
-                </Link>
+                </FixMyTechLink>
               }
               secondary={
                 <a href={smsHref("Hi Chris, I need computer or phone help. Device and problem: ")} data-call-location="home hero repair text" className="inline-flex min-h-[44px] items-center gap-1.5 text-sm font-semibold text-muted-foreground underline-offset-4 hover:text-foreground hover:underline">
@@ -205,9 +206,9 @@ export default function Home() {
               </div>
             </div>
             <div className="flex flex-col gap-3">
-              <Link to={IT_SERVICES_PATH} className="btn-ignite btn-shine inline-flex items-center justify-center gap-2">
+              <FixMyTechLink source="home repair band" className="btn-ignite btn-shine inline-flex items-center justify-center gap-2">
                 <Wrench className="h-4 w-4" aria-hidden /> Get a repair price
-              </Link>
+              </FixMyTechLink>
               <InstallBookButton note="home-repair-band" booking={IT_BOOKING} title="Book your tech visit" variant="chrome" className="inline-flex items-center justify-center gap-2">
                 <CalendarCheck className="h-4 w-4" aria-hidden /> Book a visit
               </InstallBookButton>
@@ -396,15 +397,15 @@ function HomeBar() {
   return (
     <div className={cn("pb-safe fixed inset-x-0 bottom-0 z-40 border-t border-border/80 bg-background/90 px-3 pt-3 backdrop-blur-xl transition-transform duration-300 lg:pb-3", show ? "translate-y-0" : "translate-y-full")} aria-hidden={!show}>
       <div className="mx-auto flex max-w-3xl gap-2">
-        <CallLink location="home sticky bar" className="btn-ignite inline-flex flex-1 items-center justify-center gap-1.5 whitespace-nowrap !px-3 !py-3.5 !text-sm sm:!text-base">
+        <FixMyTechLink source="home sticky bar" className="btn-ignite inline-flex flex-[1.4] items-center justify-center gap-1.5 whitespace-nowrap !px-3 !py-3.5 !text-base">
+          <Wrench className="h-4 w-4 shrink-0" aria-hidden /> Fix my tech
+        </FixMyTechLink>
+        <CallLink location="home sticky bar" className="btn-blue inline-flex flex-1 items-center justify-center gap-1.5 whitespace-nowrap !px-3 !py-3.5 !text-base">
           <Phone className="h-4 w-4 shrink-0" aria-hidden /> Call
         </CallLink>
-        <a href={smsHref(HOME_TEXT)} data-call-location="home sticky bar text" tabIndex={show ? undefined : -1} className="btn-chrome inline-flex flex-1 items-center justify-center gap-1.5 whitespace-nowrap !px-3 !py-3.5 !text-sm sm:!text-base">
-          <MessageSquare className="h-4 w-4 shrink-0 text-turbo" aria-hidden /> Text
+        <a href={smsHref(HOME_TEXT)} data-call-location="home sticky bar text" tabIndex={show ? undefined : -1} className="btn-chrome inline-flex flex-1 items-center justify-center gap-1.5 whitespace-nowrap !px-3 !py-3.5 !text-base">
+          <MessageSquare className="h-4 w-4 shrink-0" aria-hidden /> Text
         </a>
-        <Link to={IT_SERVICES_PATH} tabIndex={show ? undefined : -1} className="btn-chrome inline-flex flex-1 items-center justify-center whitespace-nowrap !px-3 !py-3.5 !text-sm sm:!text-base">
-          Repair prices
-        </Link>
       </div>
     </div>
   );

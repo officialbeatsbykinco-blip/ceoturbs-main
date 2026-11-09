@@ -1,34 +1,42 @@
-// Tech repair quiz: what's wrong, which device, where. On a phone the last tap opens Messages with the
-// whole request typed out; on a computer it takes a name and mobile number, then shows the calendar.
+// Tech repair quiz, built for phones and for people who don't like forms: big picture tiles, one question
+// per screen, then the whole request typed out for them. On a phone the last tap opens Messages to our
+// number with everything filled in; on a computer it takes a name and mobile number, then shows the calendar.
 // Either way it fires one Lead (browser + server, same event_id) tagged content_category "tech_repair".
 import { useEffect, useId, useRef, useState, type FormEvent, type MouseEvent } from "react";
 import { Link } from "react-router-dom";
-import { ArrowLeft, ArrowRight, Check, Loader2, MapPin, MessageSquare } from "lucide-react";
+import {
+  AlertTriangle, ArrowLeft, ArrowRight, BatteryLow, Check, Gauge, HelpCircle, Laptop, Loader2, Mail, MapPin, MessageSquare, Monitor, Power, Printer, ShieldAlert, Smartphone, Tablet, type LucideIcon,
+} from "lucide-react";
 import { InstallCalEmbed } from "@/components/booking/InstallCalEmbed";
 import { CallLink } from "@/components/site/CallLink";
-import { IT_BOOKING } from "@/config/site";
-import { DEVICES, EMPTY_TECH, PROBLEMS, TECH_CITIES, WHERE, techLabels, techMessage, type TechAnswers } from "@/content/tech-quiz";
+import { IT_BOOKING, SITE } from "@/config/site";
+import { DEVICES, EMPTY_TECH, PROBLEMS, WHEN, WHERE, techLabels, techMessage, zipOk, type DeviceId, type ProblemId, type TechAnswers } from "@/content/tech-quiz";
 import { sendLead } from "@/lib/lead-outbox";
 import { canText, smsHref } from "@/lib/sms";
 import { attribution, newEventId, track, visitorId } from "@/lib/track";
 import { cn } from "@/lib/utils";
 
-const STEPS = ["problem", "device", "where", "send"] as const;
+const STEPS = ["device", "problem", "when", "send"] as const;
 type Step = (typeof STEPS)[number];
+const STEP_NAMES: Record<Step, string> = { device: "Device", problem: "Problem", when: "Timing", send: "Send" };
+
+const DEVICE_ICONS: Record<DeviceId, LucideIcon> = { windows: Laptop, mac: Monitor, iphone: Smartphone, android: Smartphone, tablet: Tablet, other: Printer };
+const PROBLEM_ICONS: Record<ProblemId, LucideIcon> = { slow: Gauge, crash: AlertTriangle, dead: Power, virus: ShieldAlert, screen: BatteryLow, setup: Mail, other: HelpCircle };
 
 /** What a tech lead is worth to Meta's optimizer (an average first job). */
 export const TECH_LEAD_VALUE = 150;
 
-export function TechQuiz({ source = "computer-repair-tampa", className }: { source?: string; className?: string }) {
+export function TechQuiz({ source = "computer-repair-tampa", className, variant = "card" }: { source?: string; className?: string; variant?: "card" | "sheet" }) {
   const uid = useId().replace(/:/g, "");
   const [a, setA] = useState<TechAnswers>(EMPTY_TECH);
-  const [step, setStep] = useState<Step>("problem");
-  const [texting, setTexting] = useState(false);
+  const [step, setStep] = useState<Step>("device");
+  const [texting, setTexting] = useState(true);
   const [done, setDone] = useState(false);
   const [sending, setSending] = useState(false);
-  const [errors, setErrors] = useState<{ name?: string; phone?: string }>({});
+  const [errors, setErrors] = useState<{ name?: string; zip?: string; phone?: string }>({});
   const [honeypot, setHoneypot] = useState("");
   const startedAt = useRef(0);
+  const top = useRef<HTMLDivElement>(null);
 
   useEffect(() => setTexting(canText()), []);
 
@@ -40,6 +48,8 @@ export function TechQuiz({ source = "computer-repair-tampa", className }: { sour
     setA((prev) => ({ ...prev, ...patch }));
     setStep(next);
     track("tech_quiz_step", { source, step: next, step_number: STEPS.indexOf(next) + 1 });
+    // Keep the question in view on a phone (the tiles can push it below the fold).
+    if (variant === "card") top.current?.scrollIntoView({ block: "nearest", behavior: "smooth" });
   };
   const set = (patch: Partial<TechAnswers>) => {
     setA((prev) => ({ ...prev, ...patch }));
@@ -49,13 +59,15 @@ export function TechQuiz({ source = "computer-repair-tampa", className }: { sour
   const index = STEPS.indexOf(step);
   const message = techMessage(a);
   const nameOk = a.name.trim().length >= 2;
+  const placeOk = a.where === "remote" || zipOk(a.zip);
+  const ready = nameOk && placeOk;
 
   const lead = (channel: "sms" | "form") => {
     const labels = techLabels(a);
     const user = { name: a.name.trim(), phone: a.phone.trim() || undefined, externalId: visitorId() };
     const eventId = track(
       "generate_lead",
-      { lead_source: "tech-quiz", source, channel, value: TECH_LEAD_VALUE, currency: "USD", content_name: "Computer repair Tampa", content_category: "tech_repair", problem: a.problem, device: a.device, where: a.where },
+      { lead_source: "tech-quiz", source, channel, value: TECH_LEAD_VALUE, currency: "USD", content_name: "Computer repair Tampa", content_category: "tech_repair", problem: a.problem, device: a.device, where: a.where, when: a.when },
       { user },
     );
     return sendLead({
@@ -72,7 +84,9 @@ export function TechQuiz({ source = "computer-repair-tampa", className }: { sour
       problem: labels.problem,
       device: labels.device,
       where: labels.where,
-      city: a.city.trim(),
+      when: labels.when,
+      zip: a.where === "remote" ? "" : a.zip.trim(),
+      details: a.details.trim(),
       page: window.location.pathname,
       attribution: attribution(),
       company_site: honeypot,
@@ -80,10 +94,18 @@ export function TechQuiz({ source = "computer-repair-tampa", className }: { sour
     });
   };
 
+  const check = () => {
+    const errs: typeof errors = {};
+    if (!nameOk) errs.name = "Add your first name.";
+    if (!placeOk) errs.zip = "Add your 5-digit ZIP code.";
+    return errs;
+  };
+
   const onText = (e: MouseEvent<HTMLAnchorElement>) => {
-    if (!nameOk) {
+    const errs = check();
+    if (Object.keys(errs).length) {
       e.preventDefault();
-      return setErrors({ name: "Add your first name." });
+      return setErrors(errs);
     }
     if (done) return;
     setDone(true);
@@ -93,8 +115,7 @@ export function TechQuiz({ source = "computer-repair-tampa", className }: { sour
   const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
     if (texting) return;
-    const errs: typeof errors = {};
-    if (!nameOk) errs.name = "Enter your first name.";
+    const errs = check();
     const digits = a.phone.replace(/\D/g, "");
     if (digits.length < 10 || digits.length > 15) errs.phone = "Enter a valid mobile number.";
     if (Object.keys(errs).length) return setErrors(errs);
@@ -104,96 +125,116 @@ export function TechQuiz({ source = "computer-repair-tampa", className }: { sour
     setDone(true);
   };
 
+  const shell = cn(variant === "card" && "rounded-3xl border border-border bg-card p-5 shadow-xl sm:p-7", className);
+
   if (done && !texting)
     return (
-      <div className={cn("rounded-3xl border border-border bg-card p-5 shadow-xl sm:p-7", className)}>
+      <div className={shell}>
         <p className="flex items-center gap-2 font-display text-2xl font-bold">
           <Check className="h-6 w-6 shrink-0 text-turbo" aria-hidden /> Got it, {a.name.trim().split(/\s+/)[0]}.
         </p>
-        <p className="mt-2 text-sm text-muted-foreground">We'll text you a price shortly. Want a set time now? Pick one below.</p>
+        <p className="mt-2 text-base text-muted-foreground">We'll text you a price shortly. Want a set time now? Pick one below.</p>
         <InstallCalEmbed className="mt-5" note={`${source}-tech-quiz`} booking={IT_BOOKING} minHeight="560px" />
       </div>
     );
 
   return (
-    <div id="fix" className={cn("scroll-mt-24 rounded-3xl border border-border bg-card p-5 shadow-xl sm:p-7", className)}>
-      <div className="flex items-center justify-between gap-3 text-xs text-muted-foreground">
-        <span className="inline-flex items-center gap-1.5 font-medium text-turbo">
-          <MessageSquare className="h-3.5 w-3.5" aria-hidden /> Get a price by text · under a minute
-        </span>
-        <span aria-live="polite">
-          Step {index + 1} of {STEPS.length}
-        </span>
-      </div>
-      <div className="mt-2.5 h-1.5 overflow-hidden rounded-full bg-muted" role="progressbar" aria-label="Progress" aria-valuemin={1} aria-valuemax={STEPS.length} aria-valuenow={index + 1}>
+    <div id={variant === "card" ? "fix" : undefined} ref={top} className={cn("scroll-mt-24", shell)}>
+      <p className="font-display text-xl font-bold leading-tight sm:text-2xl">Get your repair price</p>
+      <div className="mt-3 h-2 overflow-hidden rounded-full bg-muted" role="progressbar" aria-label="Progress" aria-valuemin={1} aria-valuemax={STEPS.length} aria-valuenow={index + 1}>
         <div className="h-full rounded-full bg-gradient-to-r from-turbo to-[hsl(var(--ignite))] transition-[width] duration-300 ease-out" style={{ width: `${((index + 1) / STEPS.length) * 100}%` }} />
       </div>
+      <p className="mt-2 text-xs font-bold uppercase tracking-wider text-muted-foreground" aria-live="polite">
+        Step {index + 1} of {STEPS.length} · {STEP_NAMES[step]}
+      </p>
+      <p className="mt-3 flex items-start gap-2 rounded-xl bg-turbo/[0.08] px-3 py-2.5 text-sm leading-snug ring-1 ring-turbo/20">
+        <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-turbo" aria-hidden />
+        <span>
+          We come to you within <b>40 miles of Tampa</b>, or fix it remotely.
+        </span>
+      </p>
 
-      <div key={step} className="mt-5 animate-step">
-        {step === "problem" && (
-          <>
-            <Title text="What's wrong?" />
-            <div className="grid gap-2.5 sm:grid-cols-2">
-              {PROBLEMS.map((o) => (
-                <Option key={o.id} pressed={a.problem === o.id} onClick={() => go("device", { problem: o.id })} label={o.label} />
-              ))}
-            </div>
-          </>
-        )}
-
+      <div key={step} className="mt-4 animate-step">
         {step === "device" && (
           <>
-            <Title text="Which device?" />
-            <div className="grid gap-2.5 sm:grid-cols-2">
+            <Title text="What needs fixing?" />
+            <div className="grid grid-cols-2 gap-2.5">
               {DEVICES.map((o) => (
-                <Option key={o.id} pressed={a.device === o.id} onClick={() => go("where", { device: o.id })} label={o.label} />
+                <Tile key={o.id} icon={DEVICE_ICONS[o.id]} label={o.label} pressed={a.device === o.id} onClick={() => go("problem", { device: o.id })} />
               ))}
             </div>
-            <Back onClick={() => setStep("problem")} />
           </>
         )}
 
-        {step === "where" && (
+        {step === "problem" && (
           <>
-            <Title text="Where should we fix it?" />
-            <div className="grid gap-2.5">
-              {WHERE.map((o) => (
-                <Option key={o.id} pressed={a.where === o.id} onClick={() => go("send", { where: o.id })} label={o.label} sub={o.sub} />
+            <Title text="What is it doing?" />
+            <div className="grid gap-2">
+              {PROBLEMS.map((o) => {
+                const Icon = PROBLEM_ICONS[o.id];
+                return (
+                  <button key={o.id} type="button" aria-pressed={a.problem === o.id} onClick={() => go("when", { problem: o.id })} className={cn(row, a.problem === o.id && rowOn)}>
+                    <Icon className="h-5 w-5 shrink-0 text-turbo" aria-hidden />
+                    <span className="min-w-0 flex-1 text-base font-semibold leading-snug">{o.label}</span>
+                    <ArrowRight className="h-5 w-5 shrink-0 text-muted-foreground" aria-hidden />
+                  </button>
+                );
+              })}
+            </div>
+            <Nav onBack={() => setStep("device")} />
+          </>
+        )}
+
+        {step === "when" && (
+          <>
+            <Title text="How soon?" />
+            <div className="flex flex-wrap gap-2">
+              {WHEN.map((o) => (
+                <Chip key={o.id} label={o.label} on={a.when === o.id} onClick={() => set({ when: o.id })} />
               ))}
             </div>
-            <Back onClick={() => setStep("device")} />
+            <p className="mb-2 mt-5 text-lg font-bold">Where should we fix it?</p>
+            <div className="grid grid-cols-2 gap-2">
+              {WHERE.map((o) => (
+                <button key={o.id} type="button" aria-pressed={a.where === o.id} onClick={() => set({ where: o.id })} className={cn(row, "flex-col items-start gap-0.5 !py-3", a.where === o.id && rowOn)}>
+                  <span className="text-base font-semibold">{o.label}</span>
+                  <span className="text-xs text-muted-foreground">{o.sub}</span>
+                </button>
+              ))}
+            </div>
+            <label htmlFor={`${uid}-details`} className="mb-1.5 mt-5 block text-sm font-semibold">
+              Anything else? <span className="font-normal text-muted-foreground">(optional)</span>
+            </label>
+            <textarea id={`${uid}-details`} data-clarity-mask="true" rows={2} maxLength={300} className="field resize-none" value={a.details} onChange={(e) => set({ details: e.target.value })} placeholder="Laptop model, error message, when it started…" />
+            <Nav onBack={() => setStep("problem")} next={() => go("send")} />
           </>
         )}
 
         {step === "send" && (
           <form onSubmit={onSubmit} noValidate className="grid gap-3">
-            <Title text={texting ? "Last step: send it to us" : "Where do we text your price?"} />
-            <div className="grid gap-3 sm:grid-cols-2">
+            <Title text={texting ? "Last step: who's it from?" : "Where do we text your price?"} />
+            <div className={cn("grid gap-3", a.where !== "remote" && "grid-cols-[1.4fr_1fr]")}>
               <div>
-                <label htmlFor={`${uid}-name`} className="mb-1.5 block text-xs font-medium text-chrome">
-                  First name
+                <label htmlFor={`${uid}-name`} className="mb-1.5 block text-sm font-semibold">
+                  Your name <span className="text-[#c2410c]">*</span>
                 </label>
-                <input id={`${uid}-name`} data-clarity-mask="true" className="field" value={a.name} onChange={(e) => set({ name: e.target.value })} autoComplete="given-name" maxLength={100} aria-invalid={!!errors.name} />
+                <input id={`${uid}-name`} data-clarity-mask="true" className="field" value={a.name} onChange={(e) => set({ name: e.target.value })} autoComplete="given-name" maxLength={100} placeholder="First name" aria-invalid={!!errors.name} />
                 {errors.name && <Err text={errors.name} />}
               </div>
               {a.where !== "remote" && (
                 <div>
-                  <label htmlFor={`${uid}-city`} className="mb-1.5 flex items-center gap-1 text-xs font-medium text-chrome">
-                    <MapPin className="h-3 w-3" aria-hidden /> City
+                  <label htmlFor={`${uid}-zip`} className="mb-1.5 block text-sm font-semibold">
+                    ZIP code <span className="text-[#c2410c]">*</span>
                   </label>
-                  <input id={`${uid}-city`} list={`${uid}-cities`} className="field" value={a.city} onChange={(e) => set({ city: e.target.value })} autoComplete="address-level2" maxLength={60} placeholder="Tampa" />
-                  <datalist id={`${uid}-cities`}>
-                    {TECH_CITIES.map((c) => (
-                      <option key={c} value={c} />
-                    ))}
-                  </datalist>
+                  <input id={`${uid}-zip`} className="field" value={a.zip} onChange={(e) => set({ zip: e.target.value.replace(/\D/g, "").slice(0, 5) })} autoComplete="postal-code" inputMode="numeric" pattern="[0-9]*" maxLength={5} placeholder="33602" aria-invalid={!!errors.zip} />
+                  {errors.zip && <Err text={errors.zip} />}
                 </div>
               )}
             </div>
             {!texting && (
               <div>
-                <label htmlFor={`${uid}-phone`} className="mb-1.5 block text-xs font-medium text-chrome">
-                  Mobile number
+                <label htmlFor={`${uid}-phone`} className="mb-1.5 block text-sm font-semibold">
+                  Mobile number <span className="text-[#c2410c]">*</span>
                 </label>
                 <input id={`${uid}-phone`} data-clarity-mask="true" type="tel" className="field" value={a.phone} onChange={(e) => set({ phone: e.target.value })} autoComplete="tel" inputMode="tel" maxLength={30} placeholder="(813) 555-0123" aria-invalid={!!errors.phone} />
                 {errors.phone && <Err text={errors.phone} />}
@@ -206,13 +247,15 @@ export function TechQuiz({ source = "computer-repair-tampa", className }: { sour
 
             {texting ? (
               <>
-                <p data-clarity-mask="true" className="rounded-xl bg-muted/70 p-3 text-sm leading-relaxed">
+                <p data-clarity-mask="true" className="whitespace-pre-line rounded-xl border-2 border-dashed border-border bg-muted/50 p-3 text-[15px] leading-relaxed">
                   {message}
                 </p>
-                <a href={smsHref(message)} onClick={onText} data-call-location="tech-quiz" className="btn-ignite btn-shine w-full justify-center !py-4 !text-base">
-                  <MessageSquare className="h-5 w-5" aria-hidden /> Text it to us
+                <a href={smsHref(message)} onClick={onText} data-call-location="tech-quiz" className={cn("btn-ignite btn-shine w-full justify-center !py-4 !text-lg", !ready && "opacity-60")}>
+                  <MessageSquare className="h-5 w-5" aria-hidden /> {ready ? "Text it to us" : a.where === "remote" ? "Add your name to send" : "Add your name & ZIP to send"}
                 </a>
-                <p className="text-center text-xs text-muted-foreground">{done ? "Messages should be open. Hit send and we'll text your price back." : "Opens Messages with this filled in. Just hit send."}</p>
+                <p className="text-center text-sm text-muted-foreground">
+                  {done ? "Messages should be open. Tap send and we'll text your price back." : `Opens your Messages to ${SITE.phone.display} with this filled in. Just tap send.`}
+                </p>
               </>
             ) : (
               <>
@@ -222,18 +265,17 @@ export function TechQuiz({ source = "computer-repair-tampa", className }: { sour
                     I agree to receive text messages from CEO Turbo about my request. Message frequency varies. Message &amp; data rates may apply. Reply STOP to opt out, HELP for help. Consent is not a condition of purchase. <Link to="/terms" className="underline underline-offset-2">Terms</Link> &amp; <Link to="/privacy-policy" className="underline underline-offset-2">Privacy</Link>.
                   </span>
                 </label>
-                <button type="submit" disabled={sending} className="btn-ignite btn-shine w-full justify-center !py-4 !text-base">
-                  {sending ? <Loader2 className="h-5 w-5 animate-spin" aria-hidden /> : <>Text me my price <ArrowRight className="h-4 w-4" aria-hidden /></>}
+                <button type="submit" disabled={sending} className="btn-ignite btn-shine w-full justify-center !py-4 !text-lg">
+                  {sending ? <Loader2 className="h-5 w-5 animate-spin" aria-hidden /> : <>Text me my price <ArrowRight className="h-5 w-5" aria-hidden /></>}
                 </button>
               </>
             )}
-            <p className="text-center text-sm">
-              Rather talk?{" "}
-              <CallLink location="tech quiz" className="font-semibold text-foreground underline underline-offset-2">
-                Call us
-              </CallLink>
-            </p>
-            <Back onClick={() => setStep("where")} />
+            <CallLink location="tech quiz call" icon className="btn-chrome w-full justify-center !py-3.5 !text-base">
+              Or call {SITE.phone.display}
+            </CallLink>
+            <button type="button" onClick={() => setStep("when")} className="flex min-h-[44px] items-center justify-center gap-1.5 text-sm font-semibold text-muted-foreground hover:text-foreground">
+              <ArrowLeft className="h-4 w-4" aria-hidden /> Edit answers
+            </button>
           </form>
         )}
       </div>
@@ -241,34 +283,50 @@ export function TechQuiz({ source = "computer-repair-tampa", className }: { sour
   );
 }
 
-function Option({ label, sub, pressed, onClick }: { label: string; sub?: string; pressed: boolean; onClick: () => void }) {
+const row = "flex w-full min-h-[56px] items-center gap-3 rounded-2xl border-2 border-border bg-card px-4 text-left transition-[border-color,background-color,transform] duration-150 hover:border-turbo/60 active:scale-[0.98]";
+const rowOn = "border-turbo bg-turbo/10";
+
+function Tile({ icon: Icon, label, pressed, onClick }: { icon: LucideIcon; label: string; pressed: boolean; onClick: () => void }) {
   return (
-    <button type="button" aria-pressed={pressed} onClick={onClick} className="quiz-opt quiz-tap !py-3 text-left">
-      <span className="min-w-0 flex-1">
-        <span className="block text-sm font-semibold leading-snug">{label}</span>
-        {sub && <span className="mt-0.5 block text-xs text-muted-foreground">{sub}</span>}
-      </span>
-      <ArrowRight className="h-4 w-4 shrink-0 text-turbo" aria-hidden />
+    <button type="button" aria-pressed={pressed} onClick={onClick} className={cn("flex min-h-[104px] flex-col items-center justify-center gap-2 rounded-2xl border-2 border-border bg-card px-2 py-3 text-center transition-[border-color,background-color,transform] duration-150 hover:border-turbo/60 active:scale-[0.97]", pressed && rowOn)}>
+      <Icon className="h-8 w-8 text-turbo" strokeWidth={1.75} aria-hidden />
+      <span className="text-[15px] font-bold leading-tight">{label}</span>
+    </button>
+  );
+}
+
+function Chip({ label, on, onClick }: { label: string; on: boolean; onClick: () => void }) {
+  return (
+    <button type="button" aria-pressed={on} onClick={onClick} className={cn("min-h-[48px] rounded-full border-2 px-5 text-base font-semibold transition-colors", on ? "border-turbo bg-turbo text-white" : "border-border bg-card hover:border-turbo/60")}>
+      {label}
     </button>
   );
 }
 
 function Title({ text }: { text: string }) {
-  return <p className="mb-3 font-display text-2xl font-bold leading-tight">{text}</p>;
+  return <p className="mb-3 text-lg font-bold leading-tight">{text}</p>;
 }
 
 function Err({ text }: { text: string }) {
   return (
-    <p className="mt-1.5 text-xs text-destructive" role="alert">
+    <p className="mt-1.5 text-sm font-medium text-destructive" role="alert">
       {text}
     </p>
   );
 }
 
-function Back({ onClick }: { onClick: () => void }) {
+function Nav({ onBack, next }: { onBack: () => void; next?: () => void }) {
   return (
-    <button type="button" onClick={onClick} className="mt-1 flex min-h-[44px] items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground">
-      <ArrowLeft className="h-4 w-4" aria-hidden /> Back
-    </button>
+    <div className="mt-4 flex gap-2">
+      <button type="button" onClick={onBack} className="btn-chrome !px-4">
+        <ArrowLeft className="h-4 w-4" aria-hidden /> Back
+      </button>
+      {next && (
+        <button type="button" onClick={next} className="btn-ignite flex-1 !text-base">
+          Continue <ArrowRight className="h-4 w-4" aria-hidden />
+        </button>
+      )}
+    </div>
   );
 }
+
