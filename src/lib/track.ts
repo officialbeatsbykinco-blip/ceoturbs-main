@@ -129,6 +129,26 @@ function metaParams(params: Record<string, unknown>, ecommerce?: Ecommerce) {
  * A second fbq("init") is ignored once the pixel is running, so the values are merged into the live
  * pixel's user data (verified: the next event then carries ud[em]/ud[ph]); init is the fallback.
  */
+const UM_KEY = "ct_um";
+
+/**
+ * Advanced matching for the pixel's init call: what a returning visitor already told us (kept in this browser only,
+ * written when they submit a lead), plus their country when the browser is a US one. Meta's pixel hashes these
+ * itself, and having any of them at init is what clears the "manual advanced matching not set up" diagnostic.
+ */
+export function savedMatch(): Record<string, string> {
+  const out: Record<string, string> = {};
+  try {
+    const saved = JSON.parse(localStorage.getItem(UM_KEY) || "{}") as Record<string, unknown>;
+    for (const k of ["em", "ph", "fn", "ln", "zp", "country"]) if (typeof saved[k] === "string" && saved[k]) out[k] = saved[k] as string;
+  } catch {
+    /* storage blocked or bad JSON: no saved data */
+  }
+  // US browsers only: the agency serves business owners and artists worldwide, so never label everyone "us".
+  if (!out.country && typeof navigator !== "undefined" && /-US$/i.test(navigator.language || "")) out.country = "us";
+  return out;
+}
+
 export function identify(user: UserData) {
   const w = win();
   const id = PIXEL_ID();
@@ -143,6 +163,12 @@ export function identify(user: UserData) {
     ...(/^\d{5}$/.test(user.zip ?? "") ? { zp: user.zip, country: "us" } : {}),
     external_id: user.externalId || visitorId(),
   };
+  try {
+    const { external_id: _skip, ...keep } = ud;
+    localStorage.setItem(UM_KEY, JSON.stringify({ ...JSON.parse(localStorage.getItem(UM_KEY) || "{}"), ...keep }));
+  } catch {
+    /* storage blocked: matching still works for this visit */
+  }
   const pixel = (w.fbq as Fn & { instance?: { pixelsByID?: Record<string, { userData?: Record<string, string> }> } }).instance?.pixelsByID?.[id];
   if (pixel) pixel.userData = { ...pixel.userData, ...ud };
   else w.fbq("init", id, ud);

@@ -1,6 +1,6 @@
 // Meta Pixel (id in src/lib/track.ts; VITE_META_PIXEL_ID overrides it).
 // Loads after the page is interactive so it never slows first paint; PageView fires on every route.
-import { PIXEL_ID as pixelId, metaPixelReady, newEventId, serverTrack, visitorId } from "@/lib/track";
+import { PIXEL_ID as pixelId, metaPixelReady, newEventId, savedMatch, serverTrack, visitorId } from "@/lib/track";
 type Fbq = ((...args: unknown[]) => void) & { callMethod?: (...a: unknown[]) => void; queue: unknown[]; loaded: boolean; version: string; push: unknown };
 
 const PIXEL_ID = pixelId();
@@ -45,7 +45,7 @@ export function startPixel() {
   s.async = true;
   s.src = "https://connect.facebook.net/en_US/fbevents.js";
   document.head.appendChild(s);
-  n("init", PIXEL_ID, { external_id: visitorId() });
+  n("init", PIXEL_ID, { ...savedMatch(), external_id: visitorId() });
   pageView(n);
   metaPixelReady();
 }

@@ -145,3 +145,17 @@ describe("booked-call tracking (browser)", () => {
     expect(fbq.find((a) => a[0] === "trackCustom" && a[1] === "ContactIntent")).toBeDefined();
   });
 });
+
+describe("Meta advanced matching at pixel init", () => {
+  it("adds a US country for US browsers only, and remembers what a lead told us", async () => {
+    const { savedMatch, identify } = await import("@/lib/track");
+    localStorage.clear();
+    Object.defineProperty(navigator, "language", { value: "fr-FR", configurable: true });
+    expect(savedMatch()).toEqual({});
+    Object.defineProperty(navigator, "language", { value: "en-US", configurable: true });
+    expect(savedMatch()).toEqual({ country: "us" });
+    (window as unknown as { fbq: unknown }).fbq = Object.assign(() => {}, { instance: { pixelsByID: { "3232222473609236": { userData: {} } } } });
+    identify({ name: "Pat Lee", phone: "(813) 555-0123", zip: "33617" });
+    expect(savedMatch()).toMatchObject({ fn: "pat", ln: "lee", ph: "18135550123", zp: "33617", country: "us" });
+  });
+});
