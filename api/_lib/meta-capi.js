@@ -34,7 +34,7 @@ export function cleanIp(v) {
 }
 
 /** Meta wants lowercase, trimmed values hashed; phones as digits with country code. */
-export function hashedUser({ email, phone, name, city, externalId } = {}) {
+export function hashedUser({ email, phone, name, city, zip, externalId } = {}) {
   const out = {};
   const em = clean(email).toLowerCase();
   if (em) out.em = [sha256(em)];
@@ -46,6 +46,12 @@ export function hashedUser({ email, phone, name, city, externalId } = {}) {
   if (rest.length) out.ln = [sha256(rest.join(" "))];
   const ct = clean(city).toLowerCase().replace(/[^a-z]/g, "");
   if (ct) out.ct = [sha256(ct)];
+  // US ZIP (first 5 digits) and country: the tech quiz asks for a ZIP, and every lead we can serve is in the US.
+  const zp = clean(zip).replace(/\D/g, "").slice(0, 5);
+  if (zp.length === 5) {
+    out.zp = [sha256(zp)];
+    out.country = [sha256("us")];
+  }
   if (externalId) out.external_id = [sha256(String(externalId))];
   return out;
 }

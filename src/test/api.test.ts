@@ -30,6 +30,11 @@ describe("Meta Conversions API payload", () => {
     expect(u.ct).toEqual([sha("atlanta")]);
   });
 
+  it("adds the tech quiz ZIP and US country as match keys, and skips a bad ZIP", () => {
+    expect(hashedUser({ name: "Pat", zip: "33602" })).toMatchObject({ zp: [sha("33602")], country: [sha("us")] });
+    expect(hashedUser({ name: "Pat", zip: "336" }).zp).toBeUndefined();
+  });
+
   it("keeps the browser event id for de-duplication and passes fbp/fbc unhashed", () => {
     const e = buildEvent({ eventName: "Lead", eventId: "generate_lead_abc", url: "https://www.ceoturbo.com/free-audit", user: { email: "a@b.co" }, attribution: { fbp: "fb.1.1.2", fbclid: "XYZ" }, ip: "1.2.3.4", userAgent: "UA" });
     expect(e).toMatchObject({ event_name: "Lead", event_id: "generate_lead_abc", action_source: "website", user_data: { fbp: "fb.1.1.2", client_ip_address: "1.2.3.4", client_user_agent: "UA" } });

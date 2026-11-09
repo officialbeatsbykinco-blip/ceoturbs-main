@@ -77,7 +77,7 @@ export default async function handler(req, res) {
   const value = Number(body.value) > 0 ? Math.min(Number(body.value), 100000) : 0;
   const url = `https://www.ceoturbo.com${text(body.page, 120) || "/"}`;
   const ip = signals.ip || clientIp(req);
-  const user = { email: lead.email, phone: lead.phone, name: lead.name, externalId: text(body.visitorId, 60) || quiz?.quizId || undefined };
+  const user = { email: lead.email, phone: lead.phone, name: lead.name, zip: tech?.zip || undefined, externalId: text(body.visitorId, 60) || quiz?.quizId || undefined };
 
   const testCode = body.testEventCode || attr.test_event_code;
   const capi = sendMetaEvents([

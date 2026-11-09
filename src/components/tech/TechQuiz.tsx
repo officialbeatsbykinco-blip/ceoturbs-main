@@ -64,7 +64,7 @@ export function TechQuiz({ source = "computer-repair-tampa", className, variant 
 
   const lead = (channel: "sms" | "form") => {
     const labels = techLabels(a);
-    const user = { name: a.name.trim(), phone: a.phone.trim() || undefined, externalId: visitorId() };
+    const user = { name: a.name.trim(), phone: a.phone.trim() || undefined, zip: a.where === "remote" ? undefined : a.zip.trim() || undefined, externalId: visitorId() };
     const eventId = track(
       "generate_lead",
       { lead_source: "tech-quiz", source, channel, value: TECH_LEAD_VALUE, currency: "USD", content_name: "Computer repair Tampa", content_category: "tech_repair", problem: a.problem, device: a.device, where: a.where, when: a.when },

@@ -19,7 +19,7 @@ type Fn = (...args: unknown[]) => void;
 type Win = Window & { dataLayer?: unknown[]; fbq?: Fn };
 
 /** externalId = our own id for the person (quiz id), sent hashed for better ad-platform matching. */
-export type UserData = { email?: string; phone?: string; name?: string; externalId?: string };
+export type UserData = { email?: string; phone?: string; name?: string; zip?: string; externalId?: string };
 export type Item = { item_id: string; item_name: string; item_variant?: string; price: number; quantity: number };
 export type Ecommerce = { currency: string; value: number; items: Item[] };
 
@@ -132,7 +132,7 @@ function metaParams(params: Record<string, unknown>, ecommerce?: Ecommerce) {
 export function identify(user: UserData) {
   const w = win();
   const id = PIXEL_ID();
-  if (!w?.fbq || !id || (!user.email && !user.phone && !user.externalId)) return;
+  if (!w?.fbq || !id || (!user.email && !user.phone && !user.name && !user.zip && !user.externalId)) return;
   const { first, last } = splitName(user.name);
   const digits = user.phone?.replace(/\D/g, "") ?? "";
   const ud = {
@@ -140,6 +140,7 @@ export function identify(user: UserData) {
     ...(digits ? { ph: digits.length === 10 ? `1${digits}` : digits } : {}),
     ...(first ? { fn: first.toLowerCase() } : {}),
     ...(last ? { ln: last.toLowerCase() } : {}),
+    ...(/^\d{5}$/.test(user.zip ?? "") ? { zp: user.zip, country: "us" } : {}),
     external_id: user.externalId || visitorId(),
   };
   const pixel = (w.fbq as Fn & { instance?: { pixelsByID?: Record<string, { userData?: Record<string, string> }> } }).instance?.pixelsByID?.[id];
