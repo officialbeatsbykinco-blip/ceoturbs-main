@@ -106,6 +106,36 @@ export default function Agency() {
         <SiteWall eagerCount={0} />
       </div>
 
+      <section className="pt-14" aria-labelledby="sales-proof">
+        <div className="container-x grid items-center gap-8 lg:grid-cols-[1.2fr_1fr]">
+          <img
+            src="/img/results/gross-volume-selfie-1280.webp"
+            srcSet="/img/results/gross-volume-selfie-640.webp 640w, /img/results/gross-volume-selfie-1280.webp 1280w"
+            sizes="(min-width: 1024px) 640px, 100vw"
+            alt="Christopher pointing at a payments dashboard showing $12.3K gross volume"
+            width={1280}
+            height={720}
+            loading="lazy"
+            decoding="async"
+            className="w-full rounded-2xl ring-1 ring-white/10"
+          />
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-wider text-turbo">Proof it sells</p>
+            <h2 id="sales-proof" className="h-section mt-2">$12.3K in sales through a site and ads I built.</h2>
+            <p className="lede">Not a mockup: real gross volume from a payments dashboard. I build the same site, tracking and ads for you, set up so you see what every dollar brings back.</p>
+            <img src="/img/results/gross-volume-12k-440.webp" alt="Gross volume: $12.3K" width={446} height={117} loading="lazy" className="mt-5 w-full max-w-[300px] rounded-xl bg-white" />
+            <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+              <BookButton note="Grow — sales proof" className="inline-flex items-center justify-center gap-2">
+                <CalendarCheck className="h-5 w-5" aria-hidden /> Book a free call
+              </BookButton>
+              <CallLink location="grow sales proof" className="btn-chrome inline-flex items-center justify-center gap-2">
+                <Phone className="h-4 w-4 text-turbo" aria-hidden /> Call {SITE.phone.display}
+              </CallLink>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <section className="pt-14 pb-8" aria-labelledby="proof">
         <div className="container-x">
           <h2 id="proof" className="h-section">Real leads on small budgets.</h2>

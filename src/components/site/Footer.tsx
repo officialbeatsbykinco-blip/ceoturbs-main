@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { Logo } from "./Logo";
 import { SERVICES } from "@/content/services";
 import { GUIDES, guidePath } from "@/content/guides";
+import { IT_SERVICES_PATH, OFFICE_SETUP_PATH } from "@/content/tech-pages";
 import { SITE, fromPriceLabel } from "@/config/site";
 import { SETUP_PATH, SHOP_PATH } from "@/content/review-cards";
 import { SHIRTS_PATH, shirtFromLabel } from "@/content/company-shirts";
@@ -9,13 +10,12 @@ import { ARTIST_MERCH_PATH, artistFromLabel } from "@/content/artist-merch";
 import { CallLink } from "./CallLink";
 import { SocialLinks } from "./SocialLinks";
 import { Check } from "lucide-react";
-import { StickTap } from "@/components/visuals/StickTap";
 
 const FOOTER_POINTS = [
-  "Customer taps, your Google review form opens in 3 seconds",
-  "Pocket it, or lay it on a table or counter",
-  "iPhone XS+ and Android. No app for your customers",
-  "Set up in 2 minutes with the free NFC Tools app",
+  "Computers, phones and tablets fixed at your door or remotely",
+  "Offices set up: monitors, cables, printers, Wi-Fi",
+  "Websites and ads that make the phone ring",
+  "Tampa-based, 40 miles around. Price up front",
 ];
 
 export function Footer({ focus = false }: { focus?: boolean }) {
@@ -43,9 +43,9 @@ export function Footer({ focus = false }: { focus?: boolean }) {
         <div className="grid items-center gap-10 border-b border-border pb-14 lg:grid-cols-[1.1fr_1fr]">
           <div>
             <p className="max-w-3xl font-display text-4xl font-bold leading-[0.95] tracking-tight sm:text-5xl lg:text-6xl">
-              <span className="text-chrome-grad">One tap.</span>
+              <span className="text-chrome-grad">We fix it, set it up</span>
               <br />
-              <span className="text-turbo-grad">One more review.</span>
+              <span className="text-turbo-grad">and get you customers.</span>
             </p>
             <ul className="mt-6 grid gap-2.5 text-[15px] text-foreground/90">
               {FOOTER_POINTS.map((t) => (
@@ -56,25 +56,23 @@ export function Footer({ focus = false }: { focus?: boolean }) {
               ))}
             </ul>
             <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:items-center">
-              <Link to={SHOP_PATH} className="btn-ignite btn-shine">Get my review cards · from {fromPriceLabel}</Link>
+              <Link to={IT_SERVICES_PATH} className="btn-ignite btn-shine">Get a repair price</Link>
               <p className="text-sm text-muted-foreground">
-                Free US shipping · Call <CallLink location="footer cta" className="font-semibold text-foreground hover:text-turbo" />
+                Or call <CallLink location="footer cta" className="font-semibold text-foreground hover:text-turbo" />
               </p>
             </div>
           </div>
-          <StickTap className="mx-auto w-full max-w-[520px] text-foreground" />
+          <img src="/img/office/after-640.webp" alt="A three-monitor workstation we set up in Tampa" width={640} height={480} loading="lazy" decoding="async" className="mx-auto w-full max-w-[520px] rounded-2xl ring-1 ring-white/10" />
         </div>
 
         <div className="grid grid-cols-2 gap-x-6 gap-y-10 py-14 md:grid-cols-3 lg:grid-cols-6">
           <div className="col-span-2 md:col-span-1">
             <Logo />
             <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
-              NFC Google review cards for people who work on the move, plus websites and ads. Founded by {SITE.founder.name} ({SITE.founder.alternateName}).
+              Tampa tech repair, office setup, websites and ads. Founded by {SITE.founder.name} ({SITE.founder.alternateName}).
             </p>
             <address className="mt-4 text-sm not-italic leading-relaxed text-muted-foreground">
-              {SITE.address.streetAddress}
-              <br />
-              {SITE.address.addressLocality}, {SITE.address.addressRegion} {SITE.address.postalCode}
+              {SITE.address.addressLocality}, {SITE.address.addressRegion} · {SITE.serviceRadiusMiles} miles around and remote
               <br />
               <CallLink location="footer" icon className="mt-1 min-h-[44px] py-2 font-semibold text-foreground hover:text-turbo" />
               <br />
@@ -83,14 +81,22 @@ export function Footer({ focus = false }: { focus?: boolean }) {
             <SocialLinks className="mt-5" />
           </div>
           <FooterCol
-            title="Review cards"
+            title="Tampa tech help"
             links={[
-              { to: SHOP_PATH, label: `Buy Google Review Cards, from ${fromPriceLabel}` },
-              { to: SETUP_PATH, label: "Card setup guide" },
-              { to: "/how-to-get-more-google-reviews", label: "Get more Google reviews" },
-              { to: "/barbershops", label: "For barbers" },
-              { to: "/salons", label: "For salons" },
-              { to: "/restaurants", label: "For restaurants" },
+              { to: IT_SERVICES_PATH, label: "Computer & phone repair" },
+              { to: OFFICE_SETUP_PATH, label: "Office setup & cable management" },
+              { to: "/services/home-office-setup", label: "Home office setup" },
+              { to: "/services/pos-system-setup", label: "POS installation" },
+              { to: "/restaurants", label: "Restaurant TVs & menus" },
+              { to: "/tampa", label: "Tampa Bay service area" },
+            ]}
+          />
+          <FooterCol
+            title="Products"
+            links={[
+              { to: SHIRTS_PATH, label: `Company t-shirts, from ${shirtFromLabel}` },
+              { to: SHOP_PATH, label: `Google review cards, from ${fromPriceLabel}` },
+              { to: SETUP_PATH, label: "Review card setup guide" },
             ]}
           />
           <FooterCol
@@ -103,10 +109,9 @@ export function Footer({ focus = false }: { focus?: boolean }) {
               { to: "/visual-artists", label: "Painters & visual artists" },
               { to: "/local-business", label: "Local businesses" },
               { to: "/shopify", label: "Shopify stores" },
-              { to: "/atlanta", label: "Atlanta businesses" },
+              { to: "/tampa", label: "Tampa Bay" },
               { to: "/free-audit", label: "Free SEO, AEO & GEO audit" },
               { to: "/ads-not-converting", label: "Ads not converting? Fix tracking" },
-              { to: SHIRTS_PATH, label: `Company t-shirts with your logo — from ${shirtFromLabel}` },
               { to: ARTIST_MERCH_PATH, label: `Artist merch t-shirts — from ${artistFromLabel}` },
             ]}
           />

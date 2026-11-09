@@ -8,7 +8,7 @@ import { track } from "@/lib/track";
 
 const KEY = "ct_check_popup";
 const DELAY_MS = 12_000;
-const SKIP = ["/", "/google-ads-for-local-business", "/free-audit", "/book", "/booked", "/brand-boost", "/google-review-cards", "/google-review-card-setup", "/custom-company-t-shirts", "/artist-merch", "/restaurants", "/privacy-policy", "/terms", "/shipping-returns"];
+const SKIP = ["/", "/computer-repair-tampa", "/office-setup-tampa", "/tampa", "/google-ads-for-local-business", "/free-audit", "/book", "/booked", "/brand-boost", "/google-review-cards", "/google-review-card-setup", "/custom-company-t-shirts", "/artist-merch", "/restaurants", "/privacy-policy", "/terms", "/shipping-returns"];
 
 const seen = () => {
   try {

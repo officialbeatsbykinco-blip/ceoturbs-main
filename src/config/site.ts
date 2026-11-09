@@ -6,9 +6,9 @@ export const SITE = {
   url: "https://www.ceoturbo.com",
   /** dateModified for page schema. Bump when page copy is refreshed (guides carry their own dates). */
   contentUpdated: "2026-11-03",
-  tagline: "Tap-to-review Google cards for people who work on the move.",
+  tagline: "Tampa tech help and growth: we fix it, set it up and get you customers.",
   description:
-    "CEO Turbo sells NFC Google review cards for barbers, lawn care crews, mobile repair techs and stores: customers tap their phone and your review form opens. We also build websites and run ads.",
+    "CEO Turbo is a Tampa, FL tech and growth company. We fix computers, phones and tablets at your door or remotely, set up and organize offices, and build websites and ads that bring in customers. In person within 40 miles of Tampa.",
   founder: {
     name: "Christopher Robinson",
     alternateName: "StackmodeChris",
@@ -40,13 +40,15 @@ export const SITE = {
     /** Google Search Console / Merchant Center HTML-tag method. */
     google: "",
   },
+  /** City only: we go to the customer, so no street address is published. */
   address: {
-    streetAddress: "8735 Dunwoody Place #12143",
-    addressLocality: "Atlanta",
-    addressRegion: "GA",
-    postalCode: "30350",
+    addressLocality: "Tampa",
+    addressRegion: "FL",
     addressCountry: "US",
   },
+  /** Center of the in-person service area (downtown Tampa) and how far we drive. */
+  geo: { latitude: 27.9506, longitude: -82.4572 },
+  serviceRadiusMiles: 40,
   logo: "/img/brand/ceo-turbo-logo.png",
   ogImage: "/og/ceoturbo.jpg",
   /** CEO Turbo's own profiles (Organization schema + the social icons). */
@@ -70,8 +72,8 @@ export const SITE = {
 
 /** Brand Boost = the agency growth call. Cal.com handles scheduling. */
 export const BOOKING = {
-  calLink: "stackmodechris/ceoturbo-brandboost",
-  url: "https://cal.com/stackmodechris/ceoturbo-brandboost",
+  calLink: "ceoturbo/ceoturbo-brandboost",
+  url: "https://cal.com/ceoturbo/ceoturbo-brandboost",
   namespace: "ceoturbo-brandboost",
   name: "Brand Boost call",
   length: "30 min",
@@ -79,15 +81,15 @@ export const BOOKING = {
 
 /** Install/build jobs (office, home office, school, DJ studio, PC build) book on their own Cal.com event. */
 export const INSTALL_BOOKING = {
-  calLink: "stackmodechris/ceo-turbo-office-studio-setup",
-  url: "https://cal.com/stackmodechris/ceo-turbo-office-studio-setup",
+  calLink: "ceoturbo/ceo-turbo-office-studio-setup",
+  url: "https://cal.com/ceoturbo/ceo-turbo-office-studio-setup",
   namespace: "ceo-turbo-office-studio-setup",
 } as const;
 
-/** On-site tech help (/it-services-duluth-ga): computer, phone, TV and Wi-Fi visits book on their own Cal.com event. */
+/** On-site tech help (/computer-repair-tampa): computer, phone, TV and Wi-Fi visits book on their own Cal.com event. */
 export const IT_BOOKING = {
-  calLink: "stackmodechris/i.t-consultation",
-  url: "https://cal.com/stackmodechris/i.t-consultation",
+  calLink: "ceoturbo/i.t-consultation",
+  url: "https://cal.com/ceoturbo/i.t-consultation",
   // No dot: the namespace ends up in element ids and selectors.
   namespace: "it-consultation",
 } as const;
@@ -108,7 +110,7 @@ export const PITCH_VIDEO = {
 } as const;
 
 /**
- * The Google review card (NFC, NTAG215) — shipped from Atlanta, blank or programmed by us for a fee.
+ * The Google review card (NFC, NTAG215) — shipped from the US, blank or programmed by us for a fee.
  * Checkout runs on Shopify: the site's own buy box creates a Shopify cart through the
  * Storefront API and sends the buyer to Shopify checkout (src/lib/shopify.ts).
  * Variant ids are looked up by option value, so the Shopify product needs one option
@@ -185,8 +187,8 @@ export const fromPriceLabel = `$${fromPrice.toFixed(2)}`;
 export const money2 = (n: number) => `$${n.toFixed(2)}`;
 export const packSavings = (p: ReviewPack) => Math.max(0, +(p.qty * REVIEW_CARD.packs[0].price - p.price).toFixed(2));
 /** Merchant feed / ad link that opens the product page with this variant preselected. */
-/** Feed / Product schema link for one pack. The homepage is the canonical store; its buy box reads ?pack=. */
-export const packPath = (pack: ReviewPack["id"]) => `/?pack=${pack}`;
+/** Feed / Product schema link for one pack. /google-review-cards is the store; its buy box reads ?pack=. */
+export const packPath = (pack: ReviewPack["id"]) => `/google-review-cards?pack=${pack}`;
 /** SKU shared by Shopify, the Merchant feed, JSON-LD and ad events (CT-NFC-REVIEW-2 …). */
 export const packSku = (p: ReviewPack) => `${REVIEW_CARD.sku}-${p.qty}`;
 

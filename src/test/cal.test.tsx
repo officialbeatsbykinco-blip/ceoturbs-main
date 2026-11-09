@@ -111,7 +111,7 @@ describe("Cal.com embed loader", () => {
       await opened;
       expect(assign).toHaveBeenCalledTimes(1);
       const url = new URL(assign.mock.calls[0][0]);
-      expect(url.origin + url.pathname).toBe("https://cal.com/stackmodechris/ceoturbo-brandboost");
+      expect(url.origin + url.pathname).toBe("https://cal.com/ceoturbo/ceoturbo-brandboost");
       expect(url.searchParams.get("email")).toBe("a@b.co");
       expect(url.searchParams.get("notes")).toBe("hi");
       expect(url.searchParams.get("metadata[gclid]")).toBe("G1");
@@ -139,7 +139,7 @@ describe("Cal.com embed loader", () => {
       expect(assign).not.toHaveBeenCalled();
       expect(document.getElementById("ct-cal-rescue")).toBeNull();
       const modal = queue("ceoturbo-brandboost").find((a) => a[0] === "modal")?.[1] as { calLink: string; config: Record<string, string> };
-      expect(modal.calLink).toBe("stackmodechris/ceoturbo-brandboost");
+      expect(modal.calLink).toBe("ceoturbo/ceoturbo-brandboost");
       expect(modal.config.layout).toBe("month_view");
       expect(modal.config.useSlotsViewOnSmallScreen).toBe("true");
     } finally {
@@ -152,7 +152,7 @@ describe("Cal.com embed loader", () => {
     void loadCal("brandboostquiz");
     for (const ns of ["ceoturbo-brandboost", "brandboostquiz"]) {
       const ui = queue(ns).find((a) => a[0] === "ui")?.[1] as Record<string, unknown>;
-      expect(ui).toMatchObject({ theme: "dark", layout: "month_view", hideEventTypeDetails: true, cssVarsPerTheme: { dark: { "cal-brand": "#0093ff" } } });
+      expect(ui).toMatchObject({ theme: "dark", layout: "month_view", hideEventTypeDetails: false, cssVarsPerTheme: { dark: { "cal-brand": "#ff7800" } } });
     }
   });
 

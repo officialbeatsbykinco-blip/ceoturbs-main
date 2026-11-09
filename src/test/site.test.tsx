@@ -72,11 +72,11 @@ describe("page registry (SEO)", () => {
     expect(REVIEW_CARD.shipping.processing).not.toMatch(/Atlanta/);
   });
 
-  it("indexes the review card store once, at the homepage", () => {
+  it("indexes the review card store once, at /google-review-cards", () => {
     const shop = PAGES.find((p) => p.path === SHOP_PATH)!;
-    expect(shop.canonical).toBe("/");
-    expect(JSON.stringify(shop.schema)).not.toMatch(/"ProductGroup"|"FAQPage"/);
-    expect(JSON.stringify(PAGES.find((p) => p.path === "/")!.schema)).toContain('"ProductGroup"');
+    expect(shop.canonical).toBeUndefined();
+    expect(JSON.stringify(shop.schema)).toContain('"ProductGroup"');
+    expect(JSON.stringify(PAGES.find((p) => p.path === "/")!.schema)).not.toContain('"ProductGroup"');
   });
 
   it("gives every indexable page breadcrumbs and a dateModified", () => {
@@ -292,7 +292,7 @@ describe("review card store", () => {
     expect(p.hasVariant).toHaveLength(REVIEW_CARD.packs.length);
     for (const v of p.hasVariant) {
       expect(Number(v.offers.price)).toBeGreaterThan(0);
-      expect(v.offers.url).toMatch(/^https:\/\/www\.ceoturbo\.com\/\?pack=\d+$/);
+      expect(v.offers.url).toMatch(/^https:\/\/www\.ceoturbo\.com\/google-review-cards\?pack=\d+$/);
       expect(existsSync(pub(new URL(v.image).pathname))).toBe(true);
     }
   });
@@ -308,9 +308,11 @@ describe("review card store", () => {
 });
 
 describe("hero booking", () => {
-  it("sells cards on the home page, keeps the agency at /grow and the Brand Boost hero on the calendar", () => {
+  it("sends the home page to the three services, keeps the agency at /grow and the Brand Boost hero on the calendar", () => {
     const read = (f: string) => readFileSync(path.resolve(__dirname, f), "utf8");
-    expect(read("../pages/Home.tsx")).toContain("<BuyBox");
+    const homePage = read("../pages/Home.tsx");
+    expect(homePage).not.toContain("<BuyBox");
+    for (const to of ["to={IT_SERVICES_PATH}", "to={OFFICE_SETUP_PATH}", 'to="/grow"']) expect(homePage).toContain(to);
     expect(read("../App.tsx")).toContain('path="/grow"');
     const home = read("../pages/Agency.tsx");
     expect(home).toContain("<AudienceTiles");

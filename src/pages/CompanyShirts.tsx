@@ -4,7 +4,11 @@ import { ShirtMaker } from "@/components/shirts/ShirtMaker";
 import { Breadcrumbs, FAQList, SectionHeader } from "@/components/blocks/Basics";
 import { SHIRT_COMPARE, SHIRT_FAQS, SHIRT_SIZE_CHART, SHIRT_STEPS, SHIRT_USES, SHIRTS_PATH, shirtFromLabel } from "@/content/company-shirts";
 import { SHOP_PATH } from "@/content/review-cards";
-import { SHIRT } from "@/config/site";
+import { SHIRT, SITE } from "@/config/site";
+import { CalendarCheck, MessageSquare, Phone } from "lucide-react";
+import { BookButton } from "@/components/cta/Actions";
+import { CallLink } from "@/components/site/CallLink";
+import { smsHref } from "@/lib/sms";
 
 const toTop = () => window.scrollTo({ top: 0, behavior: "smooth" });
 
@@ -17,6 +21,23 @@ export default function CompanyShirts() {
         <div className="container-x relative">
           <Breadcrumbs items={[{ name: "Custom company t-shirts", path: SHIRTS_PATH }]} />
           <ShirtMaker />
+          <div className="panel mt-6 flex flex-col gap-4 p-5 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <p className="font-display text-lg font-bold">Rather we design it for you?</p>
+              <p className="text-sm text-muted-foreground">Send your logo, tell us how many and what colors. We'll mock it up and you approve before we print.</p>
+            </div>
+            <div className="grid gap-2 sm:flex">
+              <CallLink location="shirts design for me" className="btn-ignite inline-flex items-center justify-center gap-2 whitespace-nowrap">
+                <Phone className="h-4 w-4" aria-hidden /> Call {SITE.phone.display}
+              </CallLink>
+              <a href={smsHref("Hi Chris, I want company shirts with my logo. How many and colors: ")} data-call-location="shirts design for me text" className="btn-chrome inline-flex items-center justify-center gap-2 whitespace-nowrap">
+                <MessageSquare className="h-4 w-4 text-turbo" aria-hidden /> Text us
+              </a>
+              <BookButton note="Shirts — design for me" variant="chrome" prefill="Company shirts: logo, quantity and colors" className="inline-flex items-center justify-center gap-2 whitespace-nowrap">
+                <CalendarCheck className="h-4 w-4" aria-hidden /> Book a call
+              </BookButton>
+            </div>
+          </div>
         </div>
       </section>
 

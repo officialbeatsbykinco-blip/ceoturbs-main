@@ -416,7 +416,7 @@ export default function GetMoreReviews() {
           </div>
           <p className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-muted-foreground">
             <span className="inline-flex items-center gap-1.5">
-              <MapPin className="h-4 w-4 text-turbo" aria-hidden /> Founder-run in Atlanta
+              <MapPin className="h-4 w-4 text-turbo" aria-hidden /> Founder-run in Tampa
             </span>
             <CallLink location="review ad page trust row" icon className="text-chrome hover:text-foreground" />
             <Link to={SETUP_PATH} className="text-turbo underline-offset-4 hover:underline">

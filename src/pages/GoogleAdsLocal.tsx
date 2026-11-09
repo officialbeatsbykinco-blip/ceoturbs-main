@@ -35,7 +35,7 @@ export default function GoogleAdsLocal() {
               </CallLink>
             </div>
             <ul className="mt-6 grid max-w-xl grid-cols-2 gap-x-4 gap-y-2 text-sm text-muted-foreground">
-              {["No long-term contracts", "You own the ad account", "Every call & form tracked", "Founder-run, Atlanta-based"].map((t) => (
+              {["No long-term contracts", "You own the ad account", "Every call & form tracked", "Founder-run, Tampa-based"].map((t) => (
                 <li key={t} className="flex items-center gap-2">
                   <Check className="h-4 w-4 shrink-0 text-turbo" aria-hidden />
                   {t}

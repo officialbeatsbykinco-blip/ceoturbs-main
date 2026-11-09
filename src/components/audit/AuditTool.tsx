@@ -257,7 +257,7 @@ export function AuditTool({ source = "audit", onStageChange, compact = false }: 
                 <input id={`${uid}-what`} data-clarity-mask="true" className="field" value={form.what} onChange={(e) => set("what", e.target.value)} placeholder={form.kind === "artist" ? "e.g. R&B singer, producer" : "e.g. plumber, barber, electrician, lawyer"} maxLength={60} />
               </Field>
               <Field id={`${uid}-city`} label={form.kind === "artist" ? "City (optional)" : "City"}>
-                <input id={`${uid}-city`} data-clarity-mask="true" className="field" value={form.city} onChange={(e) => set("city", e.target.value)} placeholder="e.g. Atlanta, GA or Los Angeles, CA" autoComplete="address-level2" maxLength={60} />
+                <input id={`${uid}-city`} data-clarity-mask="true" className="field" value={form.city} onChange={(e) => set("city", e.target.value)} placeholder="e.g. Tampa, FL or Los Angeles, CA" autoComplete="address-level2" maxLength={60} />
               </Field>
             </div>
             <Field id={`${uid}-web`} label={form.kind === "artist" ? "Website or main link (optional)" : "Website (optional)"}>

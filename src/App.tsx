@@ -26,8 +26,8 @@ const HowToGetMoreCustomers = lazy(() => import("./pages/HowToGetMoreCustomers")
 const GetMoreReviews = lazy(() => import("./pages/GetMoreReviews"));
 const AdsNotConverting = lazy(() => import("./pages/AdsNotConverting"));
 const GoogleAdsLocal = lazy(() => import("./pages/GoogleAdsLocal"));
-const PcTechnician = lazy(() => import("./pages/PcTechnician"));
-const ItServices = lazy(() => import("./pages/ItServices"));
+const ComputerRepair = lazy(() => import("./pages/ComputerRepair"));
+const OfficeSetup = lazy(() => import("./pages/OfficeSetup"));
 const AppMarketing = lazy(() => import("./pages/AppMarketing"));
 const Restaurants = lazy(() => import("./pages/Restaurants"));
 const Salons = lazy(() => import("./pages/Salons"));
@@ -38,7 +38,7 @@ const GuidesHub = named(() => import("./pages/Guides"), "GuidesHub");
 const GuidePage = lazy(() => import("./pages/Guides").then((m) => ({ default: m.GuidePage })));
 const About = named(() => import("./pages/Company"), "About");
 const Contact = named(() => import("./pages/Company"), "Contact");
-const Atlanta = named(() => import("./pages/Company"), "Atlanta");
+const Tampa = named(() => import("./pages/Company"), "Tampa");
 const PrivacyPolicy = named(() => import("./pages/Legal"), "PrivacyPolicy");
 const Terms = named(() => import("./pages/Legal"), "Terms");
 const ShippingReturns = named(() => import("./pages/Legal"), "ShippingReturns");
@@ -65,8 +65,8 @@ export default function App() {
           <Route path="/get-more-reviews" element={<GetMoreReviews />} />
           <Route path="/ads-not-converting" element={<AdsNotConverting />} />
           <Route path="/google-ads-for-local-business" element={<GoogleAdsLocal />} />
-          <Route path="/pc-technician-duluth-ga" element={<PcTechnician />} />
-          <Route path="/it-services-duluth-ga" element={<ItServices />} />
+          <Route path="/computer-repair-tampa" element={<ComputerRepair />} />
+          <Route path="/office-setup-tampa" element={<OfficeSetup />} />
           <Route path="/app-marketing" element={<AppMarketing />} />
           <Route path="/restaurants" element={<Restaurants />} />
           <Route path="/salons" element={<Salons />} />
@@ -84,7 +84,7 @@ export default function App() {
           <Route path="/guides" element={<GuidesHub />} />
           <Route path="/guides/:slug" element={<GuidePage />} />
           <Route path="/how-to-get-more-google-reviews" element={<GuidePage slugOverride="how-to-get-more-google-reviews" />} />
-          <Route path="/atlanta" element={<Atlanta />} />
+          <Route path="/tampa" element={<Tampa />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />

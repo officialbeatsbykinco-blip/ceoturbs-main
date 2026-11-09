@@ -102,7 +102,7 @@ export function ReviewLinkTool({ initialLink = "", onValid }: { initialLink?: st
             <label htmlFor={`${uid}-c`} className="mb-1.5 block text-xs font-medium text-chrome">
               City
             </label>
-            <input id={`${uid}-c`} className="field" value={city} onChange={(e) => setCity(e.target.value)} placeholder="e.g. Atlanta, GA" maxLength={60} autoComplete="address-level2" />
+            <input id={`${uid}-c`} className="field" value={city} onChange={(e) => setCity(e.target.value)} placeholder="e.g. Tampa, FL" maxLength={60} autoComplete="address-level2" />
           </div>
         </div>
         <div className="mt-3 flex flex-wrap gap-2">

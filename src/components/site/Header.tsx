@@ -3,13 +3,14 @@ import { Link, NavLink, useLocation } from "react-router-dom";
 import { Calendar, ChevronDown, Menu, MessageSquare, Phone, X } from "lucide-react";
 import { Logo } from "./Logo";
 import { BookButton, InstallBookButton } from "@/components/cta/Actions";
-import { techBooking } from "@/content/tech-pages";
+import { IT_SERVICES_PATH, OFFICE_SETUP_PATH, techBooking } from "@/content/tech-pages";
 import { SERVICES } from "@/content/services";
 import { SITE, fromPriceLabel } from "@/config/site";
 import { CallLink } from "./CallLink";
 import { ARTIST_MERCH_PATH } from "@/content/artist-merch";
 import { SHIRTS_PATH } from "@/content/company-shirts";
 import { REVIEWS_AD_PATH, SHOP_PATH, SETUP_PATH } from "@/content/review-cards";
+import { QUICK_TECH_TEXT } from "@/lib/sms";
 import { CARD_TEXT, smsHref } from "@/lib/sms";
 import { cn } from "@/lib/utils";
 
@@ -42,7 +43,7 @@ const MENUS: Menu[] = [
       { to: "/producers", label: "Producers & beatmakers", sub: "Sell more beats, custom tracks and sessions" },
       { to: "/visual-artists", label: "Painters & visual artists", sub: "Sell originals, prints and commissions" },
       { to: "/shopify", label: "Shopify & online stores", sub: "More traffic that actually buys" },
-      { to: "/atlanta", label: "Atlanta businesses", sub: "Local, founder-led growth" },
+      { to: "/tampa", label: "Tampa Bay", sub: "Local, founder-run" },
       { to: "/app-marketing", label: "Software & app developers", sub: "More users & installs, zero fluff" },
     ],
   },
@@ -70,12 +71,13 @@ const MENUS: Menu[] = [
   },
 ];
 
-/** The agency menus folded into one, for after the card sale. */
+/** Everything past the four main services, in one menu. Review cards live here now. */
 const MORE: Menu = {
   label: "More",
-  to: "/grow",
+  to: "/services",
   items: [
-    { to: "/grow", label: "Websites & ads", sub: "Want more calls too? Start here" },
+    { to: SHOP_PATH, label: "Google review cards", sub: "Tap-to-review cards, from " + fromPriceLabel },
+    { to: "/tampa", label: "Tampa Bay", sub: "Where we work in person" },
     { to: "/pricing", label: "Pricing", sub: "Clear prices for websites and ads" },
     { to: "/services", label: "All services", sub: "Everything we do" },
     { to: "/free-audit", label: "Free check", sub: "See how you show up online" },
@@ -117,19 +119,19 @@ export function Header({ focus: focusProp = false }: { focus?: boolean }) {
 
         {!focus && (
           <nav aria-label="Main" className="hidden items-center gap-0.5 xl:flex">
-            <NavLink to={SHOP_PATH} className={linkCls}>
-              Buy Google Review Cards
+            <NavLink to={IT_SERVICES_PATH} className={linkCls}>
+              Tech repair
             </NavLink>
-            <NavLink to={SETUP_PATH} className={linkCls}>
-              Setup guide
+            <NavLink to={OFFICE_SETUP_PATH} className={linkCls}>
+              Office setup
             </NavLink>
-            <NavLink to="/how-to-get-more-google-reviews" className={linkCls}>
-              Get more reviews
+            <NavLink to="/grow" className={linkCls}>
+              Websites & ads
+            </NavLink>
+            <NavLink to={SHIRTS_PATH} className={linkCls}>
+              Company shirts
             </NavLink>
             <Dropdown menu={MORE} active={MORE.items.some((i) => i.to === pathname)} />
-            <BookButton note="Header nav" variant="chrome" className="ml-1 !px-3 !py-2 !text-[13px] xl:!text-sm">
-              Book a call
-            </BookButton>
           </nav>
         )}
 
@@ -141,7 +143,7 @@ export function Header({ focus: focusProp = false }: { focus?: boolean }) {
           </CallLink>
           {/* The shop pages have no bottom bar, so their Text button sits up here. */}
           {(pathname === "/" || pathname === SHOP_PATH || pathname === SHIRTS_PATH || pathname === ARTIST_MERCH_PATH) && (
-            <a href={smsHref(CARD_TEXT)} data-call-location={focus ? "ad page header text" : "header text"} className="inline-flex h-10 w-10 items-center justify-center rounded-xl text-foreground ring-1 ring-white/10 hover:bg-white/5 sm:hidden">
+            <a href={smsHref(pathname === SHOP_PATH ? CARD_TEXT : QUICK_TECH_TEXT)} data-call-location={focus ? "ad page header text" : "header text"} className="inline-flex h-10 w-10 items-center justify-center rounded-xl text-foreground ring-1 ring-white/10 hover:bg-white/5 sm:hidden">
               <MessageSquare className="h-[18px] w-[18px]" aria-hidden />
               <span className="sr-only">Text {SITE.name}</span>
             </a>
@@ -150,7 +152,7 @@ export function Header({ focus: focusProp = false }: { focus?: boolean }) {
             <InstallBookButton variant="ignite" note="Tech page header" booking={tech.booking} title={tech.title} className="inline-flex whitespace-nowrap !px-3 !py-2.5 !text-[13px] sm:!px-4 sm:!text-sm">
               Book a visit
             </InstallBookButton>
-          ) : pathname === REVIEWS_AD_PATH || pathname === "/" || pathname === SHOP_PATH ? (
+          ) : pathname === REVIEWS_AD_PATH || pathname === SHOP_PATH ? (
             <a href="#buy" className="btn-ignite !px-3 !py-1.5 text-center !text-[13px] !leading-tight sm:whitespace-nowrap sm:!px-4 sm:!py-2.5 sm:!text-sm">
               Buy Google <br className="sm:hidden" />
               Review Cards
@@ -161,8 +163,9 @@ export function Header({ focus: focusProp = false }: { focus?: boolean }) {
               <span className="hidden min-[400px]:inline">Book a free call</span>
             </BookButton>
           ) : (
-            <Link to={SHOP_PATH} className="btn-ignite whitespace-nowrap !px-3 !py-2.5 !text-sm sm:!px-4 max-sm:!hidden">
-              Buy Google Review Cards
+            <Link to={IT_SERVICES_PATH} className="btn-ignite whitespace-nowrap !px-3 !py-2.5 !text-sm sm:!px-4">
+              <span className="sm:hidden">Fix my tech</span>
+              <span className="hidden sm:inline">Get a repair price</span>
             </Link>
           )}
           {!focus && (
@@ -183,22 +186,21 @@ export function Header({ focus: focusProp = false }: { focus?: boolean }) {
       {open && !focus && (
         <div id="mobile-menu" className="container-x h-[calc(100dvh-4rem)] overflow-y-auto pb-32 pt-2 xl:hidden">
           <div className="grid gap-2">
-            <Link to={SHOP_PATH} onClick={() => setOpen(false)} className="btn-ignite justify-between !px-4 !py-4 !text-lg">
-              Buy Google Review Cards · {fromPriceLabel}
+            <Link to={IT_SERVICES_PATH} onClick={() => setOpen(false)} className="btn-ignite justify-between !px-4 !py-4 !text-lg">
+              Computer & phone repair
               <span aria-hidden>›</span>
             </Link>
-            <Link to={SETUP_PATH} onClick={() => setOpen(false)} className="panel flex items-center justify-between px-4 py-4 text-lg font-semibold">
-              Card setup guide
-              <span className="text-turbo" aria-hidden>›</span>
-            </Link>
-            <Link to="/how-to-get-more-google-reviews" onClick={() => setOpen(false)} className="panel flex items-center justify-between px-4 py-4 text-lg font-semibold">
-              Get more Google reviews
-              <span className="text-turbo" aria-hidden>›</span>
-            </Link>
-            <Link to="/grow" onClick={() => setOpen(false)} className="panel flex items-center justify-between px-4 py-4 text-lg font-semibold">
-              Websites & ads
-              <span className="text-turbo" aria-hidden>›</span>
-            </Link>
+            {[
+              [OFFICE_SETUP_PATH, "Office setup & cables"],
+              ["/grow", "Websites & ads"],
+              [SHIRTS_PATH, "Company t-shirts"],
+              [SHOP_PATH, "Google review cards"],
+            ].map(([to, label]) => (
+              <Link key={to} to={to} onClick={() => setOpen(false)} className="panel flex items-center justify-between px-4 py-4 text-lg font-semibold">
+                {label}
+                <span className="text-turbo" aria-hidden>›</span>
+              </Link>
+            ))}
             <div className="grid grid-cols-2 gap-2">
               <BookButton note="Mobile menu" variant="chrome" className="inline-flex items-center justify-center gap-2 !py-4 !text-base">
                 <Calendar className="h-5 w-5 text-turbo" aria-hidden />

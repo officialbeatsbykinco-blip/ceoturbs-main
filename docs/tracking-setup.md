@@ -106,3 +106,19 @@ GTM (GTM-KRPRZ67Z) stays on the site for anything you add later. Its old Google 
 - [ ] After the labels are in: a test free check shows the Google Ads *Lead* conversion as "Recording" within ~3h.
 - [ ] Place a real $24.99 order (refund it afterwards): Meta **Purchase**, GA4 **purchase** (Realtime), Google Ads conversion (shows within ~3h), and the order shows the gclid/fbclid notes.
 - [ ] Delete `META_TEST_EVENT_CODE`, then redeploy.
+
+## Tampa service pages (Nov 2026)
+
+### /computer-repair-tampa (Meta ads: optimize for **Lead**)
+
+| What the visitor does | Site event | Meta (browser + CAPI, same event_id) | Notes |
+|---|---|---|---|
+| Opens the page | `page_view` + `view_item` | PageView, **ViewContent** (`content_category: tech_repair`) | ViewContent server copy via `/api/track` |
+| Finishes the tech quiz (taps "Text it to us" on a phone, or sends name + mobile on a computer) | `generate_lead` (`lead_source: tech-quiz`, value 90) | **Lead** (`content_name: Computer repair Tampa`, `content_category: tech_repair`) | Server copy via `/api/lead` (type `tech-repair`), row in the leads sheet |
+| Books on the Cal.com repair event (`ceoturbo/i.t-consultation`) | `book_call` | **Schedule** | Browser listener + `/api/cal-webhook` |
+| Taps Call or Text **on a phone** | `click_to_call` / `click_to_text` | **Contact** | |
+| Clicks Call or Text **on a computer** (only shows the number/QR) | `contact_intent` | ContactIntent (custom) | Kept out of Contact and the Google Ads call conversion on purpose |
+
+### /office-setup-tampa (Google & Microsoft Ads)
+
+Same tags as before: Google Ads `book_call` / `click_to_call`, UET `book_appointment` / `contact`. Booking uses `ceoturbo/ceo-turbo-office-studio-setup`.

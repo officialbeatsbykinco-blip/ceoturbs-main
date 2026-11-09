@@ -21,7 +21,7 @@ export const AUDIT_ID = `${SITE.url}/free-audit#tool`;
 export type JsonLd = Record<string, unknown>;
 
 export const organization = (): JsonLd => ({
-  "@type": ["Organization", "ProfessionalService"],
+  "@type": ["LocalBusiness", "ProfessionalService"],
   "@id": ORG_ID,
   name: SITE.name,
   alternateName: ["CEOTurbo", "ceoturbo.com"],
@@ -32,15 +32,25 @@ export const organization = (): JsonLd => ({
   slogan: SITE.tagline,
   founder: { "@id": PERSON_ID },
   address: { "@type": "PostalAddress", ...SITE.address },
+  geo: { "@type": "GeoCoordinates", ...SITE.geo },
+  priceRange: "$$",
   telephone: SITE.phone.e164,
   email: SITE.email,
   contactPoint: [
     { "@type": "ContactPoint", telephone: SITE.phone.e164, email: SITE.email, contactType: "sales", areaServed: "Worldwide", availableLanguage: ["English"] },
     { "@type": "ContactPoint", telephone: SITE.phone.e164, email: SITE.email, contactType: "customer service", areaServed: "Worldwide", availableLanguage: ["English"] },
   ],
-  areaServed: "Worldwide",
+  areaServed: [
+    { "@type": "GeoCircle", geoMidpoint: { "@type": "GeoCoordinates", ...SITE.geo }, geoRadius: Math.round(SITE.serviceRadiusMiles * 1609.34) },
+    "Worldwide",
+  ],
   sameAs: SITE.sameAs,
   knowsAbout: [
+    "Computer repair",
+    "Phone and tablet repair",
+    "Remote computer support",
+    "Office setup and cable management",
+    "TV mounting and digital menu screens",
     "Search engine optimization",
     "Answer engine optimization",
     "Generative engine optimization",
@@ -132,7 +142,7 @@ export const service = (s: Service): JsonLd => ({
   serviceType: s.name,
   description: s.answer,
   provider: { "@id": ORG_ID },
-  areaServed: CALL_FIRST_SLUGS.includes(s.slug) ? ALL_SETUP_CITIES.map((name) => ({ "@type": "City", name, containedInPlace: { "@type": "State", name: "Georgia" } })) : "Worldwide",
+  areaServed: CALL_FIRST_SLUGS.includes(s.slug) ? ALL_SETUP_CITIES.map((name) => ({ "@type": "City", name, containedInPlace: { "@type": "State", name: "Florida" } })) : "Worldwide",
   url: abs(`/services/${s.slug}`),
   ...(pricesFor(s.slug).length ? { offers: pricesFor(s.slug).map(priceOffer) } : {}),
   hasOfferCatalog: {
@@ -221,7 +231,7 @@ export const reviewCardProduct = (): JsonLd => ({
   brand: { "@type": "Brand", name: SITE.name },
   category: "Business & Industrial > Retail > Retail Display Props & Models",
   material: "PVC",
-  url: abs("/"),
+  url: abs("/google-review-cards"),
   color: "White/Black",
   variesBy: ["https://schema.org/size"],
   hasVariant: REVIEW_CARD.packs.map((p) => ({

@@ -1,9 +1,9 @@
-// Cities served by the home office & computer setup service (Atlanta metro, Gwinnett, Athens, ~50-mile radius).
+// Cities served in person (Tampa Bay, about 40 miles from Tampa). Remote help works anywhere.
 export const SETUP_AREAS: { region: string; note?: string; cities: string[] }[] = [
-  { region: "Atlanta & inner ring", cities: ["Atlanta", "Buckhead", "Midtown", "Decatur", "Brookhaven", "Sandy Springs", "Dunwoody", "Chamblee", "Doraville", "Tucker", "East Point", "College Park", "Hapeville", "Forest Park", "Stone Mountain", "Lithonia"] },
-  { region: "Gwinnett County", note: "Home base: Duluth", cities: ["Duluth", "Norcross", "Peachtree Corners", "Lawrenceville", "Suwanee", "Sugar Hill", "Buford", "Snellville", "Lilburn", "Dacula", "Grayson", "Loganville"] },
-  { region: "North Fulton & Cobb", cities: ["Alpharetta", "Roswell", "Johns Creek", "Milton", "Marietta", "Smyrna", "Vinings", "Kennesaw", "Acworth", "Woodstock", "Canton", "Mableton", "Austell", "Powder Springs"] },
-  { region: "South & west metro", cities: ["Morrow", "Jonesboro", "Riverdale", "Stockbridge", "McDonough", "Fayetteville", "Peachtree City", "Newnan", "Douglasville", "Union City", "Fairburn"] },
-  { region: "Athens & east", note: "Athens and up to 2 hours from Duluth for larger jobs", cities: ["Athens", "Winder", "Monroe", "Covington", "Conyers", "Oconee County", "Watkinsville", "Madison"] },
+  { region: "Tampa", note: "Home base", cities: ["Tampa", "Carrollwood", "Town 'n' Country", "Westchase", "Temple Terrace", "Lutz", "Citrus Park", "Seffner"] },
+  { region: "Pinellas County", cities: ["St. Petersburg", "Clearwater", "Largo", "Pinellas Park", "Seminole", "Dunedin", "Palm Harbor", "Oldsmar", "Safety Harbor", "Tarpon Springs"] },
+  { region: "Pasco County", cities: ["Wesley Chapel", "Land O' Lakes", "New Port Richey", "Zephyrhills", "Odessa", "Trinity"] },
+  { region: "East & South Hillsborough", cities: ["Brandon", "Riverview", "Valrico", "Plant City", "Apollo Beach", "Ruskin", "Sun City Center", "Gibsonton"] },
+  { region: "Polk & Manatee", note: "Edge of the 40-mile radius", cities: ["Lakeland", "Parrish", "Palmetto"] },
 ];
 export const ALL_SETUP_CITIES = SETUP_AREAS.flatMap((r) => r.cities);

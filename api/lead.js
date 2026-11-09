@@ -22,6 +22,13 @@ export function quizFields(body) {
   };
 }
 
+/** Tech repair quiz (/computer-repair-tampa): problem, device and where, as one readable note (exported for tests). */
+export function techFields(body) {
+  const f = { problem: text(body.problem, 80), device: text(body.device, 60), where: text(body.where, 60), city: text(body.city, 60) };
+  const note = [f.problem && `Problem: ${f.problem}`, f.device && `Device: ${f.device}`, f.where && `Where: ${f.where}`, f.city && `City: ${f.city}`].filter(Boolean).join(" | ");
+  return { ...f, note };
+}
+
 /** Developer intake (/app-marketing): answers kept as one readable note for the sheet's Note column (exported for tests). */
 export function devFields(body) {
   const f = { appUrl: text(body.appUrl, 200), platform: text(body.platform, 40), stage: text(body.stage, 60), budget: text(body.budget, 40), blocker: text(body.blocker, 300) };
@@ -57,7 +64,9 @@ export default async function handler(req, res) {
   const dev = type === "dev-intake" ? devFields(body) : null;
   // The text quiz asks for a first name only: a phone send gives us their number when the text arrives.
   const textQuiz = type === "brand-boost-quiz" && text(body.service, 80) === "text-quiz";
-  const { lead, error } = cleanLead(body, { phoneOptional: !!dev || type === "shirt-exit-intent" || (textQuiz && body.channel === "sms"), emailOptional: type === "battery" || textQuiz });
+  const tech = type === "tech-repair" ? techFields(body) : null;
+  const smsSend = (textQuiz || !!tech) && body.channel === "sms";
+  const { lead, error } = cleanLead(body, { phoneOptional: !!dev || type === "shirt-exit-intent" || smsSend, emailOptional: type === "battery" || textQuiz || !!tech });
   if (error) return send(res, 400, { error });
 
   const battery = type === "battery" ? batteryFields(body) : null;
@@ -81,6 +90,7 @@ export default async function handler(req, res) {
       userAgent: req.headers["user-agent"],
       customData: {
         lead_source: type,
+        ...(tech ? { content_name: "Computer repair Tampa", content_category: "tech_repair" } : {}),
         ...(dev ? { content_name: "Developer intake", content_category: [dev.platform, dev.stage].filter(Boolean).join(" · ") } : {}),
         ...(quiz ? { content_name: "Brand Boost quiz", content_category: [quiz.audience, quiz.stage].filter(Boolean).join(" · ") } : {}),
         ...(value ? { value, currency: "USD" } : {}),
@@ -88,7 +98,7 @@ export default async function handler(req, res) {
     }),
   ]);
   const tiktok = sendTiktokEvents([
-    buildTiktokEvent({ event: "Lead", eventId, url, user, attribution: attr, ip, userAgent: req.headers["user-agent"], properties: { content_name: quiz ? "Brand Boost quiz" : dev ? "Developer intake" : type, ...(value ? { value, currency: "USD" } : {}) } }),
+    buildTiktokEvent({ event: "Lead", eventId, url, user, attribution: attr, ip, userAgent: req.headers["user-agent"], properties: { content_name: tech ? "Computer repair Tampa" : quiz ? "Brand Boost quiz" : dev ? "Developer intake" : type, ...(value ? { value, currency: "USD" } : {}) } }),
   ]);
   const { stored } = await forwardLead({
     type,
@@ -103,7 +113,7 @@ export default async function handler(req, res) {
     style: text(body.style, 40),
     pack: text(body.pack, 40),
     total: text(body.total, 20),
-    note: dev ? dev.note : battery ? battery.note : text(body.note, 500),
+    note: tech ? tech.note : dev ? dev.note : battery ? battery.note : text(body.note, 500),
     page: text(body.page, 120),
     eventId,
     ...attr,

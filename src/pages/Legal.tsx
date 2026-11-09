@@ -23,7 +23,7 @@ export function PrivacyPolicy() {
       <section>
         <h2>Who we are</h2>
         <p>
-          {SITE.name} ({SITE.url}) is operated from {SITE.address.streetAddress}, {SITE.address.addressLocality}, {SITE.address.addressRegion} {SITE.address.postalCode}, USA. This policy explains what personal information we collect and how we use it.
+          {SITE.name} ({SITE.url}) is operated from {SITE.address.addressLocality}, {SITE.address.addressRegion}, USA. This policy explains what personal information we collect and how we use it.
         </p>
       </section>
       <section>
@@ -120,7 +120,7 @@ export function Terms() {
       </section>
       <section>
         <h2>9. Governing law</h2>
-        <p>These terms are governed by the laws of the State of Georgia, USA.</p>
+        <p>These terms are governed by the laws of the State of Florida, USA.</p>
       </section>
       <section>
         <h2>10. SMS Terms</h2>
@@ -167,7 +167,7 @@ export function ShippingReturns() {
       <section>
         <h2>Contact</h2>
         <p>
-          Call or text us at <a href={SITE.phone.href} data-call-location="shipping page">{SITE.phone.display}</a>, email <a href={`mailto:${SITE.email}`}>{SITE.email}</a>, book a quick call from any page, or write to us at {SITE.address.streetAddress}, {SITE.address.addressLocality}, {SITE.address.addressRegion} {SITE.address.postalCode}. Include your name and order details.
+          Call or text us at <a href={SITE.phone.href} data-call-location="shipping page">{SITE.phone.display}</a>, email <a href={`mailto:${SITE.email}`}>{SITE.email}</a>, or book a quick call from any page. Include your name and order details.
         </p>
       </section>
     </LegalShell>

@@ -6,6 +6,9 @@ export const smsHref = (body: string) => `sms:${SITE.phone.e164}?&body=${encodeU
 /** What the phone bar's Text us button fills in. */
 export const QUICK_TEXT = "Hi CEO Turbo, I want more customers. My business is: ";
 
+/** What the homepage and shirt pages' Text buttons fill in. */
+export const QUICK_TECH_TEXT = "Hi Chris, I need help with: ";
+
 /** What the shop and setup pages' Text buttons fill in. */
 export const CARD_TEXT = "Hi CEO Turbo, I have a question about the review cards. My business is: ";
 

@@ -18,6 +18,7 @@ export function trackPayload(body) {
     eventName,
     customData: {
       ...(text(body.contentName, 120) ? { content_name: text(body.contentName, 120) } : {}),
+      ...(text(body.contentCategory, 60) ? { content_category: text(body.contentCategory, 60) } : {}),
       ...(value > 0 ? { value: Math.min(value, 10000), currency: text(body.currency, 3).toUpperCase() || "USD" } : {}),
       ...(ids.length ? { content_ids: ids, content_type: "product" } : {}),
       ...(Number(body.numItems) > 0 ? { num_items: Math.min(Number(body.numItems), 1000) } : {}),

@@ -13,6 +13,7 @@ import { redditEvent } from "@/lib/reddit";
 import { uetEvent } from "@/lib/uet";
 import { tiktokEvent } from "@/lib/tiktok";
 import { clarityEvent } from "@/lib/clarity";
+import { canText } from "@/lib/sms";
 
 type Fn = (...args: unknown[]) => void;
 type Win = Window & { dataLayer?: unknown[]; fbq?: Fn };
@@ -36,6 +37,7 @@ const META: Record<string, { name: string; custom?: boolean }> = {
   audit_start: { name: "AuditStart", custom: true },
   audit_complete: { name: "AuditComplete", custom: true },
   quiz_start: { name: "QuizStart", custom: true },
+  contact_intent: { name: "ContactIntent", custom: true },
 };
 
 /** CEO Turbo's Meta Pixel (Events Manager → Data sources). VITE_META_PIXEL_ID overrides it. */
@@ -324,7 +326,7 @@ export function attribution(): Attribution {
 const SERVER_COPY = new Set(["page_view", "view_item", "customize_product", "add_to_cart", "begin_checkout", "click_to_call", "click_to_text"]);
 
 /** Server-side copy of a browser event (api/track.js). Fire-and-forget; never throws. */
-export function serverTrack(event: string, eventId: string, data: { value?: number; currency?: string; contentName?: string; contentIds?: string[]; numItems?: number; user?: UserData } = {}) {
+export function serverTrack(event: string, eventId: string, data: { value?: number; currency?: string; contentName?: string; contentCategory?: string; contentIds?: string[]; numItems?: number; user?: UserData } = {}) {
   if (typeof window === "undefined" || !SERVER_COPY.has(event)) return;
   const page = window.location.pathname + window.location.search;
   void metaParamsReady().then(() => {
@@ -356,6 +358,12 @@ export function installCallTracking() {
       if (!a) return;
       const location = a.dataset.callLocation || "link";
       const text = a.getAttribute("href")?.startsWith("sms:");
+      // A computer can't place the call or send the text (PhoneHost shows the number instead), so it is only
+      // an intent: keep it out of Meta Contact and the Google Ads call conversion so they optimize on real taps.
+      if (!canText()) {
+        track("contact_intent", { location, channel: text ? "text" : "call" });
+        return;
+      }
       const event = text ? "click_to_text" : "click_to_call";
       const contentName = text ? "Text message" : "Phone call";
       const id = track(event, { location, content_name: contentName });

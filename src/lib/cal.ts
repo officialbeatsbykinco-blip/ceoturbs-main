@@ -58,14 +58,14 @@ function bootstrap() {
 }
 
 /**
- * Matches the inline embed code from the Cal.com dashboard (Embed → Inline): blue #0093ff on the picked
- * day/time, and the meeting-info panel hidden — visitors already know why they clicked "Book a call".
+ * Matches the inline embed code from the Cal.com dashboard (Embed → Inline, cal.com/ceoturbo): orange #ff7800 on
+ * the picked day/time in dark mode, blue #009fff in light, and the event details shown (what it is, how long, where).
  */
 const UI = {
   theme: "dark" as const,
   layout: "month_view" as const,
-  hideEventTypeDetails: true,
-  cssVarsPerTheme: { dark: { "cal-brand": "#0093ff" }, light: { "cal-brand": "#0093ff" } },
+  hideEventTypeDetails: false,
+  cssVarsPerTheme: { dark: { "cal-brand": "#ff7800" }, light: { "cal-brand": "#009fff" } },
 };
 
 /** Namespaces: the site-wide booking calendar, and the quiz's own (kept apart so their load events don't mix). */
@@ -110,6 +110,9 @@ function initNamespace(ns: string) {
   const Cal = getCal()!;
   if (inited.has(ns)) return;
   inited.add(ns);
+  // Same as the dashboard embed: the page's UTM / click-id query params ride along into the booking.
+  const withConfig = Cal as unknown as { config?: Record<string, unknown> };
+  withConfig.config = { ...(withConfig.config ?? {}), forwardQueryParams: true };
   Cal("init", ns, { origin: CAL_ORIGIN });
   Cal.ns[ns]("ui", UI);
   for (const [action, status] of [["linkReady", "ready"], ["linkFailed", "failed"]] as const)

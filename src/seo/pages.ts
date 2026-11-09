@@ -47,13 +47,12 @@ function build(): PageMeta[] {
 
   pages.push({
     path: "/",
-    title: `NFC Google Review Cards from ${fromPriceLabel}, Ships Free | CEO Turbo`,
-    description: `Tap-to-review cards for barbers, lawn care, mobile repair and stores. Customers tap and your Google review form opens. From ${fromPriceLabel}, free US shipping.`,
-    ogImage: "/og/review-cards.jpg?v=2",
+    title: "Computer Repair & Office Setup in Tampa, FL | CEO Turbo",
+    description: `Tampa tech help and growth: computers, phones and tablets fixed at your door or remotely, offices set up, and websites and ads that bring customers.`,
     priority: 1,
     changefreq: "weekly",
     group: "Core",
-    schema: [...base(), S.webPage("/", "CEO Turbo", SITE.description, "ItemPage"), S.reviewCardProduct(), S.faqPage(SHOP_FAQS, "/")],
+    schema: [...base(), S.webPage("/", "CEO Turbo", SITE.description)],
   });
 
   pages.push({
@@ -124,9 +123,7 @@ function build(): PageMeta[] {
     priority: 0.9,
     changefreq: "weekly",
     group: "Core",
-    // Same buy box and FAQs as the homepage, so it's indexed as "/" instead of competing with it for "NFC Google review cards".
-    canonical: "/",
-    schema: [...base(), S.webPage(SHOP_PATH, "Google review cards", "NFC Google review cards", "ItemPage")],
+    schema: [...base(), S.webPage(SHOP_PATH, "Google review cards", "NFC Google review cards", "ItemPage"), S.reviewCardProduct(), S.faqPage(SHOP_FAQS, SHOP_PATH), S.breadcrumbs([{ name: "Google review cards", path: SHOP_PATH }])],
   });
 
   pages.push({
@@ -259,19 +256,19 @@ function build(): PageMeta[] {
   }
 
   pages.push({
-    path: "/atlanta",
-    title: "Atlanta Marketing Agency — Websites, Ads & SEO | CEO Turbo",
+    path: "/tampa",
+    title: "CEO Turbo in Tampa, FL: Tech Repair, Office Setup & Websites",
     description:
-      "Atlanta-based growth agency building websites, Meta and Google ads, Google Business Profiles and AI-search visibility for Georgia businesses and artists.",
+      "Tampa-based and founder-run: computer, phone and tablet repair at your door, office setup and cable management, and websites and ads for Tampa Bay.",
     priority: 0.7,
     changefreq: "monthly",
     group: "Company",
-    schema: [...base(), S.webPage("/atlanta", "CEO Turbo in Atlanta", "Atlanta marketing agency"), S.breadcrumbs([{ name: "Atlanta", path: "/atlanta" }])],
+    schema: [...base(), S.webPage("/tampa", "CEO Turbo in Tampa", "Tampa tech help and growth"), S.breadcrumbs([{ name: "Tampa", path: "/tampa" }])],
   });
 
   pages.push({
     path: "/about",
-    title: "About Christopher Robinson, Atlanta Founder | CEO Turbo",
+    title: "About Christopher Robinson, Tampa Founder | CEO Turbo",
     description:
       "Christopher Robinson (StackmodeChris) founded CEO Turbo to help artists, local businesses and stores win customers with websites, ads and AI search.",
     priority: 0.6,
@@ -283,7 +280,7 @@ function build(): PageMeta[] {
   pages.push({
     path: "/contact",
     title: "Contact CEO Turbo: Call, Text, Email or Book a Call",
-    description: `Call or text ${SITE.phone.display}, email us, or book a free 30-minute Brand Boost call. Order Google review cards or reach CEO Turbo in Atlanta, GA.`,
+    description: `Call or text ${SITE.phone.display}, email us, or book a free 30-minute Brand Boost call. Tech help, office setup and websites from CEO Turbo in Tampa, FL.`,
     priority: 0.5,
     changefreq: "yearly",
     group: "Company",
@@ -339,10 +336,10 @@ function build(): PageMeta[] {
     { path: "/get-more-reviews", title: "How to Get More Google Reviews (One Tap) | CEO Turbo", description: `Why reviews decide who gets the call on Google, Maps and ChatGPT — and the NFC card that turns “I'll review you later” into a review. From ${fromPriceLabel}.`, ogImage: "/og/get-more-reviews.jpg", noindex: true, priority: 0.1, changefreq: "yearly", group: "Core", schema: base() },
     // Google Search ad landing for the local-service offer; noindex so it doesn't compete with / and /services/google-ads.
     { path: "/google-ads-for-local-business", title: "Get More Calls From Google Ads | CEO Turbo", description: `Get more calls from people searching Google. Search campaigns for appliance repair, HVAC, plumbing and cleaning, every call tracked. Setup ${price("pkg-start")}.`, noindex: true, priority: 0.1, changefreq: "yearly", group: "Core", schema: base() },
-    // Google Search ad landing for PC repair and custom builds around Duluth, GA; noindex like the other ad pages.
-    { path: "/pc-technician-duluth-ga", title: "PC Technician Near Duluth, GA: Repair & Builds | CEO Turbo", description: `PC repair and custom PC builds at your home or office in Duluth, GA and 40 miles around. Flat price in writing first. Call ${SITE.phone.display}.`, noindex: true, priority: 0.1, changefreq: "yearly", group: "Core", schema: base() },
-    // Ad landing for on-site tech help (computers, iPhone/iPad, TVs, Wi-Fi) for homes and businesses around Duluth; noindex like the other ad pages.
-    { path: "/it-services-duluth-ga", title: "Computer, iPhone, TV & Wi-Fi Repair in Duluth, GA | CEO Turbo", description: `We come to you: computer repair, iPhone screens and batteries, TV mounting and Wi-Fi fixes for homes and businesses. Call ${SITE.phone.display}.`, noindex: true, priority: 0.1, changefreq: "yearly", group: "Core", schema: base() },
+    // Meta ads landing for tech repair in Tampa (computers, phones, tablets; in-home within 40 miles or remote). Indexed for "computer repair Tampa".
+    { path: "/computer-repair-tampa", title: "Computer Repair in Tampa, FL: We Come to You | CEO Turbo", description: `Slow, crashing or dead computer, phone or tablet? Fixed at your door in Tampa Bay or remotely. Speed-up from $75. Call or text ${SITE.phone.display}.`, priority: 0.9, changefreq: "monthly", group: "Core", schema: [...base(), S.webPage("/computer-repair-tampa", "Computer repair in Tampa", "In-home and remote computer, phone and tablet repair around Tampa, FL."), S.breadcrumbs([{ name: "Computer repair Tampa", path: "/computer-repair-tampa" }])] },
+    // Google & Microsoft Ads landing for office setup and cable management in Tampa.
+    { path: "/office-setup-tampa", title: "Office Setup & Cable Management in Tampa, FL | CEO Turbo", description: `Multi-monitor workstations, cable management, printers, Wi-Fi and Microsoft/Google setup for Tampa Bay homes and offices. From $99 per desk.`, priority: 0.9, changefreq: "monthly", group: "Core", schema: [...base(), S.webPage("/office-setup-tampa", "Office setup in Tampa", "Office setup, workstation and cable management services around Tampa, FL."), S.breadcrumbs([{ name: "Office setup Tampa", path: "/office-setup-tampa" }])] },
     { path: "/book", title: "Book Your Free 30-Minute Call | CEO Turbo", description: "Pick a time for a free 30-minute call with Christopher Robinson: what's costing you calls and bookings, and a fixed price to fix it.", ogImage: "/og/brand-boost.jpg", noindex: true, priority: 0.1, changefreq: "yearly", group: "Core", schema: base() },
     { path: "/booked", title: "You're Booked | CEO Turbo", description: "Your Brand Boost call is booked. Here's how to get the most from it.", noindex: true, priority: 0.1, changefreq: "yearly", group: "Core", schema: base() },
     {

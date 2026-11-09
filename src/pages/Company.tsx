@@ -24,7 +24,7 @@ export function About() {
           <Breadcrumbs items={[{ name: "About", path: "/about" }]} />
           <SectionHeader as="h1" title="About CEO Turbo and Christopher Robinson" />
           <DirectAnswer label="In short">
-            CEO Turbo is an Atlanta-based growth agency founded by Christopher Robinson, known online as StackmodeChris. It builds websites, runs Meta, Google, TikTok and X ads, optimizes Google Business Profiles and social profiles, designs promotional emails, and does SEO, AEO and GEO for artists, local service businesses and Shopify stores.
+            CEO Turbo is a Tampa, Florida tech and growth company founded by Christopher Robinson, known online as StackmodeChris. It fixes computers, phones and tablets, sets up and organizes offices, builds websites, runs Meta, Google, TikTok and X ads, optimizes Google Business Profiles and social profiles, designs promotional emails, and does SEO, AEO and GEO for artists, local service businesses and Shopify stores.
           </DirectAnswer>
           <div className="mt-16">
             <Founder />
@@ -99,9 +99,9 @@ export function Contact() {
               <address className="mt-2 flex-1 text-sm not-italic leading-relaxed text-muted-foreground">
                 {SITE.name}
                 <br />
-                {SITE.address.streetAddress}
+                {SITE.address.addressLocality}, {SITE.address.addressRegion}
                 <br />
-                {SITE.address.addressLocality}, {SITE.address.addressRegion} {SITE.address.postalCode}
+                In person within {SITE.serviceRadiusMiles} miles, remote anywhere
               </address>
               <a href="https://www.instagram.com/ceoturbo_/" target="_blank" rel="noopener" className="btn-chrome mt-6">
                 DM us on Instagram <ArrowUpRight className="h-4 w-4" />
@@ -126,7 +126,7 @@ export function Contact() {
   );
 }
 
-export function Atlanta() {
+export function Tampa() {
   const georgia = ["oj-junk-removal", "kingstone-landscaping", "cleardump", "appliance-king", "7uvhavin", "yari-beats"]
     .map(clientBySlug)
     .filter((c): c is NonNullable<typeof c> => Boolean(c));
@@ -135,22 +135,25 @@ export function Atlanta() {
       <section className="relative overflow-hidden pt-28 sm:pt-32">
         <div className="pointer-events-none absolute -top-32 left-1/2 h-[520px] w-[900px] -translate-x-1/2 glow-turbo" aria-hidden />
         <div className="container-x relative">
-          <Breadcrumbs items={[{ name: "Atlanta", path: "/atlanta" }]} />
-          <SectionHeader as="h1" title="Atlanta marketing agency for local businesses and artists" />
-          <DirectAnswer label="CEO Turbo in Atlanta">
-            CEO Turbo is a growth agency based in Atlanta, Georgia. We build websites, run Meta and Google ads, optimize Google Business Profiles and do SEO, AEO and GEO for Georgia businesses and artists — {georgia.length} of our live client sites are in Georgia, from metro Atlanta junk removal to North Georgia landscaping and Atlanta producers.
+          <Breadcrumbs items={[{ name: "Tampa", path: "/tampa" }]} />
+          <SectionHeader as="h1" title="Tampa tech help and growth, founder-run" />
+          <DirectAnswer label="CEO Turbo in Tampa">
+            CEO Turbo is based in Tampa, Florida. We fix computers, phones and tablets at your door or remotely, set up and organize offices, and build websites and ads that bring in customers. In-person work covers about 40 miles around Tampa, and {georgia.length} of the client sites below were built before our move from Georgia.
           </DirectAnswer>
           <div className="mt-8 flex flex-wrap gap-3">
-            <BookButton note="Atlanta page">Book a free call</BookButton>
-            <Link to="/local-business" className="btn-chrome">
-              Local business services
+            <Link to="/computer-repair-tampa" className="btn-ignite">
+              Computer &amp; phone repair
             </Link>
+            <Link to="/office-setup-tampa" className="btn-chrome">
+              Office setup
+            </Link>
+            <BookButton note="Tampa page">Websites &amp; ads call</BookButton>
           </div>
         </div>
       </section>
       <section className="section" aria-labelledby="ga-work">
         <div className="container-x">
-          <SectionHeader title={<span id="ga-work">Georgia clients we've built for</span>} lede="Metro Atlanta, Gwinnett County, North Georgia, Macon and Barnesville." />
+          <SectionHeader title={<span id="ga-work">Sites and ads we've built</span>} lede="Real client work for local service businesses and artists." />
           <div className="mt-10">
             <WorkGrid clients={georgia} />
           </div>
@@ -158,7 +161,7 @@ export function Atlanta() {
       </section>
       <section className="section border-t border-border">
         <div className="container-x">
-          <SectionHeader title="What we do for Atlanta businesses" />
+          <SectionHeader title="What we do for Tampa Bay businesses" />
           <div className="mt-10">
             <ServiceGrid slugs={["google-business-profile", "website-design", "meta-ads", "google-ads", "seo-aeo-geo"]} />
           </div>
@@ -174,7 +177,7 @@ export function Atlanta() {
           </p>
         </div>
       </section>
-      <BookingSection note="Atlanta page" />
+      <BookingSection note="Tampa page" />
     </>
   );
 }

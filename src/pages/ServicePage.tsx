@@ -135,7 +135,7 @@ export default function ServicePage() {
                       </a>
                       <span className="text-border" aria-hidden>•</span>
                       <a href="#areas" className="inline-flex min-h-10 items-center transition hover:text-foreground">
-                        Atlanta & Gwinnett
+                        Tampa Bay
                       </a>
                     </div>
                   </>
@@ -319,7 +319,7 @@ export default function ServicePage() {
       {isHomeOffice && (
         <section className="section border-t border-border" aria-labelledby="areas">
           <div className="container-x">
-            <SectionHeader title={<span id="areas">Areas We Serve</span>} lede="We serve the entire Atlanta metro area within a 50-mile radius, plus extended service up to 2 hours from Duluth for larger projects." />
+            <SectionHeader title={<span id="areas">Areas We Serve</span>} lede="We come to you anywhere within about 40 miles of Tampa. Remote computer help works anywhere." />
             <div className="mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
               {SETUP_AREAS.map((r, i) => (
                 <Reveal key={r.region} delay={i * 70}>
@@ -337,7 +337,7 @@ export default function ServicePage() {
                 </Reveal>
               ))}
             </div>
-            <p className="mt-6 text-sm text-muted-foreground">Don't see your city? If you're within about two hours of Duluth, call {SITE.phone.display} and we'll tell you the same day.</p>
+            <p className="mt-6 text-sm text-muted-foreground">Don't see your city? If you're within about 40 miles of Tampa, call {SITE.phone.display} and we'll tell you the same day.</p>
           </div>
         </section>
       )}

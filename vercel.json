@@ -31,6 +31,9 @@
     }
   },
   "redirects": [
+    { "source": "/it-services-duluth-ga", "destination": "/computer-repair-tampa", "permanent": true },
+    { "source": "/pc-technician-duluth-ga", "destination": "/computer-repair-tampa", "permanent": true },
+    { "source": "/atlanta", "destination": "/tampa", "permanent": true },
     {
       "source": "/website",
       "destination": "/services/website-design",
