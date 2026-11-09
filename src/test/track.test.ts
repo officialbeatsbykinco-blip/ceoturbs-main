@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
 import { GOOGLE_ADS_ID, GOOGLE_ADS_LABELS } from "@/lib/ga";
 
-type Win = Window & { uetq?: unknown[]; gtag?: (...a: unknown[]) => void; fbq?: (...a: unknown[]) => void; dataLayer?: unknown[] };
+type Win = Window & { uetq?: unknown[]; gtag?: (...a: unknown[]) => void; gaLayer?: unknown[]; fbq?: (...a: unknown[]) => void; dataLayer?: unknown[] };
 const w = window as Win;
 
 /** Loads a fresh copy of the tracking modules so each test starts with no dedupe / Meta state. */
@@ -157,5 +157,15 @@ describe("Meta advanced matching at pixel init", () => {
     (window as unknown as { fbq: unknown }).fbq = Object.assign(() => {}, { instance: { pixelsByID: { "3232222473609236": { userData: {} } } } });
     identify({ name: "Pat Lee", phone: "(813) 555-0123", zip: "33617" });
     expect(savedMatch()).toMatchObject({ fn: "pat", ln: "lee", ph: "18135550123", zp: "33617", country: "us" });
+  });
+});
+
+describe("Google tag loading", () => {
+  it("queues the first Ads conversion if the lazy tag has not loaded yet", async () => {
+    const { googleAdsConversion } = await import("@/lib/ga");
+    delete w.gtag;
+    w.gaLayer = [];
+    googleAdsConversion("generate_lead", { eventId: "lead_early", value: 10, currency: "USD" });
+    expect(w.gaLayer).toEqual(expect.arrayContaining([expect.objectContaining({ 0: "event", 1: "conversion", 2: expect.objectContaining({ transaction_id: "lead_early" }) })]));
   });
 });

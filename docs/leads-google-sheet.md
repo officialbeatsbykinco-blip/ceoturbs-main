@@ -65,6 +65,16 @@ Project → Settings → Environment Variables:
 | `LEADS_WEBHOOK_SECRET` | the same random string as `SECRET` above |
 | `PSI_API_KEY` (optional) | a free Google PageSpeed Insights API key — adds a real mobile speed score to every audit |
 
+For production ad-event matching, add these to the same Vercel **Production** environment and redeploy:
+
+| Name | Value |
+| --- | --- |
+| `META_CAPI_TOKEN` | Meta Events Manager → your pixel → Settings → Conversions API → Generate access token |
+| `META_PIXEL_ID` (optional) | `3232222473609236` unless you intentionally use another pixel |
+| `META_TEST_EVENT_CODE` (temporary) | Only while testing in Meta Test Events; remove it after verification |
+
+Google Ads, GA4, Microsoft UET and Clarity IDs are already built into the site. `VITE_GOOGLE_ADS_ID`, `VITE_UET_TAG_ID` and `VITE_CLARITY_ID` are optional build-time overrides, not replacements for the lead webhook variables.
+
 Redeploy. Run a test audit on the live site and check the sheet.
 
 ## Local testing

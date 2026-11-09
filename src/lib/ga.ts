@@ -28,6 +28,18 @@ export const GOOGLE_ADS_LABELS: Record<string, string> = {
 
 type GaWin = Window & { gaLayer?: unknown[]; gtag?: (...args: unknown[]) => void; __ga?: boolean };
 
+/** Keep first-touch events until the lazy Google tag is ready. */
+function pushGtag(w: GaWin, ...args: unknown[]) {
+  w.gaLayer = w.gaLayer || [];
+  if (w.gtag) w.gtag(...args);
+  else {
+    // gtag.js consumes an arguments-like queue, not a plain array.
+    const queued = { length: args.length } as Record<number | "length", unknown>;
+    args.forEach((arg, i) => (queued[i] = arg));
+    w.gaLayer.push(queued);
+  }
+}
+
 export function startGa() {
   if (typeof window === "undefined") return;
   const w = window as GaWin;
@@ -60,7 +72,7 @@ export function loadGa() {
 /** A GA4 event (conversion or funnel step). Safe to call before the tag has loaded. */
 export function gaEvent(name: string, params: Record<string, unknown> = {}) {
   if (typeof window === "undefined") return;
-  (window as GaWin).gtag?.("event", name, params);
+  pushGtag(window as GaWin, "event", name, params);
 }
 
 /** Client-side route change → GA4 page_view (the first load is sent by the tag itself). */
@@ -76,11 +88,10 @@ export function gaPageView(path: string) {
 export function googleAdsConversion(event: string, data: { eventId: string; value?: unknown; currency?: unknown; email?: string; phone?: string }) {
   const label = GOOGLE_ADS_LABELS[event];
   if (!label || typeof window === "undefined") return;
-  const gtag = (window as GaWin).gtag;
-  if (!gtag) return;
-  if (data.email || data.phone) gtag("set", "user_data", { ...(data.email ? { email: data.email.trim().toLowerCase() } : {}), ...(data.phone ? { phone_number: data.phone } : {}) });
+  const w = window as GaWin;
+  if (data.email || data.phone) pushGtag(w, "set", "user_data", { ...(data.email ? { email: data.email.trim().toLowerCase() } : {}), ...(data.phone ? { phone_number: data.phone } : {}) });
   const value = Number(data.value);
-  gtag("event", "conversion", {
+  pushGtag(w, "event", "conversion", {
     send_to: `${GOOGLE_ADS_ID}/${label}`,
     transaction_id: data.eventId,
     ...(value > 0 ? { value, currency: typeof data.currency === "string" ? data.currency : "USD" } : {}),
