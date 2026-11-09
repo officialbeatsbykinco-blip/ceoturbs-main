@@ -14,6 +14,7 @@ import { QUICK_TECH_TEXT } from "@/lib/sms";
 import { CARD_TEXT, smsHref } from "@/lib/sms";
 import { cn } from "@/lib/utils";
 import { FixMyTechLink } from "@/components/tech/FixMyTechLink";
+import { ContactButton } from "@/components/cta/ContactChooser";
 import { useTexting } from "@/components/booking/BookOrText";
 
 type Item = { to: string; label: string; sub?: string; group?: string };
@@ -177,10 +178,9 @@ export function Header({ focus: focusProp = false }: { focus?: boolean }) {
               <span className="hidden min-[400px]:inline">Book a free call</span>
             </BookButton>
           ) : (
-            <FixMyTechLink source="header" className="btn-ignite whitespace-nowrap !px-3 !py-2.5 !text-sm sm:!px-4">
-              <span className="sm:hidden">Fix my tech</span>
-              <span className="hidden sm:inline">Get a repair price</span>
-            </FixMyTechLink>
+            <ContactButton source="header" className="btn-ignite whitespace-nowrap !px-4 !py-2.5 !text-sm">
+              Contact us
+            </ContactButton>
           )}
           {!focus && (
             <button

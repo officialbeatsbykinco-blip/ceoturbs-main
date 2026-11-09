@@ -8,6 +8,7 @@ import { FloatingBookButton } from "./FloatingBookButton";
 import { QuizModalHost } from "@/components/quiz/QuizModalHost";
 import { TextQuizHost } from "@/components/quiz/TextQuizHost";
 import { TechQuizHost } from "@/components/tech/TechQuizHost";
+import { ContactHost } from "@/components/cta/ContactChooser";
 import { PhoneHost } from "./PhoneHost";
 import { BookingModalHost } from "@/components/booking/BookingModalHost";
 import { FreeCheckPopup } from "@/components/site/FreeCheckPopup";
@@ -48,6 +49,17 @@ export function Layout({ children }: { children: ReactNode }) {
     void updateHead(pathname);
     // `instant`: the page sets scroll-behavior: smooth, which would otherwise animate a slow scroll-up on every page change.
     window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+    // A link to a section on another page (/office-setup-tampa#book): scroll to it once the lazy page has rendered.
+    const id = window.location.hash.slice(1);
+    if (id) {
+      let tries = 0;
+      const find = () => {
+        const el = document.getElementById(decodeURIComponent(id));
+        if (el) el.scrollIntoView({ behavior: "instant", block: "start" });
+        else if (++tries < 20) window.setTimeout(find, 100);
+      };
+      window.setTimeout(find, 50);
+    }
     pixelPageView();
     tiktokPageView();
     redditPageView();
@@ -92,6 +104,7 @@ export function Layout({ children }: { children: ReactNode }) {
       <QuizModalHost />
       <TextQuizHost />
       <TechQuizHost />
+      <ContactHost />
       <PhoneHost />
       <BookingModalHost />
       <FreeCheckPopup />
