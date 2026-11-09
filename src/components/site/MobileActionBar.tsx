@@ -1,4 +1,4 @@
-import { Link, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { BookButton, InstallBookButton } from "@/components/cta/Actions";
 import { CALL_FIRST_SLUGS } from "@/content/services";
 import { Calendar, MessageSquare, Phone, Wrench } from "lucide-react";
@@ -9,7 +9,7 @@ import { CallLink } from "./CallLink";
 import { REVIEWS_AD_PATH, SETUP_PATH, SHOP_PATH } from "@/content/review-cards";
 import { SHIRTS_PATH } from "@/content/company-shirts";
 import { ARTIST_MERCH_PATH } from "@/content/artist-merch";
-import { CARD_TEXT, QUICK_TEXT, smsHref } from "@/lib/sms";
+import { CARD_TEXT, QUICK_TECH_TEXT, QUICK_TEXT, smsHref } from "@/lib/sms";
 
 /** Sticky bottom bar on phones: the money actions are always one tap away. The shop pages have their own buy bars. */
 export function MobileActionBar() {
@@ -134,26 +134,23 @@ export function MobileActionBar() {
         </div>
       </div>
     );
-  // Everywhere else: the cards first, with Book, Text and Call one tap away.
+  // Everywhere else: tech repair first (the money maker), then a blue Call and a Text. No calendar on phones.
   if (pathname !== SETUP_PATH)
     return (
-      <div className="pb-safe fixed inset-x-0 bottom-0 z-40 border-t border-border/80 bg-background/90 px-3 pt-3 backdrop-blur-xl sm:hidden">
-        <div className="flex gap-2">
-          <Link to={SHOP_PATH} className="btn-ignite flex-1 whitespace-nowrap !px-3 !py-3.5 !text-base">
-            Buy Google Review Cards
-          </Link>
-          <BookButton note="Mobile bar" variant="chrome" className="grid w-12 shrink-0 place-items-center !rounded-2xl !p-0">
-            <Calendar className="h-5 w-5 text-turbo" aria-hidden />
-            <span className="sr-only">Book a free call</span>
-          </BookButton>
-          <a href={smsHref(QUICK_TEXT)} data-call-location="mobile bar text" className="grid w-12 shrink-0 place-items-center rounded-2xl text-foreground ring-1 ring-white/15 hover:bg-white/5">
-            <MessageSquare className="h-5 w-5" aria-hidden />
-            <span className="sr-only">Text {SITE.name}</span>
-          </a>
-          <CallLink location="mobile bar" className="grid w-12 shrink-0 place-items-center rounded-2xl text-foreground ring-1 ring-white/15 hover:bg-white/5">
-            <Phone className="h-5 w-5" aria-hidden />
-            <span className="sr-only">Call {SITE.name} at {SITE.phone.display}</span>
+      <div className="pb-safe fixed inset-x-0 bottom-0 z-40 border-t border-border/80 bg-background/95 px-2.5 pt-2.5 backdrop-blur-xl sm:hidden">
+        <div className="flex items-center gap-1.5">
+          <FixMyTechLink source="mobile bar" className="btn-ignite flex flex-[1.4] items-center justify-center gap-1.5 whitespace-nowrap !px-2 !py-3.5 !text-base font-bold shadow-lg">
+            <Wrench className="h-4 w-4 shrink-0" aria-hidden />
+            <span>Fix my tech</span>
+          </FixMyTechLink>
+          <CallLink location="mobile bar" className="btn-blue flex flex-1 items-center justify-center gap-1.5 whitespace-nowrap !px-2 !py-3.5 !text-base font-bold">
+            <Phone className="h-4 w-4 shrink-0" aria-hidden />
+            <span>Call</span>
           </CallLink>
+          <a href={smsHref(QUICK_TECH_TEXT)} data-call-location="mobile bar text" className="btn-chrome flex flex-1 items-center justify-center gap-1.5 whitespace-nowrap !px-2 !py-3.5 !text-base font-bold">
+            <MessageSquare className="h-4 w-4 shrink-0" aria-hidden />
+            <span>Text</span>
+          </a>
         </div>
       </div>
     );

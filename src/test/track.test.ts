@@ -62,6 +62,11 @@ describe("booked-call tracking (browser)", () => {
     expect(uetCalls().some((c) => c[0] === "set")).toBe(true);
   });
 
+  it("sends phone text taps to Google Ads like call taps (same Contact action)", () => {
+    expect(GOOGLE_ADS_LABELS.click_to_text).toBeTruthy();
+    expect(GOOGLE_ADS_LABELS.click_to_text).toBe(GOOGLE_ADS_LABELS.click_to_call);
+  });
+
   it("fires one book_call with a stable per-booking id on every platform", async () => {
     const { trackBooked, gtag, fbq } = await setup();
     trackBooked("embed", "UID3", { email: "a@example.com", phone: "4045550123" });

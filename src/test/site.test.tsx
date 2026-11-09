@@ -1,3 +1,4 @@
+import { IT_SERVICES_PATH } from "@/content/tech-pages";
 import { describe, it, expect, vi } from "vitest";
 import { SETUP_PATH, SHOP_PATH } from "@/content/review-cards";
 import { existsSync, readFileSync } from "node:fs";
@@ -198,7 +199,7 @@ describe("conversion buttons", () => {
     expect(screen.getByRole("link", { name: "Book" })).toHaveAttribute("href", BOOKING.url);
   });
 
-  it("mobile bar sells cards on generic pages, leaves the store alone and gives setup help", () => {
+  it("mobile bar leads with tech repair on generic pages, leaves the store alone and gives setup help", () => {
     const at = (route: string) =>
       render(
         <MemoryRouter initialEntries={[route]}>
@@ -206,7 +207,8 @@ describe("conversion buttons", () => {
         </MemoryRouter>,
       );
     const generic = at("/pricing");
-    expect(screen.getByRole("link", { name: /Buy Google Review Cards/ })).toHaveAttribute("href", SHOP_PATH);
+    expect(screen.getByRole("link", { name: /Fix my tech/ })).toHaveAttribute("href", IT_SERVICES_PATH);
+    expect(screen.queryByRole("link", { name: /Buy Google Review Cards/ })).toBeNull();
     expect(screen.getByRole("link", { name: /^Call/ })).toHaveAttribute("href", "tel:+16785584327");
     generic.unmount();
     const store = at("/");

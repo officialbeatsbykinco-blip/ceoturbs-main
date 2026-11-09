@@ -388,7 +388,7 @@ export function serverTrack(event: string, eventId: string, data: { value?: numb
 }
 
 /**
- * Every tel: link counts as a phone lead and every sms: link as a text lead (click_to_text, no Google Ads call conversion): GA4/Google Ads (click_to_call), Meta "Contact"
+ * Every tel: link counts as a phone lead and every sms: link as a text lead (click_to_text; Google Ads counts both on the "Contact" action): GA4/Google Ads (click_to_call), Meta "Contact"
  * (browser + Conversions API), Microsoft and TikTok. One delegated listener covers every page.
  */
 export function installCallTracking() {

@@ -20,6 +20,9 @@ export const GOOGLE_ADS_LABELS: Record<string, string> = {
   generate_lead: "6XuTCJ6H55odEM3ryuZE",
   book_call: "5K_sCJuH55odEM3ryuZE",
   click_to_call: "eAzECKGH55odEM3ryuZE",
+  // A text tap on a phone is a lead just like a call (most older visitors text). It lands on the same
+  // "Contact" action; without this, every Text button was invisible to Google Ads.
+  click_to_text: "eAzECKGH55odEM3ryuZE",
   purchase: "sOe0CJiH55odEM3ryuZE",
 };
 
