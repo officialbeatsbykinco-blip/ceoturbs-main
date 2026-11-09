@@ -17,7 +17,7 @@ const STEPS = ["problem", "device", "where", "send"] as const;
 type Step = (typeof STEPS)[number];
 
 /** What a tech lead is worth to Meta's optimizer (an average first job). */
-export const TECH_LEAD_VALUE = 90;
+export const TECH_LEAD_VALUE = 150;
 
 export function TechQuiz({ source = "computer-repair-tampa", className }: { source?: string; className?: string }) {
   const uid = useId().replace(/:/g, "");

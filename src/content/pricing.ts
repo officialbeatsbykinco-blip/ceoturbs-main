@@ -442,27 +442,27 @@ export const ALL_PRICES = [...PACKAGES, ...SETUP, ...WEBSITES, ...MONTHLY];
 
 /**
  * Tech help (/computer-repair-tampa): repairs and setups for homes and small businesses around Tampa.
- * Set about $5–10 under typical Tampa prices (virus removal $85–100, tune-up $80, remote session $79.99).
+ * Mobile, on-site rates: we drive to the customer, so these sit above drop-off shop prices.
  * Kept out of ALL_PRICES so the agency /pricing page doesn't list them; read them with itPrice().
  */
 export const IT_SERVICES: PriceItem[] = [
-  { id: "it-visit", name: "Diagnosis", price: 39, billing: "once", summary: "Credited toward the repair, so it's free when we fix it.", includes: [] },
-  { id: "it-speedup", name: "Windows speed-up & tune-up", price: 75, from: true, billing: "once", summary: "Slow, freezing or full of junk: cleaned, updated and fast again. At your door.", includes: [] },
-  { id: "it-remote", name: "Remote speed-up", price: 69, from: true, billing: "once", summary: "Windows cleanup over the internet. No drive, no wait.", includes: [] },
-  { id: "it-virus", name: "Virus & pop-up removal", price: 79, billing: "once", summary: "Viruses, scam pop-ups and junk removed, protection set up.", includes: [] },
-  { id: "it-pc-repair", name: "Computer & laptop repair", price: 79, from: true, billing: "once", summary: "Crashing, blue screens or won't turn on.", includes: [] },
-  { id: "it-ssd", name: "SSD upgrade (old computer feels new)", price: 99, from: true, billing: "once", summary: "Labor to move everything onto a fast new drive. Drive extra, at cost.", includes: [] },
-  { id: "it-data", name: "Data backup & transfer", price: 69, billing: "once", summary: "Photos, files and email moved to a new computer or backed up.", includes: [] },
-  { id: "it-printer", name: "Printer & software setup", price: 59, from: true, billing: "once", summary: "Printers, Microsoft Office, email and apps working.", includes: [] },
-  { id: "it-iphone-screen", name: "iPhone screen replacement", price: 79, from: true, billing: "once", summary: "Cracked or dead screen replaced at your door.", includes: [] },
-  { id: "it-iphone-battery", name: "iPhone battery replacement", price: 49, from: true, billing: "once", summary: "Phone dies by lunch? New battery.", includes: [] },
-  { id: "it-tablet-screen", name: "iPad & tablet screen", price: 89, from: true, billing: "once", summary: "Cracked glass or touch that stopped working.", includes: [] },
-  { id: "it-tv-mount", name: "TV wall mount", price: 69, billing: "once", summary: "Per TV up to 65\", drywall and studs. Mount not included.", includes: [] },
-  { id: "it-tv-extra", name: "Each extra TV, same visit", price: 49, billing: "once", summary: "Mount a second TV on the same trip.", includes: [] },
-  { id: "it-tv-setup", name: "TV & streaming setup", price: 49, billing: "once", summary: "Apps, sound bar, remotes and accounts working.", includes: [] },
-  { id: "it-wifi", name: "Internet & Wi-Fi fix", price: 69, from: true, billing: "once", summary: "Dead spots, drops, slow speeds or a new router.", includes: [] },
-  { id: "it-mesh", name: "Mesh Wi-Fi install", price: 99, from: true, billing: "once", summary: "Strong signal in every room. Labor; you keep the gear.", includes: [] },
-  { id: "it-business-hour", name: "Business on-site IT", price: 75, billing: "once", summary: "Per hour. Networks, workstations, printers, TVs.", includes: [] },
+  { id: "it-visit", name: "Diagnosis", price: 79, billing: "once", summary: "Credited toward the repair, so it's free when we fix it.", includes: [] },
+  { id: "it-speedup", name: "Windows speed-up & tune-up", price: 149, from: true, billing: "once", summary: "Slow, freezing or full of junk: cleaned, updated and fast again. At your door.", includes: [] },
+  { id: "it-remote", name: "Remote speed-up", price: 99, from: true, billing: "once", summary: "Windows cleanup over the internet. No drive, no wait.", includes: [] },
+  { id: "it-virus", name: "Virus & pop-up removal", price: 149, billing: "once", summary: "Viruses, scam pop-ups and junk removed, protection set up.", includes: [] },
+  { id: "it-pc-repair", name: "Computer & laptop repair", price: 149, from: true, billing: "once", summary: "Crashing, blue screens or won't turn on.", includes: [] },
+  { id: "it-ssd", name: "SSD upgrade (old computer feels new)", price: 199, from: true, billing: "once", summary: "Labor to move everything onto a fast new drive. Drive extra, at cost.", includes: [] },
+  { id: "it-data", name: "Data backup & transfer", price: 129, billing: "once", summary: "Photos, files and email moved to a new computer or backed up.", includes: [] },
+  { id: "it-printer", name: "Printer & software setup", price: 99, from: true, billing: "once", summary: "Printers, Microsoft Office, email and apps working.", includes: [] },
+  { id: "it-iphone-screen", name: "iPhone screen replacement", price: 149, from: true, billing: "once", summary: "Cracked or dead screen replaced at your door.", includes: [] },
+  { id: "it-iphone-battery", name: "iPhone battery replacement", price: 99, from: true, billing: "once", summary: "Phone dies by lunch? New battery.", includes: [] },
+  { id: "it-tablet-screen", name: "iPad & tablet screen", price: 149, from: true, billing: "once", summary: "Cracked glass or touch that stopped working.", includes: [] },
+  { id: "it-tv-mount", name: "TV wall mount", price: 129, billing: "once", summary: "Per TV up to 65\", drywall and studs. Mount not included.", includes: [] },
+  { id: "it-tv-extra", name: "Each extra TV, same visit", price: 79, billing: "once", summary: "Mount a second TV on the same trip.", includes: [] },
+  { id: "it-tv-setup", name: "TV & streaming setup", price: 99, billing: "once", summary: "Apps, sound bar, remotes and accounts working.", includes: [] },
+  { id: "it-wifi", name: "Internet & Wi-Fi fix", price: 129, from: true, billing: "once", summary: "Dead spots, drops, slow speeds or a new router.", includes: [] },
+  { id: "it-mesh", name: "Mesh Wi-Fi install", price: 179, from: true, billing: "once", summary: "Strong signal in every room. Labor; you keep the gear.", includes: [] },
+  { id: "it-business-hour", name: "Business on-site IT", price: 125, billing: "once", summary: "Per hour. Networks, workstations, printers, TVs.", includes: [] },
 ];
 /** "from $99" style label for an IT_SERVICES item. */
 export const itPrice = (id: string) => {

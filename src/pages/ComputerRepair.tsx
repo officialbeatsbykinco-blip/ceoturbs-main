@@ -27,12 +27,12 @@ const PRICE_GROUPS: { icon: LucideIcon; title: string; ids: string[] }[] = [
 
 const PROMISES = ["Price up front, before any work", `Diagnosis ${itPrice("it-visit")}, credited to the repair`, "No fix, no charge", "Pay after it works"];
 
-/** Typical Tampa prices vs ours (Nov 2026, from local shop price lists). */
+/** A drop-off repair shop vs us. How it works, not price. */
 const COMPARE = [
-  { job: "Virus removal", them: "$85–$100 at Tampa shops", us: itPrice("it-virus") },
-  { job: "Tune-up / speed-up", them: "About $80, and you drop it off", us: `${itPrice("it-speedup")} at your door` },
-  { job: "Remote session", them: "$79.99 for 30 minutes", us: itPrice("it-remote") },
-  { job: "Getting it there", them: "Drive over, drop it off, come back", us: "We come to you" },
+  { job: "Getting it there", them: "Unplug it, drive over, drop it off", us: "We come to your home or business" },
+  { job: "How long", them: "Leave it for days", us: "Usually fixed the same or next day" },
+  { job: "The price", them: "Often found out after drop-off", us: "Price up front, before any work" },
+  { job: "If it can't be fixed", them: "You may still pay the bench fee", us: "No fix, no charge on the repair" },
 ];
 
 const STEPS = [
@@ -86,8 +86,8 @@ function Ctas({ where, className }: { where: string; className?: string }) {
 export default function ComputerRepair() {
   // ViewContent (browser + server copy, one event_id) so Meta can build audiences of repair-page visitors.
   useEffect(() => {
-    const id = track("view_item", { content_name: "Computer repair Tampa", content_category: "tech_repair", content_type: "service", value: 90, currency: "USD" }, { eventId: newEventId("vc") });
-    serverTrack("view_item", id, { value: 90, currency: "USD", contentName: "Computer repair Tampa", contentCategory: "tech_repair" });
+    const id = track("view_item", { content_name: "Computer repair Tampa", content_category: "tech_repair", content_type: "service", value: 150, currency: "USD" }, { eventId: newEventId("vc") });
+    serverTrack("view_item", id, { value: 150, currency: "USD", contentName: "Computer repair Tampa", contentCategory: "tech_repair" });
   }, []);
 
   return (
@@ -136,7 +136,7 @@ export default function ComputerRepair() {
 
       <section className="section border-t border-border" aria-labelledby="prices">
         <div className="container-x">
-          <SectionHeader title={<span id="prices">Starting prices</span>} lede="Flat starting prices, below what most Tampa shops charge. You get your exact price before any work. Parts at cost." />
+          <SectionHeader title={<span id="prices">Starting prices</span>} lede="Flat starting prices for in-home and on-site service. You get your exact price before any work. Parts extra." />
           <div className="mt-10 grid gap-4 lg:grid-cols-3">
             {PRICE_GROUPS.map((g) => (
               <div key={g.title} className="panel p-5 sm:p-6">
@@ -199,11 +199,11 @@ export default function ComputerRepair() {
 
       <section className="section border-t border-border" aria-labelledby="compare">
         <div className="container-x">
-          <SectionHeader title={<span id="compare">Why pay more and wait longer?</span>} lede="Lower than typical Tampa prices, and you never leave the house." />
+          <SectionHeader title={<span id="compare">Why drive it to a shop?</span>} lede="Repair-shop quality, at your door, with the price in writing first." />
           <div className="panel mt-8 overflow-hidden">
             <div className="hidden grid-cols-[1fr_1.2fr_1.2fr] gap-4 border-b border-border px-5 py-3 text-xs font-semibold uppercase tracking-wide text-muted-foreground sm:grid">
-              <span>Job</span>
-              <span>Typical in Tampa</span>
+              <span>&nbsp;</span>
+              <span>Drop-off shop</span>
               <span className="text-turbo">With us</span>
             </div>
             {COMPARE.map((r) => (

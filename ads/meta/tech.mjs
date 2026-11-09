@@ -46,7 +46,7 @@ h1{font-family:Grot,Inter,sans-serif;font-weight:700;letter-spacing:-.03em;line-
 
 // ---------- scenes. Each gets the safe box {x,y,w,h} and a size tag. ----------
 
-/** A: pain + price. A stuck loading bar, "don't buy a new one", speed-up from $75. */
+/** A: pain + price. A stuck loading bar, "don't buy a new one", speed-up from $149. */
 const slow = (b, tall) => `
 <div class="safe" style="left:${b.x}px;top:${b.y}px;width:${b.w}px;height:${b.h}px;justify-content:space-between">
   <div>
@@ -62,7 +62,7 @@ const slow = (b, tall) => `
   <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:20px">
     <div>
       <div class="mu" style="font-size:32px;font-weight:600">Speed-up at your door</div>
-      <div class="price" style="font-size:${tall ? 150 : 140}px">from <span class="or">$75</span></div>
+      <div class="price" style="font-size:${tall ? 150 : 140}px">from <span class="or">$149</span></div>
     </div>
   </div>
   <div class="chips">
@@ -83,7 +83,7 @@ const text = (b, tall) => `
     </div>
     <div style="display:flex;flex-direction:column;gap:16px;margin-top:24px;font-size:36px;line-height:1.28">
       <div style="align-self:flex-end;max-width:80%;background:#0a84ff;color:#fff;padding:18px 26px;border-radius:30px 30px 8px 30px">Hi Chris, my Windows laptop won't turn on. Can you come to me? I'm in Brandon.</div>
-      <div style="align-self:flex-start;max-width:84%;background:#e5e5ea;padding:18px 26px;border-radius:30px 30px 30px 8px">Yes, I can come today. Diagnosis is $39 and it comes off the repair. Most fixes start at $79.</div>
+      <div style="align-self:flex-start;max-width:84%;background:#e5e5ea;padding:18px 26px;border-radius:30px 30px 30px 8px">Yes, I can come today. Diagnosis is $79 and it comes off the repair. Most fixes start at $149.</div>
       <div style="align-self:flex-end;max-width:70%;background:#0a84ff;color:#fff;padding:18px 26px;border-radius:30px 30px 8px 30px">Perfect, see you then 👍</div>
     </div>
   </div>
@@ -112,7 +112,7 @@ const compare = (b, tall) => {
     ${row("Wait in line at the counter", "No fix, no charge")}
   </div>
   <div style="display:flex;align-items:center;justify-content:space-between;gap:20px">
-    <div><div class="mu" style="font-size:30px;font-weight:600">Diagnosis</div><div class="price" style="font-size:110px">$39</div><div class="mu" style="font-size:26px;font-weight:600">credited to the repair</div></div>
+    <div><div class="mu" style="font-size:30px;font-weight:600">Diagnosis</div><div class="price" style="font-size:110px">$79</div><div class="mu" style="font-size:26px;font-weight:600">credited to the repair</div></div>
     <div style="text-align:right"><div class="mu" style="font-size:28px;font-weight:600">Call or text</div><div style="font-size:46px;font-weight:800">${PHONE}</div></div>
   </div>
 </div>`;

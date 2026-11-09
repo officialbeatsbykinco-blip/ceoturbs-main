@@ -27,17 +27,17 @@ CTA button: **Get quote** on all three.
 **Primary text**
 > Slow computer? Don't buy a new one yet.
 >
-> We come to your home or office around Tampa and speed it up in one visit. Speed-up from $75. You get the price before we start, and if we can't fix it you don't pay.
+> We come to your home or office around Tampa and speed it up in one visit. Speed-up from $149. You get the price before we start, and if we can't fix it you don't pay.
 >
 > Tap below, answer 3 quick questions, and we'll text you a price. Or call or text (678) 558-4327.
 
-**Headline:** Slow Computer? Speed-Up From $75
+**Headline:** Slow Computer? Speed-Up From $149
 **Description:** At your door around Tampa. No fix, no charge.
 
 ### 2. `text`
 > Computer, laptop or phone acting up? Text us what's wrong and get a price in minutes.
 >
-> Diagnosis is $39 and it comes off the repair. Most fixes start at $79. We come to you anywhere within 40 miles of Tampa, and you pay after it works.
+> Diagnosis is $79 and it comes off the repair. Most fixes start at $149. We come to you anywhere within 40 miles of Tampa, and you pay after it works.
 >
 > Tap below, pick your problem and device, and your text is written for you. Just hit send.
 
@@ -47,11 +47,11 @@ CTA button: **Get quote** on all three.
 ### 3. `compare`
 > Broken computer? Skip the drive to the repair store.
 >
-> We come to your door around Tampa, usually the same or next day. You get the price before we start, and if we can't fix it there's no charge. Diagnosis $39, credited to the repair.
+> We come to your door around Tampa, usually the same or next day. You get the price before we start, and if we can't fix it there's no charge. Diagnosis $79, credited to the repair.
 >
 > Tap below for a price by text, or call (678) 558-4327.
 
-**Headline:** We Come to You. Diagnosis $39.
+**Headline:** We Come to You. Diagnosis $79.
 **Description:** Computers, laptops, phones. Tampa + 40 miles.
 
 **Why these three:** each tests one buying reason. `slow` = pain + low anchored price (the classic local-service winner), `text` = shows the exact low-effort next step (lowers fear of calling), `compare` = convenience vs. the store. Keep all three in one ad set; after 7 days kill any with $40+ spend and no leads.
@@ -124,9 +124,9 @@ software download, driver download, microsoft support, apple support, scam, comp
 Computer Repair in Tampa
 We Come to Your Door
 Laptop & PC Repair Near You
-Diagnosis $39, Credited
-Repairs From $79
-Speed-Up From $75
+Diagnosis $79, Credited
+Repairs From $149
+Speed-Up From $149
 Price Before We Start
 No Fix, No Charge
 Same or Next-Day Visits
@@ -142,15 +142,15 @@ Pin "Computer Repair in Tampa" to position 1 (optional; leave others unpinned).
 **Descriptions (≤90 chars)**
 ```
 Slow, crashing or won't turn on? We come to your home or office around Tampa.
-Diagnosis $39, credited to the repair. You get the price before any work starts.
-Laptop and PC repair from $79. No fix, no charge. Pay after it works.
+Diagnosis $79, credited to the repair. You get the price before any work starts.
+Laptop and PC repair from $149. No fix, no charge. Pay after it works.
 Answer 3 quick questions and get your price by text, or pick a time online.
 ```
 
 **RSA: Ad group 2 headlines**
 ```
 Phone Screen Repair Tampa
-iPhone Screens From $79
+iPhone Screens From $149
 We Come to Your Door
 Screen & Battery Repair
 Price Before We Start
@@ -160,21 +160,21 @@ Pay After It Works
 Text Us for a Price
 Call (678) 558-4327
 ```
-(If "iPhone" in a headline gets limited for trademark, swap to "Phone Screens From $79".)
+(If "iPhone" in a headline gets limited for trademark, swap to "Phone Screens From $149".)
 
 **Descriptions**
 ```
 Cracked screen or dying battery? We fix phones and tablets at your door in Tampa.
-Phone screens from $79. You get the price before we start. Pay after it works.
+Phone screens from $149. You get the price before we start. Pay after it works.
 Text us your model and get a price in minutes, or pick a time online.
 ```
 
 **Assets (all ad groups)**
 - Sitelinks: `Prices` → `/computer-repair-tampa#prices` · `Book a Visit` → `/computer-repair-tampa#fix` · `Office Setup` → `/office-setup-tampa` · `Service Area` → `/computer-repair-tampa#area`
-- Callouts: `No Fix, No Charge` · `Price Before Work` · `We Come to You` · `Pay After It Works` · `Diagnosis $39`
+- Callouts: `No Fix, No Charge` · `Price Before Work` · `We Come to You` · `Pay After It Works` · `Diagnosis $79`
 - Structured snippet → Services: `Laptop Repair, PC Repair, Speed-Ups, Data Recovery, Phone Screens, Wi-Fi Setup`
 - Call asset: (678) 558-4327, call reporting on, count calls ≥60s as a conversion
-- Price asset (optional): Speed-up from $75, PC repair from $79, Phone screen from $79
+- Price asset (optional): Speed-up from $149, PC repair from $149, Phone screen from $149
 - Location asset if the Google Business Profile is linked
 
 ---
@@ -192,9 +192,9 @@ PMax learns from conversion data; launched cold on a small budget it spends on D
 
 **Asset group `Computer Repair`**
 - Images: upload `meta-tech-*-1080x1350.png` as 4:5 portrait, plus 1200x1200 square and 1200x628 landscape crops (export from the same builder by adding sizes, or crop in Canva). Logo 1200x1200.
-- Headlines (≤30): `Computer Repair in Tampa`, `We Come to Your Door`, `Diagnosis $39, Credited`, `No Fix, No Charge`, `Repairs From $79`
+- Headlines (≤30): `Computer Repair in Tampa`, `We Come to Your Door`, `Diagnosis $79, Credited`, `No Fix, No Charge`, `Repairs From $149`
 - Long headlines (≤90): `Slow or broken computer? We fix it at your door anywhere around Tampa.` · `Laptop, PC and phone repair at home or work. Price before we start.`
-- Descriptions (≤90): `Diagnosis $39, credited to the repair. No fix, no charge. Pay after it works.` · `Answer 3 quick questions and get your price by text in minutes.` · `Serving Tampa and 40 miles around. Call or text (678) 558-4327.` · `Computers, laptops, phones and tablets repaired on-site.`
+- Descriptions (≤90): `Diagnosis $79, credited to the repair. No fix, no charge. Pay after it works.` · `Answer 3 quick questions and get your price by text in minutes.` · `Serving Tampa and 40 miles around. Call or text (678) 558-4327.` · `Computers, laptops, phones and tablets repaired on-site.`
 - Business name: `CEO Turbo`
 - CTA: Get quote
 - Audience signal: custom segment of people who searched the Ad group 1 keywords + your website visitors + customer list if you have one.

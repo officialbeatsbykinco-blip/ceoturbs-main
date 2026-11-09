@@ -11,13 +11,13 @@ Build this in Meta Ads Manager in the browser (no CSV upload). One campaign, one
 
 | Service | Price |
 |---|---|
-| Speed-up (in person) | from $75 |
-| Remote Windows speed-up | from $69 |
-| Virus removal | $79 |
-| PC repair | from $79 |
-| SSD upgrade | from $99 |
-| iPhone screen | from $79 |
-| Diagnosis | $39, credited to the repair |
+| Speed-up (in person) | from $149 |
+| Remote Windows speed-up | from $99 |
+| Virus removal | $149 |
+| PC repair | from $149 |
+| SSD upgrade | from $199 |
+| iPhone screen | from $149 |
+| Diagnosis | $79, credited to the repair |
 
 Older customers with money like a starting price or a flat price, and like to call or text. Put the price and "call or text" in every ad.
 
@@ -78,7 +78,7 @@ Older customers with money like a starting price or a flat price, and like to ca
 - **Week 3:** Add one new ad (a new hook on the winning concept). Keep the winners running.
 - **If the ad set stays above $40 per lead for 10 days:** fix the page or the offer before spending more. Check the quiz on a phone, page speed, and that the Lead event fires (Events Manager → Test events).
 
-Rough targets for Tampa repair leads: $10–25 per Lead, $30–60 per Schedule. A $79–$99 job plus add-ons pays back one lead in that range.
+Rough targets for Tampa repair leads: $10–25 per Lead, $30–60 per Schedule. A $149–$199 job plus add-ons pays back one lead in that range.
 
 ## 3. Creative concepts
 
@@ -96,11 +96,11 @@ Each concept: hook (first 2 seconds of video or the top line on the image), prim
 >
 > I come to your home or office anywhere around Tampa and speed it up in person. Most computers run like new in one visit.
 >
-> Speed-up from $75. SSD upgrade from $99. You get the price before I start.
+> Speed-up from $149. SSD upgrade from $199. You get the price before I start.
 >
 > Tap below, answer 3 quick questions, and I'll text you back. Or call or text (678) 558-4327.
 
-**Headline:** Slow Computer? Speed-Up From $75
+**Headline:** Slow Computer? Speed-Up From $149
 **Description (if shown):** In-person, around Tampa. Price before I start.
 **CTA button:** Get Quote
 
@@ -114,13 +114,13 @@ Each concept: hook (first 2 seconds of video or the top line on the image), prim
 **Primary text**
 > Computer won't turn on, keeps crashing, or stuck on a black screen?
 >
-> I'll find out what's wrong. Diagnosis is $39, and it comes off the repair if you go ahead. PC repair from $79.
+> I'll find out what's wrong. Diagnosis is $79, and it comes off the repair if you go ahead. PC repair from $149.
 >
 > I come to you around Tampa (40 miles), or you can drop it off. No surprise bills: you know the price before I touch it.
 >
 > Tap below to tell me what's happening. Takes 20 seconds. Or call or text (678) 558-4327.
 
-**Headline:** Won't Turn On? $39 Diagnosis
+**Headline:** Won't Turn On? $79 Diagnosis
 **Description:** Credited to the repair. Tampa area.
 **CTA button:** Get Quote
 
@@ -136,11 +136,11 @@ Each concept: hook (first 2 seconds of video or the top line on the image), prim
 >
 > You call me, I connect to your computer while you watch, clean it up and speed it up. You see everything I do, and you can stop it any time.
 >
-> Remote speed-up from $69. Virus removal $79.
+> Remote speed-up from $99. Virus removal $149.
 >
 > Tap below and pick a time, or call or text (678) 558-4327 and I'll walk you through it.
 
-**Headline:** Remote Windows Speed-Up From $69
+**Headline:** Remote Windows Speed-Up From $99
 **Description:** You watch the whole time. Same-day spots.
 **CTA button:** Book Now
 
@@ -150,7 +150,7 @@ Note: keep this ad honest about how remote works. You call or text first, the cu
 
 **Hooks**
 - "This laptop is 7 years old. Watch how fast it opens now."
-- "Same computer. New speed. $99."
+- "Same computer. New speed. $199."
 - "Don't spend $1,000 on a new laptop."
 
 **Primary text**
@@ -158,11 +158,11 @@ Note: keep this ad honest about how remote works. You call or text first, the cu
 >
 > A new SSD drive is the single biggest speed boost for an older computer. Programs open in seconds, startup goes from minutes to under 30 seconds, and all your files and pictures stay right where they are.
 >
-> SSD upgrade from $99. I come to you anywhere around Tampa.
+> SSD upgrade from $199. I come to you anywhere around Tampa.
 >
 > Tap below for a quick quote, or call or text (678) 558-4327.
 
-**Headline:** Old Computer Feel New From $99
+**Headline:** Old Computer Feel New From $199
 **Description:** SSD upgrade, files kept. Tampa area.
 **CTA button:** Get Quote
 
@@ -170,9 +170,9 @@ Note: keep this ad honest about how remote works. You call or text first, the cu
 
 **Hook:** "Cracked iPhone screen? Fixed while you wait."
 **Primary text:**
-> Cracked or black iPhone screen? iPhone screen repair from $79. I come to you around Tampa, or meet nearby. Tap below for a price on your model, or call or text (678) 558-4327.
+> Cracked or black iPhone screen? iPhone screen repair from $149. I come to you around Tampa, or meet nearby. Tap below for a price on your model, or call or text (678) 558-4327.
 
-**Headline:** iPhone Screen From $79
+**Headline:** iPhone Screen From $149
 **CTA button:** Get Quote
 
 ## 4. Shooting each concept on a phone
@@ -190,29 +190,29 @@ General rules for all of them:
 - Shot 2: you at a kitchen table with the laptop, "Most slow computers just need a clean-up. Here's what I do."
 - Shot 3: quick cuts of you working (hands on keyboard, Task Manager showing 100% disk).
 - Shot 4: split screen or before/after timer: "Before: 4 minutes to start. After: 25 seconds."
-- End: you to camera, "Speed-up from $75. Tap below or call or text me."
+- End: you to camera, "Speed-up from $149. Tap below or call or text me."
 
 **B: Won't turn on**
 - Shot 1: finger pressing the power button, nothing happens. Text: "Won't turn on?"
 - Shot 2: you calm, to camera: "Most of the time your files are still there."
 - Shot 3: you opening the case or checking the charger and battery.
 - Shot 4: screen lights up. Customer's relieved reaction if they agree to be filmed (get a quick OK on camera or in text).
-- End: "$39 diagnosis, comes off the repair."
+- End: "$79 diagnosis, comes off the repair."
 
 **C: Remote speed-up**
 - Shot 1: you at your desk with headset, laptop open: "I'm fixing a computer in Brandon right now, and I'm in Tampa."
 - Shot 2: screen recording of a test machine (your own computer, not a customer's) being cleaned up: startup apps turned off, disk usage dropping.
 - Shot 3: you: "They watch everything I do, and they can stop it any time."
-- End: "Remote Windows speed-up from $69. Book a time below."
+- End: "Remote Windows speed-up from $99. Book a time below."
 
 **D: Old computer feels new**
 - Shot 1: an old laptop next to a stopwatch on the phone. Press power, start timer. Text: "7 years old."
 - Shot 2: you swapping in the SSD (close-up of hands, screwdriver, the new drive). Satisfying, no talking needed.
 - Shot 3: same laptop, same stopwatch, boots in under 30 seconds.
-- Shot 4: you holding up the old drive: "This was the problem. $99 and it feels new."
+- Shot 4: you holding up the old drive: "This was the problem. $199 and it feels new."
 - Keep the real times. Don't fake the timer.
 
-**Images while you shoot:** a clean photo of you holding a laptop, with big text "Slow computer? Speed-up from $75" and "Call or text (678) 558-4327" along the bottom. Run 1 image ad per concept until the videos are ready.
+**Images while you shoot:** a clean photo of you holding a laptop, with big text "Slow computer? Speed-up from $149" and "Call or text (678) 558-4327" along the bottom. Run 1 image ad per concept until the videos are ready.
 
 ## 5. Events to watch
 
