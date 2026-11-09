@@ -65,6 +65,8 @@ export default async function handler(req, res) {
   // The text quiz asks for a first name only: a phone send gives us their number when the text arrives.
   const textQuiz = type === "brand-boost-quiz" && text(body.service, 80) === "text-quiz";
   const tech = type === "tech-repair" ? techFields(body) : null;
+  // The office text quiz files through the tech path (same sheet tab) but is its own service in Meta's reports.
+  const officeQuiz = !!tech && text(body.service, 80) === "office-quiz";
   const smsSend = (textQuiz || !!tech) && body.channel === "sms";
   const { lead, error } = cleanLead(body, { phoneOptional: !!dev || type === "shirt-exit-intent" || smsSend, emailOptional: type === "battery" || textQuiz || !!tech });
   if (error) return send(res, 400, { error });
@@ -91,7 +93,7 @@ export default async function handler(req, res) {
       userAgent: req.headers["user-agent"],
       customData: {
         lead_source: type,
-        ...(tech ? { content_name: "Computer repair Tampa", content_category: "tech_repair" } : {}),
+        ...(tech ? (officeQuiz ? { content_name: "Office setup Tampa", content_category: "office_setup" } : { content_name: "Computer repair Tampa", content_category: "tech_repair" }) : {}),
         ...(dev ? { content_name: "Developer intake", content_category: [dev.platform, dev.stage].filter(Boolean).join(" · ") } : {}),
         ...(quiz ? { content_name: "Brand Boost quiz", content_category: [quiz.audience, quiz.stage].filter(Boolean).join(" · ") } : {}),
         ...(value ? { value, currency: "USD" } : {}),
@@ -99,7 +101,7 @@ export default async function handler(req, res) {
     }),
   ], testCode);
   const tiktok = sendTiktokEvents([
-    buildTiktokEvent({ event: "Lead", eventId, url, user, attribution: attr, ip, userAgent: req.headers["user-agent"], properties: { content_name: tech ? "Computer repair Tampa" : quiz ? "Brand Boost quiz" : dev ? "Developer intake" : type, ...(value ? { value, currency: "USD" } : {}) } }),
+    buildTiktokEvent({ event: "Lead", eventId, url, user, attribution: attr, ip, userAgent: req.headers["user-agent"], properties: { content_name: officeQuiz ? "Office setup Tampa" : tech ? "Computer repair Tampa" : quiz ? "Brand Boost quiz" : dev ? "Developer intake" : type, ...(value ? { value, currency: "USD" } : {}) } }),
   ]);
   const { stored } = await forwardLead({
     type,

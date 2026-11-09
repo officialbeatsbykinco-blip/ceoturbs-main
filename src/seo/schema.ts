@@ -155,6 +155,29 @@ export const service = (s: Service): JsonLd => ({
   },
 });
 
+/** Every in-person city as a schema.org City in Florida (the 40-mile Tampa radius). */
+export const tampaCities = () => ALL_SETUP_CITIES.map((name) => ({ "@type": "City", name, containedInPlace: { "@type": "State", name: "Florida" } }));
+
+/**
+ * An in-person local service (tech repair, office setup): who provides it, every city it covers, the 40-mile
+ * circle around Tampa, and its published prices. Matches what the page shows, so search and AI answers can quote it.
+ */
+export const localService = (o: { path: string; name: string; serviceType: string; description: string; prices: PriceItem[] }): JsonLd => ({
+  "@type": "Service",
+  "@id": `${abs(o.path)}#service`,
+  name: o.name,
+  serviceType: o.serviceType,
+  description: o.description,
+  url: abs(o.path),
+  provider: { "@id": ORG_ID },
+  areaServed: [
+    { "@type": "GeoCircle", geoMidpoint: { "@type": "GeoCoordinates", ...SITE.geo }, geoRadius: Math.round(SITE.serviceRadiusMiles * 1609.34) },
+    ...tampaCities(),
+  ],
+  availableChannel: { "@type": "ServiceChannel", servicePhone: { "@type": "ContactPoint", telephone: SITE.phone.e164, contactType: "customer service" }, serviceUrl: abs(o.path) },
+  offers: o.prices.map(priceOffer),
+});
+
 /** A published service price as a schema.org Offer: one-time fee, or a monthly UnitPriceSpecification. */
 export const priceOffer = (p: PriceItem) => ({
   "@type": "Offer",

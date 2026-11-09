@@ -80,14 +80,14 @@ const section = (g) => {
 };
 const llms = `# CEO Turbo
 
-> CEO Turbo (ceoturbo.com) is a Tampa, Florida tech and growth company. It fixes computers, phones and tablets in person within about 40 miles of Tampa or remotely (https://www.ceoturbo.com/computer-repair-tampa), sets up and organizes home and business offices (https://www.ceoturbo.com/office-setup-tampa), makes custom company t-shirts, and sells NFC Google review cards. Founded by Christopher Robinson (StackmodeChris), it also builds websites, runs Meta, Google, TikTok and X ads, sets up and optimizes Google Business Profiles and social media profiles, designs promotional email campaigns, and does SEO, AEO and GEO for independent artists, local service businesses and Shopify stores. It offers a free online SEO, AEO and GEO visibility audit (https://www.ceoturbo.com/free-audit). Free 30-minute "Brand Boost" growth calls are booked at https://cal.com/ceoturbo/ceoturbo-brandboost.
+> CEO Turbo (ceoturbo.com) is a Tampa, Florida tech and growth company. It fixes computers, phones and tablets in person within about 40 miles of Tampa, speeds up slow Windows computers remotely (https://www.ceoturbo.com/computer-repair-tampa), sets up and organizes home and business offices (https://www.ceoturbo.com/office-setup-tampa), makes custom company t-shirts, and sells NFC Google review cards. Founded by Christopher Robinson (StackmodeChris), it also builds websites, runs Meta, Google, TikTok and X ads, sets up and optimizes Google Business Profiles and social media profiles, designs promotional email campaigns, and does SEO, AEO and GEO for independent artists, local service businesses and Shopify stores. It offers a free online SEO, AEO and GEO visibility audit (https://www.ceoturbo.com/free-audit). Free 30-minute "Brand Boost" growth calls are booked at https://cal.com/ceoturbo/ceoturbo-brandboost.
 
 Key facts:
 - 19 live client websites, including Mor Handy, Appliance King, OJ Junk Removal, Kingstone Landscaping, BIGZO, 7UVHAVIN and Beyond Labels Gifts.
 - Meta lead campaigns (Jul–Oct 2026): 161 leads for $1,193.92, $7.42 average cost per lead, lowest $4.31.
 - Google Ads (Appliance King, one day, Oct 2026): 2 conversions for $6.57, $3.29 per conversion.
 - Artist profile campaign (BIGZO): 165 profile visits at $0.32 each.
-- Based in Tampa, Florida; in-person tech repair and office setup within about 40 miles of Tampa, remote computer help and websites/ads anywhere in the US.
+- Based in Tampa, Florida; in-person tech repair and office setup within about 40 miles of Tampa, remote speed-ups for slow Windows computers anywhere in the US, and websites and ads for business owners and artists worldwide.
 - Phone: (678) 558-4327 (call or text).
 - Social: Instagram https://www.instagram.com/ceoturbo_/ · Facebook https://www.facebook.com/profile.php?id=61595439263484 · YouTube https://www.youtube.com/@CEOTurbo7 · X https://x.com/CEO_Turbo · LinkedIn https://www.linkedin.com/showcase/ceoturbo · Pinterest https://www.pinterest.com/ceoturbo/
 

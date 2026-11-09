@@ -10,9 +10,10 @@ import { OfficeIntake } from "@/components/blocks/OfficeIntake";
 import { OfficeTextQuiz } from "@/components/blocks/OfficeTextQuiz";
 import { BookOrText, useTexting } from "@/components/booking/BookOrText";
 import { FAQList, SectionHeader } from "@/components/blocks/Basics";
+import { OFFICE_FAQS } from "@/content/tech-faqs";
 import { BeforeAfter, OFFICE_BEFORE_AFTER } from "@/components/visuals/BeforeAfter";
 import { byId, itPrice, usd } from "@/content/pricing";
-import { SETUP_AREAS } from "@/content/service-areas";
+import { ServiceAreaList } from "@/components/blocks/ServiceAreaList";
 import { INSTALL_BOOKING, SITE } from "@/config/site";
 import { cn } from "@/lib/utils";
 
@@ -47,18 +48,7 @@ const STEPS = [
   { icon: Wrench, title: "We set it all up", body: "We build, mount, wire and test everything, walk you through it and leave it clean." },
 ];
 
-const AREA = SETUP_AREAS.flatMap((r) => r.cities).slice(0, 20);
 
-const FAQS = [
-  { q: "How much does an office setup cost?", a: `A single desk with computer setup is ${usd(byId("office-basic").price)}. A full workstation with multi-monitor mounting and cable management is ${usd(byId("office-complete").price)} per desk. Whole-office transformations start at ${usd(byId("office-transform-basic").price)} and are quoted in writing first.` },
-  { q: "Can you set me up to use two computers at one desk?", a: "Yes. We set up one keyboard, mouse and monitors to control a work laptop and a personal or second computer, using a KVM switch or software, so you switch with one click." },
-  { q: "Do you bring the equipment?", a: "You can buy it, or we buy it at cost and show you the receipts. We'll send you a list of exactly what to get before the visit." },
-  { q: "How long does it take?", a: "Most home offices and single desks take 2 to 4 hours. A small office is usually one day, and bigger build-outs get a timeline with the quote." },
-  { q: "Do you organize files and accounts too?", a: "Yes. We set up Microsoft 365 or Google Workspace email, shared drives and a simple folder system, and move files over from old computers." },
-  { q: "Do you install restaurant menu screens?", a: "Yes. We design the menu boards, mount the TVs and set them up to show your menu, like we've done for restaurants and lounges." },
-  { q: "Where do you work?", a: `Tampa and about 40 miles around it, including ${AREA.slice(1, 12).join(", ")} and more. Call or text ${SITE.phone.display} to confirm your address.` },
-  { q: "Can you work after hours?", a: "Yes. We regularly set up offices before opening or after closing so your team isn't interrupted." },
-];
 
 function Ctas({ where, className }: { where: string; className?: string }) {
   // Phones: the tap-question text flow (#book). Computers: the Cal.com calendar.
@@ -193,17 +183,11 @@ export default function OfficeSetup() {
       <section className="section border-t border-border" aria-labelledby="area">
         <div className="container-x">
           <SectionHeader title={<span id="area">Where we work</span>} lede="Tampa and about 40 miles around it." />
-          <ul className="mt-8 flex flex-wrap gap-2">
-            {AREA.map((c) => (
-              <li key={c} className="inline-flex items-center gap-1.5 rounded-full border border-border/80 bg-card/60 px-3 py-1.5 text-sm">
-                <MapPin className="h-3.5 w-3.5 text-turbo" aria-hidden /> {c}
-              </li>
-            ))}
-          </ul>
+          <ServiceAreaList className="mt-8" />
         </div>
       </section>
 
-      <FAQList faqs={FAQS} title="Quick answers" />
+      <FAQList faqs={OFFICE_FAQS} title="Quick answers" />
 
       <section className="section border-t border-border" aria-labelledby="final">
         <div className="container-x">

@@ -319,7 +319,7 @@ export default function ServicePage() {
       {isHomeOffice && (
         <section className="section border-t border-border" aria-labelledby="areas">
           <div className="container-x">
-            <SectionHeader title={<span id="areas">Areas We Serve</span>} lede="We come to you anywhere within about 40 miles of Tampa. Remote computer help works anywhere." />
+            <SectionHeader title={<span id="areas">Areas We Serve</span>} lede="We come to you anywhere within about 40 miles of Tampa. Remote speed-ups for slow Windows computers work anywhere." />
             <div className="mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
               {SETUP_AREAS.map((r, i) => (
                 <Reveal key={r.region} delay={i * 70}>

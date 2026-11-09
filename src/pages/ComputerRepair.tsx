@@ -8,10 +8,11 @@ import { Building2, Calendar, Check, ClipboardCheck, Cpu, Gauge, Globe, Home, La
 import { CallLink } from "@/components/site/CallLink";
 import { InstallBookButton } from "@/components/cta/Actions";
 import { FAQList, SectionHeader } from "@/components/blocks/Basics";
+import { REPAIR_FAQS } from "@/content/tech-faqs";
 import { TechQuiz } from "@/components/tech/TechQuiz";
 import { BookOrText, CalCard, useTexting } from "@/components/booking/BookOrText";
 import { IT_SERVICES, itPrice } from "@/content/pricing";
-import { SETUP_AREAS } from "@/content/service-areas";
+import { ServiceAreaList } from "@/components/blocks/ServiceAreaList";
 import { IT_SERVICES_PATH, OFFICE_SETUP_PATH } from "@/content/tech-pages";
 import { FixMyTechLink } from "@/components/tech/FixMyTechLink";
 import { IT_BOOKING, SITE } from "@/config/site";
@@ -48,20 +49,7 @@ const FEEL_NEW = [
   { icon: ShieldCheck, title: "Virus & scam pop-ups gone", body: "Malware removed and real protection set up, without the subscription upsell." },
 ];
 
-const AREA = SETUP_AREAS.flatMap((r) => r.cities).slice(0, 24);
 
-const FAQS = [
-  { q: "How much does it cost?", a: `You get the price before any work starts. Starting prices: Windows speed-up ${itPrice("it-speedup")}, remote speed-up ${itPrice("it-remote")}, virus removal ${itPrice("it-virus")}, computer repair ${itPrice("it-pc-repair")}, SSD upgrade ${itPrice("it-ssd")}, iPhone screen ${itPrice("it-iphone-screen")}, iPhone battery ${itPrice("it-iphone-battery")}. Parts are extra at cost.` },
-  { q: "Do you really come to me?", a: "Yes. Computers, phones, tablets, printers, TVs and Wi-Fi are fixed at your home or business. You don't drop anything off or wait at a store." },
-  { q: "Can you fix my computer remotely?", a: `Only speed-ups for a slow Windows computer: we clear out junk, startup clutter and old updates over the internet while you watch, from ${itPrice("it-remote")}. It works anywhere in the US. Viruses, crashes, hardware, Macs, phones and tablets need an in-person visit.` },
-  { q: "Where do you come to?", a: `Anywhere within about 40 miles of Tampa, including ${AREA.slice(1, 15).join(", ")} and more. Text your ZIP code and we'll confirm.` },
-  { q: "How fast can you come?", a: "Usually the same day or the next day. Call or text for the soonest time, or pick a slot on the calendar." },
-  { q: "What's the diagnosis fee?", a: `${itPrice("it-visit")}, and it's credited toward the repair. So if we fix it, the diagnosis is free. If it can't be fixed, you don't pay for a repair we didn't do.` },
-  { q: "Can you make my old computer feel new?", a: `Usually, yes. A cleanup plus an SSD upgrade makes most 5- to 10-year-old computers boot in seconds. Upgrade labor starts at ${itPrice("it-ssd")}, and we'll tell you honestly if a new computer makes more sense.` },
-  { q: "Is my data safe?", a: "We don't open your files, photos or messages to fix a device, and we don't copy anything unless you ask us to move it." },
-  { q: "Do you work with businesses?", a: `Yes. Offices, shops, restaurants and salons: workstations, printers, networks, TVs and menu screens. On-site IT is ${itPrice("it-business-hour")} an hour, and full office setups are on our office setup page.` },
-  { q: "How do I pay?", a: "After the job is done and you've checked it works. Card, cash, Zelle or Cash App." },
-];
 
 function Ctas({ where, className }: { where: string; className?: string }) {
   // Phones: the tap-question text flow (#fix). Computers: the Cal.com calendar.
@@ -285,18 +273,12 @@ export default function ComputerRepair() {
       <section className="section border-t border-border" aria-labelledby="area">
         <div className="container-x">
           <SectionHeader title={<span id="area">Where we come to you</span>} lede="Tampa and about 40 miles around it. Remote speed-ups for slow Windows PCs work anywhere." />
-          <ul className="mt-8 flex flex-wrap gap-2">
-            {AREA.map((c) => (
-              <li key={c} className="inline-flex items-center gap-1.5 rounded-full border border-border/80 bg-card/60 px-3 py-1.5 text-sm">
-                <MapPin className="h-3.5 w-3.5 text-turbo" aria-hidden /> {c}
-              </li>
-            ))}
-          </ul>
+          <ServiceAreaList className="mt-8" />
           <p className="mt-4 text-sm text-muted-foreground">Somewhere else nearby? Text your ZIP code and we'll tell you.</p>
         </div>
       </section>
 
-      <FAQList faqs={FAQS} title="Quick answers" />
+      <FAQList faqs={REPAIR_FAQS} title="Quick answers" />
 
       <section className="section border-t border-border" aria-labelledby="final">
         <div className="container-x">
