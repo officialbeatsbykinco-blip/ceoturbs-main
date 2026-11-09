@@ -43,9 +43,11 @@ export default function AudiencePage({ slug }: { slug: Audience["slug"] }) {
               <p className="mt-5 max-w-xl text-lg leading-relaxed text-muted-foreground">{a.answer}</p>
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
                 <BookButton note={a.bookingNote} prefill={a.bookingNote}>{a.ctaLabel}</BookButton>
-                <a href="#work" className="btn-chrome">
-                  See the work first
-                </a>
+                {work.length > 0 && (
+                  <a href="#work" className="btn-chrome">
+                    See the work first
+                  </a>
+                )}
               </div>
             </div>
             <Scene className="h-auto w-full" />

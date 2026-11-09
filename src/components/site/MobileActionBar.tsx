@@ -102,9 +102,9 @@ export function MobileActionBar() {
     return (
       <div className="pb-safe fixed inset-x-0 bottom-0 z-40 border-t border-border/80 bg-background/90 px-3 pt-3 backdrop-blur-xl sm:hidden">
         <div className="flex gap-2">
-          <a href="#intake" className="btn-ignite flex-1 !py-3.5 !text-base">
+          <BookButton note="App marketing mobile bar" className="flex-1 !py-3.5 !text-base">
             Get my free growth plan
-          </a>
+          </BookButton>
           <a href={smsHref(QUICK_TEXT)} data-call-location="dev page mobile bar text" className="grid w-12 shrink-0 place-items-center rounded-2xl text-foreground ring-1 ring-white/15 hover:bg-white/5">
             <MessageSquare className="h-5 w-5" aria-hidden />
             <span className="sr-only">Text {SITE.name}</span>

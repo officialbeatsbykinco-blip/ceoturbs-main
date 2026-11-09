@@ -101,6 +101,12 @@ for (const file of files) {
     if (!routes.has(clean) && !existsSync(asset)) err(route, `broken internal link → ${href}`);
   }
 
+  // Same-page jump links ("Get my price" → #book) must land on a section that exists in this page's HTML.
+  for (const m of body.matchAll(/<a\b[^>]*href="#([^"]+)"/g)) {
+    const id = m[1];
+    if (id !== "main" && !html.includes(`id="${id}"`)) err(route, `jump link to a missing section → #${id}`);
+  }
+
   if (noindex && sitemapUrls.has(url)) err(route, "noindex page is in sitemap.xml");
   if (alternate && sitemapUrls.has(url)) err(route, "canonicalized page is in sitemap.xml");
   if (!noindex && !alternate && !sitemapUrls.has(url)) err(route, "indexable page missing from sitemap.xml");
