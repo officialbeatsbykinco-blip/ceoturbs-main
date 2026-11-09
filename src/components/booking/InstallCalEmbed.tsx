@@ -2,7 +2,7 @@ import { useEffect, useId, useState } from "react";
 import { ExternalLink, Loader2, MessageSquare, ShieldCheck } from "lucide-react";
 import { INSTALL_BOOKING, SITE, type CalEvent } from "@/config/site";
 import { mountInstallBooking } from "@/lib/cal";
-import { track } from "@/lib/track";
+import { track, serverTrack } from "@/lib/track";
 
 export function InstallCalEmbed({
   className = "",
@@ -21,7 +21,8 @@ export function InstallCalEmbed({
   const [showFallback, setShowFallback] = useState(false);
 
   useEffect(() => {
-    track("booking_open", { source: `${note} — native cal embed` });
+    const id = track("booking_open", { source: `${note} — native cal embed`, content_name: booking?.title || "Install booking" });
+    serverTrack("booking_open", id, { contentName: booking?.title || "Install booking" });
     let active = true;
 
     mountInstallBooking(calId, note, uid, booking).then((r) => {

@@ -104,4 +104,41 @@ describe("booked-call tracking (browser)", () => {
     const actions = uetCalls().filter((c) => c[0] === "event").map((c) => c[1]);
     expect(actions).toEqual(["book_appointment", "submit_lead_form"]);
   });
+
+  it("fires Meta Lead on book buttons (booking_open) so Meta lead optimization sees active events", async () => {
+    const { track, fbq } = await setup();
+    track("booking_open", { source: "Header book button", content_name: "Brand Boost call" }, { eventId: "bo_123" });
+    const lead = fbq.find((a) => a[0] === "track" && a[1] === "Lead");
+    expect(lead).toBeDefined();
+    expect(lead![2]).toMatchObject({ content_name: "Brand Boost call", lead_source: "Header book button" });
+    expect(lead![3]).toEqual({ eventID: "bo_123_lead" });
+
+    const open = fbq.find((a) => a[0] === "trackCustom" && a[1] === "BookingOpen");
+    expect(open).toBeDefined();
+    expect(open![3]).toEqual({ eventID: "bo_123" });
+  });
+
+  it("fires Meta Lead on phone and text taps alongside Contact", async () => {
+    const { track, fbq } = await setup();
+    track("click_to_call", { location: "hero-mobile", content_name: "Phone call" }, { eventId: "call_456" });
+    const lead = fbq.find((a) => a[0] === "track" && a[1] === "Lead");
+    const contact = fbq.find((a) => a[0] === "track" && a[1] === "Contact");
+    expect(lead).toBeDefined();
+    expect(contact).toBeDefined();
+    expect(lead![2]).toMatchObject({ content_name: "Phone call", lead_source: "hero-mobile" });
+    expect(lead![3]).toEqual({ eventID: "call_456_lead" });
+    expect(contact![3]).toEqual({ eventID: "call_456" });
+  });
+
+  it("fires Meta Lead on desktop call clicks (contact_intent) so testing on desktop registers active events", async () => {
+    const { track, fbq } = await setup();
+    track("contact_intent", { location: "header-call", channel: "call" }, { eventId: "ci_789" });
+    const lead = fbq.find((a) => a[0] === "track" && a[1] === "Lead");
+    const custom = fbq.find((a) => a[0] === "trackCustom" && a[1] === "ContactIntent");
+    expect(lead).toBeDefined();
+    expect(custom).toBeDefined();
+    expect(fbq.some((a) => a[1] === "Contact")).toBe(false);
+    expect(lead![2]).toMatchObject({ content_name: "Phone call intent (desktop)", lead_source: "header-call" });
+    expect(lead![3]).toEqual({ eventID: "ci_789_lead" });
+  });
 });

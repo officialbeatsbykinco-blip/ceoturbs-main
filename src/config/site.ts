@@ -95,7 +95,7 @@ export const IT_BOOKING = {
 } as const;
 
 /** Any Cal.com event the install-style calendar (embed, modal, button) can show. */
-export type CalEvent = { calLink: string; url: string; namespace: string };
+export type CalEvent = { calLink: string; url: string; namespace: string; title?: string };
 
 /** Founder video used on the homepage, Brand Boost and ad landing pages. */
 export const PITCH_VIDEO = {

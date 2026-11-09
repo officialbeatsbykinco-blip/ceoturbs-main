@@ -24,20 +24,37 @@ export type Item = { item_id: string; item_name: string; item_variant?: string; 
 export type Ecommerce = { currency: string; value: number; items: Item[] };
 
 /** dataLayer event → Meta event. `custom` events go through trackCustom. */
-const META: Record<string, { name: string; custom?: boolean }> = {
-  view_item: { name: "ViewContent" },
-  add_to_cart: { name: "AddToCart" },
-  begin_checkout: { name: "InitiateCheckout" },
-  customize_product: { name: "CustomizeProduct" },
-  generate_lead: { name: "Lead" },
-  book_call: { name: "Schedule" },
-  click_to_call: { name: "Contact" },
-  click_to_text: { name: "Contact" },
-  booking_open: { name: "BookingOpen", custom: true },
-  audit_start: { name: "AuditStart", custom: true },
-  audit_complete: { name: "AuditComplete", custom: true },
-  quiz_start: { name: "QuizStart", custom: true },
-  contact_intent: { name: "ContactIntent", custom: true },
+type MetaTarget = { name: string; custom?: boolean; eventIdSuffix?: string };
+
+const META: Record<string, MetaTarget[]> = {
+  view_item: [{ name: "ViewContent" }],
+  add_to_cart: [{ name: "AddToCart" }],
+  begin_checkout: [{ name: "InitiateCheckout" }],
+  customize_product: [{ name: "CustomizeProduct" }],
+  generate_lead: [{ name: "Lead" }],
+  book_call: [
+    { name: "Schedule" },
+    { name: "Lead", eventIdSuffix: "lead" },
+  ],
+  click_to_call: [
+    { name: "Contact" },
+    { name: "Lead", eventIdSuffix: "lead" },
+  ],
+  click_to_text: [
+    { name: "Contact" },
+    { name: "Lead", eventIdSuffix: "lead" },
+  ],
+  booking_open: [
+    { name: "BookingOpen", custom: true },
+    { name: "Lead", eventIdSuffix: "lead" },
+  ],
+  contact_intent: [
+    { name: "ContactIntent", custom: true },
+    { name: "Lead", eventIdSuffix: "lead" },
+  ],
+  audit_start: [{ name: "AuditStart", custom: true }],
+  audit_complete: [{ name: "AuditComplete", custom: true }],
+  quiz_start: [{ name: "QuizStart", custom: true }],
 };
 
 /** CEO Turbo's Meta Pixel (Events Manager → Data sources). VITE_META_PIXEL_ID overrides it. */
@@ -45,7 +62,7 @@ export const DEFAULT_PIXEL_ID = "3232222473609236";
 export const PIXEL_ID = () => (import.meta.env.VITE_META_PIXEL_ID as string | undefined) || DEFAULT_PIXEL_ID;
 
 /** Conversions worth filtering session recordings by in Clarity. */
-const CLARITY_EVENTS = new Set(["generate_lead", "book_call", "click_to_call", "click_to_text", "add_to_cart", "begin_checkout"]);
+const CLARITY_EVENTS = new Set(["generate_lead", "book_call", "booking_open", "click_to_call", "click_to_text", "add_to_cart", "begin_checkout"]);
 
 export const newEventId = (prefix: string) => `${prefix}_${Date.now().toString(36)}${Math.random().toString(36).slice(2, 8)}`;
 
@@ -173,12 +190,42 @@ export function track(event: string, params: Record<string, unknown> = {}, opts:
 
   tiktokEvent(event, { value: ecommerce?.value ?? params.value, currency: ecommerce?.currency ?? params.currency, content_name: params.content_name, contents: ecommerce?.items.map((i) => ({ content_id: i.item_id, content_name: i.item_name, quantity: i.quantity, price: i.price })) }, event_id, user ? { email: user.email, phone: e164(user.phone), externalId: user.externalId } : undefined);
 
-  const meta = META[event];
-  if (meta && PIXEL_ID()) {
+  const metaTargets = META[event];
+  if (metaTargets && metaTargets.length && PIXEL_ID()) {
     const payload = metaParams(params, ecommerce);
     withMeta(() => {
       if (user) identify(user);
-      win()?.fbq?.(meta.custom ? "trackCustom" : "track", meta.name, payload, { eventID: event_id });
+      const fbq = win()?.fbq;
+      if (!fbq) return;
+      for (const target of metaTargets) {
+        const id = target.eventIdSuffix ? `${event_id}_${target.eventIdSuffix}` : event_id;
+        const eventPayload =
+          target.name === "Lead"
+            ? {
+                ...payload,
+                content_name:
+                  (payload.content_name as string) ||
+                  (event === "click_to_call"
+                    ? "Phone call"
+                    : event === "click_to_text"
+                    ? "Text message"
+                    : event === "booking_open"
+                    ? "Book call button"
+                    : event === "book_call"
+                    ? "Booked call"
+                    : event === "contact_intent"
+                    ? "Phone call intent (desktop)"
+                    : "Lead"),
+                lead_source:
+                  (payload.lead_source as string) ||
+                  (params.lead_source as string) ||
+                  (params.source as string) ||
+                  (params.location as string) ||
+                  event,
+              }
+            : payload;
+        fbq(target.custom ? "trackCustom" : "track", target.name, eventPayload, { eventID: id });
+      }
     });
   }
   return event_id;
@@ -227,7 +274,7 @@ export function trackBooked(via: string, uid?: string, user?: UserData) {
 // Shopify orders can be tied back to the ad that drove them.
 
 const ATTR_KEY = "ct_attr";
-const ATTR_PARAMS = ["gclid", "gbraid", "wbraid", "fbclid", "msclkid", "ttclid", "utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term"] as const;
+const ATTR_PARAMS = ["gclid", "gbraid", "wbraid", "fbclid", "msclkid", "ttclid", "utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term", "test_event_code"] as const;
 export type Attribution = Partial<Record<(typeof ATTR_PARAMS)[number] | "landing" | "fbp" | "fbc" | "fbi" | "ttp", string>>;
 
 const decode = (v = "") => {
@@ -323,7 +370,7 @@ export function attribution(): Attribution {
 }
 
 /** Events the server also sends to the Conversions API (same event_id, so Meta de-duplicates). */
-const SERVER_COPY = new Set(["page_view", "view_item", "customize_product", "add_to_cart", "begin_checkout", "click_to_call", "click_to_text"]);
+const SERVER_COPY = new Set(["page_view", "view_item", "customize_product", "add_to_cart", "begin_checkout", "click_to_call", "click_to_text", "booking_open", "contact_intent"]);
 
 /** Server-side copy of a browser event (api/track.js). Fire-and-forget; never throws. */
 export function serverTrack(event: string, eventId: string, data: { value?: number; currency?: string; contentName?: string; contentCategory?: string; contentIds?: string[]; numItems?: number; user?: UserData } = {}) {
@@ -361,7 +408,8 @@ export function installCallTracking() {
       // A computer can't place the call or send the text (PhoneHost shows the number instead), so it is only
       // an intent: keep it out of Meta Contact and the Google Ads call conversion so they optimize on real taps.
       if (!canText()) {
-        track("contact_intent", { location, channel: text ? "text" : "call" });
+        const id = track("contact_intent", { location, channel: text ? "text" : "call" });
+        serverTrack("contact_intent", id, { contentName: text ? "Text message intent" : "Phone call intent" });
         return;
       }
       const event = text ? "click_to_text" : "click_to_call";

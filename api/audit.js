@@ -65,6 +65,7 @@ export default async function handler(req, res) {
   const stageLabel = input.stage === "start" ? "Starting out" : input.stage === "grow" ? "Growing" : "";
   const category = `${kind === "artist" ? "Artist" : "Business"}${stageLabel ? ` · ${stageLabel}` : ""}`;
   const externalId = text(body.visitorId, 60) || undefined;
+  const testCode = body.testEventCode || attr.test_event_code;
   const capi = Promise.all([
     sendMetaEvents([
       buildEvent({
@@ -77,7 +78,7 @@ export default async function handler(req, res) {
         userAgent: req.headers["user-agent"],
         customData: { lead_source: "free_check", content_name: contentName, content_category: category, value: FREE_CHECK_VALUE, currency: "USD" },
       }),
-    ]),
+    ], testCode),
     sendTiktokEvents([buildTiktokEvent({ event: "Lead", eventId, url, user: { email: lead.email, phone: lead.phone, externalId }, attribution: attr, ip, userAgent: req.headers["user-agent"], properties: { content_name: contentName, value: FREE_CHECK_VALUE, currency: "USD" } })]),
   ]);
 

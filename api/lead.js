@@ -79,6 +79,7 @@ export default async function handler(req, res) {
   const ip = signals.ip || clientIp(req);
   const user = { email: lead.email, phone: lead.phone, name: lead.name, externalId: text(body.visitorId, 60) || quiz?.quizId || undefined };
 
+  const testCode = body.testEventCode || attr.test_event_code;
   const capi = sendMetaEvents([
     buildEvent({
       eventName: "Lead",
@@ -96,7 +97,7 @@ export default async function handler(req, res) {
         ...(value ? { value, currency: "USD" } : {}),
       },
     }),
-  ]);
+  ], testCode);
   const tiktok = sendTiktokEvents([
     buildTiktokEvent({ event: "Lead", eventId, url, user, attribution: attr, ip, userAgent: req.headers["user-agent"], properties: { content_name: tech ? "Computer repair Tampa" : quiz ? "Brand Boost quiz" : dev ? "Developer intake" : type, ...(value ? { value, currency: "USD" } : {}) } }),
   ]);

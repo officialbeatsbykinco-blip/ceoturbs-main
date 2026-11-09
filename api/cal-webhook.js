@@ -100,19 +100,31 @@ export default async function handler(req, res) {
   const url = `https://www.ceoturbo.com${b.page || "/brand-boost"}`;
   const user = { email: b.email, phone: b.phone, name: b.name, externalId: b.visitorId || b.quizId || undefined };
   const worth = b.value ? { value: b.value, currency: "USD" } : {};
+  const metaEvents = [
+    buildEvent({
+      eventName: "Schedule",
+      eventId,
+      eventTime: body.createdAt,
+      url,
+      user,
+      attribution: b.attribution,
+      userAgent: b.ua || undefined,
+      customData: { content_name: b.title || "Brand Boost call", lead_source: b.source || "cal.com", ...worth },
+    }),
+    buildEvent({
+      eventName: "Lead",
+      eventId: eventId ? `${eventId}_lead` : undefined,
+      eventTime: body.createdAt,
+      url,
+      user,
+      attribution: b.attribution,
+      userAgent: b.ua || undefined,
+      customData: { content_name: b.title || "Brand Boost call (booking)", lead_source: b.source || "cal.com", ...worth },
+    }),
+  ];
+  const testCode = b.attribution?.test_event_code;
   const [capi, , sheet] = await Promise.all([
-    sendMetaEvents([
-      buildEvent({
-        eventName: "Schedule",
-        eventId,
-        eventTime: body.createdAt,
-        url,
-        user,
-        attribution: b.attribution,
-        userAgent: b.ua || undefined,
-        customData: { content_name: b.title || "Brand Boost call", lead_source: b.source || "cal.com", ...worth },
-      }),
-    ]),
+    sendMetaEvents(metaEvents, testCode),
     sendTiktokEvents([buildTiktokEvent({ event: "Schedule", eventId, eventTime: body.createdAt, url, user, attribution: b.attribution, userAgent: b.ua || undefined, properties: { content_name: b.title || "Brand Boost call", ...worth } })]),
     forwardLead({ type: "booking", name: b.name, email: b.email, phone: b.phone, startTime: b.startTime, endTime: b.endTime, timeZone: b.timeZone, meetingLink: b.meetingLink, event: b.title, notes: b.notes, businessName: b.businessName, whatTheyDo: b.whatTheyDo, stage: b.stage, website: b.website, goal: b.goal, budget: b.budget, blockers: b.blockers, timeline: b.timeline, move: b.move, value: b.value, ...scoreLead(b), quizId: b.quizId, source: b.source, page: b.page, uid: b.uid, ...b.attribution }),
   ]);

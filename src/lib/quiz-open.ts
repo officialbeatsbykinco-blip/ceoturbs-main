@@ -1,6 +1,6 @@
 // Every "Book a call" button routes through the Brand Boost quiz: on pages where the quiz is the hero it
 // scrolls there, everywhere else it opens the quiz in a dialog (src/components/quiz/QuizModal.tsx).
-import { track } from "@/lib/track";
+import { track, serverTrack } from "@/lib/track";
 
 export type QuizOpen = { source?: string; prefill?: string };
 
@@ -15,14 +15,16 @@ export function openQuiz(detail: QuizOpen = {}): boolean {
   if (typeof window === "undefined") return false;
   const hero = document.querySelector<HTMLElement>('[data-quiz-inline="primary"]');
   if (hero) {
-    track("booking_open", { source: detail.source, via: "quiz-scroll" });
+    const id = track("booking_open", { source: detail.source, via: "quiz-scroll", content_name: "Brand Boost quiz scroll" });
+    serverTrack("booking_open", id, { contentName: "Brand Boost quiz scroll" });
     // Quiz already done: go straight to the booking calendar, not back to the top of the plan.
     (hero.querySelector<HTMLElement>("[data-quiz-cal]") ?? hero).scrollIntoView({ behavior: "smooth", block: "start" });
     window.setTimeout(() => hero.querySelector<HTMLElement>("[data-quiz-focus]")?.focus({ preventScroll: true }), 450);
     return true;
   }
   if (!window.__ctQuizModal) return false;
-  track("booking_open", { source: detail.source, via: "quiz-modal" });
+  const id = track("booking_open", { source: detail.source, via: "quiz-modal", content_name: "Brand Boost quiz modal" });
+  serverTrack("booking_open", id, { contentName: "Brand Boost quiz modal" });
   window.dispatchEvent(new CustomEvent<QuizOpen>("ct:quiz", { detail }));
   return true;
 }

@@ -7,6 +7,7 @@ import "@fontsource-variable/space-grotesk/wght.css";
 import "./index.css";
 import { startGa } from "./lib/ga";
 import { startGtm } from "./lib/gtm";
+import { startPixel } from "./lib/pixel";
 import { captureAttribution, installCallTracking } from "./lib/track";
 import { flushLeadOutbox } from "./lib/lead-outbox";
 
@@ -37,6 +38,7 @@ installCallTracking();
 flushLeadOutbox();
 startGtm();
 startGa();
+startPixel();
 
 const container = document.getElementById("root")!;
 const app = (

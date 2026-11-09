@@ -4,7 +4,7 @@ import { InstallCalModal } from "@/components/booking/InstallCalModal";
 import { BOOKING, INSTALL_BOOKING, SITE, fromPriceLabel, type CalEvent } from "@/config/site";
 import { SHOP_PATH } from "@/content/review-cards";
 import { openBooking } from "@/lib/cal";
-import { track } from "@/lib/track";
+import { track, serverTrack } from "@/lib/track";
 import { cn } from "@/lib/utils";
 
 const TextQuoteModal = lazy(() => import("@/components/cta/TextQuoteModal").then((m) => ({ default: m.TextQuoteModal })));
@@ -80,6 +80,8 @@ export function InstallBookButton({
   const onClick = (e: MouseEvent<HTMLAnchorElement>) => {
     if (e.metaKey || e.ctrlKey || e.shiftKey) return;
     e.preventDefault();
+    const id = track("booking_open", { source: note ?? "install-button", content_name: title ?? "Book install" });
+    serverTrack("booking_open", id, { contentName: title ?? "Book install" });
     setModalOpen(true);
   };
 

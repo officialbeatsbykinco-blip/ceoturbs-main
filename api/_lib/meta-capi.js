@@ -90,18 +90,19 @@ export function buildEvent({ eventName, eventId, eventTime, url, user, attributi
 }
 
 /** Sends events to Meta. Never throws; a missing token just skips (logged once per call). */
-export async function sendMetaEvents(events) {
+export async function sendMetaEvents(events, testEventCode) {
   const token = process.env.META_CAPI_TOKEN;
   const pixel = process.env.META_PIXEL_ID || process.env.VITE_META_PIXEL_ID || DEFAULT_PIXEL_ID;
   if (!token) {
     console.warn("[capi] META_CAPI_TOKEN not set — server-side event skipped");
     return { sent: false };
   }
+  const testCode = testEventCode || process.env.META_TEST_EVENT_CODE;
   try {
     const res = await fetch(`https://graph.facebook.com/${GRAPH}/${pixel}/events?access_token=${encodeURIComponent(token)}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ data: events, ...(process.env.META_TEST_EVENT_CODE ? { test_event_code: process.env.META_TEST_EVENT_CODE } : {}) }),
+      body: JSON.stringify({ data: events, ...(testCode ? { test_event_code: testCode } : {}) }),
       signal: AbortSignal.timeout(6000),
     });
     if (!res.ok) console.error("[capi] Meta responded", res.status, await res.text().catch(() => ""));

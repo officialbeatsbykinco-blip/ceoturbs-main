@@ -4,7 +4,7 @@ import { useEffect, useId, useRef, useState } from "react";
 import { ArrowRight } from "lucide-react";
 import { BOOKING } from "@/config/site";
 import { bookingPageUrl, mountInlineBooking, onLinkStatus, type Prefill } from "@/lib/cal";
-import { track } from "@/lib/track";
+import { track, serverTrack } from "@/lib/track";
 import { cn } from "@/lib/utils";
 
 type Status = "loading" | "ready" | "slow" | "failed";
@@ -16,7 +16,10 @@ export function InlineBooking({ ns: baseNs = BOOKING.namespace, source, prefill,
   const ns = `${baseNs}-${calId}`;
   const [status, setStatus] = useState<Status>("loading");
   const pageUrl = bookingPageUrl(prefill, person, fields, { source: `${source ?? "site"} — direct page`, meta });
-  const directClick = () => track("booking_open", { source: `${source ?? "site"} — direct page` });
+  const directClick = () => {
+    const id = track("booking_open", { source: `${source ?? "site"} — direct page`, content_name: "Inline booking" });
+    serverTrack("booking_open", id, { contentName: "Inline booking" });
+  };
   const box = useRef<HTMLDivElement>(null);
   // The calendar is a whole app in an iframe, so it only starts loading as the visitor nears it.
   const [near, setNear] = useState(false);

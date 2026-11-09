@@ -5,7 +5,17 @@
 import { readJson, send, clientIp, rateLimited, sameOrigin, isJson } from "./_lib/http.js";
 import { buildEvent, cleanAttribution, requestSignals, sendMetaEvents, withSignals } from "./_lib/meta-capi.js";
 
-const EVENTS = { page_view: "PageView", view_item: "ViewContent", add_to_cart: "AddToCart", begin_checkout: "InitiateCheckout", customize_product: "CustomizeProduct", click_to_call: "Contact", click_to_text: "Contact" };
+const EVENTS = {
+  page_view: "PageView",
+  view_item: "ViewContent",
+  add_to_cart: "AddToCart",
+  begin_checkout: "InitiateCheckout",
+  customize_product: "CustomizeProduct",
+  click_to_call: "Contact",
+  click_to_text: "Contact",
+  contact_intent: "Contact",
+  booking_open: "Lead",
+};
 const text = (v, max) => (typeof v === "string" ? v.replace(/[\u0000-\u001f\u007f<>]/g, " ").trim().slice(0, max) : "");
 
 /** Validated CAPI custom_data for an allowed event, or null (exported for tests). */
@@ -47,7 +57,7 @@ export default async function handler(req, res) {
 
   const signals = requestSignals(req, res);
   const attr = withSignals(cleanAttribution(body.attribution), signals);
-  const meta = await sendMetaEvents([
+  const events = [
     buildEvent({
       eventName: p.eventName,
       eventId,
@@ -58,6 +68,25 @@ export default async function handler(req, res) {
       userAgent: req.headers["user-agent"],
       customData: p.customData,
     }),
-  ]);
+  ];
+  if (p.eventName === "Contact") {
+    events.push(
+      buildEvent({
+        eventName: "Lead",
+        eventId: `${eventId}_lead`,
+        url: `https://www.ceoturbo.com${text(body.page, 600).replace(/^(?!\/)/, "/") || "/"}`,
+        user: { externalId: text(body.visitorId, 60) || undefined },
+        attribution: attr,
+        ip: signals.ip || clientIp(req),
+        userAgent: req.headers["user-agent"],
+        customData: {
+          ...p.customData,
+          lead_source: body.event || "contact",
+        },
+      }),
+    );
+  }
+  const testCode = body.testEventCode || body.attribution?.test_event_code;
+  const meta = await sendMetaEvents(events, testCode);
   return send(res, 200, { ok: true, meta: !!meta.sent });
 }

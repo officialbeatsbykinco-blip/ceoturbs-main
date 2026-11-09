@@ -1,9 +1,9 @@
 // Cal.com embed loader. The script loads on the first interaction so it never
 // competes with the page's first paint, and every booking shows as an inline calendar on the page.
 import { BOOKING, INSTALL_BOOKING, type CalEvent } from "@/config/site";
-import { attribution, track, trackBooked } from "@/lib/track";
+import { attribution, track, trackBooked, serverTrack } from "@/lib/track";
 
-export { track, trackBooked };
+export { track, trackBooked, serverTrack };
 
 type CalFn = ((...args: unknown[]) => void) & {
   loaded?: boolean;
@@ -218,7 +218,8 @@ export function bookingPageUrl(prefill?: string, person?: Person, fields?: Prefi
 
 /** Leaves for the booking page in this tab (new tabs get blocked after an await, and in-app browsers handle them badly). */
 function goToBookingPage(url: string, source?: string) {
-  track("booking_open", { source: `${source ?? "site"} — direct page` });
+  const id = track("booking_open", { source: `${source ?? "site"} — direct page`, content_name: "Brand Boost call" });
+  serverTrack("booking_open", id, { contentName: "Brand Boost call" });
   window.location.assign(url);
 }
 
@@ -229,7 +230,8 @@ export type BookingRequest = Prefill;
  * Without that dialog mounted, falls back to Cal.com's modal, then to the booking page if the calendar fails.
  */
 export async function openBooking(source?: string, prefill?: string, person?: Person, extra: Omit<Prefill, "source" | "prefill" | "person"> = {}) {
-  track("booking_open", { source });
+  const id = track("booking_open", { source: source || "book-button", content_name: "Brand Boost call" });
+  serverTrack("booking_open", id, { contentName: "Brand Boost call" });
   if (window.__ctBookingModal) {
     window.dispatchEvent(new CustomEvent<BookingRequest>("ct:booking", { detail: { source, prefill, person, ...extra } }));
     return;
@@ -275,7 +277,8 @@ function bookerFrom(d: Record<string, unknown>) {
 
 /** Install/build pages: opens the office-studio-setup calendar (or another `event`) in Cal's modal, falling back to its booking page. */
 export async function openInstallBooking(source?: string, event: CalEvent = INSTALL_BOOKING) {
-  track("booking_open", { source: `${source ?? "install"} — install calendar` });
+  const id = track("booking_open", { source: `${source ?? "install"} — install calendar`, content_name: event.title || "Install booking" });
+  serverTrack("booking_open", id, { contentName: event.title || "Install booking" });
   const ns = event.namespace;
   const url = `${event.url}?${new URLSearchParams({ "metadata[source]": source ?? "install", "metadata[page]": window.location.pathname })}`;
   const ok = await loadCalWithin(ns);

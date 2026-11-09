@@ -7,9 +7,29 @@ const PIXEL_ID = pixelId();
 let started = false;
 
 export function startPixel() {
-  // Dev servers and build runs must not reach the real pixel: fake Leads teach Meta to find the wrong people.
-  if (!PIXEL_ID || started || typeof window === "undefined" || /^(localhost|127\.0\.0\.1)$/.test(window.location.hostname)) return;
+  if (started || typeof window === "undefined") return;
+  const isLocalhost = /^(localhost|127\.0\.0\.1)$/.test(window.location.hostname);
+  const allowLocal =
+    window.location.search.includes("test_pixel=true") ||
+    import.meta.env.VITE_ENABLE_LOCAL_PIXEL === "true";
+
+  if (isLocalhost && !allowLocal) {
+    console.info(
+      "[pixel] Meta Pixel disabled on localhost to prevent test data pollution. Add ?test_pixel=true to the URL to enable during local testing."
+    );
+    return;
+  }
+  if (!PIXEL_ID) return;
   started = true;
+  const q = new URLSearchParams(window.location.search);
+  const testCode = q.get("test_event_code");
+  if (testCode) {
+    try {
+      sessionStorage.setItem("ct_meta_test_code", testCode);
+    } catch {
+      /* ignore */
+    }
+  }
   const w = window as unknown as { fbq?: Fbq; _fbq?: Fbq };
   if (w.fbq) return;
   const n = function (...args: unknown[]) {
