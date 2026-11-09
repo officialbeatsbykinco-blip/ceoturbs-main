@@ -15,6 +15,7 @@ import { newEventId, serverTrack, track } from "@/lib/track";
 
 const STEP_ICONS = [MessageSquare, ClipboardCheck, Home];
 const PROMISES = ["Price up front, before any work", "We come to your home or business", "Tested with you before we leave", "Pay after it works"];
+const BUSINESS_PROMISES = ["Flat price in writing first", "On-site at your office or shop", "Tested with your team", "Pay after it's done"];
 
 export default function InstallPage({ path }: { path: string }) {
   const page = installPage(path)!;
@@ -24,7 +25,9 @@ export default function InstallPage({ path }: { path: string }) {
     serverTrack("view_item", id, { value: page.value, currency: "USD", contentName: page.name, contentCategory: page.category });
   }, [page]);
 
-  const others = INSTALL_PAGES.filter((p) => p.path !== page.path);
+  const business = page.audience === "business";
+  // Consumer pages cross-link each other; the business (Google Ads) page links to no consumer page.
+  const others = business ? [] : INSTALL_PAGES.filter((p) => p.path !== page.path && !p.audience);
 
   return (
     <>
@@ -57,7 +60,7 @@ export default function InstallPage({ path }: { path: string }) {
               </CallLink>
             </div>
             <ul className="mt-6 grid max-w-xl gap-x-4 gap-y-2 text-[15px] text-muted-foreground sm:grid-cols-2">
-              {PROMISES.map((t) => (
+              {(business ? BUSINESS_PROMISES : PROMISES).map((t) => (
                 <li key={t} className="flex items-center gap-2">
                   <Check className="h-4 w-4 shrink-0 text-turbo" aria-hidden />
                   {t}
@@ -132,7 +135,7 @@ export default function InstallPage({ path }: { path: string }) {
           <img src={SITE.founder.image} alt={SITE.founder.name} width={160} height={160} loading="lazy" className="h-32 w-32 rounded-2xl object-cover ring-1 ring-border sm:h-40 sm:w-40" />
           <div>
             <h2 id="who" className="h-section">You deal with the person who does the work.</h2>
-            <p className="lede">I'm {SITE.founder.name.split(" ")[0]}, based in Tampa. No call center: you call or text, I tell you the price, I show up and do the job.</p>
+            <p className="lede">I'm {SITE.founder.name.split(" ")[0]}, based in Tampa. No call center: you call or text, I {business ? "send a written quote" : "tell you the price"}, I show up and do the job.</p>
           </div>
         </div>
       </section>
@@ -146,6 +149,7 @@ export default function InstallPage({ path }: { path: string }) {
 
       <FAQList faqs={page.faqs} title="Quick answers" />
 
+      {!business && (
       <section className="section border-t border-border" aria-labelledby="more">
         <div className="container-x">
           <SectionHeader title={<span id="more">We also do</span>} />
@@ -161,6 +165,7 @@ export default function InstallPage({ path }: { path: string }) {
           </div>
         </div>
       </section>
+      )}
 
       <section className="section border-t border-border" aria-labelledby="final">
         <div className="container-x">

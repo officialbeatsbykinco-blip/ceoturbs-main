@@ -122,12 +122,20 @@ describe("Tampa move", () => {
 describe("Tampa install pages", () => {
   it("has a page for computer setup, security cameras and Wi-Fi, each with per-unit prices", async () => {
     const { INSTALL_PAGES } = await import("@/content/install-pages");
-    expect(INSTALL_PAGES.map((p) => p.path)).toEqual(["/computer-setup-tampa", "/security-camera-installation-tampa", "/wifi-installation-tampa"]);
+    expect(INSTALL_PAGES.map((p) => p.path)).toEqual(["/computer-setup-tampa", "/security-camera-installation-tampa", "/wifi-installation-tampa", "/business-tech-setup-tampa"]);
     for (const p of INSTALL_PAGES) expect(p.prices.length, p.path).toBeGreaterThan(1);
     const cams = INSTALL_PAGES[1];
     expect(cams.prices.map((x) => x.id)).toEqual(["cam-doorbell", "cam-wifi"]);
     // No ladder work: the camera page never offers wired, roofline or recorder systems.
     expect(cams.priceNote).toContain("No second-story, roofline or wired systems");
+  });
+
+  it("keeps the Google Ads business page clear of consumer tech-support wording", async () => {
+    // Google bans ads for consumer tech support/repair/installation but allows services sold only to businesses.
+    const { INSTALL_PAGES } = await import("@/content/install-pages");
+    const biz = INSTALL_PAGES.find((p) => p.audience === "business")!;
+    const text = JSON.stringify(biz).toLowerCase();
+    for (const w of ["repair", "fix", "virus", "troubleshoot", "tech support", "technical support", "remote", "your home", "homeowner"]) expect(text, w).not.toContain(w);
   });
 
   it("writes the install request into the text, one answer per line", async () => {

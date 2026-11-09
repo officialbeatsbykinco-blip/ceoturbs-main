@@ -32,6 +32,11 @@ export type InstallPage = {
   faqs: FAQ[];
   /** What a lead is worth to the ad platforms (an average first job). */
   value: number;
+  /**
+   * "business": a Google Ads landing page. Google bans ads for consumer tech services but allows them for
+   * services sold only to businesses, so this page talks to businesses only and links to no consumer page.
+   */
+  audience?: "business";
   seo: { title: string; description: string };
 };
 
@@ -178,6 +183,65 @@ export const INSTALL_PAGES: InstallPage[] = [
     },
   },
 ];
+
+
+const bizHour = byId(IT_SERVICES, "it-business-hour");
+
+/** Google Ads landing page: business-only (see InstallPage.audience). Never mentions repair or home service. */
+INSTALL_PAGES.push({
+  slug: "business-tech-setup",
+  path: "/business-tech-setup-tampa",
+  name: "Business tech setup Tampa",
+  service: "business tech setup",
+  category: "business_tech",
+  audience: "business",
+  chip: "For Tampa Bay businesses · on-site within 40 miles",
+  h1: ["Office tech set up right.", "For Tampa Bay businesses."],
+  lede: "Workstations, multi-monitor desks, business Wi-Fi, printers, Microsoft 365, storefront doorbells and cameras, all set up on-site at your office, shop or clinic. Flat price in writing before we start.",
+  prices: [
+    { ...station, name: "Workstation setup (per station)", summary: "Computer, monitors, keyboard, cables, network and printer at one desk." },
+    { ...setupBasic, name: "Computer setup (first computer)", summary: "Unboxed, updated, accounts and software set up, files moved over." },
+    { ...ip("setup-extra"), name: "Each extra computer, same visit" },
+    ip("monitor-mount"),
+    { ...wifiMesh, name: "Business Wi-Fi install", summary: "Strong Wi-Fi across the space, with a separate guest network." },
+    { ...ip("cam-doorbell"), name: "Storefront video doorbell", summary: "Mounted at the door and set up on the owner's phone." },
+    { ...bizHour, name: "On-site tech work (per hour)", summary: "Printers, shared drives, POS and anything else on your list." },
+  ],
+  jobs: [
+    { id: "move", label: "New office or move-in setup" },
+    { id: "desks", label: "Workstations & multi-monitor desks" },
+    { id: "wifi", label: "Business Wi-Fi & guest network" },
+    { id: "printers", label: "Printers & shared files" },
+    { id: "m365", label: "Microsoft 365 or Google Workspace" },
+    { id: "cams", label: "Storefront doorbell & cameras" },
+    { id: "pos", label: "POS or register setup" },
+    { id: "cables", label: "Cable cleanup & organization" },
+  ],
+  questions: [
+    { id: "biz", label: "What kind of business?", short: "Business", options: [{ id: "office", label: "Office" }, { id: "retail", label: "Shop or restaurant" }, { id: "clinic", label: "Clinic or salon" }, { id: "other", label: "Other" }] },
+    { id: "seats", label: "How many workstations?", short: "Workstations", options: [{ id: "1-3", label: "1–3" }, { id: "4-10", label: "4–10" }, { id: "11+", label: "11 or more" }] },
+  ],
+  includes: ["Every workstation set up and tested", "Monitors mounted and lined up", "Wi-Fi with a separate guest network", "Printers and shared files working for everyone", "Microsoft 365 or Google Workspace accounts", "Cables routed and labeled, desks clean"],
+  steps: [
+    { title: "Tell us about your office", body: "What you need and how many workstations. A few taps or a call." },
+    { title: "Flat price in writing", body: "You get the price by text before we come. No hourly surprises on a set job." },
+    { title: "Ready on day one", body: "We set it up on-site, test it with your team, then you pay." },
+  ],
+  faqs: [
+    { q: "How much does office tech setup cost?", a: `${usd(station.price)} per workstation with computer, monitors, cables, network and printer. Computers alone are ${usd(setupBasic.price)} for the first and ${usd(ip("setup-extra").price)} for each extra on the same visit, monitor mounts are ${usd(ip("monitor-mount").price)} each and business Wi-Fi installs start at ${usd(wifiMesh.price)}. Anything else is ${usd(bizHour.price)} an hour. You get the total in writing first.` },
+    { q: "What kinds of businesses do you work with?", a: "Offices, shops, restaurants, clinics, salons, gyms and contractors around Tampa Bay, from one desk to a whole office move-in." },
+    { q: "Can you set up a new office before we move in?", a: "Yes. Workstations, Wi-Fi, printers, accounts and cables done before your first day, so your team sits down and works." },
+    { q: "Do you install cameras and doorbells for storefronts?", a: "Yes, video doorbells and Wi-Fi cameras that mount at the door, counter and inside the shop, set up on the owner's phone. No roofline or wired systems." },
+    { q: "Do we buy the equipment?", a: "Yes, or we tell you exactly what to buy before the visit. No markup on gear." },
+    WHERE_FAQ("We work on-site"),
+    { q: "How do we pay?", a: "After the work is done and your team has checked it. Card, Zelle or business check." },
+  ],
+  value: 500,
+  seo: {
+    title: "Office & Business Tech Setup in Tampa, FL | CEO Turbo",
+    description: `Workstations, multi-monitor desks, business Wi-Fi, printers and Microsoft 365 set up on-site for Tampa Bay businesses. Flat price. Call ${SITE.phone.display}.`,
+  },
+});
 
 export const INSTALL_PATHS = INSTALL_PAGES.map((p) => p.path);
 export const installPage = (path: string) => INSTALL_PAGES.find((p) => p.path === path.replace(/\/$/, ""));

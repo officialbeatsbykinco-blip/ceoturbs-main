@@ -33,7 +33,7 @@ const updateHead = async (pathname: string) => {
 };
 
 /** Pages that use the friendly light look: white background, dark text, orange and blue buttons (easy for every age to read). */
-const SOFT = /^\/(|pricing|services(\/.*)?|google-review-cards|google-review-card-setup|results|about|contact|tampa|book|booked|computer-repair-tampa|office-setup-tampa|computer-setup-tampa|security-camera-installation-tampa|wifi-installation-tampa|restaurants|salons|barbershops)\/?$/;
+const SOFT = /^\/(|pricing|services(\/.*)?|google-review-cards|google-review-card-setup|results|about|contact|tampa|book|booked|computer-repair-tampa|office-setup-tampa|computer-setup-tampa|security-camera-installation-tampa|wifi-installation-tampa|business-tech-setup-tampa|restaurants|salons|barbershops)\/?$/;
 
 export function Layout({ children }: { children: ReactNode }) {
   const { pathname } = useLocation();
@@ -97,7 +97,8 @@ export function Layout({ children }: { children: ReactNode }) {
         {children}
       </main>
       <div className={soft ? "theme-soft contents" : "contents"}>
-        <Footer />
+        {/* Google Ads landing page: the short footer, so an ad visitor never sees links to consumer services. */}
+        <Footer focus={pathname.replace(/\/$/, "") === "/business-tech-setup-tampa"} />
         <MobileActionBar />
         <FloatingBookButton />
       </div>
