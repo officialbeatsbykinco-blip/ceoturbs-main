@@ -11,6 +11,7 @@ import { SHIRT_FAQS, SHIRTS_PATH } from "@/content/company-shirts";
 import { MERCH_FAQS, ARTIST_MERCH_PATH } from "@/content/artist-merch";
 import { IT_SERVICES, PRICING_FAQS, byId, price } from "@/content/pricing";
 import { OFFICE_FAQS, REPAIR_FAQS } from "@/content/tech-faqs";
+import { INSTALL_PAGES } from "@/content/install-pages";
 
 const OFFICE_PRICES = ["office-basic", "office-home", "office-complete", "office-transform-basic", "office-transform-standard", "office-transform-complete"].map(byId);
 import { RESTAURANT_FAQS, RESTAURANTS_PATH } from "@/content/restaurants";
@@ -343,6 +344,21 @@ function build(): PageMeta[] {
     { path: "/computer-repair-tampa", title: "Computer Repair in Tampa, FL: We Come to You | CEO Turbo", description: `Slow, crashing or dead computer, phone or tablet? Fixed at your door in Tampa Bay or remotely. Speed-up from $149. Call or text ${SITE.phone.display}.`, priority: 0.9, changefreq: "monthly", group: "Core", schema: [...base(), S.webPage("/computer-repair-tampa", "Computer repair in Tampa", "In-home computer, phone and tablet repair within 40 miles of Tampa, FL, and remote speed-ups for slow Windows computers."), S.breadcrumbs([{ name: "Computer repair Tampa", path: "/computer-repair-tampa" }]), S.localService({ path: "/computer-repair-tampa", name: "Computer, phone and tablet repair in Tampa Bay", serviceType: "Computer repair", description: "In-home and on-site repair of computers, laptops, iPhones, Android phones and tablets within about 40 miles of Tampa, FL, plus remote speed-ups for slow Windows computers. Price up front, no fix no charge.", prices: IT_SERVICES }), S.faqPage(REPAIR_FAQS, "/computer-repair-tampa")] },
     // Google & Microsoft Ads landing for office setup and cable management in Tampa.
     { path: "/office-setup-tampa", title: "Office Setup & Cable Management in Tampa, FL | CEO Turbo", description: `Multi-monitor workstations, cable management, printers, Wi-Fi and Microsoft/Google setup for Tampa Bay homes and offices. From $99 per desk.`, priority: 0.9, changefreq: "monthly", group: "Core", schema: [...base(), S.webPage("/office-setup-tampa", "Office setup in Tampa", "Office setup, workstation and cable management services around Tampa, FL."), S.breadcrumbs([{ name: "Office setup Tampa", path: "/office-setup-tampa" }]), S.localService({ path: "/office-setup-tampa", name: "Office setup and cable management in Tampa Bay", serviceType: "Office setup", description: "Multi-monitor workstations, cable management, printers, Wi-Fi and Microsoft or Google setup for homes and businesses within about 40 miles of Tampa, FL. Flat price in writing first.", prices: OFFICE_PRICES }), S.faqPage(OFFICE_FAQS, "/office-setup-tampa")] },
+    ...INSTALL_PAGES.map((p) => ({
+      path: p.path,
+      title: p.seo.title,
+      description: p.seo.description,
+      priority: 0.85,
+      changefreq: "monthly" as const,
+      group: "Core" as const,
+      schema: [
+        ...base(),
+        S.webPage(p.path, p.name, p.lede),
+        S.breadcrumbs([{ name: p.name, path: p.path }]),
+        S.localService({ path: p.path, name: `${p.service[0].toUpperCase()}${p.service.slice(1)} in Tampa Bay`, serviceType: p.service, description: p.lede, prices: p.prices }),
+        S.faqPage(p.faqs, p.path),
+      ],
+    })),
     { path: "/book", title: "Book Your Free 30-Minute Call | CEO Turbo", description: "Pick a time for a free 30-minute call with Christopher Robinson: what's costing you calls and bookings, and a fixed price to fix it.", ogImage: "/og/brand-boost.jpg", noindex: true, priority: 0.1, changefreq: "yearly", group: "Core", schema: base() },
     { path: "/booked", title: "You're Booked | CEO Turbo", description: "Your Brand Boost call is booked. Here's how to get the most from it.", noindex: true, priority: 0.1, changefreq: "yearly", group: "Core", schema: base() },
     {

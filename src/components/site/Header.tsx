@@ -206,6 +206,9 @@ export function Header({ focus: focusProp = false }: { focus?: boolean }) {
             </FixMyTechLink>
             {[
               [OFFICE_SETUP_PATH, "Office setup & cables"],
+              ["/computer-setup-tampa", "Computer setup"],
+              ["/security-camera-installation-tampa", "Security cameras"],
+              ["/wifi-installation-tampa", "Wi-Fi & internet"],
               ["/grow", "Websites & ads"],
               [SHIRTS_PATH, "Company t-shirts"],
               [SHOP_PATH, "Google review cards"],

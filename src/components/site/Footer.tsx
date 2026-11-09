@@ -86,6 +86,9 @@ export function Footer({ focus = false }: { focus?: boolean }) {
             links={[
               { to: IT_SERVICES_PATH, label: "Computer & phone repair" },
               { to: OFFICE_SETUP_PATH, label: "Office setup & cable management" },
+              { to: "/computer-setup-tampa", label: "Computer setup" },
+              { to: "/security-camera-installation-tampa", label: "Security camera installation" },
+              { to: "/wifi-installation-tampa", label: "Wi-Fi & internet setup" },
               { to: "/services/home-office-setup", label: "Home office setup" },
               { to: "/services/pos-system-setup", label: "POS installation" },
               { to: "/restaurants", label: "Restaurant TVs & menus" },

@@ -464,6 +464,20 @@ export const IT_SERVICES: PriceItem[] = [
   { id: "it-mesh", name: "Mesh Wi-Fi install", price: 179, from: true, billing: "once", summary: "Strong signal in every room. Labor; you keep the gear.", includes: [] },
   { id: "it-business-hour", name: "Business on-site IT", price: 125, billing: "once", summary: "Per hour. Networks, workstations, printers, TVs.", includes: [] },
 ];
+/**
+ * Installation prices (computer setup, security cameras, Wi-Fi) for the Tampa install pages. Labor only, per unit,
+ * so a customer can add it up themselves: equipment is theirs or bought at cost with receipts.
+ */
+export const INSTALL_PRICES: PriceItem[] = [
+  { id: "setup-extra", name: "Each extra computer, same visit", price: 69, billing: "once", summary: "Set up, updated and files moved, on the same trip.", includes: [] },
+  { id: "monitor-mount", name: "Monitor arm or wall mount", price: 39, billing: "once", summary: "Per monitor, on an arm or the wall, cables hidden. Mount not included.", includes: [] },
+  { id: "cam-wifi", name: "Wi-Fi camera installed", price: 99, billing: "once", summary: "Per camera: mounted, aimed, on your Wi-Fi and in the app.", includes: [] },
+  { id: "cam-wired", name: "Wired camera installed", price: 169, billing: "once", summary: "Per camera: cable run included, mounted, aimed and weather-sealed.", includes: [] },
+  { id: "cam-doorbell", name: "Video doorbell installed", price: 119, billing: "once", summary: "Mounted, wired to your chime and set up in the app.", includes: [] },
+  { id: "cam-nvr", name: "Recorder (NVR) & phone app setup", price: 99, billing: "once", summary: "Footage saved, phone viewing and alerts set up for you.", includes: [] },
+  { id: "net-drop", name: "Network cable drop", price: 129, billing: "once", summary: "Per cable: a wired connection run to a desk, TV or camera.", includes: [] },
+];
+
 /** "from $99" style label for an IT_SERVICES item. */
 export const itPrice = (id: string) => {
   const item = IT_SERVICES.find((p) => p.id === id);

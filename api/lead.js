@@ -43,6 +43,13 @@ export function batteryFields(body) {
   return { ...f, note };
 }
 
+/** Install quiz (computer setup, security cameras, Wi-Fi pages): one readable note for the sheet (exported for tests). */
+export function installFields(body) {
+  const f = { service: text(body.service, 60), contentName: text(body.contentName, 80), category: text(body.category, 40), jobs: text(body.jobs, 300), answers: text(body.answers, 300), when: text(body.when, 30), zip: text(body.zip, 10), details: text(body.details, 300) };
+  const note = [f.contentName && `Service: ${f.contentName}`, f.jobs && `Need: ${f.jobs}`, f.answers, f.when && `When: ${f.when}`, f.zip && `ZIP: ${f.zip}`, f.details && `Details: ${f.details}`].filter(Boolean).join(" | ");
+  return { ...f, note };
+}
+
 export default async function handler(req, res) {
   if (req.method !== "POST") {
     res.setHeader("Allow", "POST");
@@ -67,8 +74,9 @@ export default async function handler(req, res) {
   const tech = type === "tech-repair" ? techFields(body) : null;
   // The office text quiz files through the tech path (same sheet tab) but is its own service in Meta's reports.
   const officeQuiz = !!tech && text(body.service, 80) === "office-quiz";
-  const smsSend = (textQuiz || !!tech) && body.channel === "sms";
-  const { lead, error } = cleanLead(body, { phoneOptional: !!dev || type === "shirt-exit-intent" || smsSend, emailOptional: type === "battery" || textQuiz || !!tech });
+  const install = type === "install" ? installFields(body) : null;
+  const smsSend = (textQuiz || !!tech || !!install) && body.channel === "sms";
+  const { lead, error } = cleanLead(body, { phoneOptional: !!dev || type === "shirt-exit-intent" || smsSend, emailOptional: type === "battery" || textQuiz || !!tech || !!install });
   if (error) return send(res, 400, { error });
 
   const battery = type === "battery" ? batteryFields(body) : null;
@@ -79,7 +87,7 @@ export default async function handler(req, res) {
   const value = Number(body.value) > 0 ? Math.min(Number(body.value), 100000) : 0;
   const url = `https://www.ceoturbo.com${text(body.page, 120) || "/"}`;
   const ip = signals.ip || clientIp(req);
-  const user = { email: lead.email, phone: lead.phone, name: lead.name, zip: tech?.zip || undefined, externalId: text(body.visitorId, 60) || quiz?.quizId || undefined };
+  const user = { email: lead.email, phone: lead.phone, name: lead.name, zip: tech?.zip || install?.zip || undefined, externalId: text(body.visitorId, 60) || quiz?.quizId || undefined };
 
   const testCode = body.testEventCode || attr.test_event_code;
   const capi = sendMetaEvents([
@@ -93,6 +101,7 @@ export default async function handler(req, res) {
       userAgent: req.headers["user-agent"],
       customData: {
         lead_source: type,
+        ...(install ? { content_name: install.contentName || "Installation Tampa", content_category: install.category || "installation" } : {}),
         ...(tech ? (officeQuiz ? { content_name: "Office setup Tampa", content_category: "office_setup" } : { content_name: "Computer repair Tampa", content_category: "tech_repair" }) : {}),
         ...(dev ? { content_name: "Developer intake", content_category: [dev.platform, dev.stage].filter(Boolean).join(" · ") } : {}),
         ...(quiz ? { content_name: "Brand Boost quiz", content_category: [quiz.audience, quiz.stage].filter(Boolean).join(" · ") } : {}),
@@ -101,7 +110,7 @@ export default async function handler(req, res) {
     }),
   ], testCode);
   const tiktok = sendTiktokEvents([
-    buildTiktokEvent({ event: "Lead", eventId, url, user, attribution: attr, ip, userAgent: req.headers["user-agent"], properties: { content_name: officeQuiz ? "Office setup Tampa" : tech ? "Computer repair Tampa" : quiz ? "Brand Boost quiz" : dev ? "Developer intake" : type, ...(value ? { value, currency: "USD" } : {}) } }),
+    buildTiktokEvent({ event: "Lead", eventId, url, user, attribution: attr, ip, userAgent: req.headers["user-agent"], properties: { content_name: install ? install.contentName || "Installation Tampa" : officeQuiz ? "Office setup Tampa" : tech ? "Computer repair Tampa" : quiz ? "Brand Boost quiz" : dev ? "Developer intake" : type, ...(value ? { value, currency: "USD" } : {}) } }),
   ]);
   const { stored } = await forwardLead({
     type,
@@ -116,7 +125,7 @@ export default async function handler(req, res) {
     style: text(body.style, 40),
     pack: text(body.pack, 40),
     total: text(body.total, 20),
-    note: tech ? tech.note : dev ? dev.note : battery ? battery.note : text(body.note, 500),
+    note: install ? install.note : tech ? tech.note : dev ? dev.note : battery ? battery.note : text(body.note, 500),
     page: text(body.page, 120),
     eventId,
     ...attr,

@@ -208,6 +208,22 @@ export type GoogleAdResult = {
  */
 export const GOOGLE_AD_RESULTS: GoogleAdResult[] = [
   {
+    key: "appliance-king-google-2wk",
+    client: "Appliance King",
+    clientSlug: "appliance-king",
+    campaign: "Appliance repair & used appliances, Macon GA: Google Search",
+    period: "Oct 26 – Nov 8, 2026",
+    headline: "Two weeks on Google Search: 42 conversions for $176.",
+    clicks: 166,
+    cpc: 1.06,
+    conversions: 42,
+    costPer: 4.19,
+    spent: 176,
+    image: "/img/results/appliance-king-google-2wk.webp",
+    width: 1600,
+    height: 983,
+  },
+  {
     key: "appliance-king-google-day",
     client: "Appliance King",
     clientSlug: "appliance-king",

@@ -2,6 +2,7 @@ import { lazy, Suspense } from "react";
 import { Routes, Route } from "react-router-dom";
 import { Layout } from "@/components/site/Layout";
 import Home from "./pages/Home";
+import { INSTALL_PATHS } from "@/content/install-pages";
 
 const named = <T extends Record<string, unknown>>(load: () => Promise<T>, key: keyof T) =>
   lazy(() => load().then((m) => ({ default: m[key] as React.ComponentType })));
@@ -28,6 +29,7 @@ const AdsNotConverting = lazy(() => import("./pages/AdsNotConverting"));
 const GoogleAdsLocal = lazy(() => import("./pages/GoogleAdsLocal"));
 const ComputerRepair = lazy(() => import("./pages/ComputerRepair"));
 const OfficeSetup = lazy(() => import("./pages/OfficeSetup"));
+const InstallPage = lazy(() => import("./pages/InstallPage"));
 const AppMarketing = lazy(() => import("./pages/AppMarketing"));
 const Restaurants = lazy(() => import("./pages/Restaurants"));
 const Salons = lazy(() => import("./pages/Salons"));
@@ -67,6 +69,9 @@ export default function App() {
           <Route path="/google-ads-for-local-business" element={<GoogleAdsLocal />} />
           <Route path="/computer-repair-tampa" element={<ComputerRepair />} />
           <Route path="/office-setup-tampa" element={<OfficeSetup />} />
+          {INSTALL_PATHS.map((p) => (
+            <Route key={p} path={p} element={<InstallPage path={p} />} />
+          ))}
           <Route path="/app-marketing" element={<AppMarketing />} />
           <Route path="/restaurants" element={<Restaurants />} />
           <Route path="/salons" element={<Salons />} />

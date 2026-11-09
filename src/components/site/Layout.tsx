@@ -33,7 +33,7 @@ const updateHead = async (pathname: string) => {
 };
 
 /** Pages that use the friendly light look: white background, dark text, orange and blue buttons (easy for every age to read). */
-const SOFT = /^\/(|pricing|services(\/.*)?|google-review-cards|google-review-card-setup|results|about|contact|tampa|book|booked|computer-repair-tampa|office-setup-tampa|restaurants|salons|barbershops)\/?$/;
+const SOFT = /^\/(|pricing|services(\/.*)?|google-review-cards|google-review-card-setup|results|about|contact|tampa|book|booked|computer-repair-tampa|office-setup-tampa|computer-setup-tampa|security-camera-installation-tampa|wifi-installation-tampa|restaurants|salons|barbershops)\/?$/;
 
 export function Layout({ children }: { children: ReactNode }) {
   const { pathname } = useLocation();

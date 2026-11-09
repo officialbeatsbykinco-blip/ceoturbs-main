@@ -139,7 +139,7 @@ export default function Agency() {
       <section className="pt-14 pb-8" aria-labelledby="proof">
         <div className="container-x">
           <h2 id="proof" className="h-section">Real leads on small budgets.</h2>
-          <p className="lede">Unedited dashboards from Appliance King, appliance repair in Macon GA: 2 Google Ads conversions for $6.57 in one day, 14 website leads at $6.46 each on $5 a day, and 71 free clicks from Google Search in 3 months.</p>
+          <p className="lede">Unedited dashboards from Appliance King, appliance repair in Macon GA: 42 Google Ads conversions for $176 in two weeks ($4.19 each), 14 website leads at $6.46 each on $5 a day, and 71 free clicks from Google Search in 3 months.</p>
           <div className="mt-8">
             <BestResults />
           </div>
@@ -257,7 +257,7 @@ export default function Agency() {
             ))}
           </ul>
           <div className="mt-8 grid items-start gap-6 lg:grid-cols-[1.1fr_0.9fr]">
-            <GoogleAdProof compact result={GOOGLE_AD_RESULTS[1]} />
+            <GoogleAdProof compact result={GOOGLE_AD_RESULTS[0]} />
             <div className="panel p-6">
               <p className="font-display text-lg font-bold">Real ad accounts, real leads.</p>
               <p className="mt-2 text-sm text-muted-foreground">Unedited Google Ads and Meta dashboards from local service businesses. Setup from {price("pkg-start")}, the full Launch package {price("pkg-launch")}, ads management from {price("growth")}/mo. You own the ad account and there's no long-term contract.</p>

@@ -118,3 +118,25 @@ describe("Tampa move", () => {
     expect(hits.map((f) => path.relative(root, f))).toEqual([]);
   });
 });
+
+describe("Tampa install pages", () => {
+  it("has a page for computer setup, security cameras and Wi-Fi, each with per-unit prices", async () => {
+    const { INSTALL_PAGES } = await import("@/content/install-pages");
+    expect(INSTALL_PAGES.map((p) => p.path)).toEqual(["/computer-setup-tampa", "/security-camera-installation-tampa", "/wifi-installation-tampa"]);
+    for (const p of INSTALL_PAGES) expect(p.prices.length, p.path).toBeGreaterThan(1);
+    const cams = INSTALL_PAGES[1];
+    expect(cams.prices.map((x) => x.price)).toEqual([99, 169, 119, 99]);
+    expect(cams.priceNote).toContain("$775");
+  });
+
+  it("writes the install request into the text, one answer per line", async () => {
+    const { INSTALL_PAGES, EMPTY_INSTALL, installMessage } = await import("@/content/install-pages");
+    const msg = installMessage(INSTALL_PAGES[1], { ...EMPTY_INSTALL, jobs: ["new", "doorbell"], picks: { count: "3-4", place: "home", kind: "wifi" }, zip: "33511", name: "Pat" });
+    expect(msg).toBe("Hi Chris! I'd like a price for security camera installation.\nNeed: Install new cameras, Video doorbell\nCameras: 3–4\nFor: Home\nType: Wi-Fi (Ring, Arlo, Wyze…)\nWhen: ASAP\nZIP: 33511\nName: Pat");
+  });
+
+  it("files install leads as one readable sheet note", async () => {
+    const { installFields } = await import("../../api/lead.js");
+    expect(installFields({ contentName: "Security cameras Tampa", jobs: "Install new cameras", answers: "Cameras: 3–4 | For: Home", when: "ASAP", zip: "33511" }).note).toBe("Service: Security cameras Tampa | Need: Install new cameras | Cameras: 3–4 | For: Home | When: ASAP | ZIP: 33511");
+  });
+});

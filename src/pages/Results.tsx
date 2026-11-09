@@ -20,7 +20,7 @@ export default function Results() {
             lede="No cherry-picked case-study graphics. These are unedited Google Ads, Meta Ads Manager and Google Search Console screenshots from client and in-house campaigns, July–October 2026."
           />
           <DirectAnswer label="The numbers">
-            Across {AD_TOTALS.campaigns} Meta lead campaigns, CEO Turbo clients got {AD_TOTALS.leads} leads for {money(AD_TOTALS.leadSpend)} — {money(AD_TOTALS.avgCpl)} per lead on average, with the best at {money(AD_TOTALS.lowestCpl)}. On Google Search, {GOOGLE_AD_RESULT.client} got {GOOGLE_AD_RESULT.conversions} conversions for {money(GOOGLE_AD_RESULT.spent)} in one day ({money(GOOGLE_AD_RESULT.costPer)} each). An artist profile campaign drove 165 visits at $0.32 each, and stackmode.net reached 3.34K Google impressions.
+            Across {AD_TOTALS.campaigns} Meta lead campaigns, CEO Turbo clients got {AD_TOTALS.leads} leads for {money(AD_TOTALS.leadSpend)} — {money(AD_TOTALS.avgCpl)} per lead on average, with the best at {money(AD_TOTALS.lowestCpl)}. On Google Search, {GOOGLE_AD_RESULT.client} got {GOOGLE_AD_RESULT.conversions} conversions for {money(GOOGLE_AD_RESULT.spent)} in two weeks ({money(GOOGLE_AD_RESULT.costPer)} each, {GOOGLE_AD_RESULT.period}). An artist profile campaign drove 165 visits at $0.32 each, and stackmode.net reached 3.34K Google impressions.
           </DirectAnswer>
         </div>
       </section>
@@ -45,7 +45,7 @@ export default function Results() {
         <div className="container-x">
           <FeaturedResult />
           <div className="mt-12">
-            <GoogleAdProof result={GOOGLE_AD_RESULTS[1]} />
+            <GoogleAdProof result={GOOGLE_AD_RESULTS[0]} />
           </div>
         </div>
       </section>
