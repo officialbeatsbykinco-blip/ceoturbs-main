@@ -105,17 +105,20 @@ describe("booked-call tracking (browser)", () => {
     expect(actions).toEqual(["book_appointment", "submit_lead_form"]);
   });
 
-  it("fires Meta Lead on book buttons (booking_open) so Meta lead optimization sees active events", async () => {
+  it("opening the calendar is not a Meta Lead (it opens by itself on desktop)", async () => {
     const { track, fbq } = await setup();
     track("booking_open", { source: "Header book button", content_name: "Brand Boost call" }, { eventId: "bo_123" });
-    const lead = fbq.find((a) => a[0] === "track" && a[1] === "Lead");
-    expect(lead).toBeDefined();
-    expect(lead![2]).toMatchObject({ content_name: "Brand Boost call", lead_source: "Header book button" });
-    expect(lead![3]).toEqual({ eventID: "bo_123_lead" });
-
+    expect(fbq.some((a) => a[1] === "Lead")).toBe(false);
     const open = fbq.find((a) => a[0] === "trackCustom" && a[1] === "BookingOpen");
-    expect(open).toBeDefined();
     expect(open![3]).toEqual({ eventID: "bo_123" });
+  });
+
+  it("a quiz or form submit is a Meta Lead", async () => {
+    const { track, fbq } = await setup();
+    track("generate_lead", { lead_source: "tech-quiz", value: 150, currency: "USD" }, { eventId: "gl_1" });
+    const lead = fbq.find((a) => a[0] === "track" && a[1] === "Lead");
+    expect(lead![2]).toMatchObject({ value: 150, currency: "USD" });
+    expect(lead![3]).toEqual({ eventID: "gl_1" });
   });
 
   it("fires Meta Lead on phone and text taps alongside Contact", async () => {
@@ -130,15 +133,10 @@ describe("booked-call tracking (browser)", () => {
     expect(contact![3]).toEqual({ eventID: "call_456" });
   });
 
-  it("fires Meta Lead on desktop call clicks (contact_intent) so testing on desktop registers active events", async () => {
+  it("a desktop click on the number is only an intent, not a Lead or Contact", async () => {
     const { track, fbq } = await setup();
     track("contact_intent", { location: "header-call", channel: "call" }, { eventId: "ci_789" });
-    const lead = fbq.find((a) => a[0] === "track" && a[1] === "Lead");
-    const custom = fbq.find((a) => a[0] === "trackCustom" && a[1] === "ContactIntent");
-    expect(lead).toBeDefined();
-    expect(custom).toBeDefined();
-    expect(fbq.some((a) => a[1] === "Contact")).toBe(false);
-    expect(lead![2]).toMatchObject({ content_name: "Phone call intent (desktop)", lead_source: "header-call" });
-    expect(lead![3]).toEqual({ eventID: "ci_789_lead" });
+    expect(fbq.some((a) => a[1] === "Lead" || a[1] === "Contact")).toBe(false);
+    expect(fbq.find((a) => a[0] === "trackCustom" && a[1] === "ContactIntent")).toBeDefined();
   });
 });

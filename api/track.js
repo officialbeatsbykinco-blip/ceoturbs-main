@@ -13,8 +13,6 @@ const EVENTS = {
   customize_product: "CustomizeProduct",
   click_to_call: "Contact",
   click_to_text: "Contact",
-  contact_intent: "Contact",
-  booking_open: "Lead",
 };
 const text = (v, max) => (typeof v === "string" ? v.replace(/[\u0000-\u001f\u007f<>]/g, " ").trim().slice(0, max) : "");
 
@@ -69,7 +67,8 @@ export default async function handler(req, res) {
       customData: p.customData,
     }),
   ];
-  if (p.eventName === "Contact") {
+  // A real call/text tap on a phone is a lead too (same event as the browser's Lead, id + "_lead").
+  if (body.event === "click_to_call" || body.event === "click_to_text") {
     events.push(
       buildEvent({
         eventName: "Lead",

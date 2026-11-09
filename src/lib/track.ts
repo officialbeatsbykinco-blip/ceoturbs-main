@@ -44,14 +44,11 @@ const META: Record<string, MetaTarget[]> = {
     { name: "Contact" },
     { name: "Lead", eventIdSuffix: "lead" },
   ],
-  booking_open: [
-    { name: "BookingOpen", custom: true },
-    { name: "Lead", eventIdSuffix: "lead" },
-  ],
-  contact_intent: [
-    { name: "ContactIntent", custom: true },
-    { name: "Lead", eventIdSuffix: "lead" },
-  ],
+  // Opening the calendar (it opens by itself on desktop) or clicking a number on a computer is not a lead:
+  // counting them as Lead would teach Meta to buy page visitors. Real leads: generate_lead, book_call and
+  // call/text taps on a phone.
+  booking_open: [{ name: "BookingOpen", custom: true }],
+  contact_intent: [{ name: "ContactIntent", custom: true }],
   audit_start: [{ name: "AuditStart", custom: true }],
   audit_complete: [{ name: "AuditComplete", custom: true }],
   quiz_start: [{ name: "QuizStart", custom: true }],
@@ -370,7 +367,7 @@ export function attribution(): Attribution {
 }
 
 /** Events the server also sends to the Conversions API (same event_id, so Meta de-duplicates). */
-const SERVER_COPY = new Set(["page_view", "view_item", "customize_product", "add_to_cart", "begin_checkout", "click_to_call", "click_to_text", "booking_open", "contact_intent"]);
+const SERVER_COPY = new Set(["page_view", "view_item", "customize_product", "add_to_cart", "begin_checkout", "click_to_call", "click_to_text"]);
 
 /** Server-side copy of a browser event (api/track.js). Fire-and-forget; never throws. */
 export function serverTrack(event: string, eventId: string, data: { value?: number; currency?: string; contentName?: string; contentCategory?: string; contentIds?: string[]; numItems?: number; user?: UserData } = {}) {
@@ -404,6 +401,8 @@ export function installCallTracking() {
       const a = (e.target as Element | null)?.closest?.('a[href^="tel:"], a[href^="sms:"]') as HTMLAnchorElement | null;
       if (!a) return;
       const location = a.dataset.callLocation || "link";
+      // A quiz's own "Text it to us" button already fired generate_lead (Lead) with the answers; don't count it twice.
+      if (/quiz$/.test(location)) return;
       const text = a.getAttribute("href")?.startsWith("sms:");
       // A computer can't place the call or send the text (PhoneHost shows the number instead), so it is only
       // an intent: keep it out of Meta Contact and the Google Ads call conversion so they optimize on real taps.

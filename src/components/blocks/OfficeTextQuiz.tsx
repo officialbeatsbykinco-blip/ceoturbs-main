@@ -4,7 +4,8 @@ import { useRef, useState, type MouseEvent } from "react";
 import { ArrowLeft, ArrowRight, MessageSquare } from "lucide-react";
 import { CallLink } from "@/components/site/CallLink";
 import { smsHref } from "@/lib/sms";
-import { track } from "@/lib/track";
+import { sendLead } from "@/lib/lead-outbox";
+import { attribution, newEventId, track, visitorId } from "@/lib/track";
 import { cn } from "@/lib/utils";
 
 export const OFFICE_NEEDS = [
@@ -45,7 +46,11 @@ export function OfficeTextQuiz({ id = "book", className }: { id?: string; classN
     }
     if (sent.current) return;
     sent.current = true;
-    track("generate_lead", { lead_source: "office-quiz", channel: "sms", value: 300, currency: "USD", content_name: "Office setup Tampa", content_category: "office_setup", need: a.need, size: a.size, timing: a.when }, { user: { name: a.name.trim() } });
+    const need = OFFICE_NEEDS.find((n) => n.id === a.need)?.label ?? "";
+    const user = { name: a.name.trim(), externalId: visitorId() };
+    const eventId = track("generate_lead", { lead_source: "office-quiz", channel: "sms", value: 300, currency: "USD", content_name: "Office setup Tampa", content_category: "office_setup", need: a.need, size: a.size, timing: a.when }, { user });
+    // Server copy (Conversions API + leads sheet), same event_id so Meta de-duplicates it.
+    void sendLead({ type: "tech-repair", service: "office-quiz", channel: "sms", eventId, value: 300, visitorId: user.externalId, quizId: newEventId("o"), name: user.name, phone: "", problem: need, device: a.size ?? "", where: a.when ?? "", city: "", page: window.location.pathname, attribution: attribution(), company_site: "", elapsedMs: 99_999 });
   };
 
   return (
