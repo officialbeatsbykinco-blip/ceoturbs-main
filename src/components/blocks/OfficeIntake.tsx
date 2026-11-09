@@ -1,4 +1,4 @@
-import { MessageSquare, Phone, ShieldCheck } from "lucide-react";
+import { Phone, ShieldCheck } from "lucide-react";
 import { INSTALL_BOOKING, SITE, type CalEvent } from "@/config/site";
 import { InstallCalEmbed } from "@/components/booking/InstallCalEmbed";
 import { cn } from "@/lib/utils";
@@ -72,12 +72,12 @@ export function OfficeIntake({
           {info.title}
         </h2>
         <p className="mt-1 text-xs text-muted-foreground sm:text-sm">
-          Pick a date and time on the calendar, or call / text for immediate same-day scheduling.
+          Pick a date and time on the calendar, or call for immediate same-day scheduling.
         </p>
       </div>
 
-      {/* Direct Quick Action Buttons (Call & Text) */}
-      <div className="my-4 grid grid-cols-2 gap-2 sm:gap-3">
+      {/* Desktop booking surface: Cal.com first, with phone support as the only secondary action. */}
+      <div className="my-4">
         <a
           href={SITE.phone.href}
           data-call-location={`${service}-embed-call`}
@@ -85,14 +85,6 @@ export function OfficeIntake({
         >
           <Phone className="h-4 w-4 shrink-0 text-turbo" aria-hidden />
           <span className="truncate">Call {SITE.phone.display}</span>
-        </a>
-        <a
-          href={`sms:${SITE.phone.e164}?&body=${encodeURIComponent(info.sms)}`}
-          data-call-location={`${service}-embed-sms`}
-          className="btn-chrome flex items-center justify-center gap-2 !py-2.5 !px-3 text-xs font-semibold sm:text-sm"
-        >
-          <MessageSquare className="h-4 w-4 shrink-0 text-turbo" aria-hidden />
-          <span className="truncate">Text for quote</span>
         </a>
       </div>
 

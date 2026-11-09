@@ -1,6 +1,6 @@
 // One rule for the ad landing pages: computers book on the Cal.com calendar, phones answer a few tap
-// questions and send them as a text. The prerendered HTML is the phone version (most ad traffic);
-// a computer swaps to the calendar right after load.
+// questions and send them as a text. Desktop is the safe first render because the paid ad audience is
+// being sent to the page on computers; supported phones switch to the question flow after hydration.
 import { useEffect, useState, type ReactNode } from "react";
 import { Calendar } from "lucide-react";
 import { InstallCalEmbed } from "@/components/booking/InstallCalEmbed";
@@ -8,9 +8,9 @@ import type { CalEvent } from "@/config/site";
 import { canText } from "@/lib/sms";
 import { cn } from "@/lib/utils";
 
-/** True once mounted on a phone or tablet that can open Messages. Starts true (phone-first prerender). */
+/** True once mounted on a phone or tablet that can open Messages. Desktop/Cal is the SSR-safe default. */
 export function useTexting() {
-  const [texting, setTexting] = useState(true);
+  const [texting, setTexting] = useState(false);
   useEffect(() => setTexting(canText()), []);
   return texting;
 }

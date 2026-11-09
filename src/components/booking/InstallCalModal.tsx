@@ -1,5 +1,5 @@
 import * as Dialog from "@radix-ui/react-dialog";
-import { X, Calendar as CalendarIcon, Phone, MessageSquare } from "lucide-react";
+import { X, Calendar as CalendarIcon, Phone } from "lucide-react";
 import { SITE, INSTALL_BOOKING, type CalEvent } from "@/config/site";
 import { InstallCalEmbed } from "./InstallCalEmbed";
 
@@ -57,14 +57,6 @@ export function InstallCalModal({
               >
                 <Phone className="h-3.5 w-3.5" aria-hidden />
                 <span>Call {SITE.phone.display}</span>
-              </a>
-              <span className="text-border" aria-hidden>•</span>
-              <a
-                href={`sms:${SITE.phone.e164}?&body=${encodeURIComponent("Hi! I'd like a quote for office setup.")}`}
-                className="inline-flex items-center gap-1.5 font-semibold text-turbo hover:underline"
-              >
-                <MessageSquare className="h-3.5 w-3.5" aria-hidden />
-                <span>Text for quote</span>
               </a>
             </div>
           </div>

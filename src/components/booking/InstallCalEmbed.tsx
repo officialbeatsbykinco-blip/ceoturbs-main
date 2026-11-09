@@ -1,6 +1,6 @@
 import { useEffect, useId, useState } from "react";
-import { ExternalLink, Loader2, MessageSquare, ShieldCheck } from "lucide-react";
-import { INSTALL_BOOKING, SITE, type CalEvent } from "@/config/site";
+import { ExternalLink, Loader2, ShieldCheck } from "lucide-react";
+import { INSTALL_BOOKING, type CalEvent } from "@/config/site";
 import { calTheme, mountInstallBooking } from "@/lib/cal";
 import { track, serverTrack } from "@/lib/track";
 
@@ -75,14 +75,6 @@ export function InstallCalEmbed({
         <div className="flex shrink-0 flex-wrap items-center justify-between gap-2 border-t border-border/70 bg-card/90 px-4 py-2.5 text-xs text-muted-foreground">
           <span>Calendar loading slow on your device?</span>
           <div className="flex items-center gap-3">
-            <a
-              href={`sms:${SITE.phone.e164}?&body=${encodeURIComponent("Hi! I'd like a quote and to schedule a setup.")}`}
-              className="inline-flex min-h-10 items-center gap-1 font-semibold text-turbo hover:underline"
-            >
-              <MessageSquare className="h-3 w-3" aria-hidden />
-              <span>Text us</span>
-            </a>
-            <span className="text-border" aria-hidden>•</span>
             <a
               href={booking.url}
               target="_blank"

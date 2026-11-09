@@ -83,7 +83,7 @@ export default async function handler(req, res) {
   ]);
 
   const failing = report ? report.checks.filter((c) => report.top.includes(c.id)).map((c) => c.label) : [];
-  await forwardLead({
+  const { stored } = await forwardLead({
     type: kind === "artist" ? "audit-artist" : "audit-business",
     ...lead,
     what: input.what,
@@ -106,6 +106,6 @@ export default async function handler(req, res) {
   });
   const [meta] = await capi;
 
-  if (!report) return send(res, 503, { error: "audit", meta: !!meta.sent });
-  return send(res, 200, { report, meta: !!meta.sent });
+  if (!report) return send(res, 503, { error: "audit", stored: !!stored, meta: !!meta.sent });
+  return send(res, 200, { report, stored: !!stored, meta: !!meta.sent });
 }

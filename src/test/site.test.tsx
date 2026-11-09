@@ -228,7 +228,7 @@ describe("conversion buttons", () => {
     expect(screen.getByRole("link", { name: "Shop" })).toHaveAttribute("href", "/google-review-cards");
   });
 
-  it("setup booking embed renders clean Cal.com embed with call/text and zero questionnaire questions", async () => {
+  it("setup booking embed renders clean Cal.com embed with call only and zero questionnaire questions", async () => {
     await act(async () => {
       render(
         <MemoryRouter>
@@ -238,7 +238,7 @@ describe("conversion buttons", () => {
     });
     expect(screen.getByText("Book your home office setup")).toBeInTheDocument();
     expect(screen.getByText(/Call \(678\) 558-4327/)).toBeInTheDocument();
-    expect(screen.getByText("Text for quote")).toBeInTheDocument();
+    expect(screen.queryByText("Text for quote")).not.toBeInTheDocument();
 
     // Verify all questionnaire questions are completely removed
     expect(screen.queryByText("What do you need set up?")).toBeNull();
