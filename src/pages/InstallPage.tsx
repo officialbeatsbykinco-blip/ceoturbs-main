@@ -2,11 +2,12 @@
 // One focused action: the quiz (phones text us, computers leave a number then pick a time), with Call one tap away.
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Check, ClipboardCheck, Home, MapPin, MessageSquare, Phone, Wrench } from "lucide-react";
+import { Calendar, Check, ClipboardCheck, Home, MapPin, MessageSquare, Phone, Wrench } from "lucide-react";
 import { CallLink } from "@/components/site/CallLink";
 import { FAQList, SectionHeader } from "@/components/blocks/Basics";
 import { ServiceAreaList } from "@/components/blocks/ServiceAreaList";
 import { InstallQuiz } from "@/components/tech/InstallQuiz";
+import { InstallCalEmbed } from "@/components/booking/InstallCalEmbed";
 import { SITE } from "@/config/site";
 import { INSTALL_PAGES, installPage } from "@/content/install-pages";
 import { usd } from "@/content/pricing";
@@ -53,7 +54,10 @@ export default function InstallPage({ path }: { path: string }) {
             )}
             <div className="mt-6 grid gap-3 sm:flex sm:flex-wrap">
               <a href="#book" className="btn-ignite btn-shine inline-flex items-center justify-center gap-2 !py-4 !text-lg">
-                <MessageSquare className="h-5 w-5" aria-hidden /> Get my price
+                <Calendar className="hidden h-5 w-5 sm:block" aria-hidden />
+                <MessageSquare className="h-5 w-5 sm:hidden" aria-hidden />
+                <span className="sm:hidden">Get my price</span>
+                <span className="hidden sm:inline">Book a time</span>
               </a>
               <CallLink location={`${page.slug} hero`} icon className="btn-blue justify-center !py-4 !text-lg">
                 Call {SITE.phone.display}
@@ -68,7 +72,18 @@ export default function InstallPage({ path }: { path: string }) {
               ))}
             </ul>
           </div>
-          <InstallQuiz page={page} className="min-w-0" />
+          <div id="book" className="min-w-0 scroll-mt-24">
+            <div className="hidden rounded-3xl border border-border bg-card p-5 shadow-xl sm:block sm:p-7">
+              <p className="flex items-center gap-2 font-display text-2xl font-bold leading-tight">
+                <Calendar className="h-6 w-6 shrink-0 text-turbo" aria-hidden /> Book your time
+              </p>
+              <p className="mt-1.5 text-sm text-muted-foreground">Pick a time on Cal.com. We confirm the exact price before the work starts.</p>
+              <InstallCalEmbed className="mt-4" note={`${page.slug}-desktop-booking`} minHeight="560px" />
+            </div>
+            <div className="sm:hidden">
+              <InstallQuiz page={page} id="book-mobile" className="min-w-0" />
+            </div>
+          </div>
         </div>
       </section>
 
@@ -174,7 +189,10 @@ export default function InstallPage({ path }: { path: string }) {
             <p className="lede mx-auto">Text or call {SITE.phone.display}. Price up front, pay after it works.</p>
             <div className="mt-7 grid gap-3 sm:flex sm:justify-center">
               <a href="#book" className="btn-ignite inline-flex items-center justify-center gap-2 !py-4 !text-lg">
-                <MessageSquare className="h-5 w-5" aria-hidden /> Get my price
+                <Calendar className="hidden h-5 w-5 sm:block" aria-hidden />
+                <MessageSquare className="h-5 w-5 sm:hidden" aria-hidden />
+                <span className="sm:hidden">Get my price</span>
+                <span className="hidden sm:inline">Book a time</span>
               </a>
               <CallLink location={`${page.slug} final`} className="btn-blue justify-center !py-4 !text-lg">
                 <Phone className="h-5 w-5" aria-hidden /> Call now
