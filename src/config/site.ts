@@ -6,9 +6,9 @@ export const SITE = {
   url: "https://www.ceoturbo.com",
   /** dateModified for page schema. Bump when page copy is refreshed (guides carry their own dates). */
   contentUpdated: "2026-11-03",
-  tagline: "Tampa tech help and growth: we fix it, set it up and get you customers.",
+  tagline: "Tampa IT support: we fix it, set it up and keep it running, then help you get customers.",
   description:
-    "CEO Turbo is a Tampa, FL tech and growth company. We fix computers, phones and tablets at your door or remotely, set up and organize offices, and build websites and ads that bring in customers. In person within 40 miles of Tampa.",
+    "CEO Turbo is a Tampa, FL IT support and growth company. We fix computers, phones and tablets at your door or remotely, set up and organize offices, and build websites and ads that bring in customers. In person within 40 miles of Tampa.",
   founder: {
     name: "Christopher Robinson",
     alternateName: "StackmodeChris",

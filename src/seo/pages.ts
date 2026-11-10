@@ -51,8 +51,8 @@ function build(): PageMeta[] {
 
   pages.push({
     path: "/",
-    title: "Computer Repair & Office Setup in Tampa, FL | CEO Turbo",
-    description: `Tampa tech help and growth: computers, phones and tablets fixed at your door, offices set up, and websites and ads that bring customers.`,
+    title: "Tampa IT Support, Computer Repair & Office Setup | CEO Turbo",
+    description: `Tampa IT support for homes and businesses: computers, phones and tablets fixed at your door or remotely, offices and Wi-Fi set up, plus websites and ads.`,
     priority: 1,
     changefreq: "weekly",
     group: "Core",
@@ -261,13 +261,13 @@ function build(): PageMeta[] {
 
   pages.push({
     path: "/tampa",
-    title: "CEO Turbo in Tampa, FL: Tech Repair, Office Setup & Websites",
+    title: "CEO Turbo Tampa: IT Support, Computer Repair & Office Setup",
     description:
-      "Tampa-based and founder-run: computer, phone and tablet repair at your door, office setup and cable management, and websites and ads for Tampa Bay.",
+      "Tampa-based, founder-run IT support: computer, phone and tablet repair at your door, office, Wi-Fi and network setup, plus websites and ads for Tampa Bay.",
     priority: 0.7,
     changefreq: "monthly",
     group: "Company",
-    schema: [...base(), S.webPage("/tampa", "CEO Turbo in Tampa", "Tampa tech help and growth"), S.breadcrumbs([{ name: "Tampa", path: "/tampa" }])],
+    schema: [...base(), S.webPage("/tampa", "CEO Turbo in Tampa", "Tampa IT support and growth"), S.breadcrumbs([{ name: "Tampa", path: "/tampa" }])],
   });
 
   pages.push({
