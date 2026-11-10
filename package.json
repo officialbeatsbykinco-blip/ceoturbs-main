@@ -21,7 +21,8 @@
     "ads:demandgen": "node ads/youtube/demandgen.mjs",
     "audit:seo": "node scripts/audit-dist.mjs",
     "audit:pages": "node scripts/audit-pages.mjs",
-    "images:cards": "node scripts/review-card-hd.mjs"
+    "images:cards": "node scripts/review-card-hd.mjs",
+    "ads:pmax": "node ads/google/pmax-business.mjs"
   },
   "dependencies": {
     "@calcom/embed-react": "^1.5.3",
