@@ -49,6 +49,7 @@ for (const file of files) {
   const route = routeOf(file);
   if (route === "/404") continue;
   const html = readFileSync(file, "utf8");
+  if (!/googletagmanager\.com\/gtag\/js\?id=AW-\d+/.test(html)) err(route, "Google tag (gtag.js AW-…) missing from static HTML: Google Ads flags the page as untagged");
   const robots = metaContent(html, "name", "robots") || "";
   const noindex = /noindex/.test(robots);
   const url = route === "/" ? `${ORIGIN}/` : `${ORIGIN}${route}`;

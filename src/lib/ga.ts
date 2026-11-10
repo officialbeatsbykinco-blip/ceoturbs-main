@@ -63,6 +63,8 @@ export function loadGa() {
   const w = window as GaWin & { __gaLoaded?: boolean };
   if (w.__gaLoaded) return;
   w.__gaLoaded = true;
+  // index.html already ships the Google tag; only add it ourselves if that tag is missing.
+  if (document.querySelector('script[src*="googletagmanager.com/gtag/js"]')) return;
   const s = document.createElement("script");
   s.async = true;
   s.src = `https://www.googletagmanager.com/gtag/js?id=${GA_ID}&l=gaLayer`;
