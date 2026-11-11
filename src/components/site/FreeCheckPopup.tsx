@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { ArrowRight, X } from "lucide-react";
 import { track } from "@/lib/track";
+import { INSTALL_PATHS } from "@/content/install-pages";
 
 const KEY = "ct_check_popup";
 const DELAY_MS = 12_000;
@@ -29,7 +30,9 @@ export function FreeCheckPopup() {
   const { pathname } = useLocation();
   const [show, setShow] = useState(false);
   // Ready buyers (pricing, results, any service page) never get pulled away from booking.
-  const skip = SKIP.includes(pathname) || pathname === "/pricing" || pathname === "/results" || pathname.startsWith("/services");
+  // Tech and local-service pages (every install page, anything "-tampa") are ad landing pages: an agency
+  // offer there pulls a visitor off the quiz, so the popup never shows on them.
+  const skip = SKIP.includes(pathname) || INSTALL_PATHS.includes(pathname) || pathname.includes("tampa") || pathname === "/pricing" || pathname === "/results" || pathname.startsWith("/services");
 
   useEffect(() => {
     if (skip || seen()) return;

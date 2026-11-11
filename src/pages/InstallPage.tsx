@@ -7,6 +7,7 @@ import { CallLink } from "@/components/site/CallLink";
 import { FAQList, SectionHeader } from "@/components/blocks/Basics";
 import { ServiceAreaList } from "@/components/blocks/ServiceAreaList";
 import { InstallQuiz } from "@/components/tech/InstallQuiz";
+import { FounderBadge } from "@/components/tech/FounderBadge";
 import { InstallCalEmbed } from "@/components/booking/InstallCalEmbed";
 import { SITE } from "@/config/site";
 import { INSTALL_PAGES, installPage } from "@/content/install-pages";
@@ -63,6 +64,7 @@ export default function InstallPage({ path }: { path: string }) {
                 Call {SITE.phone.display}
               </CallLink>
             </div>
+            <FounderBadge className="mt-5 max-w-xl" line={business ? "I do the setup myself and text you a written price first. Call or text, you get me." : "I come out and do the work myself. Call or text, you get me, not a call center."} />
             <ul className="mt-6 grid max-w-xl gap-x-4 gap-y-2 text-[15px] text-muted-foreground sm:grid-cols-2">
               {(business ? BUSINESS_PROMISES : PROMISES).map((t) => (
                 <li key={t} className="flex items-center gap-2">
