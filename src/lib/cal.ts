@@ -256,8 +256,11 @@ export async function openBooking(source?: string, prefill?: string, person?: Pe
  */
 export async function mountInlineBooking(elementId: string, source?: string, prefill?: string, opts: { ns?: string } & Omit<Prefill, "source" | "prefill"> = {}): Promise<LinkResult> {
   const { ns = BOOKING.namespace, ...rest } = opts;
-  const ok = await loadCalWithin(ns);
+  // A slow phone or network can take longer than 6s; give up only after 15s so a late load still shows the calendar.
+  const ok = await loadCalWithin(ns, 15000);
   if (!ok || !getCal()?.ns[ns]) return "failed";
+  // The box can unmount while Cal loads (phone layout swaps it out); mounting into nothing throws "Element not found".
+  if (!document.getElementById(elementId)) return "failed";
   const shown = waitForLink(ns, 12000);
   getCal()!.ns[ns]("inline", {
     elementOrSelector: `#${elementId}`,
@@ -295,8 +298,11 @@ export async function openInstallBooking(source?: string, event: CalEvent = INST
 export async function mountInstallBooking(elementId: string, source?: string, instance = "modal", event: CalEvent = INSTALL_BOOKING): Promise<LinkResult> {
   // One namespace per mounted calendar: Cal keeps a single embed per namespace, so sharing one leaves the second empty.
   const ns = `${event.namespace}-${instance}`;
-  const ok = await loadCalWithin(ns);
+  // A slow phone or network can take longer than 6s; give up only after 15s so a late load still shows the calendar.
+  const ok = await loadCalWithin(ns, 15000);
   if (!ok || !getCal()?.ns[ns]) return "failed";
+  // The box can unmount while Cal loads (phone layout swaps it out); mounting into nothing throws "Element not found".
+  if (!document.getElementById(elementId)) return "failed";
   const shown = waitForLink(ns, 12000);
   getCal()!.ns[ns]("inline", {
     elementOrSelector: `#${elementId}`,

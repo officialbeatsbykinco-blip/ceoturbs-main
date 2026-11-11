@@ -21,12 +21,12 @@ export function InlineBooking({ ns: baseNs = BOOKING.namespace, source, prefill,
     serverTrack("booking_open", id, { contentName: "Inline booking" });
   };
   const box = useRef<HTMLDivElement>(null);
-  // The calendar is a whole app in an iframe, so it only starts loading as the visitor nears it.
+  // The calendar is a whole app in an iframe, so it only starts loading as the visitor nears it (about two screens early, so it is ready on arrival).
   const [near, setNear] = useState(false);
 
   useEffect(() => {
     if (typeof IntersectionObserver === "undefined") return setNear(true);
-    const io = new IntersectionObserver(([e]) => e.isIntersecting && setNear(true), { rootMargin: "800px 0px" });
+    const io = new IntersectionObserver(([e]) => e.isIntersecting && setNear(true), { rootMargin: "2000px 0px" });
     if (box.current) io.observe(box.current);
     return () => io.disconnect();
   }, []);

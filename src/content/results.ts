@@ -204,9 +204,25 @@ export type GoogleAdResult = {
 /**
  * Appliance King Google Ads (Search), read from the Ads screenshots. Keep exact.
  * Conversions are as reported by Google Ads. Kept out of AD_RESULTS so the Meta AD_TOTALS stay Meta-only.
- * The first entry is the featured (best) result.
+ * The first entry is the featured (latest, all-time) result.
  */
 export const GOOGLE_AD_RESULTS: GoogleAdResult[] = [
+  {
+    key: "appliance-king-google-alltime",
+    client: "Appliance King",
+    clientSlug: "appliance-king",
+    campaign: "Appliance repair & used appliances, Macon GA: Google Ads, all campaigns",
+    period: "All time, through Nov 9, 2026",
+    headline: "All time on Google Ads: 52 conversions for $290.",
+    clicks: 233,
+    cpc: 1.25,
+    conversions: 52,
+    costPer: 5.58,
+    spent: 290,
+    image: "/img/results/appliance-king-google-alltime.webp",
+    width: 1786,
+    height: 602,
+  },
   {
     key: "appliance-king-google-2wk",
     client: "Appliance King",
@@ -257,7 +273,10 @@ export const GOOGLE_AD_RESULTS: GoogleAdResult[] = [
   },
 ];
 
-export const GOOGLE_AD_RESULT = GOOGLE_AD_RESULTS[0];
+/** Cheapest multi-day result, used for "as little as" claims. */
+export const GOOGLE_AD_RESULT = GOOGLE_AD_RESULTS.find((g) => g.key === "appliance-king-google-2wk")!;
+/** Latest all-time total, featured on Results and Agency. */
+export const GOOGLE_AD_TOTAL = GOOGLE_AD_RESULTS[0];
 
 /** Featured proof. The revenue line is the owner's own statement, not a dashboard number. */
 export const FEATURED_RESULT = {

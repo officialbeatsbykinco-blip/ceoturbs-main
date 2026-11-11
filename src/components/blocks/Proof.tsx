@@ -176,7 +176,7 @@ export function GoogleAdProof({ compact = false, result = GOOGLE_AD_RESULT }: { 
       <a href={g.image} target="_blank" rel="noopener" className={cn("block bg-white", compact ? "border-t border-border" : "border-t border-border lg:border-l lg:border-t-0")}>
         <img
           src={g.width > 900 ? g.image.replace(".webp", "-900.webp") : g.image}
-          srcSet={g.width > 900 ? `${g.image.replace(".webp", "-900.webp")} 900w, ${g.image} 2000w` : undefined}
+          srcSet={g.width > 900 ? `${g.image.replace(".webp", "-900.webp")} 900w, ${g.image} ${g.width}w` : undefined}
           sizes={g.width > 900 ? "(min-width: 1024px) 640px, 92vw" : undefined}
           alt={`Google Ads dashboard: ${g.client} ${g.campaign}, ${g.conversions} conversions at ${money(g.costPer)} each, ${money(g.spent)} spent`}
           loading="lazy"

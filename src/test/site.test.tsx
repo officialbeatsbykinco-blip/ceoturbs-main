@@ -162,7 +162,8 @@ describe("reported numbers", () => {
   });
 
   it("matches the Google Ads screenshots, with cost per conversion = spend / conversions", () => {
-    expect(GOOGLE_AD_RESULTS[0]).toMatchObject({ clicks: 166, conversions: 42, spent: 176, cpc: 1.06 });
+    expect(GOOGLE_AD_RESULTS[0]).toMatchObject({ clicks: 233, conversions: 52, spent: 290, cpc: 1.25, costPer: 5.58 });
+    expect(GOOGLE_AD_RESULTS.find((g) => g.key === "appliance-king-google-2wk")).toMatchObject({ clicks: 166, conversions: 42, spent: 176, cpc: 1.06 });
     expect(GOOGLE_AD_RESULTS.find((g) => g.key === "appliance-king-google-day")).toMatchObject({ clicks: 3, conversions: 2, spent: 6.57, cpc: 2.19 });
     GOOGLE_AD_RESULTS.forEach((g) => {
       expect(g.costPer, g.key).toBeCloseTo(g.spent / g.conversions, 2);
