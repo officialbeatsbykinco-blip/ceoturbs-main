@@ -56,6 +56,7 @@ The booking questions (business, what they do, website, goal, budget) are now as
    - URL: `https://www.ceoturbo.com/api/cal-webhook` (use **www**, the bare domain redirects)
    - Trigger: **Booking Created**
    - Secret: the `CAL_WEBHOOK_SECRET` value
+   - Status (2026-11-10): `CAL_WEBHOOK_SECRET` is set on the live Vercel project **ceoturbs-main-ibsm** (the one on ceoturbo.com, production). The other project, ceoturbs-main, has no env vars. A copy of the value is in `.env.cal-webhook` in the local checkout (git-ignored). If the Cal.com webhook is ever recreated, paste that same value.
 3. **Booking questions:** make **Phone number** required or optional-but-shown. Phone is the second-strongest match signal for Meta and Google.
 
 ## 4. Google Ads (AW-18468746701, built into the site)
