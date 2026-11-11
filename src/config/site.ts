@@ -94,6 +94,14 @@ export const IT_BOOKING = {
   namespace: "it-consultation",
 } as const;
 
+/** Gaming PC FPS boost (/gaming-pc-fps-boost): a 1-hour session, remote over Google Meet or in person around Tampa. */
+export const FPS_BOOKING = {
+  calLink: "ceoturbo/ceo-turbo-fps-boost",
+  url: "https://cal.com/ceoturbo/ceo-turbo-fps-boost",
+  namespace: "ceo-turbo-fps-boost",
+  title: "FPS boost",
+} as const;
+
 /** Any Cal.com event the install-style calendar (embed, modal, button) can show. */
 export type CalEvent = { calLink: string; url: string; namespace: string; title?: string };
 

@@ -1,7 +1,7 @@
 // Tampa installation landing pages (Google Search ads + local SEO): computer setup, security cameras and
 // Wi-Fi/internet. One template (pages/InstallPage.tsx), one quiz (components/tech/InstallQuiz.tsx).
 // Prices come from content/pricing.ts so the page, its schema and the ads agree. Cameras have no set price yet.
-import { SITE } from "@/config/site";
+import { FPS_BOOKING, SITE, type CalEvent } from "@/config/site";
 import { ALL_SETUP_CITIES } from "@/content/service-areas";
 import { INSTALL_PRICES, IT_SERVICES, SETUP, usd, type PriceItem } from "@/content/pricing";
 import type { FAQ } from "@/content/services";
@@ -37,8 +37,23 @@ export type InstallPage = {
    * services sold only to businesses, so this page talks to businesses only and links to no consumer page.
    */
   audience?: "business";
+  /** Its own Cal.com event for the desktop calendar (default: the install event). */
+  booking?: CalEvent;
+  /** Remote work is offered: a ZIP is only asked for when this question's answer is the in-person option. */
+  remote?: { question: string; inPerson: string };
+  /** Hero check list (default: the in-home promises). */
+  promises?: string[];
+  /** Lede over the price list (default: labor per unit, equipment at cost). */
+  pricesLede?: string;
+  /** Lede over the service-area list. */
+  areaLede?: string;
+  /** Service name in the LocalService schema (default: "<service> in Tampa Bay"). */
+  schemaName?: string;
   seo: { title: string; description: string };
 };
+
+/** True when the quiz needs a ZIP: every in-person job, and remote-capable pages only when they pick in person. */
+export const needsZip = (page: Pick<InstallPage, "remote">, a: Pick<InstallAnswers, "picks">) => !page.remote || a.picks[page.remote.question] === page.remote.inPerson;
 
 const byId = (list: PriceItem[], id: string) => list.find((p) => p.id === id)!;
 const CITY_LIST = `${ALL_SETUP_CITIES.slice(0, -1).join(", ")} and ${ALL_SETUP_CITIES[ALL_SETUP_CITIES.length - 1]}`;
@@ -243,6 +258,77 @@ INSTALL_PAGES.push({
   },
 });
 
+const remoteSpeed = byId(IT_SERVICES, "it-remote");
+const homeSpeed = byId(IT_SERVICES, "it-speedup");
+const ssd = byId(IT_SERVICES, "it-ssd");
+
+/** Gaming PC FPS boost: consumer (Meta, organic and AI search). Remote anywhere in the US, in person around Tampa. */
+INSTALL_PAGES.push({
+  slug: "fps-boost",
+  path: "/gaming-pc-fps-boost",
+  name: "Gaming PC FPS boost",
+  service: "a gaming PC FPS boost",
+  category: "gaming_fps",
+  booking: FPS_BOOKING,
+  remote: { question: "how", inPerson: "inperson" },
+  chip: "Remote anywhere in the US · in person around Tampa",
+  h1: ["Low FPS, stutter or lag?", "We tune your gaming PC for more FPS."],
+  lede: "A one-on-one tune-up of your Windows gaming PC: graphics drivers, Windows settings, background apps, temps and your in-game settings. Done live with you over the internet, or in person around Tampa. We check your FPS before and after, so you see the difference.",
+  promises: ["FPS checked before and after", "Live with you, about an hour", "Remote or in person in Tampa", "Price before we start"],
+  pricesLede: "Price before we start. Parts like a faster drive are extra, at cost, and only if you want them.",
+  areaLede: "Remote works anywhere in the US. In person: Tampa and about 40 miles around it.",
+  schemaName: "Gaming PC FPS boost, remote or in Tampa Bay",
+  prices: [
+    { ...remoteSpeed, name: "Remote FPS boost", summary: "Live over the internet: drivers, Windows, background apps and game settings tuned." },
+    { ...homeSpeed, name: "In-person FPS boost (Tampa area)", summary: "Same tune-up at your place, plus dust and temps checked." },
+    { ...ssd, name: "Faster drive upgrade (load times)", summary: "Games and Windows moved to a fast SSD. Drive extra, at cost." },
+  ],
+  jobs: [
+    { id: "lowfps", label: "Low FPS" },
+    { id: "stutter", label: "Stutter or lag spikes" },
+    { id: "input", label: "Input delay" },
+    { id: "loads", label: "Long load times" },
+    { id: "crash", label: "Crashes or freezes in game" },
+    { id: "hot", label: "Runs hot or loud" },
+    { id: "stream", label: "Lag when streaming or recording" },
+    { id: "max", label: "Just want max performance" },
+  ],
+  questions: [
+    { id: "how", label: "How should we do it?", short: "How", options: [{ id: "remote", label: "Remote, over the internet" }, { id: "inperson", label: "In person (Tampa area)" }] },
+    { id: "pc", label: "What's your setup?", short: "PC", options: [{ id: "desktop", label: "Gaming desktop" }, { id: "laptop", label: "Gaming laptop" }] },
+    { id: "game", label: "What do you play most?", short: "Plays", options: [{ id: "fortnite", label: "Fortnite" }, { id: "cod", label: "Call of Duty / Warzone" }, { id: "valorant", label: "Valorant" }, { id: "cs2", label: "CS2" }, { id: "minecraft", label: "Minecraft" }, { id: "other", label: "Something else" }] },
+  ],
+  includes: [
+    "FPS and temps checked before we start",
+    "NVIDIA or AMD graphics drivers cleaned and updated",
+    "Windows power plan, Game Mode and background apps tuned",
+    "Startup junk and bloat removed",
+    "In-game settings tuned for your PC and your game",
+    "FPS checked again with you at the end",
+  ],
+  steps: [
+    { title: "Tell us your PC and games", body: "What's wrong, what you play and remote or in person. A few taps or a call." },
+    { title: "Price by text", body: "You get the price before we start. Nothing changes without asking you." },
+    { title: "Tuned live with you", body: "About an hour, screen share or at your place. FPS checked before and after, then you pay." },
+  ],
+  faqs: [
+    { q: "How much does a gaming PC FPS boost cost?", a: `${usd(remoteSpeed.price)} and up remotely, ${usd(homeSpeed.price)} and up in person within about 40 miles of Tampa. You get the exact price by text before we start, and you pay after it's done.` },
+    { q: "Can you boost my FPS remotely?", a: "Yes. We connect over the internet while you watch, using a screen share you can end any time, and tune everything live. It works anywhere in the US on a Windows gaming PC or laptop." },
+    { q: "How much more FPS will I get?", a: "It depends on your hardware. The biggest gains usually come from clean graphics drivers, the right Windows and in-game settings, and stopping background apps. We check your FPS before and after so you see the real difference. If your hardware is the limit, we tell you which upgrade gives the most FPS for the money." },
+    { q: "Which games do you tune for?", a: "Any PC game, including Fortnite, Call of Duty and Warzone, Valorant, CS2, Minecraft, Apex Legends and GTA V. We tune Windows for gaming and the settings of the games you actually play." },
+    { q: "Is it safe? Will you overclock my PC?", a: "We don't overclock, change hardware or delete your files without asking you first. Every change is explained as we go." },
+    { q: "Do you work on gaming laptops?", a: "Yes. Laptops get the same tune-up, plus power and cooling settings so they don't throttle when they get hot." },
+    { q: "How long does it take?", a: "About an hour, live with you. Bigger jobs like a drive upgrade take longer, and you get the time and price first." },
+    WHERE_FAQ("In person, we come"),
+    PAY_FAQ,
+  ],
+  value: 120,
+  seo: {
+    title: "Gaming PC FPS Boost Service: Remote or Tampa | CEO Turbo",
+    description: `Low FPS, stutter or input lag? We tune your Windows gaming PC live, remote anywhere in the US or in person in Tampa. From ${usd(remoteSpeed.price)}. Text ${SITE.phone.display}.`,
+  },
+});
+
 export const INSTALL_PATHS = INSTALL_PAGES.map((p) => p.path);
 export const installPage = (path: string) => INSTALL_PAGES.find((p) => p.path === path.replace(/\/$/, ""));
 
@@ -275,7 +361,7 @@ export function installMessage(page: InstallPage, a: InstallAnswers) {
     ...l.answers,
     a.details.trim() && `Details: ${a.details.trim()}`,
     l.when && `When: ${l.when}`,
-    `ZIP: ${a.zip.trim() || "-"}`,
+    needsZip(page, a) && `ZIP: ${a.zip.trim() || "-"}`,
     `Name: ${a.name.trim() || "-"}`,
   ]
     .filter(Boolean)

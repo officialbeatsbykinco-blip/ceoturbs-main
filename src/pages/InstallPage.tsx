@@ -9,7 +9,7 @@ import { ServiceAreaList } from "@/components/blocks/ServiceAreaList";
 import { InstallQuiz } from "@/components/tech/InstallQuiz";
 import { CustomerReview, FounderBadge } from "@/components/tech/FounderBadge";
 import { InstallCalEmbed } from "@/components/booking/InstallCalEmbed";
-import { SITE } from "@/config/site";
+import { INSTALL_BOOKING, SITE } from "@/config/site";
 import { INSTALL_PAGES, installPage } from "@/content/install-pages";
 import { usd } from "@/content/pricing";
 import { OFFICE_SETUP_PATH } from "@/content/tech-pages";
@@ -64,11 +64,11 @@ export default function InstallPage({ path }: { path: string }) {
                 Call {SITE.phone.display}
               </CallLink>
             </div>
-            <FounderBadge className="mt-5 max-w-xl" line={business ? "I do the setup myself and text you a written price first. Call or text, you get me." : "I come out and do the work myself. Call or text, you get me, not a call center."} />
+            <FounderBadge className="mt-5 max-w-xl" line={business ? "I do the setup myself and text you a written price first. Call or text, you get me." : page.remote ? "I tune your PC myself, live with you. Call or text, you get me, not a call center." : "I come out and do the work myself. Call or text, you get me, not a call center."} />
             {/* The review mentions phones: keep it off the business-only (Google Ads) page. */}
             {!business && <CustomerReview className="mt-3 max-w-xl" />}
             <ul className="mt-6 grid max-w-xl gap-x-4 gap-y-2 text-[15px] text-muted-foreground sm:grid-cols-2">
-              {(business ? BUSINESS_PROMISES : PROMISES).map((t) => (
+              {(page.promises ?? (business ? BUSINESS_PROMISES : PROMISES)).map((t) => (
                 <li key={t} className="flex items-center gap-2">
                   <Check className="h-4 w-4 shrink-0 text-turbo" aria-hidden />
                   {t}
@@ -82,7 +82,7 @@ export default function InstallPage({ path }: { path: string }) {
                 <Calendar className="h-6 w-6 shrink-0 text-turbo" aria-hidden /> Book your time
               </p>
               <p className="mt-1.5 text-sm text-muted-foreground">Pick a time on Cal.com. We confirm the exact price before the work starts.</p>
-              <InstallCalEmbed className="mt-4" note={`${page.slug}-desktop-booking`} minHeight="560px" />
+              <InstallCalEmbed className="mt-4" note={`${page.slug}-desktop-booking`} booking={page.booking ?? INSTALL_BOOKING} minHeight="560px" />
             </div>
             <div className="sm:hidden">
               <InstallQuiz page={page} id="book-mobile" className="min-w-0" />
@@ -93,7 +93,7 @@ export default function InstallPage({ path }: { path: string }) {
 
       <section className="section border-t border-border" aria-labelledby="prices">
         <div className="container-x">
-          <SectionHeader title={<span id="prices">Prices</span>} lede="Labor, per unit, so you can add it up yourself. Equipment is yours, or we buy it at cost and show you the receipt. You get the total before we start." />
+          <SectionHeader title={<span id="prices">Prices</span>} lede={page.pricesLede ?? "Labor, per unit, so you can add it up yourself. Equipment is yours, or we buy it at cost and show you the receipt. You get the total before we start."} />
           {page.prices.length > 0 && (
             <ul className="panel mt-8 divide-y divide-border/60 px-5 sm:px-6">
               {page.prices.map((p) => (
@@ -161,7 +161,7 @@ export default function InstallPage({ path }: { path: string }) {
 
       <section className="section border-t border-border" aria-labelledby="area">
         <div className="container-x">
-          <SectionHeader title={<span id="area">Where we come to you</span>} lede="Tampa and about 40 miles around it." />
+          <SectionHeader title={<span id="area">{page.remote ? "Where we work" : "Where we come to you"}</span>} lede={page.areaLede ?? "Tampa and about 40 miles around it."} />
           <ServiceAreaList className="mt-8" />
         </div>
       </section>

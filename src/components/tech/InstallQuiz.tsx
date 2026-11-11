@@ -7,7 +7,7 @@ import { ArrowLeft, ArrowRight, Check, Loader2, MapPin, MessageSquare } from "lu
 import { InstallCalEmbed } from "@/components/booking/InstallCalEmbed";
 import { CallLink } from "@/components/site/CallLink";
 import { INSTALL_BOOKING, SITE } from "@/config/site";
-import { EMPTY_INSTALL, WHEN_OPTIONS, installLabels, installMessage, type InstallAnswers, type InstallPage } from "@/content/install-pages";
+import { EMPTY_INSTALL, WHEN_OPTIONS, installLabels, installMessage, needsZip, type InstallAnswers, type InstallPage } from "@/content/install-pages";
 import { zipOk } from "@/content/tech-quiz";
 import { sendLead } from "@/lib/lead-outbox";
 import { canText, smsHref } from "@/lib/sms";
@@ -57,11 +57,12 @@ export function InstallQuiz({ page, id = "book", className }: { page: InstallPag
   const index = STEPS.indexOf(step);
   const message = installMessage(page, a);
   const nameOk = a.name.trim().length >= 2;
-  const ready = nameOk && zipOk(a.zip);
+  const zipNeeded = needsZip(page, a);
+  const ready = nameOk && (!zipNeeded || zipOk(a.zip));
 
   const lead = (channel: "sms" | "form") => {
     const l = installLabels(page, a);
-    const user = { name: a.name.trim(), phone: a.phone.trim() || undefined, zip: a.zip.trim() || undefined, externalId: visitorId() };
+    const user = { name: a.name.trim(), phone: a.phone.trim() || undefined, zip: (zipNeeded && a.zip.trim()) || undefined, externalId: visitorId() };
     const eventId = track(
       "generate_lead",
       { lead_source: "install-quiz", source: page.slug, channel, value: page.value, currency: "USD", content_name: page.name, content_category: page.category, jobs: a.jobs.join(","), when: a.when },
@@ -83,7 +84,7 @@ export function InstallQuiz({ page, id = "book", className }: { page: InstallPag
       jobs: l.jobs,
       answers: l.answers.join(" | "),
       when: l.when,
-      zip: a.zip.trim(),
+      zip: zipNeeded ? a.zip.trim() : "",
       details: a.details.trim(),
       page: window.location.pathname,
       attribution: attribution(),
@@ -95,7 +96,7 @@ export function InstallQuiz({ page, id = "book", className }: { page: InstallPag
   const check = () => {
     const errs: typeof errors = {};
     if (!nameOk) errs.name = "Add your first name.";
-    if (!zipOk(a.zip)) errs.zip = "Add your 5-digit ZIP code.";
+    if (zipNeeded && !zipOk(a.zip)) errs.zip = "Add your 5-digit ZIP code.";
     return errs;
   };
 
@@ -132,7 +133,7 @@ export function InstallQuiz({ page, id = "book", className }: { page: InstallPag
           <Check className="h-6 w-6 shrink-0 text-turbo" aria-hidden /> Got it, {a.name.trim().split(/\s+/)[0]}.
         </p>
         <p className="mt-2 text-base text-muted-foreground">We'll text you a price shortly. Want a set time now? Pick one below.</p>
-        <InstallCalEmbed className="mt-5" note={`${page.slug}-install-quiz`} booking={INSTALL_BOOKING} minHeight="560px" />
+        <InstallCalEmbed className="mt-5" note={`${page.slug}-install-quiz`} booking={page.booking ?? INSTALL_BOOKING} minHeight="560px" />
       </div>
     );
 
@@ -148,7 +149,15 @@ export function InstallQuiz({ page, id = "book", className }: { page: InstallPag
       <p className="mt-3 flex items-start gap-2 rounded-xl bg-turbo/[0.08] px-3 py-2.5 text-sm leading-snug ring-1 ring-turbo/20">
         <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-turbo" aria-hidden />
         <span>
-          We come to you within <b>40 miles of Tampa</b>. Price before we start.
+          {page.remote ? (
+            <>
+              <b>Remote anywhere in the US</b>, or in person within 40 miles of Tampa. Price before we start.
+            </>
+          ) : (
+            <>
+              We come to you within <b>40 miles of Tampa</b>. Price before we start.
+            </>
+          )}
         </span>
       </p>
 
@@ -213,7 +222,7 @@ export function InstallQuiz({ page, id = "book", className }: { page: InstallPag
         {step === "send" && (
           <form onSubmit={onSubmit} noValidate className="grid gap-3">
             <p className="text-lg font-bold leading-tight">{texting ? "Last step: who's it from?" : "Where do we text your price?"}</p>
-            <div className="grid grid-cols-[1.4fr_1fr] gap-3">
+            <div className={cn("grid gap-3", zipNeeded && "grid-cols-[1.4fr_1fr]")}>
               <div>
                 <label htmlFor={`${uid}-name`} className="mb-1.5 block text-sm font-semibold">
                   Your name <span className="text-[#c2410c]">*</span>
@@ -221,6 +230,7 @@ export function InstallQuiz({ page, id = "book", className }: { page: InstallPag
                 <input id={`${uid}-name`} data-clarity-mask="true" className="field" value={a.name} onChange={(e) => set({ name: e.target.value })} autoComplete="given-name" maxLength={100} placeholder="First name" aria-invalid={!!errors.name} />
                 {errors.name && <Err text={errors.name} />}
               </div>
+              {zipNeeded && (
               <div>
                 <label htmlFor={`${uid}-zip`} className="mb-1.5 block text-sm font-semibold">
                   ZIP code <span className="text-[#c2410c]">*</span>
@@ -228,6 +238,7 @@ export function InstallQuiz({ page, id = "book", className }: { page: InstallPag
                 <input id={`${uid}-zip`} className="field" value={a.zip} onChange={(e) => set({ zip: e.target.value.replace(/\D/g, "").slice(0, 5) })} autoComplete="postal-code" inputMode="numeric" pattern="[0-9]*" maxLength={5} placeholder="33602" aria-invalid={!!errors.zip} />
                 {errors.zip && <Err text={errors.zip} />}
               </div>
+              )}
             </div>
             {!texting && (
               <div>
@@ -249,7 +260,7 @@ export function InstallQuiz({ page, id = "book", className }: { page: InstallPag
                   {message}
                 </p>
                 <a href={smsHref(message)} onClick={onText} data-call-location="install-quiz" className={cn("btn-ignite btn-shine w-full justify-center !py-4 !text-lg", !ready && "opacity-60")}>
-                  <MessageSquare className="h-5 w-5" aria-hidden /> {ready ? "Text it to us" : "Add your name & ZIP to send"}
+                  <MessageSquare className="h-5 w-5" aria-hidden /> {ready ? "Text it to us" : zipNeeded ? "Add your name & ZIP to send" : "Add your name to send"}
                 </a>
                 <p className="text-center text-sm text-muted-foreground">
                   {done ? "Messages should be open. Tap send and we'll text your price back." : `Opens your Messages to ${SITE.phone.display} with this filled in. Just tap send.`}

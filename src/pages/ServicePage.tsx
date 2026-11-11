@@ -157,11 +157,10 @@ export default function ServicePage() {
               </div>
             </div>
             {isHomeOffice ? (
-              texting ? (
-                <OfficeTextQuiz id="book" quiz={SETUP_QUIZZES[s.slug] ?? OFFICE_QUIZ} className="min-w-0" />
-              ) : (
-                <OfficeIntake service={s.slug} />
-              )
+              // "#book" exists in the server HTML too (crawlers, slow phones), whichever booking box shows.
+              <div id="book" className="min-w-0 scroll-mt-24">
+                {texting ? <OfficeTextQuiz id="book-quiz" quiz={SETUP_QUIZZES[s.slug] ?? OFFICE_QUIZ} className="min-w-0" /> : <OfficeIntake service={s.slug} />}
+              </div>
             ) : (
               <Scene className="h-auto w-full" />
             )}

@@ -141,12 +141,33 @@ describe("Tampa move", () => {
 describe("Tampa install pages", () => {
   it("has a page for computer setup, security cameras and Wi-Fi, each with per-unit prices", async () => {
     const { INSTALL_PAGES } = await import("@/content/install-pages");
-    expect(INSTALL_PAGES.map((p) => p.path)).toEqual(["/computer-setup-tampa", "/security-camera-installation-tampa", "/wifi-installation-tampa", "/business-tech-setup-tampa"]);
+    expect(INSTALL_PAGES.map((p) => p.path)).toEqual(["/computer-setup-tampa", "/security-camera-installation-tampa", "/wifi-installation-tampa", "/business-tech-setup-tampa", "/gaming-pc-fps-boost"]);
     for (const p of INSTALL_PAGES) expect(p.prices.length, p.path).toBeGreaterThan(1);
     const cams = INSTALL_PAGES[1];
     expect(cams.prices.map((x) => x.id)).toEqual(["cam-doorbell", "cam-wifi"]);
     // No ladder work: the camera page never offers wired, roofline or recorder systems.
     expect(cams.priceNote).toContain("No second-story, roofline or wired systems");
+  });
+
+  it("FPS boost: own Cal.com event, remote needs no ZIP, in person does, and every answer reaches the text", async () => {
+    const { INSTALL_PAGES, installMessage, needsZip, EMPTY_INSTALL } = await import("@/content/install-pages");
+    const fps = INSTALL_PAGES.find((p) => p.path === "/gaming-pc-fps-boost")!;
+    expect(fps.booking?.calLink).toBe("ceoturbo/ceo-turbo-fps-boost");
+    expect(fps.seo.title.length).toBeGreaterThanOrEqual(50);
+    expect(fps.seo.title.length).toBeLessThanOrEqual(60);
+    expect(fps.seo.description.length).toBeLessThanOrEqual(155);
+    const remote = { ...EMPTY_INSTALL, jobs: ["lowfps", "stutter"], picks: { how: "remote", pc: "desktop", game: "fortnite" }, name: "Jay", details: "RTX 3060, drops to 40 in fights" };
+    expect(needsZip(fps, remote)).toBe(false);
+    const msg = installMessage(fps, remote);
+    expect(msg).toContain("Need: Low FPS, Stutter or lag spikes");
+    expect(msg).toContain("How: Remote, over the internet");
+    expect(msg).toContain("Plays: Fortnite");
+    expect(msg).toContain("Details: RTX 3060, drops to 40 in fights");
+    expect(msg).not.toContain("ZIP");
+    expect(needsZip(fps, { picks: { how: "inperson" } })).toBe(true);
+    expect(installMessage(fps, { ...remote, picks: { how: "inperson" }, zip: "33617" })).toContain("ZIP: 33617");
+    // Every other install page still always asks for a ZIP.
+    for (const p of INSTALL_PAGES.filter((x) => !x.remote)) expect(needsZip(p, { picks: {} })).toBe(true);
   });
 
   it("keeps the Google Ads business page clear of consumer tech-support wording", async () => {
