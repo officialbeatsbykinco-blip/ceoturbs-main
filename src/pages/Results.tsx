@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { AD_RESULTS, AD_TOTALS, GOOGLE_AD_RESULT, GOOGLE_AD_TOTAL, money } from "@/content/results";
 import { ADS } from "@/content/ads";
 import { AdResultsGrid, AdGallery, BestResults, GSCProof, FeaturedResult, GoogleAdProof, StripeProof } from "@/components/blocks/Proof";
-import { BookingSection } from "@/components/blocks/Sales";
+import { BookingSection, ReviewCardStrip } from "@/components/blocks/Sales";
 import { SectionHeader, Breadcrumbs, DirectAnswer } from "@/components/blocks/Basics";
 import { BookButton } from "@/components/cta/Actions";
 
@@ -132,6 +132,10 @@ export default function Results() {
           </div>
         </div>
       </section>
+
+      <div className="container-x pb-4">
+        <ReviewCardStrip where="Results page" title="More reviews, more clicks: Google review cards" />
+      </div>
 
       <BookingSection note="Results page" />
     </>

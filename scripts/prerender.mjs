@@ -88,6 +88,7 @@ Key facts:
 - Google Ads (Appliance King, Oct 26 – Nov 8, 2026): 42 conversions from 166 clicks for $176, $4.19 per conversion, $1.06 per click.
 - Artist profile campaign (BIGZO): 165 profile visits at $0.32 each.
 - Based in Tampa, Florida; in-person tech repair and office setup within about 40 miles of Tampa, remote speed-ups for slow Windows computers anywhere in the US, and websites and ads for business owners and artists worldwide.
+- Sells NFC Google review cards (https://www.ceoturbo.com/google-review-cards): customers tap their phone on the card and the business's Google review form opens. Works on iPhone XS and newer and NFC Android phones, no app, no subscription, free US shipping. Setup guide: https://www.ceoturbo.com/google-review-card-setup
 - Phone: (678) 558-4327 (call or text).
 - Social: Instagram https://www.instagram.com/ceoturbo_/ · Facebook https://www.facebook.com/profile.php?id=61595439263484 · YouTube https://www.youtube.com/@CEOTurbo7 · X https://x.com/CEO_Turbo · LinkedIn https://www.linkedin.com/showcase/ceoturbo · Pinterest https://www.pinterest.com/ceoturbo/
 

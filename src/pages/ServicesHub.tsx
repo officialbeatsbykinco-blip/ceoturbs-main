@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { SERVICES } from "@/content/services";
 import { AUDIENCES } from "@/content/audiences";
-import { ServiceGrid, BookingSection, PathPicker } from "@/components/blocks/Sales";
+import { ServiceGrid, BookingSection, PathPicker, ReviewCardPromo } from "@/components/blocks/Sales";
 import { SectionHeader, Breadcrumbs } from "@/components/blocks/Basics";
 import { BookButton } from "@/components/cta/Actions";
 
@@ -73,6 +73,12 @@ export default function ServicesHub() {
               </tbody>
             </table>
           </div>
+        </div>
+      </section>
+
+      <section className="section border-t border-border" aria-label="Google review cards">
+        <div className="container-x">
+          <ReviewCardPromo title="Our best seller: one-tap Google review cards." />
         </div>
       </section>
 

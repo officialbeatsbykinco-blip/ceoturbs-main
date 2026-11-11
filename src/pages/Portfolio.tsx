@@ -1,7 +1,7 @@
 import { CLIENTS, CATEGORY_LABEL, type Category } from "@/content/clients";
 import { SiteWall } from "@/components/visuals/SiteWall";
 import { WorkGrid } from "@/components/blocks/Proof";
-import { BookingSection } from "@/components/blocks/Sales";
+import { BookingSection, ReviewCardStrip } from "@/components/blocks/Sales";
 import { SectionHeader, Breadcrumbs } from "@/components/blocks/Basics";
 import { BookButton } from "@/components/cta/Actions";
 
@@ -27,6 +27,9 @@ export default function Portfolio() {
           <WorkGrid filterable />
         </div>
       </section>
+      <div className="container-x">
+        <ReviewCardStrip where="Portfolio" />
+      </div>
       <BookingSection note="Portfolio" title="Want yours next? Let's talk about it." />
     </>
   );

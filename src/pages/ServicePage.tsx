@@ -3,7 +3,7 @@ import { OfficeIntake } from "@/components/blocks/OfficeIntake";
 import { PriceBox } from "@/components/blocks/PriceBlocks";
 import { AdGallery, AdResultsGrid, GoogleAdProof, WorkGrid } from "@/components/blocks/Proof";
 import { Reveal } from "@/components/blocks/Reveal";
-import { BookingSection, ReviewCardPromo, ServiceGrid } from "@/components/blocks/Sales";
+import { BookingSection, ReviewCardPromo, ReviewCardStrip, ServiceGrid } from "@/components/blocks/Sales";
 import { BookButton, InstallBookButton, TextQuoteButton } from "@/components/cta/Actions";
 import { OFFICE_QUIZ, OfficeTextQuiz, SETUP_QUIZZES } from "@/components/blocks/OfficeTextQuiz";
 import { useTexting } from "@/components/booking/BookOrText";
@@ -436,7 +436,14 @@ export default function ServicePage() {
           </div>
         </section>
       ) : (
-        <BookingSection note={note} prefill={prefill} />
+        <>
+          {s.slug !== "google-business-profile" && (
+            <div className="container-x pt-12">
+              <ReviewCardStrip where={`Service ${s.slug}`} title="Pair it with Google review cards" />
+            </div>
+          )}
+          <BookingSection note={note} prefill={prefill} />
+        </>
       )}
     </>
   );

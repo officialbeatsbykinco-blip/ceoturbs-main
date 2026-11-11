@@ -6,6 +6,7 @@ import { SectionHeader } from "@/components/blocks/Basics";
 import { ContactBand } from "@/components/shop/StoreSections";
 import { BestResults, ProofStats, AdGallery } from "@/components/blocks/Proof";
 import { MobileMore } from "@/components/blocks/MobileMore";
+import { ReviewCardPromo, ReviewCardStrip } from "@/components/blocks/Sales";
 import { SiteWall } from "@/components/visuals/SiteWall";
 import { BeforeAfter, OFFICE_BEFORE_AFTER } from "@/components/visuals/BeforeAfter";
 import { CallLink } from "@/components/site/CallLink";
@@ -38,7 +39,7 @@ const WHO = [
 /**
  * Funnel: three doors (fix my tech, set up my office, get more customers), each to its own page built to book.
  * Then proof for each (the before/after desk, the sites, the ad dashboards), company shirts, and call/text/book again.
- * Review cards live on their own page, linked once near the bottom.
+ * Google review cards are sprinkled through: a strip under the hero, a full promo after who we help, and a strip by the shirts.
  */
 export default function Home() {
   const navigate = useNavigate();
@@ -154,6 +155,7 @@ export default function Home() {
               <span className="sr-only">Text {SITE.founder.name}</span>
             </a>
           </div>
+          <ReviewCardStrip where="Home hero" className="mx-auto mt-3 max-w-6xl" />
         </div>
       </section>
 
@@ -232,6 +234,12 @@ export default function Home() {
         </div>
       </section>
 
+      <section className="section border-t border-border" aria-label="Google review cards">
+        <div className="container-x">
+          <ReviewCardPromo title="More 5-star Google reviews with one tap." />
+        </div>
+      </section>
+
       <section id="work" className="scroll-mt-20 border-t border-border pt-14 sm:pt-20" aria-labelledby="work-title">
         <div className="container-x text-center">
           <p className="text-xs font-semibold uppercase tracking-wider text-turbo">Websites</p>
@@ -284,13 +292,7 @@ export default function Home() {
               </CallLink>
             </div>
           </div>
-          <Link to={SHOP_PATH} className="panel mt-4 flex items-center gap-3 p-4 text-sm transition hover:ring-1 hover:ring-turbo/50">
-            <Star className="h-5 w-5 shrink-0 fill-current text-amber-400" aria-hidden />
-            <span className="flex-1">
-              <span className="font-semibold">Also: Google review cards.</span> <span className="text-muted-foreground">Customers tap and your review page opens. From {fromPriceLabel}.</span>
-            </span>
-            <ArrowRight className="h-4 w-4 text-turbo" aria-hidden />
-          </Link>
+          <ReviewCardStrip where="Home shirts band" className="mt-4" line="Hand it over after the job or leave it on the counter. Customers tap and your review page opens." />
         </div>
       </section>
 

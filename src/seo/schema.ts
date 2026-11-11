@@ -1,6 +1,6 @@
 // JSON-LD builders. Every node references the shared Organization/Person/WebSite
 // by @id so search engines and AI systems see one consistent entity graph.
-import { SITE, BOOKING, REVIEW_CARD, PITCH_VIDEO, SHIRT, ARTIST_SHIRT, packPath, packSku, shirtSku, type ShirtProduct } from "@/config/site";
+import { SITE, BOOKING, REVIEW_CARD, fromPrice, PITCH_VIDEO, SHIRT, ARTIST_SHIRT, packPath, packSku, shirtSku, type ShirtProduct } from "@/config/site";
 import { SHIRTS_PATH } from "@/content/company-shirts";
 import { ARTIST_MERCH_PATH } from "@/content/artist-merch";
 import { ALL_SETUP_CITIES } from "@/content/service-areas";
@@ -65,6 +65,16 @@ export const organization = (): JsonLd => ({
     "Music artist marketing",
     "Shopify marketing",
   ],
+  // The review card store, so search and AI answers tie the product to the business on every page.
+  makesOffer: {
+    "@type": "Offer",
+    name: REVIEW_CARD.fullName,
+    url: abs("/google-review-cards"),
+    priceCurrency: "USD",
+    price: fromPrice.toFixed(2),
+    availability: "https://schema.org/InStock",
+    itemOffered: { "@id": PRODUCT_ID },
+  },
   potentialAction: {
     "@type": "ReserveAction",
     name: `Book a ${BOOKING.name}`,

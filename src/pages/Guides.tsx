@@ -7,7 +7,7 @@ import { SITE, REVIEW_CARD, fromPriceLabel, money2 } from "@/config/site";
 import { GUIDE_OFFERS, DEFAULT_OFFER } from "@/content/guide-offers";
 import { BookButton, ShopCardsButton } from "@/components/cta/Actions";
 import { ReviewCard3D } from "@/components/visuals/ReviewVisuals";
-import { BookingSection } from "@/components/blocks/Sales";
+import { BookingSection, ReviewCardStrip } from "@/components/blocks/Sales";
 import { Breadcrumbs, DirectAnswer, FAQList, SectionHeader } from "@/components/blocks/Basics";
 import NotFound from "./NotFound";
 
@@ -174,6 +174,8 @@ function GuideArticle({ g }: { g: Guide }) {
               )}
             </div>
           </aside>
+
+          <ReviewCardStrip where={`Guide ${g.slug}`} className="mt-12" />
 
           <div className="mt-12">
             <h2 className="text-lg font-semibold">Related</h2>

@@ -5,7 +5,7 @@ import { AD_RESULTS } from "@/content/results";
 import { adsForClient } from "@/content/ads";
 import { AUDIENCES } from "@/content/audiences";
 import { BrowserShot, FeaturedResult, ResultCard, AdGallery, WorkGrid } from "@/components/blocks/Proof";
-import { BookingSection } from "@/components/blocks/Sales";
+import { BookingSection, ReviewCardStrip } from "@/components/blocks/Sales";
 import { Breadcrumbs } from "@/components/blocks/Basics";
 import { BookButton } from "@/components/cta/Actions";
 import NotFound from "./NotFound";
@@ -161,6 +161,10 @@ export default function CaseStudy() {
           </div>
         </section>
       )}
+
+      <div className="container-x pt-12">
+        <ReviewCardStrip where="Case study" />
+      </div>
 
       <BookingSection note={note} title={`Want results like ${c.name}? Book a free call.`} />
     </>

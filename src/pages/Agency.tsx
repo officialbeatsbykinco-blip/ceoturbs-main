@@ -10,7 +10,7 @@ import { ADS } from "@/content/ads";
 import { AD_RESULTS, AD_TOTALS, GOOGLE_AD_RESULTS, money } from "@/content/results";
 import { GrandSlamOffer } from "@/components/blocks/Offer";
 import { ReviewDuo } from "@/components/blocks/ReviewDuo";
-import { Founder, BookingSection } from "@/components/blocks/Sales";
+import { Founder, BookingSection, ReviewCardPromo } from "@/components/blocks/Sales";
 import { SectionHeader, FAQList } from "@/components/blocks/Basics";
 import { HOME_FAQS } from "@/content/faqs";
 import { price } from "@/content/pricing";
@@ -276,6 +276,12 @@ export default function Agency() {
       <section className="section border-t border-border" aria-label="Founder">
         <div className="container-x">
           <Founder />
+        </div>
+      </section>
+
+      <section className="section border-t border-border" aria-label="Google review cards">
+        <div className="container-x">
+          <ReviewCardPromo title="Reviews win the click. Get them with one tap." />
         </div>
       </section>
 
