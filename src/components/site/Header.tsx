@@ -74,12 +74,11 @@ const MENUS: Menu[] = [
   },
 ];
 
-/** Everything past the four main services, in one menu. Review cards live here now. */
+/** Everything past the main nav links, in one menu. */
 const MORE: Menu = {
   label: "More",
   to: "/services",
   items: [
-    { to: SHOP_PATH, label: "Google review cards", sub: "Tap-to-review cards, from " + fromPriceLabel },
     { to: "/tampa", label: "Tampa Bay", sub: "Where we work in person" },
     { to: "/pricing", label: "Pricing", sub: "Clear prices for websites and ads" },
     { to: "/services", label: "All services", sub: "Everything we do" },
@@ -131,6 +130,9 @@ export function Header({ focus: focusProp = false }: { focus?: boolean }) {
             </NavLink>
             <NavLink to="/grow" className={linkCls}>
               Websites & ads
+            </NavLink>
+            <NavLink to={SHOP_PATH} className={linkCls}>
+              Google review cards
             </NavLink>
             <NavLink to={SHIRTS_PATH} className={linkCls}>
               Company shirts
@@ -205,13 +207,13 @@ export function Header({ focus: focusProp = false }: { focus?: boolean }) {
               <span aria-hidden>›</span>
             </FixMyTechLink>
             {[
+              [SHOP_PATH, `Google review cards · ${fromPriceLabel}`],
               [OFFICE_SETUP_PATH, "Office setup & cables"],
               ["/computer-setup-tampa", "Computer setup"],
               ["/security-camera-installation-tampa", "Security cameras"],
               ["/wifi-installation-tampa", "Wi-Fi & internet"],
               ["/grow", "Websites & ads"],
               [SHIRTS_PATH, "Company t-shirts"],
-              [SHOP_PATH, "Google review cards"],
             ].map(([to, label]) => (
               <Link key={to} to={to} onClick={() => setOpen(false)} className="panel flex items-center justify-between px-4 py-4 text-lg font-semibold">
                 {label}
