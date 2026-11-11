@@ -10,7 +10,7 @@ import {
 import { InstallCalEmbed } from "@/components/booking/InstallCalEmbed";
 import { CallLink } from "@/components/site/CallLink";
 import { IT_BOOKING, SITE } from "@/config/site";
-import { DEVICES, EMPTY_TECH, WHEN, WHERE, problemsFor, remoteOk, techLabels, techMessage, zipOk, type DeviceId, type ProblemId, type TechAnswers } from "@/content/tech-quiz";
+import { DETAILS_MAX, DEVICES, EMPTY_TECH, WHEN, WHERE, allProblems, problemsFor, remoteOk, techLabels, techMessage, zipOk, type DeviceId, type ProblemId, type TechAnswers } from "@/content/tech-quiz";
 import { sendLead } from "@/lib/lead-outbox";
 import { canText, smsHref } from "@/lib/sms";
 import { attribution, newEventId, track, visitorId } from "@/lib/track";
@@ -18,7 +18,7 @@ import { cn } from "@/lib/utils";
 
 const STEPS = ["device", "problem", "when", "send"] as const;
 type Step = (typeof STEPS)[number];
-const STEP_NAMES: Record<Step, string> = { device: "Device", problem: "Problem", when: "Timing", send: "Send" };
+const STEP_NAMES: Record<Step, string> = { device: "Devices", problem: "Problems", when: "Timing", send: "Send" };
 
 const DEVICE_ICONS: Record<DeviceId, LucideIcon> = { windows: Laptop, mac: Monitor, iphone: Smartphone, android: Smartphone, tablet: Tablet, other: Printer };
 const PROBLEM_ICONS: Record<ProblemId, LucideIcon> = { slow: Gauge, crash: AlertTriangle, dead: Power, virus: ShieldAlert, screen: Monitor, battery: BatteryLow, setup: Mail, data: FolderOpen, printer: Printer, wifi: Wifi, tv: Tv, other: HelpCircle };
@@ -56,10 +56,26 @@ export function TechQuiz({ source = "computer-repair-tampa", className, variant 
     setErrors({});
   };
 
-  const toggle = (id: ProblemId) => {
-    setA((prev) => ({ ...prev, problems: prev.problems.includes(id) ? prev.problems.filter((p) => p !== id) : [...prev.problems, id] }));
+  // Several broken devices are normal: tap every one, then each gets its own problem list.
+  const toggleDevice = (d: DeviceId) => {
+    setA((prev) => {
+      const on = prev.devices.includes(d);
+      const problems = { ...prev.problems };
+      if (on) delete problems[d];
+      // Keep the order of the tiles, so the text reads the same way the screen does.
+      const devices = on ? prev.devices.filter((x) => x !== d) : DEVICES.map((o) => o.id).filter((id) => id === d || prev.devices.includes(id));
+      return { ...prev, devices, problems };
+    });
     setErrors({});
   };
+  const toggle = (d: DeviceId, id: ProblemId) => {
+    setA((prev) => {
+      const cur = prev.problems[d] ?? [];
+      return { ...prev, problems: { ...prev.problems, [d]: cur.includes(id) ? cur.filter((p) => p !== id) : [...cur, id] } };
+    });
+    setErrors({});
+  };
+  const picked = allProblems(a).length;
 
   const index = STEPS.indexOf(step);
   const message = techMessage(a);
@@ -72,7 +88,7 @@ export function TechQuiz({ source = "computer-repair-tampa", className, variant 
     const user = { name: a.name.trim(), phone: a.phone.trim() || undefined, zip: a.where === "remote" ? undefined : a.zip.trim() || undefined, externalId: visitorId() };
     const eventId = track(
       "generate_lead",
-      { lead_source: "tech-quiz", source, channel, value: TECH_LEAD_VALUE, currency: "USD", content_name: "Computer repair Tampa", content_category: "tech_repair", problem: a.problems.join(","), device: a.device, where: a.where, when: a.when },
+      { lead_source: "tech-quiz", source, channel, value: TECH_LEAD_VALUE, currency: "USD", content_name: "Computer repair Tampa", content_category: "tech_repair", problem: allProblems(a).join(","), device: a.devices.join(","), device_count: a.devices.length, where: a.where, when: a.when },
       { user },
     );
     return sendLead({
@@ -163,38 +179,62 @@ export function TechQuiz({ source = "computer-repair-tampa", className, variant 
         {step === "device" && (
           <>
             <Title text="What needs fixing?" />
+            <p className="-mt-2 mb-3 text-sm text-muted-foreground">Tap every device that's giving you trouble.</p>
             <div className="grid grid-cols-2 gap-2.5">
               {DEVICES.map((o) => (
-                <Tile key={o.id} icon={DEVICE_ICONS[o.id]} label={o.label} pressed={a.device === o.id} onClick={() => go("problem", a.device === o.id ? {} : { device: o.id, problems: [], where: "home" })} />
+                <Tile key={o.id} icon={DEVICE_ICONS[o.id]} label={o.label} pressed={a.devices.includes(o.id)} onClick={() => toggleDevice(o.id)} />
               ))}
             </div>
+            {errors.pick && <Err text={errors.pick} />}
+            <button
+              type="button"
+              onClick={() => (a.devices.length ? go("problem") : setErrors({ pick: "Tap at least one device." }))}
+              className={cn("btn-ignite mt-4 w-full justify-center !py-4 !text-base", !a.devices.length && "opacity-60")}
+            >
+              {a.devices.length > 1 ? `Continue with ${a.devices.length} devices` : "Continue"} <ArrowRight className="h-4 w-4" aria-hidden />
+            </button>
           </>
         )}
 
         {step === "problem" && (
           <>
-            <Title text="What's going on?" />
+            <Title text={a.devices.length > 1 ? "What's wrong with each one?" : "What's going on?"} />
             <p className="-mt-2 mb-3 text-sm text-muted-foreground">Tap all that apply.</p>
-            <div className="grid gap-2">
-              {problemsFor(a.device).map((o) => {
-                const Icon = PROBLEM_ICONS[o.id];
-                const on = a.problems.includes(o.id);
-                return (
-                  <button key={o.id} type="button" aria-pressed={on} onClick={() => toggle(o.id)} className={cn(row, on && rowOn)}>
-                    <Icon className="h-5 w-5 shrink-0 text-turbo" aria-hidden />
-                    <span className="min-w-0 flex-1 text-base font-semibold leading-snug">{o.label}</span>
-                    <span className={cn("grid h-6 w-6 shrink-0 place-items-center rounded-md border-2", on ? "border-turbo bg-turbo text-white" : "border-border")} aria-hidden>
-                      {on && <Check className="h-4 w-4" />}
-                    </span>
-                  </button>
-                );
-              })}
+            <div className="grid gap-5">
+              {a.devices.map((d) => (
+                <div key={d}>
+                  {a.devices.length > 1 && (
+                    <p className="mb-2 flex items-center gap-2 text-base font-bold">
+                      {(() => {
+                        const Icon = DEVICE_ICONS[d];
+                        return <Icon className="h-5 w-5 text-turbo" aria-hidden />;
+                      })()}
+                      {DEVICES.find((o) => o.id === d)?.label}
+                    </p>
+                  )}
+                  <div className="grid gap-2">
+                    {problemsFor(d).map((o) => {
+                      const Icon = PROBLEM_ICONS[o.id];
+                      const on = (a.problems[d] ?? []).includes(o.id);
+                      return (
+                        <button key={o.id} type="button" aria-pressed={on} onClick={() => toggle(d, o.id)} className={cn(row, on && rowOn)}>
+                          <Icon className="h-5 w-5 shrink-0 text-turbo" aria-hidden />
+                          <span className="min-w-0 flex-1 text-base font-semibold leading-snug">{o.label}</span>
+                          <span className={cn("grid h-6 w-6 shrink-0 place-items-center rounded-md border-2", on ? "border-turbo bg-turbo text-white" : "border-border")} aria-hidden>
+                            {on && <Check className="h-4 w-4" />}
+                          </span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              ))}
             </div>
             {errors.pick && <Err text={errors.pick} />}
             <Nav
               onBack={() => setStep("device")}
-              next={() => (a.problems.length ? go("when", remoteOk(a) ? {} : { where: "home" }) : setErrors({ pick: "Tap at least one problem." }))}
-              label={a.problems.length > 1 ? `Continue with ${a.problems.length}` : "Continue"}
+              next={() => (picked ? go("when", remoteOk(a) ? {} : { where: "home" }) : setErrors({ pick: "Tap at least one problem." }))}
+              label={picked > 1 ? `Continue with ${picked} problems` : "Continue"}
             />
           </>
         )}
@@ -221,9 +261,9 @@ export function TechQuiz({ source = "computer-repair-tampa", className, variant 
               </>
             )}
             <label htmlFor={`${uid}-details`} className="mb-1.5 mt-5 block text-sm font-semibold">
-              Anything else? <span className="font-normal text-muted-foreground">(optional)</span>
+              Tell us everything <span className="font-normal text-muted-foreground">(optional)</span>
             </label>
-            <textarea id={`${uid}-details`} data-clarity-mask="true" rows={2} maxLength={300} className="field resize-none" value={a.details} onChange={(e) => set({ details: e.target.value })} placeholder="Laptop model, error message, when it started…" />
+            <textarea id={`${uid}-details`} data-clarity-mask="true" rows={3} maxLength={DETAILS_MAX} className="field min-h-[88px]" value={a.details} onChange={(e) => set({ details: e.target.value })} placeholder="Every problem, models, error messages, when it started… the more the better." />
             <Nav onBack={() => setStep("problem")} next={() => go("send")} />
           </>
         )}
@@ -306,7 +346,11 @@ const rowOn = "border-turbo bg-turbo/10";
 
 function Tile({ icon: Icon, label, pressed, onClick }: { icon: LucideIcon; label: string; pressed: boolean; onClick: () => void }) {
   return (
-    <button type="button" aria-pressed={pressed} onClick={onClick} className={cn("flex min-h-[104px] flex-col items-center justify-center gap-2 rounded-2xl border-2 border-border bg-card px-2 py-3 text-center transition-[border-color,background-color,transform] duration-150 hover:border-turbo/60 active:scale-[0.97]", pressed && rowOn)}>
+    <button type="button" aria-pressed={pressed} onClick={onClick} className={cn("relative flex min-h-[104px] flex-col items-center justify-center gap-2 rounded-2xl border-2 border-border bg-card px-2 py-3 text-center transition-[border-color,background-color,transform] duration-150 hover:border-turbo/60 active:scale-[0.97]", pressed && "border-turbo bg-turbo/15 ring-2 ring-turbo/30")}>
+      {/* Several can be picked, so a picked tile has to read as picked at a glance. */}
+      <span className={cn("absolute right-2 top-2 grid h-6 w-6 place-items-center rounded-full border-2", pressed ? "border-turbo bg-turbo text-white" : "border-border bg-card")} aria-hidden>
+        {pressed && <Check className="h-4 w-4" />}
+      </span>
       <Icon className="h-8 w-8 text-turbo" strokeWidth={1.75} aria-hidden />
       <span className="text-[15px] font-bold leading-tight">{label}</span>
     </button>

@@ -198,7 +198,7 @@ export function InstallQuiz({ page, id = "book", className }: { page: InstallPag
             <label htmlFor={`${uid}-details`} className="mb-1.5 mt-5 block text-sm font-semibold">
               Anything else? <span className="font-normal text-muted-foreground">(optional)</span>
             </label>
-            <textarea id={`${uid}-details`} data-clarity-mask="true" rows={2} maxLength={300} className="field resize-none" value={a.details} onChange={(e) => set({ details: e.target.value })} placeholder="Brand, model, where it goes, anything we should know…" />
+            <textarea id={`${uid}-details`} data-clarity-mask="true" rows={3} maxLength={1000} className="field min-h-[88px]" value={a.details} onChange={(e) => set({ details: e.target.value })} placeholder="Everything you need, brands, models, where it goes… the more the better." />
             <div className="mt-4 flex gap-2">
               <button type="button" onClick={() => setStep("jobs")} className="btn-chrome !px-4">
                 <ArrowLeft className="h-4 w-4" aria-hidden /> Back

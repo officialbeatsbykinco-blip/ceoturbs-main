@@ -2,7 +2,7 @@ import { useEffect, useId, useRef, useState, type FormEvent, type ReactNode } fr
 import { Link } from "react-router-dom";
 import { AlertTriangle, ArrowRight, Building2, Check, ChevronDown, Loader2, Lock, Mic2, RotateCcw, Search, Sparkles, X } from "lucide-react";
 import { openBooking } from "@/lib/cal";
-import { attribution, track, visitorId } from "@/lib/track";
+import { attribution, newEventId, track, visitorId } from "@/lib/track";
 import { CallLink } from "@/components/site/CallLink";
 import { BOOKING, fromPriceLabel } from "@/config/site";
 import { CardFace, ScoreGauge } from "@/components/visuals/ReviewVisuals";
@@ -151,11 +151,20 @@ export function AuditTool({ source = "audit", onStageChange, compact = false }: 
 
     setStage("scan");
     scrollTop();
-    const leadEventId = track(
-      "generate_lead",
-      { lead_source: "free_check", kind: form.kind, stage: form.stage, source, value: FREE_CHECK_VALUE, currency: "USD", content_name: form.kind === "artist" ? "Artist visibility check" : "Business visibility check", content_category: `${form.kind === "artist" ? "Artist" : "Business"} · ${form.stage === "start" ? "Starting out" : "Growing"}` },
-      { user: { email: form.email, phone: form.phone, name: form.name, externalId: visitorId() } },
-    );
+    // One id shared by the browser Pixel and the server's Lead so Meta counts it once. The browser copy
+    // fires only after the server takes the lead: a typo'd phone that comes back 400 must not count as a
+    // Lead, then count again when they fix it.
+    const leadEventId = newEventId("generate_lead");
+    let counted = false;
+    const countLead = () => {
+      if (counted) return;
+      counted = true;
+      track(
+        "generate_lead",
+        { lead_source: "free_check", kind: form.kind, stage: form.stage, source, value: FREE_CHECK_VALUE, currency: "USD", content_name: form.kind === "artist" ? "Artist visibility check" : "Business visibility check", content_category: `${form.kind === "artist" ? "Artist" : "Business"} · ${form.stage === "start" ? "Starting out" : "Growing"}` },
+        { eventId: leadEventId, user: { email: form.email, phone: form.phone, name: form.name, externalId: visitorId() } },
+      );
+    };
     const minWait = new Promise((r) => setTimeout(r, 4200));
     try {
       const res = await fetch("/api/audit", {
@@ -164,6 +173,8 @@ export function AuditTool({ source = "audit", onStageChange, compact = false }: 
         body: JSON.stringify({ ...form, visitorId: visitorId(), elapsedMs: Date.now() - (started.current || Date.now()), page: window.location.pathname, eventId: leadEventId, attribution: attribution() }),
       });
       const data = await res.json().catch(() => ({}));
+      // The server saved the lead (a 503 means the scan failed but the lead is in): count it now.
+      if (res.status !== 400 && res.status !== 429) countLead();
       await minWait;
       if (res.ok && data.report) {
         setReport(data.report);
@@ -188,6 +199,8 @@ export function AuditTool({ source = "audit", onStageChange, compact = false }: 
       setFailure(res.status === 429 ? "rate" : "server");
       setStage("failed");
     } catch {
+      // No answer at all: the server may still have it, so count it rather than lose the conversion.
+      countLead();
       await minWait;
       setFailure("network");
       setStage("failed");

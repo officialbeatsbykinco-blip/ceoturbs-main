@@ -24,7 +24,7 @@ export function quizFields(body) {
 
 /** Tech repair quiz (/computer-repair-tampa): problem, device, timing, place and details, as one readable note (exported for tests). */
 export function techFields(body) {
-  const f = { problem: text(body.problem, 300), device: text(body.device, 60), when: text(body.when, 30), where: text(body.where, 60), zip: text(body.zip, 10), city: text(body.city, 60), details: text(body.details, 300) };
+  const f = { problem: text(body.problem, 1500), device: text(body.device, 200), when: text(body.when, 30), where: text(body.where, 60), zip: text(body.zip, 10), city: text(body.city, 60), details: text(body.details, 1000) };
   const note = [f.problem && `Problem: ${f.problem}`, f.device && `Device: ${f.device}`, f.when && `When: ${f.when}`, f.where && `Where: ${f.where}`, f.zip && `ZIP: ${f.zip}`, f.city && `City: ${f.city}`, f.details && `Details: ${f.details}`].filter(Boolean).join(" | ");
   return { ...f, note };
 }
@@ -45,7 +45,7 @@ export function batteryFields(body) {
 
 /** Install quiz (computer setup, security cameras, Wi-Fi pages): one readable note for the sheet (exported for tests). */
 export function installFields(body) {
-  const f = { service: text(body.service, 60), contentName: text(body.contentName, 80), category: text(body.category, 40), jobs: text(body.jobs, 300), answers: text(body.answers, 300), when: text(body.when, 30), zip: text(body.zip, 10), details: text(body.details, 300) };
+  const f = { service: text(body.service, 60), contentName: text(body.contentName, 80), category: text(body.category, 40), jobs: text(body.jobs, 1000), answers: text(body.answers, 1000), when: text(body.when, 30), zip: text(body.zip, 10), details: text(body.details, 1000) };
   const note = [f.contentName && `Service: ${f.contentName}`, f.jobs && `Need: ${f.jobs}`, f.answers, f.when && `When: ${f.when}`, f.zip && `ZIP: ${f.zip}`, f.details && `Details: ${f.details}`].filter(Boolean).join(" | ");
   return { ...f, note };
 }

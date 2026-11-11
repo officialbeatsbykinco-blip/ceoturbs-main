@@ -46,16 +46,23 @@ export const WHERE = [
 ] as const;
 
 /** Remote is only a speed-up for a slow Windows computer (the it-remote price). Anything else needs a visit. */
-export const remoteOk = (a: Pick<TechAnswers, "device" | "problems">) => a.device === "windows" && a.problems.length > 0 && a.problems.every((p) => p === "slow");
+export const remoteOk = (a: Pick<TechAnswers, "devices" | "problems">) => {
+  const win = a.problems.windows ?? [];
+  return a.devices.length === 1 && a.devices[0] === "windows" && win.length > 0 && win.every((p) => p === "slow");
+};
+
+/** Longest free-text note we accept (the quiz box, the text and the lead sheet all agree). */
+export const DETAILS_MAX = 1000;
 
 export type DeviceId = (typeof DEVICES)[number]["id"];
 export type ProblemId = (typeof PROBLEMS)[number]["id"];
 export type WhenId = (typeof WHEN)[number]["id"];
 export type WhereId = (typeof WHERE)[number]["id"];
 
+/** Several broken devices in one request: each picked device keeps its own list of problems. */
 export type TechAnswers = {
-  device?: DeviceId;
-  problems: ProblemId[];
+  devices: DeviceId[];
+  problems: Partial<Record<DeviceId, ProblemId[]>>;
   when: WhenId;
   where: WhereId;
   details: string;
@@ -64,16 +71,26 @@ export type TechAnswers = {
   phone: string;
   smsOptIn: boolean;
 };
-export const EMPTY_TECH: TechAnswers = { problems: [], when: "asap", where: "home", details: "", zip: "", name: "", phone: "", smsOptIn: false };
+export const EMPTY_TECH: TechAnswers = { devices: [], problems: {}, when: "asap", where: "home", details: "", zip: "", name: "", phone: "", smsOptIn: false };
 
 /** Cities we come to (the full in-person list, Tampa first). */
 export const TECH_CITIES = ALL_SETUP_CITIES;
 
 const pick = <T extends { id: string; label: string }>(list: readonly T[], id?: string) => list.find((o) => o.id === id)?.label ?? "";
 
+/** Every picked problem across every device, deduplicated (for analytics). */
+export const allProblems = (a: Pick<TechAnswers, "devices" | "problems">) => [...new Set(a.devices.flatMap((d) => a.problems[d] ?? []))];
+
+/** One line per device: "iPhone: Cracked or broken screen, Battery dies fast". No pick yet reads "not sure, will explain". */
+const deviceLines = (a: TechAnswers) =>
+  a.devices.map((d) => {
+    const probs = (a.problems[d] ?? []).map((id) => pick(PROBLEMS, id)).filter(Boolean);
+    return `${pick(DEVICES, d)}: ${probs.length ? probs.join(", ") : "not sure, will explain"}`;
+  });
+
 export const techLabels = (a: TechAnswers) => ({
-  device: pick(DEVICES, a.device),
-  problem: a.problems.map((id) => pick(PROBLEMS, id)).filter(Boolean).join(", "),
+  device: a.devices.map((d) => pick(DEVICES, d)).join(", "),
+  problem: deviceLines(a).join("; "),
   when: pick(WHEN, a.when),
   where: pick(WHERE, a.where),
 });
@@ -81,14 +98,14 @@ export const techLabels = (a: TechAnswers) => ({
 /** A US ZIP code (5 digits). Only needed when we're coming to them. */
 export const zipOk = (zip: string) => /^\d{5}$/.test(zip.trim());
 
-/** The text a phone sends us: one line per answer, so it reads at a glance on the owner's phone. */
+/** The text a phone sends us: one line per device and per answer, so it reads at a glance on the owner's phone. */
 export function techMessage(a: TechAnswers) {
   const l = techLabels(a);
   const where = a.where === "remote" && remoteOk(a) ? "Remote" : `Come to me${a.zip.trim() ? `, ZIP ${a.zip.trim()}` : ""}`;
+  const lines = deviceLines(a);
   return [
     "Hi Chris! I'd like a repair price.",
-    l.device && `Device: ${l.device}`,
-    l.problem && `${a.problems.length > 1 ? "Problems" : "Problem"}: ${l.problem}`,
+    ...(lines.length > 1 ? [`${lines.length} devices:`, ...lines.map((x) => `- ${x}`)] : lines),
     a.details.trim() && `Details: ${a.details.trim()}`,
     l.when && `When: ${l.when}`,
     `Where: ${where}`,
