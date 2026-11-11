@@ -1,7 +1,7 @@
-// Office setup on a phone: three taps and a first name, then Messages opens with the request typed out.
+// Office setup on a phone: pick every need (several allowed), size, timing and a first name, then Messages opens with the request typed out.
 // Fires one Lead (content_category "office_setup").
 import { useRef, useState, type MouseEvent } from "react";
-import { ArrowLeft, ArrowRight, MessageSquare } from "lucide-react";
+import { ArrowLeft, ArrowRight, Check, MessageSquare } from "lucide-react";
 import { CallLink } from "@/components/site/CallLink";
 import { smsHref } from "@/lib/sms";
 import { sendLead } from "@/lib/lead-outbox";
@@ -27,6 +27,8 @@ export type SetupQuiz = {
   /** How the size answer reads in the text, e.g. "Size" or "Registers". */
   sizeLabel: string;
   sizes: readonly string[];
+  /** One answer only (e.g. which POS brand): a tap moves on. Otherwise people can tap several needs, then Continue. */
+  single?: boolean;
 };
 
 export const OFFICE_QUIZ: SetupQuiz = { key: "office-setup", needTitle: "What do you need set up?", needs: OFFICE_NEEDS, sizeTitle: "How big is the office?", sizeLabel: "Size", sizes: OFFICE_SIZES };
@@ -100,13 +102,17 @@ export const SETUP_QUIZZES: Record<string, SetupQuiz> = {
     sizeTitle: "How many registers?",
     sizeLabel: "Registers",
     sizes: ["1", "2–3", "4 or more"],
+    single: true,
   },
 };
 
-type Answers = { need?: string; size?: string; when?: string; name: string };
+type Answers = { needs: string[]; size?: string; when?: string; name: string };
+
+/** "a", "a and b", "a, b and c" */
+const joinAnd = (xs: string[]) => (xs.length < 2 ? xs.join("") : `${xs.slice(0, -1).join(", ")} and ${xs[xs.length - 1]}`);
 
 export function officeMessage(a: Answers, quiz: SetupQuiz = OFFICE_QUIZ) {
-  const need = quiz.needs.find((n) => n.id === a.need)?.text ?? "help with a setup";
+  const need = joinAnd(quiz.needs.filter((n) => a.needs.includes(n.id)).map((n) => n.text)) || "help with a setup";
   const name = a.name.trim() ? ` – ${a.name.trim().split(/\s+/)[0]}` : "";
   return `Hi Chris, I need ${need} in Tampa. ${quiz.sizeLabel}: ${a.size ?? "not sure"}. Timing: ${a.when ?? "not sure"}. What's the price?${name}`;
 }
@@ -114,7 +120,7 @@ export function officeMessage(a: Answers, quiz: SetupQuiz = OFFICE_QUIZ) {
 const STEPS = ["need", "size", "when", "send"] as const;
 
 export function OfficeTextQuiz({ id = "book", className, quiz = OFFICE_QUIZ }: { id?: string; className?: string; quiz?: SetupQuiz }) {
-  const [a, setA] = useState<Answers>({ name: "" });
+  const [a, setA] = useState<Answers>({ needs: [], name: "" });
   const [step, setStep] = useState<(typeof STEPS)[number]>("need");
   const [err, setErr] = useState("");
   const sent = useRef(false);
@@ -132,9 +138,9 @@ export function OfficeTextQuiz({ id = "book", className, quiz = OFFICE_QUIZ }: {
     }
     if (sent.current) return;
     sent.current = true;
-    const need = quiz.needs.find((n) => n.id === a.need)?.label ?? "";
+    const need = quiz.needs.filter((n) => a.needs.includes(n.id)).map((n) => n.label).join(", ");
     const user = { name: a.name.trim(), externalId: visitorId() };
-    const eventId = track("generate_lead", { lead_source: "office-quiz", channel: "sms", value: 300, currency: "USD", content_name: quiz === OFFICE_QUIZ ? "Office setup Tampa" : `Setup: ${quiz.key}`, content_category: "office_setup", service: quiz.key, need: a.need, size: a.size, timing: a.when }, { user });
+    const eventId = track("generate_lead", { lead_source: "office-quiz", channel: "sms", value: 300, currency: "USD", content_name: quiz === OFFICE_QUIZ ? "Office setup Tampa" : `Setup: ${quiz.key}`, content_category: "office_setup", service: quiz.key, need: a.needs.join(","), need_count: a.needs.length, size: a.size, timing: a.when }, { user });
     // Server copy (Conversions API + leads sheet), same event_id so Meta de-duplicates it.
     void sendLead({ type: "tech-repair", service: quiz === OFFICE_QUIZ ? "office-quiz" : `setup-quiz:${quiz.key}`, channel: "sms", eventId, value: 300, visitorId: user.externalId, quizId: newEventId("o"), name: user.name, phone: "", problem: need, device: a.size ?? "", where: a.when ?? "", city: "", page: window.location.pathname, attribution: attribution(), company_site: "", elapsedMs: 99_999 });
   };
@@ -156,11 +162,28 @@ export function OfficeTextQuiz({ id = "book", className, quiz = OFFICE_QUIZ }: {
         {step === "need" && (
           <>
             <Title text={quiz.needTitle} />
+            {!quiz.single && <p className="-mt-2 mb-3 text-sm text-muted-foreground">Tap all that apply.</p>}
             <div className="grid gap-2.5">
-              {quiz.needs.map((o) => (
-                <Opt key={o.id} label={o.label} pressed={a.need === o.id} onClick={() => go("size", { need: o.id })} />
-              ))}
+              {quiz.needs.map((o) =>
+                quiz.single ? (
+                  <Opt key={o.id} label={o.label} pressed={a.needs[0] === o.id} onClick={() => go("size", { needs: [o.id] })} />
+                ) : (
+                  <Check1 key={o.id} label={o.label} on={a.needs.includes(o.id)} onClick={() => (setErr(""), setA((p) => ({ ...p, needs: p.needs.includes(o.id) ? p.needs.filter((x) => x !== o.id) : [...p.needs, o.id] })))} />
+                ),
+              )}
             </div>
+            {!quiz.single && (
+              <>
+                {err && (
+                  <p className="mt-2 text-sm text-destructive" role="alert">
+                    {err}
+                  </p>
+                )}
+                <button type="button" onClick={() => (a.needs.length ? (setErr(""), go("size", {})) : setErr("Tap at least one."))} className="btn-ignite mt-3 w-full justify-center !py-4 !text-base">
+                  {a.needs.length > 1 ? `Continue with ${a.needs.length}` : "Continue"} <ArrowRight className="h-5 w-5" aria-hidden />
+                </button>
+              </>
+            )}
           </>
         )}
         {step === "size" && (
@@ -217,6 +240,17 @@ export function OfficeTextQuiz({ id = "book", className, quiz = OFFICE_QUIZ }: {
         )}
       </div>
     </div>
+  );
+}
+
+function Check1({ label, on, onClick }: { label: string; on: boolean; onClick: () => void }) {
+  return (
+    <button type="button" aria-pressed={on} onClick={onClick} className="quiz-opt quiz-tap !py-3 text-left">
+      <span className="min-w-0 flex-1 text-sm font-semibold leading-snug">{label}</span>
+      <span className={cn("grid h-6 w-6 shrink-0 place-items-center rounded-md border-2", on ? "border-turbo bg-turbo text-white" : "border-border")} aria-hidden>
+        {on && <Check className="h-4 w-4" />}
+      </span>
+    </button>
   );
 }
 

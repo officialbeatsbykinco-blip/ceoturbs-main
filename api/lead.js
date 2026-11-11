@@ -24,7 +24,7 @@ export function quizFields(body) {
 
 /** Tech repair quiz (/computer-repair-tampa): problem, device, timing, place and details, as one readable note (exported for tests). */
 export function techFields(body) {
-  const f = { problem: text(body.problem, 80), device: text(body.device, 60), when: text(body.when, 30), where: text(body.where, 60), zip: text(body.zip, 10), city: text(body.city, 60), details: text(body.details, 300) };
+  const f = { problem: text(body.problem, 300), device: text(body.device, 60), when: text(body.when, 30), where: text(body.where, 60), zip: text(body.zip, 10), city: text(body.city, 60), details: text(body.details, 300) };
   const note = [f.problem && `Problem: ${f.problem}`, f.device && `Device: ${f.device}`, f.when && `When: ${f.when}`, f.where && `Where: ${f.where}`, f.zip && `ZIP: ${f.zip}`, f.city && `City: ${f.city}`, f.details && `Details: ${f.details}`].filter(Boolean).join(" | ");
   return { ...f, note };
 }

@@ -108,9 +108,12 @@ describe("setup service phone quizzes", () => {
       expect(q, slug).toBeDefined();
       expect(q.needs.length).toBeGreaterThanOrEqual(3);
       expect(q.sizes.length).toBeGreaterThanOrEqual(3);
-      const msg = officeMessage({ need: q.needs[0].id, size: q.sizes[0], when: "This week", name: "Dana Smith" }, q);
+      const msg = officeMessage({ needs: [q.needs[0].id], size: q.sizes[0], when: "This week", name: "Dana Smith" }, q);
       expect(msg).toMatch(/^Hi Chris, I need .+ in Tampa\. .+: .+\. Timing: This week\. What's the price\? – Dana$/);
     }
-    expect(officeMessage({ need: "square", size: "2–3", when: "This month", name: "" }, SETUP_QUIZZES["pos-system-setup"])).toBe("Hi Chris, I need a Square POS installed in Tampa. Registers: 2–3. Timing: This month. What's the price?");
+    expect(officeMessage({ needs: ["desks", "network", "accounts"], size: "4–10 desks", when: "This week", name: "" })).toBe(
+      "Hi Chris, I need workstations and monitors set up, Wi-Fi, network and printers set up and Microsoft 365 or Google Workspace set up in Tampa. Size: 4–10 desks. Timing: This week. What's the price?",
+    );
+    expect(officeMessage({ needs: ["square"], size: "2–3", when: "This month", name: "" }, SETUP_QUIZZES["pos-system-setup"])).toBe("Hi Chris, I need a Square POS installed in Tampa. Registers: 2–3. Timing: This month. What's the price?");
   });
 });

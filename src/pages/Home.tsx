@@ -6,7 +6,7 @@ import { SectionHeader } from "@/components/blocks/Basics";
 import { ContactBand } from "@/components/shop/StoreSections";
 import { BestResults, ProofStats, AdGallery } from "@/components/blocks/Proof";
 import { MobileMore } from "@/components/blocks/MobileMore";
-import { ReviewCardPromo, ReviewCardStrip } from "@/components/blocks/Sales";
+import { ReviewCardPromo, ReviewCardStrip } from "@/components/blocks/ReviewCardBlocks";
 import { SiteWall } from "@/components/visuals/SiteWall";
 import { BeforeAfter, OFFICE_BEFORE_AFTER } from "@/components/visuals/BeforeAfter";
 import { CallLink } from "@/components/site/CallLink";
