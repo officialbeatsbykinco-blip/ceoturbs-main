@@ -341,3 +341,7 @@ export const shirtStyleOption = (style: ShirtStyle, back: boolean, p: ShirtProdu
 export const shirtSku = (style: ShirtStyle, back: boolean, p: ShirtProduct = SHIRT) => `${p.sku}-${style === "short" ? "SS" : "LS"}${back ? "-FB" : ""}`;
 export const shirtFromPrice = Math.min(...SHIRT.styles.map((s) => s.price));
 export const artistFromPrice = Math.min(...ARTIST_SHIRT.styles.map((s) => s.price));
+
+/** Real Google reviews of CEO Turbo, word for word. Add new ones at the top; the tech pages show the first one.
+ *  Never add review schema (aggregateRating) for these: Google treats self-hosted reviews as self-serving. */
+export const REVIEWS = [{ name: "Dariel L.", stars: 5, text: "Most professional support for the phones", date: "2026-11-10", source: "Google" }] as const;

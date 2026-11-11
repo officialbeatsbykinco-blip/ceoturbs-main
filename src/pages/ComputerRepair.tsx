@@ -2,7 +2,7 @@
 // computers, phones and tablets, fixed at the customer's door within 40 miles or remotely. Prices come from
 // IT_SERVICES in content/pricing.ts. Conversion events: ViewContent on load, Lead from the quiz (TechQuiz),
 // Contact from call/text taps, Schedule from a Cal.com booking.
-import { FounderBadge } from "@/components/tech/FounderBadge";
+import { CustomerReview, FounderBadge } from "@/components/tech/FounderBadge";
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Building2, Calendar, Check, ClipboardCheck, Cpu, Gauge, Globe, Home, Laptop, MapPin, MessageSquare, Phone, ShieldCheck, Smartphone, Tv, Wrench, type LucideIcon } from "lucide-react";
@@ -109,6 +109,7 @@ export default function ComputerRepair() {
             </div>
             <Ctas where="hero" className="mt-6" />
             <FounderBadge className="mt-5 max-w-xl" line="I come to your door and fix it myself. Call or text, you get me, not a call center." />
+            <CustomerReview className="mt-3 max-w-xl" />
             <ul className="mt-6 grid max-w-xl gap-x-4 gap-y-2 text-sm text-muted-foreground sm:grid-cols-2">
               {PROMISES.map((t) => (
                 <li key={t} className="flex items-center gap-2">
