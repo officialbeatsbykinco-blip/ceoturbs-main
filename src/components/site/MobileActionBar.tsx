@@ -1,7 +1,7 @@
 import { useLocation } from "react-router-dom";
-import { BookButton, InstallBookButton } from "@/components/cta/Actions";
+import { BookButton } from "@/components/cta/Actions";
 import { CALL_FIRST_SLUGS } from "@/content/services";
-import { Calendar, MessageSquare, Phone, Wrench } from "lucide-react";
+import { MessageSquare, Phone, Wrench } from "lucide-react";
 import { SITE, fromPriceLabel } from "@/config/site";
 import { IT_SERVICES_PATH, techBooking } from "@/content/tech-pages";
 import { FixMyTechLink } from "@/components/tech/FixMyTechLink";
@@ -33,34 +33,26 @@ export function MobileActionBar() {
         </div>
       </div>
     );
+  // Setup service pages (home office, DJ studio, POS…): same as the office page. Phones never get the calendar; the
+  // orange button jumps to the tap-question text quiz on the page, then a blue Call and a Text.
   if (CALL_FIRST_SLUGS.some((slug) => pathname === `/services/${slug}`)) {
     const slug = pathname.split("/").pop() || "setup";
     const smsText = `Hi, I'd like a quote for ${slug.replace(/-/g, " ")}. My city is: `;
     return (
-      <div className="pb-safe fixed inset-x-0 bottom-0 z-40 border-t border-border/80 bg-background/90 px-2.5 pt-2.5 backdrop-blur-xl sm:hidden">
+      <div className="pb-safe fixed inset-x-0 bottom-0 z-40 border-t border-border/80 bg-background/95 px-2.5 pt-2.5 backdrop-blur-xl sm:hidden">
         <div className="flex items-center gap-1.5">
-          <CallLink
-            location={`${slug}-sticky-mobile`}
-            className="btn-ignite flex flex-1 items-center justify-center gap-1.5 whitespace-nowrap !py-3.5 !px-2 !text-sm font-bold shadow-lg"
-          >
+          <a href="#book" data-call-location={`${slug}-sticky-mobile-quiz`} className="btn-ignite flex flex-[1.4] items-center justify-center gap-1.5 whitespace-nowrap !py-3.5 !px-2 !text-base font-bold shadow-lg">
+            <MessageSquare className="h-4 w-4 shrink-0" aria-hidden />
+            <span>Get a quote</span>
+          </a>
+          <CallLink location={`${slug}-sticky-mobile`} className="btn-blue flex flex-1 items-center justify-center gap-1.5 whitespace-nowrap !py-3.5 !px-2 !text-base font-bold">
             <Phone className="h-4 w-4 shrink-0" aria-hidden />
             <span>Call</span>
           </CallLink>
-          <a
-            href={smsHref(smsText)}
-            className="btn-chrome flex flex-1 items-center justify-center gap-1.5 whitespace-nowrap !py-3.5 !px-2 !text-sm font-bold text-foreground"
-          >
-            <MessageSquare className="h-4 w-4 shrink-0 text-turbo" aria-hidden />
+          <a href={smsHref(smsText)} data-call-location={`${slug}-sticky-mobile-sms`} className="btn-chrome flex flex-1 items-center justify-center gap-1.5 whitespace-nowrap !py-3.5 !px-2 !text-base font-bold">
+            <MessageSquare className="h-4 w-4 shrink-0" aria-hidden />
             <span>Text</span>
           </a>
-          <InstallBookButton
-            note={`${slug}-sticky-mobile`}
-            variant="chrome"
-            className="flex flex-1 items-center justify-center gap-1.5 whitespace-nowrap !py-3.5 !px-2 !text-sm"
-          >
-            <Calendar className="h-4 w-4 shrink-0" aria-hidden />
-            <span>Book</span>
-          </InstallBookButton>
         </div>
       </div>
     );

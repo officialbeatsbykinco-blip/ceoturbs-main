@@ -73,7 +73,8 @@ export default async function handler(req, res) {
   const textQuiz = type === "brand-boost-quiz" && text(body.service, 80) === "text-quiz";
   const tech = type === "tech-repair" ? techFields(body) : null;
   // The office text quiz files through the tech path (same sheet tab) but is its own service in Meta's reports.
-  const officeQuiz = !!tech && text(body.service, 80) === "office-quiz";
+  // /services setup pages send "setup-quiz:<slug>" (home office, DJ studio, POS…) and count as office setup too.
+  const officeQuiz = !!tech && (text(body.service, 80) === "office-quiz" || text(body.service, 80).startsWith("setup-quiz:"));
   const install = type === "install" ? installFields(body) : null;
   const smsSend = (textQuiz || !!tech || !!install) && body.channel === "sms";
   const { lead, error } = cleanLead(body, { phoneOptional: !!dev || type === "shirt-exit-intent" || smsSend, emailOptional: type === "battery" || textQuiz || !!tech || !!install });

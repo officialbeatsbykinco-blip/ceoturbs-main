@@ -5,6 +5,8 @@ import { AdGallery, AdResultsGrid, GoogleAdProof, WorkGrid } from "@/components/
 import { Reveal } from "@/components/blocks/Reveal";
 import { BookingSection, ReviewCardPromo, ServiceGrid } from "@/components/blocks/Sales";
 import { BookButton, InstallBookButton, TextQuoteButton } from "@/components/cta/Actions";
+import { OFFICE_QUIZ, OfficeTextQuiz, SETUP_QUIZZES } from "@/components/blocks/OfficeTextQuiz";
+import { useTexting } from "@/components/booking/BookOrText";
 import { SCENES, SearchScene } from "@/components/visuals/Scenes";
 import { SITE } from "@/config/site";
 import { CallLink } from "@/components/site/CallLink";
@@ -16,11 +18,14 @@ import { SETUP_AREAS } from "@/content/service-areas";
 import { CALL_FIRST_SLUGS, serviceBySlug, SERVICES } from "@/content/services";
 import { Calendar, Check, MessageSquare, Phone, X } from "lucide-react";
 import { Link, useParams } from "react-router-dom";
+import type { ComponentProps } from "react";
 import { cn } from "@/lib/utils";
 import NotFound from "./NotFound";
 
 export default function ServicePage() {
   const { slug = "" } = useParams();
+  // Phones get the tap-question text quiz, never a Cal.com calendar; computers keep the calendar.
+  const texting = useTexting();
   const s = serviceBySlug(slug);
   if (!s) return <NotFound />;
 
@@ -31,9 +36,9 @@ export default function ServicePage() {
   const isOfficeTransform = s.slug === "office-transformation";
   const showCal = isHomeOffice;
   const calLink = (loc: string, cls: string) => (
-    <InstallBookButton note={`${s.slug}-${loc}`} className={cls}>
+    <SetupBookButton texting={texting} note={`${s.slug}-${loc}`} className={cls}>
       Book online
-    </InstallBookButton>
+    </SetupBookButton>
   );
   const Scene = s.slug === "seo-aeo-geo" ? SearchScene : s.slug === "google-business-profile" ? SCENES.local : s.slug === "email-marketing" || s.slug === "tiktok-ads" ? SCENES.shopify : s.slug === "social-media-optimization" || s.slug === "x-ads" ? SCENES.artist : SearchScene;
   const note = `Service: ${s.name}`;
@@ -60,14 +65,14 @@ export default function ServicePage() {
                     {/* DESKTOP (sm+): Primary = Book Online (ignite), Secondary = Call (chrome), Tertiary = Text Quote (chrome) */}
                     <div className="hidden sm:flex sm:flex-wrap sm:items-center sm:gap-3">
                       {showCal && (
-                        <InstallBookButton
+                        <SetupBookButton texting={texting}
                           note={`${s.slug}-hero`}
                           variant="ignite"
                           className="flex items-center justify-center gap-2 shadow-lg"
                         >
                           <Calendar className="h-4 w-4 shrink-0" aria-hidden />
                           <span>Book online</span>
-                        </InstallBookButton>
+                        </SetupBookButton>
                       )}
                       <a
                         href={SITE.phone.href}
@@ -107,14 +112,14 @@ export default function ServicePage() {
                           <span>Text quote</span>
                         </TextQuoteButton>
                         {showCal && (
-                          <InstallBookButton
+                          <SetupBookButton texting={texting}
                             note={`${s.slug}-hero`}
                             variant="chrome"
                             className="flex w-full items-center justify-center gap-1.5 !px-3"
                           >
                             <Calendar className="h-4 w-4 shrink-0" aria-hidden />
                             <span>Book online</span>
-                          </InstallBookButton>
+                          </SetupBookButton>
                         )}
                       </div>
                     </div>
@@ -151,7 +156,15 @@ export default function ServicePage() {
                 )}
               </div>
             </div>
-            {isHomeOffice ? <OfficeIntake service={s.slug} /> : <Scene className="h-auto w-full" />}
+            {isHomeOffice ? (
+              texting ? (
+                <OfficeTextQuiz id="book" quiz={SETUP_QUIZZES[s.slug] ?? OFFICE_QUIZ} className="min-w-0" />
+              ) : (
+                <OfficeIntake service={s.slug} />
+              )
+            ) : (
+              <Scene className="h-auto w-full" />
+            )}
           </div>
           <DirectAnswer label={`What is ${s.short}?`}>{s.answer}</DirectAnswer>
         </div>
@@ -227,10 +240,10 @@ export default function ServicePage() {
                   {/* Desktop pricing CTAs */}
                   <div className="hidden sm:flex sm:flex-wrap sm:items-center sm:gap-3">
                     {showCal && (
-                      <InstallBookButton note={`${s.slug}-pricing`} variant="ignite">
+                      <SetupBookButton texting={texting} note={`${s.slug}-pricing`} variant="ignite">
                         <Calendar className="h-4 w-4 shrink-0" aria-hidden />
                         Book your setup
-                      </InstallBookButton>
+                      </SetupBookButton>
                     )}
                     <a
                       href={SITE.phone.href}
@@ -270,10 +283,10 @@ export default function ServicePage() {
                         Text quote
                       </TextQuoteButton>
                       {showCal && (
-                        <InstallBookButton note={`${s.slug}-pricing`} variant="chrome" className="w-full inline-flex items-center justify-center gap-1.5 !px-3">
+                        <SetupBookButton texting={texting} note={`${s.slug}-pricing`} variant="chrome" className="w-full inline-flex items-center justify-center gap-1.5 !px-3">
                           <Calendar className="h-4 w-4 shrink-0" aria-hidden />
                           Book online
-                        </InstallBookButton>
+                        </SetupBookButton>
                       )}
                     </div>
                   </div>
@@ -370,10 +383,10 @@ export default function ServicePage() {
             {/* Desktop buttons */}
             <div className="mt-6 hidden items-center justify-center gap-3 sm:flex">
               {showCal && (
-                <InstallBookButton note={`${s.slug}-footer`} variant="ignite" className="inline-flex items-center gap-2">
+                <SetupBookButton texting={texting} note={`${s.slug}-footer`} variant="ignite" className="inline-flex items-center gap-2">
                   <Calendar className="h-4 w-4 shrink-0" aria-hidden />
                   Book online
-                </InstallBookButton>
+                </SetupBookButton>
               )}
               <a
                 href={SITE.phone.href}
@@ -413,10 +426,10 @@ export default function ServicePage() {
                   Text quote
                 </TextQuoteButton>
                 {showCal && (
-                  <InstallBookButton note={`${s.slug}-footer`} variant="chrome" className="w-full inline-flex items-center justify-center gap-1.5 !px-3">
+                  <SetupBookButton texting={texting} note={`${s.slug}-footer`} variant="chrome" className="w-full inline-flex items-center justify-center gap-1.5 !px-3">
                     <Calendar className="h-4 w-4 shrink-0" aria-hidden />
                     Book online
-                  </InstallBookButton>
+                  </SetupBookButton>
                 )}
               </div>
             </div>
@@ -426,5 +439,16 @@ export default function ServicePage() {
         <BookingSection note={note} prefill={prefill} />
       )}
     </>
+  );
+}
+
+/** "Book online" on a computer (Cal.com popup); on a phone it jumps to the text quiz instead. */
+function SetupBookButton({ texting, ...props }: ComponentProps<typeof InstallBookButton> & { texting: boolean }) {
+  if (!texting) return <InstallBookButton {...props} />;
+  return (
+    <a href="#book" data-call-location={`${props.note ?? "service"}-quiz`} className={cn(props.variant === "ignite" ? "btn-ignite" : "btn-chrome", props.className)}>
+      <MessageSquare className="h-4 w-4 shrink-0" aria-hidden />
+      <span>Get my price</span>
+    </a>
   );
 }

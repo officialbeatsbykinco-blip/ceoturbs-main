@@ -98,3 +98,19 @@ describe("text quiz leads on the server", () => {
     expect(cleanLead({ name: "Sam", phone: "4045550123" }).error).toBe("email");
   });
 });
+
+describe("setup service phone quizzes", () => {
+  it("every /services setup page has its own text quiz with answers that read well", async () => {
+    const { SETUP_QUIZZES, officeMessage } = await import("@/components/blocks/OfficeTextQuiz");
+    const { CALL_FIRST_SLUGS } = await import("@/content/services");
+    for (const slug of CALL_FIRST_SLUGS) {
+      const q = SETUP_QUIZZES[slug];
+      expect(q, slug).toBeDefined();
+      expect(q.needs.length).toBeGreaterThanOrEqual(3);
+      expect(q.sizes.length).toBeGreaterThanOrEqual(3);
+      const msg = officeMessage({ need: q.needs[0].id, size: q.sizes[0], when: "This week", name: "Dana Smith" }, q);
+      expect(msg).toMatch(/^Hi Chris, I need .+ in Tampa\. .+: .+\. Timing: This week\. What's the price\? – Dana$/);
+    }
+    expect(officeMessage({ need: "square", size: "2–3", when: "This month", name: "" }, SETUP_QUIZZES["pos-system-setup"])).toBe("Hi Chris, I need a Square POS installed in Tampa. Registers: 2–3. Timing: This month. What's the price?");
+  });
+});
