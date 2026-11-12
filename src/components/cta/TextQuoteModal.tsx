@@ -68,7 +68,7 @@ export function TextQuoteModal({
 
   const copyNumber = async () => {
     try {
-      await navigator.clipboard.writeText("678-558-4327");
+      await navigator.clipboard.writeText(SITE.phone.display);
       setCopied(true);
       setTimeout(() => setCopied(false), 2200);
       track("sms_copy_number", { service });

@@ -10,6 +10,7 @@ import { ReviewCardPromo, ReviewCardStrip } from "@/components/blocks/ReviewCard
 import { SiteWall } from "@/components/visuals/SiteWall";
 import { BeforeAfter, OFFICE_BEFORE_AFTER } from "@/components/visuals/BeforeAfter";
 import { CallLink } from "@/components/site/CallLink";
+import { PhoneOnly } from "@/components/booking/BookOrText";
 import { IT_BOOKING, SITE, fromPriceLabel } from "@/config/site";
 import { ADS } from "@/content/ads";
 import { AD_TOTALS, money } from "@/content/results";
@@ -86,9 +87,17 @@ export default function Home() {
                 </FixMyTechLink>
               }
               secondary={
-                <a href={smsHref("Hi Chris, I need computer or phone help. Device and problem: ")} data-call-location="home hero repair text" className="inline-flex min-h-[44px] items-center gap-1.5 text-sm font-semibold text-muted-foreground underline-offset-4 hover:text-foreground hover:underline">
-                  <MessageSquare className="h-4 w-4 text-turbo" aria-hidden /> or text us
-                </a>
+                <PhoneOnly
+                  desktop={
+                    <CallLink location="home hero repair call" className="inline-flex min-h-[44px] items-center gap-1.5 text-base font-semibold underline-offset-4 hover:underline">
+                      <Phone className="h-4 w-4 text-turbo" aria-hidden /> or call {SITE.phone.display}
+                    </CallLink>
+                  }
+                >
+                  <a href={smsHref("Hi Chris, I need computer or phone help. Device and problem: ")} data-call-location="home hero repair text" className="inline-flex min-h-[44px] items-center gap-1.5 text-sm font-semibold text-muted-foreground underline-offset-4 hover:text-foreground hover:underline">
+                    <MessageSquare className="h-4 w-4 text-turbo" aria-hidden /> or text us
+                  </a>
+                </PhoneOnly>
               }
             />
             <HeroDoor
@@ -150,10 +159,12 @@ export default function Home() {
             <CallLink location="home hero founder" className="btn-chrome hidden shrink-0 items-center gap-2 !px-4 !py-2.5 !text-sm sm:inline-flex">
               <Phone className="h-4 w-4 text-turbo" aria-hidden /> {SITE.phone.display}
             </CallLink>
-            <a href={smsHref(HOME_TEXT)} data-call-location="home hero founder text" className="grid h-11 w-11 shrink-0 place-items-center rounded-xl ring-1 ring-white/15 sm:hidden">
-              <MessageSquare className="h-5 w-5 text-turbo" aria-hidden />
-              <span className="sr-only">Text {SITE.founder.name}</span>
-            </a>
+            <PhoneOnly>
+              <a href={smsHref(HOME_TEXT)} data-call-location="home hero founder text" className="grid h-11 w-11 shrink-0 place-items-center rounded-xl ring-1 ring-white/15 sm:hidden">
+                <MessageSquare className="h-5 w-5 text-turbo" aria-hidden />
+                <span className="sr-only">Text {SITE.founder.name}</span>
+              </a>
+            </PhoneOnly>
           </div>
           <ReviewCardStrip where="Home hero" className="mx-auto mt-3 max-w-6xl" />
         </div>
@@ -307,9 +318,17 @@ export default function Home() {
               <CallLink location="home final CTA" className="btn-ignite btn-shine inline-flex items-center justify-center gap-2">
                 <Phone className="h-4 w-4" aria-hidden /> Call {SITE.phone.display}
               </CallLink>
-              <a href={smsHref(HOME_TEXT)} data-call-location="home final CTA text" className="btn-chrome inline-flex items-center justify-center gap-2">
-                <MessageSquare className="h-4 w-4 text-turbo" aria-hidden /> Text us
-              </a>
+              <PhoneOnly
+                desktop={
+                  <InstallBookButton booking={IT_BOOKING} note="Home final CTA" title="Book a repair or setup" variant="chrome" className="inline-flex items-center justify-center gap-2">
+                    <CalendarCheck className="h-4 w-4 text-turbo" aria-hidden /> Book a time
+                  </InstallBookButton>
+                }
+              >
+                <a href={smsHref(HOME_TEXT)} data-call-location="home final CTA text" className="btn-chrome inline-flex items-center justify-center gap-2">
+                  <MessageSquare className="h-4 w-4 text-turbo" aria-hidden /> Text us
+                </a>
+              </PhoneOnly>
               <BookButton note="Home final CTA" variant="chrome" className="inline-flex items-center justify-center gap-2">
                 <Megaphone className="h-4 w-4" aria-hidden /> Websites &amp; ads call
               </BookButton>
@@ -405,9 +424,17 @@ function HomeBar() {
         <CallLink location="home sticky bar" className="btn-blue inline-flex flex-1 items-center justify-center gap-1.5 whitespace-nowrap !px-3 !py-3.5 !text-base">
           <Phone className="h-4 w-4 shrink-0" aria-hidden /> Call
         </CallLink>
-        <a href={smsHref(HOME_TEXT)} data-call-location="home sticky bar text" tabIndex={show ? undefined : -1} className="btn-chrome inline-flex flex-1 items-center justify-center gap-1.5 whitespace-nowrap !px-3 !py-3.5 !text-base">
-          <MessageSquare className="h-4 w-4 shrink-0" aria-hidden /> Text
-        </a>
+        <PhoneOnly
+          desktop={
+            <InstallBookButton booking={IT_BOOKING} note="Home sticky bar" title="Book a repair or setup" variant="chrome" className="inline-flex flex-1 items-center justify-center gap-1.5 whitespace-nowrap !px-3 !py-3.5 !text-base">
+              <CalendarCheck className="h-4 w-4 shrink-0" aria-hidden /> Book a time
+            </InstallBookButton>
+          }
+        >
+          <a href={smsHref(HOME_TEXT)} data-call-location="home sticky bar text" tabIndex={show ? undefined : -1} className="btn-chrome inline-flex flex-1 items-center justify-center gap-1.5 whitespace-nowrap !px-3 !py-3.5 !text-base">
+            <MessageSquare className="h-4 w-4 shrink-0" aria-hidden /> Text
+          </a>
+        </PhoneOnly>
       </div>
     </div>
   );

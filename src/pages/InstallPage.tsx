@@ -12,6 +12,8 @@ import { InstallCalEmbed } from "@/components/booking/InstallCalEmbed";
 import { INSTALL_BOOKING, SITE } from "@/config/site";
 import { INSTALL_PAGES, installPage } from "@/content/install-pages";
 import { usd } from "@/content/pricing";
+import { OFFICE_FROM, OfficePrices } from "@/components/blocks/OfficePrices";
+import { BeforeAfter, OFFICE_BEFORE_AFTER } from "@/components/visuals/BeforeAfter";
 import { OFFICE_SETUP_PATH } from "@/content/tech-pages";
 import { newEventId, serverTrack, track } from "@/lib/track";
 
@@ -44,7 +46,13 @@ export default function InstallPage({ path }: { path: string }) {
               <span className="text-chrome-grad">{page.h1[0]}</span> <span className="text-turbo-grad">{page.h1[1]}</span>
             </h1>
             <p className="mt-4 max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg">{page.lede}</p>
-            {page.prices.length > 0 && (
+            {business && (
+              <>
+                <BeforeAfter {...OFFICE_BEFORE_AFTER} label="business hero" priority className="mt-6" />
+                <p className="mt-2 text-sm text-muted-foreground">A real office desk we set up. <span className="font-semibold text-foreground">{OFFICE_FROM}.</span></p>
+              </>
+            )}
+            {!business && page.prices.length > 0 && (
               <div className="mt-5 flex flex-wrap gap-2 text-sm">
                 {page.prices.slice(0, 3).map((p) => (
                   <span key={p.id} className="rounded-full border border-border/80 bg-white/[0.03] px-3 py-1.5 text-muted-foreground">
@@ -64,7 +72,7 @@ export default function InstallPage({ path }: { path: string }) {
                 Call {SITE.phone.display}
               </CallLink>
             </div>
-            <FounderBadge className="mt-5 max-w-xl" line={business ? "I do the setup myself and text you a written price first. Call or text, you get me." : page.remote ? "I tune your PC myself, live with you. Call or text, you get me, not a call center." : "I come out and do the work myself. Call or text, you get me, not a call center."} />
+            <FounderBadge className="mt-5 max-w-xl" line={business ? "I do the setup myself and give you a written price first. Call and you get me." : page.remote ? "I tune your PC myself, live with you. Call and you get me, not a call center." : "I come out and do the work myself. Call and you get me, not a call center."} />
             {/* The review mentions phones: keep it off the business-only (Google Ads) page. */}
             {!business && <CustomerReview className="mt-3 max-w-xl" />}
             <ul className="mt-6 grid max-w-xl gap-x-4 gap-y-2 text-[15px] text-muted-foreground sm:grid-cols-2">
@@ -93,8 +101,10 @@ export default function InstallPage({ path }: { path: string }) {
 
       <section className="section border-t border-border" aria-labelledby="prices">
         <div className="container-x">
-          <SectionHeader title={<span id="prices">Prices</span>} lede={page.pricesLede ?? "Labor, per unit, so you can add it up yourself. Equipment is yours, or we buy it at cost and show you the receipt. You get the total before we start."} />
-          {page.prices.length > 0 && (
+          <SectionHeader title={<span id="prices">Prices</span>} lede={business ? "Three simple prices. Cameras, Wi-Fi and TV mounts are priced per item on your call." : page.pricesLede ?? "Labor, per unit, so you can add it up yourself. Equipment is yours, or we buy it at cost and show you the receipt. You get the total before we start."} />
+          {business ? (
+            <OfficePrices className="mt-10" />
+          ) : page.prices.length > 0 && (
             <ul className="panel mt-8 divide-y divide-border/60 px-5 sm:px-6">
               {page.prices.map((p) => (
                 <li key={p.id} className="flex items-start justify-between gap-4 py-4">

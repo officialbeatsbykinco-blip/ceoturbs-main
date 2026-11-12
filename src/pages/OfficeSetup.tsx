@@ -3,7 +3,7 @@
 // Google setup, TVs and menu screens. No repair wording here: those ads stay on setup and installation.
 // Conversions (Google Ads + UET): book_call from the Cal.com embed, click_to_call / click_to_text on phones.
 import { Link } from "react-router-dom";
-import { Cable, Calendar, Check, ClipboardCheck, FolderTree, Home, Layers, MapPin, MessageSquare, Monitor, Network, Printer, Tv, Wrench, type LucideIcon } from "lucide-react";
+import { Cable, Calendar, ClipboardCheck, FolderTree, Home, Layers, MapPin, MessageSquare, Monitor, Network, Printer, Tv, Wrench, type LucideIcon } from "lucide-react";
 import { CallLink } from "@/components/site/CallLink";
 import { InstallBookButton } from "@/components/cta/Actions";
 import { OfficeIntake } from "@/components/blocks/OfficeIntake";
@@ -12,7 +12,8 @@ import { BookOrText, useTexting } from "@/components/booking/BookOrText";
 import { FAQList, SectionHeader } from "@/components/blocks/Basics";
 import { OFFICE_FAQS } from "@/content/tech-faqs";
 import { BeforeAfter, OFFICE_BEFORE_AFTER } from "@/components/visuals/BeforeAfter";
-import { byId, itPrice, usd } from "@/content/pricing";
+import { OFFICE_FROM, OfficePrices } from "@/components/blocks/OfficePrices";
+import { FounderBadge } from "@/components/tech/FounderBadge";
 import { ServiceAreaList } from "@/components/blocks/ServiceAreaList";
 import { INSTALL_BOOKING, SITE } from "@/config/site";
 import { cn } from "@/lib/utils";
@@ -29,21 +30,9 @@ const WHAT: { icon: LucideIcon; title: string; body: string }[] = [
   { icon: Home, title: "Home offices", body: "Desk built, monitors up, computer and printer connected and cables hidden, usually in one visit." },
 ];
 
-const TIERS = [
-  { name: "Desk & computer setup", price: usd(byId("office-basic").price), note: "per desk", items: ["Computer and monitor connected", "Software and updates", "Printer and Wi-Fi connected"] },
-  { name: "Full workstation + cable management", price: usd(byId("office-complete").price), note: "per desk", items: ["Multi-monitor mounting", "Cables routed and hidden", "Desk assembly", "Network and printer setup"], popular: true },
-  { name: "Whole-office transformation", price: `from ${usd(byId("office-transform-basic").price)}`, note: "quoted in writing", items: ["Every workstation", "Network, Wi-Fi and cameras", "TVs and printers", "Cleanup and staff walkthrough"] },
-];
-
-const EXTRAS = [
-  ["TV wall mount", `${itPrice("it-tv-mount")}/TV`],
-  ["Printer & software setup", itPrice("it-printer")],
-  ["Mesh Wi-Fi install", itPrice("it-mesh")],
-  ["On-site IT by the hour", `${itPrice("it-business-hour")}/hr`],
-] as const;
 
 const STEPS = [
-  { icon: MessageSquare, title: "Tell us the space", body: "Call, text a photo or book a time. Number of desks and what you want done." },
+  { icon: MessageSquare, title: "Tell us the space", body: "Book a time or call. Tell us how many desks and what you want done." },
   { icon: ClipboardCheck, title: "Flat price in writing", body: "You get the price before we start. You buy the gear, or we buy it at cost with receipts." },
   { icon: Wrench, title: "We set it all up", body: "We build, mount, wire and test everything, walk you through it and leave it clean." },
 ];
@@ -84,12 +73,13 @@ export default function OfficeSetup() {
             <h1 id="hero" className="mt-4 text-[32px] font-bold leading-[1.05] sm:text-5xl md:text-[52px]">
               <span className="text-chrome-grad">Messy office?</span> <span className="text-turbo-grad">We set it up and make it work.</span>
             </h1>
-            <p className="mt-4 max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg">
-              Multi-monitor workstations, cable management, printers, Wi-Fi and Microsoft or Google set up and organized. Flat price in writing before we start.
+            <p className="mt-4 max-w-xl text-lg leading-relaxed text-muted-foreground">
+              Screens, cables, printers and Wi-Fi set up and working. <span className="font-semibold text-foreground">{OFFICE_FROM}.</span> Price in writing before we start.
             </p>
-            <BeforeAfter {...OFFICE_BEFORE_AFTER} label="office hero" className="mt-6" />
-            <p className="mt-2 text-xs text-muted-foreground">A real desk we set up. Drag to compare.</p>
+            <BeforeAfter {...OFFICE_BEFORE_AFTER} label="office hero" priority className="mt-6" />
+            <p className="mt-2 text-sm text-muted-foreground">A real desk we set up in Tampa.</p>
             <Ctas where="hero" className="mt-6" />
+            <FounderBadge className="mt-5 max-w-xl" line="I plan it with you and do the work myself. Call and you get me, not a call center." />
           </div>
           <BookOrText
             phone={<OfficeTextQuiz id="book" className="min-w-0" />}
@@ -115,33 +105,8 @@ export default function OfficeSetup() {
 
       <section className="section border-t border-border" aria-labelledby="prices">
         <div className="container-x">
-          <SectionHeader title={<span id="prices">Flat prices</span>} lede="Labor only, confirmed in writing before we start. Gear at cost if we buy it for you." />
-          <div className="mt-10 grid gap-4 lg:grid-cols-3">
-            {TIERS.map((t) => (
-              <div key={t.name} className={cn("panel flex flex-col p-6", t.popular && "ring-2 ring-turbo")}>
-                {t.popular && <span className="chip mb-3 self-start text-xs font-semibold text-turbo">Most booked</span>}
-                <h3 className="font-display text-lg font-bold">{t.name}</h3>
-                <p className="mt-2">
-                  <span className="font-display text-3xl font-bold">{t.price}</span> <span className="text-sm text-muted-foreground">{t.note}</span>
-                </p>
-                <ul className="mt-4 flex-1 space-y-2 text-sm text-muted-foreground">
-                  {t.items.map((i) => (
-                    <li key={i} className="flex gap-2">
-                      <Check className="mt-0.5 h-4 w-4 shrink-0 text-turbo" aria-hidden />
-                      {i}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </div>
-          <div className="mt-6 flex flex-wrap gap-2 text-xs">
-            {EXTRAS.map(([k, v]) => (
-              <span key={k} className="rounded-full border border-border/80 bg-white/[0.03] px-3 py-1.5 text-muted-foreground">
-                {k} <span className="font-semibold text-foreground">{v}</span>
-              </span>
-            ))}
-          </div>
+          <SectionHeader title={<span id="prices">Flat prices</span>} lede="Three simple prices. No surprises." />
+          <OfficePrices className="mt-12" />
           <Ctas where="prices" className="mt-8" />
         </div>
       </section>
@@ -194,7 +159,7 @@ export default function OfficeSetup() {
           <div className="panel relative overflow-hidden p-6 text-center sm:p-10">
             <div className="pointer-events-none absolute -top-32 left-1/2 h-72 w-[700px] -translate-x-1/2 glow-turbo" aria-hidden />
             <h2 id="final" className="h-section relative">Ready for an office that just works?</h2>
-            <p className="lede relative mx-auto">Call or text {SITE.phone.display}, or pick a time. Flat price in writing first.</p>
+            <p className="lede relative mx-auto">Pick a time or call {SITE.phone.display}. Price in writing first.</p>
             <Ctas where="final" className="relative mt-7 sm:justify-center" />
           </div>
         </div>

@@ -31,3 +31,11 @@ export function CalCard({ id = "fix", title, sub, note, booking, className }: { 
     </div>
   );
 }
+
+/**
+ * Text links only make sense on a phone. Computers get `desktop` instead (a Call link or a booking button),
+ * so no desktop visitor is ever left with an sms: link that opens nothing. Desktop is the SSR default.
+ */
+export function PhoneOnly({ children, desktop = null }: { children: ReactNode; desktop?: ReactNode }) {
+  return <BookOrText phone={children} desktop={desktop} />;
+}

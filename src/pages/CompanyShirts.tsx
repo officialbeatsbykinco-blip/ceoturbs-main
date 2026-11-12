@@ -8,6 +8,7 @@ import { SHIRT, SITE } from "@/config/site";
 import { CalendarCheck, MessageSquare, Phone } from "lucide-react";
 import { BookButton } from "@/components/cta/Actions";
 import { CallLink } from "@/components/site/CallLink";
+import { PhoneOnly } from "@/components/booking/BookOrText";
 import { smsHref } from "@/lib/sms";
 
 const toTop = () => window.scrollTo({ top: 0, behavior: "smooth" });
@@ -30,9 +31,11 @@ export default function CompanyShirts() {
               <CallLink location="shirts design for me" className="btn-ignite inline-flex items-center justify-center gap-2 whitespace-nowrap">
                 <Phone className="h-4 w-4" aria-hidden /> Call {SITE.phone.display}
               </CallLink>
-              <a href={smsHref("Hi Chris, I want company shirts with my logo. How many and colors: ")} data-call-location="shirts design for me text" className="btn-chrome inline-flex items-center justify-center gap-2 whitespace-nowrap">
-                <MessageSquare className="h-4 w-4 text-turbo" aria-hidden /> Text us
-              </a>
+              <PhoneOnly>
+                <a href={smsHref("Hi Chris, I want company shirts with my logo. How many and colors: ")} data-call-location="shirts design for me text" className="btn-chrome inline-flex items-center justify-center gap-2 whitespace-nowrap">
+                  <MessageSquare className="h-4 w-4 text-turbo" aria-hidden /> Text us
+                </a>
+              </PhoneOnly>
               <BookButton note="Shirts — design for me" variant="chrome" prefill="Company shirts: logo, quantity and colors" className="inline-flex items-center justify-center gap-2 whitespace-nowrap">
                 <CalendarCheck className="h-4 w-4" aria-hidden /> Book a call
               </BookButton>

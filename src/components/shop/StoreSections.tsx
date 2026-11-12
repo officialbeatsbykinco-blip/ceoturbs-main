@@ -4,6 +4,8 @@ import { SectionHeader } from "@/components/blocks/Basics";
 import { REVIEW_CARD, SITE, money2 } from "@/config/site";
 import { monthlyReviews, monthsToGoal, suggestPack } from "@/lib/review-goal";
 import { smsHref } from "@/lib/sms";
+import { PhoneOnly, useTexting } from "@/components/booking/BookOrText";
+import { CallLink } from "@/components/site/CallLink";
 import { cn } from "@/lib/utils";
 
 const TRUST = [
@@ -139,9 +141,17 @@ export function BulkBand() {
             <p className="lede">Franchises, salons with a chair per stylist, fleets and restaurants with a card per table: text how many and we will send you a price.</p>
           </div>
           <div className="grid gap-3">
-            <a href={smsHref(BULK_TEXT)} data-call-location="bulk band" className="btn-ignite btn-shine">
-              <MessageSquare className="h-4 w-4" aria-hidden /> Text us the number
-            </a>
+            <PhoneOnly
+              desktop={
+                <CallLink location="bulk band call" className="btn-ignite btn-shine">
+                  <Phone className="h-4 w-4" aria-hidden /> Call {SITE.phone.display}
+                </CallLink>
+              }
+            >
+              <a href={smsHref(BULK_TEXT)} data-call-location="bulk band" className="btn-ignite btn-shine">
+                <MessageSquare className="h-4 w-4" aria-hidden /> Text us the number
+              </a>
+            </PhoneOnly>
             <a href={`mailto:${SITE.email}?subject=${encodeURIComponent("Review cards for my team")}`} className="btn-chrome">
               <Mail className="h-4 w-4" aria-hidden /> Email us
             </a>
@@ -160,12 +170,15 @@ const CONTACT = [
 
 /** Three one-tap ways to reach a person. Calls and texts on a computer open the number and a scan code (PhoneHost). */
 export function ContactBand({ className }: { className?: string }) {
+  // Computers can't send a text, so they only see Call and Email.
+  const texting = useTexting();
+  const ways = CONTACT.filter((c) => texting || c.t !== "Text");
   return (
     <section className={cn("section border-t border-border", className)} aria-labelledby="contact">
       <div className="container-x">
         <SectionHeader center kicker="Talk to a person" title={<span id="contact">Questions? Come on, we'll answer.</span>} lede="Before you order or after it arrives. A real person replies." />
-        <ul className="mx-auto mt-8 grid max-w-3xl gap-3 sm:grid-cols-3">
-          {CONTACT.map((c) => (
+        <ul className={cn("mx-auto mt-8 grid max-w-3xl gap-3", ways.length === 3 ? "sm:grid-cols-3" : "sm:grid-cols-2")}>
+          {ways.map((c) => (
             <li key={c.t}>
               <a href={c.href} data-call-location={c.loc} className="panel flex min-h-[88px] flex-col items-center justify-center gap-1 p-4 text-center transition hover:ring-1 hover:ring-turbo/60">
                 <c.icon className="h-6 w-6 text-turbo" aria-hidden />

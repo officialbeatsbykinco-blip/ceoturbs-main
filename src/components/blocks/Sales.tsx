@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { ArrowRight, Check, Globe, Mail, MapPin, Megaphone, MessageSquare, Search, UserRound, Music2 } from "lucide-react";
 import { CallLink } from "@/components/site/CallLink";
 import { InlineBooking } from "@/components/booking/InlineBooking";
+import { PhoneOnly } from "@/components/booking/BookOrText";
 import { SERVICES, type Service } from "@/content/services";
 import { AUDIENCES } from "@/content/audiences";
 import { clientsIn } from "@/content/clients";
@@ -177,14 +178,16 @@ export function BookingSection({
             </ul>
             <div className="panel mt-8 p-5">
               <p className="font-semibold">Rather talk now?</p>
-              <p className="mt-1 text-sm text-muted-foreground">Call or text {SITE.phone.display}.</p>
+              <p className="mt-1 text-sm text-muted-foreground">Call {SITE.phone.display}. Or pick a time on the calendar.</p>
               <div className="mt-4 flex flex-wrap gap-2">
                 <CallLink location={`${note ?? "Booking section"} — call`} icon className="btn-ignite !px-4 !py-2.5 !text-sm">
                   Call now
                 </CallLink>
-                <a href={`sms:${SITE.phone.e164}`} onClick={() => track("text_click", { source: note ?? "Booking section" })} className="btn-chrome inline-flex items-center gap-1.5 !px-4 !py-2.5 !text-sm">
-                  <MessageSquare className="h-4 w-4" aria-hidden /> Text us
-                </a>
+                <PhoneOnly>
+                  <a href={`sms:${SITE.phone.e164}`} data-call-location={`${note ?? "Booking section"} — text`} onClick={() => track("text_click", { source: note ?? "Booking section" })} className="btn-chrome inline-flex items-center gap-1.5 !px-4 !py-2.5 !text-sm">
+                    <MessageSquare className="h-4 w-4" aria-hidden /> Text us
+                  </a>
+                </PhoneOnly>
               </div>
             </div>
           </div>

@@ -13,7 +13,8 @@ import { IT_SERVICES, PRICING_FAQS, byId, price } from "@/content/pricing";
 import { OFFICE_FAQS, REPAIR_FAQS } from "@/content/tech-faqs";
 import { INSTALL_PAGES } from "@/content/install-pages";
 
-const OFFICE_PRICES = ["office-basic", "office-home", "office-complete", "office-transform-basic", "office-transform-standard", "office-transform-complete"].map(byId);
+// The same three prices the office pages show (src/components/blocks/OfficePrices.tsx).
+const OFFICE_PRICES = ["office-basic", "office-complete", "office-transform-basic"].map(byId);
 import { RESTAURANT_FAQS, RESTAURANTS_PATH } from "@/content/restaurants";
 import { NICHES } from "@/content/niches";
 import * as S from "./schema";

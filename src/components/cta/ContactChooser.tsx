@@ -84,13 +84,15 @@ export function ContactHost() {
         </button>
       ))}
       <p className="mt-2 text-center text-sm font-semibold text-muted-foreground">Rather talk to a person?</p>
-      <div className="grid grid-cols-2 gap-2">
+      <div className="grid auto-cols-fr grid-flow-col gap-2">
         <CallLink location={`contact chooser (${source})`} className="btn-blue !py-3.5 !text-base">
           <Phone className="h-4 w-4" aria-hidden /> Call
         </CallLink>
-        <a href={smsHref(QUICK_TECH_TEXT)} data-call-location={`contact chooser text (${source})`} className="btn-chrome !py-3.5 !text-base">
-          <MessageSquare className="h-4 w-4" aria-hidden /> Text
-        </a>
+        {canText() && (
+          <a href={smsHref(QUICK_TECH_TEXT)} data-call-location={`contact chooser text (${source})`} className="btn-chrome !py-3.5 !text-base">
+            <MessageSquare className="h-4 w-4" aria-hidden /> Text
+          </a>
+        )}
       </div>
       <p className="text-center text-xs text-muted-foreground">
         {SITE.phone.display} · You talk to Chris, not a call center

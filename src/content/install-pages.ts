@@ -239,11 +239,11 @@ INSTALL_PAGES.push({
   includes: ["Every workstation set up and tested", "Monitors mounted and lined up", "Wi-Fi with a separate guest network", "Printers and shared files working for everyone", "Microsoft 365 or Google Workspace accounts", "Cables routed and labeled, desks clean"],
   steps: [
     { title: "Tell us about your office", body: "What you need and how many workstations. A few taps or a call." },
-    { title: "Flat price in writing", body: "You get the price by text before we come. No hourly surprises on a set job." },
+    { title: "Flat price in writing", body: "You get the price in writing before we come. No hourly surprises on a set job." },
     { title: "Ready on day one", body: "We set it up on-site, test it with your team, then you pay." },
   ],
   faqs: [
-    { q: "How much does office tech setup cost?", a: `${usd(station.price)} per workstation with computer, monitors, cables, network and printer. Computers alone are ${usd(setupBasic.price)} for the first and ${usd(ip("setup-extra").price)} for each extra on the same visit, monitor mounts are ${usd(ip("monitor-mount").price)} each and business Wi-Fi installs start at ${usd(wifiMesh.price)}. Anything else is ${usd(bizHour.price)} an hour. You get the total in writing first.` },
+    { q: "How much does office tech setup cost?", a: `${usd(setupBasic.price)} per desk to get a computer and screen hooked up, ${usd(station.price)} for a full workstation with screens mounted and cables hidden, and whole offices from ${usd(byId(SETUP, "office-transform-basic").price)}. Wi-Fi, cameras and TV mounts are priced per item on your call. You get the total in writing first.` },
     { q: "What kinds of businesses do you work with?", a: "Offices, shops, restaurants, clinics, salons, gyms and contractors around Tampa Bay, from one desk to a whole office move-in." },
     { q: "Can you set up a new office before we move in?", a: "Yes. Workstations, Wi-Fi, printers, accounts and cables done before your first day, so your team sits down and works." },
     { q: "Do you install cameras and doorbells for storefronts?", a: "Yes, video doorbells and Wi-Fi cameras that mount at the door, counter and inside the shop, set up on the owner's phone. No roofline or wired systems." },

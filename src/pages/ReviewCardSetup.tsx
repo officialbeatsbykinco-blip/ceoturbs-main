@@ -1,10 +1,12 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { Link } from "react-router-dom";
-import { ArrowLeft, ArrowRight, Check, Copy, Laptop, Loader2, MessageSquare, MessageSquareQuote, PackageCheck, Play, Smartphone, Wand2, X } from "lucide-react";
+import { ArrowLeft, ArrowRight, Check, Copy, Laptop, Loader2, MessageSquare, MessageSquareQuote, PackageCheck, Phone, Play, Smartphone, Wand2, X } from "lucide-react";
 import { Breadcrumbs, FAQList } from "@/components/blocks/Basics";
 import { CardUpsell } from "@/components/blocks/CardUpsell";
 import { QrCode, ReviewLinkTool } from "@/components/shop/ReviewLinkTool";
-import { NFC_APP } from "@/config/site";
+import { NFC_APP, SITE } from "@/config/site";
+import { PhoneOnly } from "@/components/booking/BookOrText";
+import { CallLink } from "@/components/site/CallLink";
 import { RULES, SETUP_FAQS, SETUP_PATH, SHOP_PATH } from "@/content/review-cards";
 import { CARD_TEXT, smsHref } from "@/lib/sms";
 import { track } from "@/lib/track";
@@ -179,13 +181,21 @@ export default function ReviewCardSetup() {
         <div className="container-x">
           <div className="cta-glow grid gap-6 rounded-3xl p-7 sm:p-10 lg:grid-cols-[1.4fr_auto] lg:items-center">
             <div>
-              <h2 className="h-section">Stuck? Text us.</h2>
+              <h2 className="h-section">Stuck? We'll help.</h2>
               <p className="lede">Send your business name and we'll get your card working.</p>
             </div>
             <div className="flex flex-col gap-3">
-              <a href={smsHref(CARD_TEXT)} data-call-location="setup guide help" className="btn-ignite">
-                <MessageSquare className="h-4 w-4" aria-hidden /> Text us for help
-              </a>
+              <PhoneOnly
+                desktop={
+                  <CallLink location="setup guide help call" className="btn-ignite">
+                    <Phone className="h-4 w-4" aria-hidden /> Call {SITE.phone.display}
+                  </CallLink>
+                }
+              >
+                <a href={smsHref(CARD_TEXT)} data-call-location="setup guide help" className="btn-ignite">
+                  <MessageSquare className="h-4 w-4" aria-hidden /> Text us for help
+                </a>
+              </PhoneOnly>
               <Link to={SHOP_PATH} className="btn-chrome">
                 Order more cards
               </Link>
@@ -259,9 +269,17 @@ function NoProfile() {
   return (
     <p className="mt-4 text-sm text-muted-foreground">
       Can't find it, or no Google profile yet?{" "}
-      <a href={smsHref(CARD_TEXT)} data-call-location="setup no profile" className="font-semibold text-turbo underline-offset-2 hover:underline">
-        Text us your business name
-      </a>{" "}
+      <PhoneOnly
+        desktop={
+          <CallLink location="setup no profile call" className="font-semibold text-turbo underline-offset-2 hover:underline">
+            Call {SITE.phone.display}
+          </CallLink>
+        }
+      >
+        <a href={smsHref(CARD_TEXT)} data-call-location="setup no profile" className="font-semibold text-turbo underline-offset-2 hover:underline">
+          Text us your business name
+        </a>
+      </PhoneOnly>{" "}
       and we'll help.
     </p>
   );

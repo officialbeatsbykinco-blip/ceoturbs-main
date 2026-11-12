@@ -1,8 +1,10 @@
 // Bottom-right "Book a free call" button on tablets and desktops (phones have the sticky action bar). It opens
 // the same tracked Cal.com inline calendar dialog as every other booking button.
 import { useLocation } from "react-router-dom";
-import { CalendarDays, MessageSquare } from "lucide-react";
-import { BookButton, InstallBookButton, TextQuoteButton } from "@/components/cta/Actions";
+import { CalendarDays, Phone } from "lucide-react";
+import { BookButton, InstallBookButton } from "@/components/cta/Actions";
+import { CallLink } from "@/components/site/CallLink";
+import { SITE } from "@/config/site";
 import { isInstallPath } from "@/content/services";
 import { techBooking } from "@/content/tech-pages";
 import { SETUP_PATH, SHOP_PATH } from "@/content/review-cards";
@@ -28,13 +30,10 @@ export function FloatingBookButton() {
   if (isInstallPath(pathname))
     return (
       <div className="fixed bottom-6 right-6 z-40 hidden items-center gap-2 sm:flex">
-        <TextQuoteButton
-          service={pathname.split("/").pop()?.replace(/-/g, " ") || "setup"}
-          className="!rounded-full !px-4 !py-3 !text-sm shadow-xl flex items-center gap-1.5"
-        >
-          <MessageSquare className="h-4 w-4 text-turbo" aria-hidden />
-          Text Us
-        </TextQuoteButton>
+        <CallLink location="floating install call" className="btn-chrome !rounded-full !px-4 !py-3 !text-sm shadow-xl flex items-center gap-1.5">
+          <Phone className="h-4 w-4 text-turbo" aria-hidden />
+          {SITE.phone.display}
+        </CallLink>
         <InstallBookButton variant="ignite" note="Floating install button" className="!rounded-full !px-5 !py-3 !text-sm shadow-xl flex items-center gap-2">
           <CalendarDays className="h-4 w-4" aria-hidden />
           Book Online

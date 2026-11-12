@@ -117,7 +117,7 @@
 
   /* The action button — orange is reserved for this. */
   .btn-ignite {
-    @apply relative inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-xl px-4 py-3 text-[15px] font-semibold transition-transform duration-150 active:scale-[0.98] sm:px-6 sm:py-3.5;
+    @apply relative inline-flex items-center justify-center gap-2 whitespace-nowrap min-h-[48px] rounded-xl px-4 py-3 text-base font-bold transition-transform duration-150 active:scale-[0.98] sm:min-h-[52px] sm:px-6 sm:py-3.5 sm:text-[17px];
     /* near-black on orange: ~7:1 contrast (white on this orange is only ~3:1) */
     color: #140700;
     background: linear-gradient(180deg, hsl(var(--ignite-hot)), hsl(var(--ignite)));
@@ -132,7 +132,7 @@
   }
 
   .btn-chrome {
-    @apply inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-xl px-4 py-3 text-[15px] font-semibold text-foreground transition-colors sm:px-5 sm:py-3.5;
+    @apply inline-flex items-center justify-center gap-2 whitespace-nowrap min-h-[48px] rounded-xl px-4 py-3 text-base font-semibold text-foreground transition-colors sm:min-h-[52px] sm:px-5 sm:py-3.5 sm:text-[17px];
     background: linear-gradient(180deg, hsl(218 25% 14%), hsl(218 28% 9%));
     box-shadow: inset 0 1px 0 hsl(0 0% 100% / 0.08), 0 0 0 1px hsl(var(--border));
   }
@@ -142,7 +142,7 @@
 
   /* Solid blue: the Call button. White on this deep blue is ~7:1. */
   .btn-blue {
-    @apply inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-xl px-4 py-3 text-[15px] font-semibold text-white transition-[filter,transform] duration-150 active:scale-[0.98] sm:px-5 sm:py-3.5;
+    @apply inline-flex items-center justify-center gap-2 whitespace-nowrap min-h-[48px] rounded-xl px-4 py-3 text-base font-bold text-white transition-[filter,transform] duration-150 active:scale-[0.98] sm:min-h-[52px] sm:px-5 sm:py-3.5 sm:text-[17px];
     background: linear-gradient(180deg, hsl(208 90% 45%), hsl(208 100% 36%));
     box-shadow: inset 0 1px 0 hsl(0 0% 100% / 0.25), 0 8px 22px -10px hsl(208 100% 36% / 0.7);
   }

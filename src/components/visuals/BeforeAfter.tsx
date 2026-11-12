@@ -7,14 +7,14 @@ import { cn } from "@/lib/utils";
 
 type Img = { src: string; srcSet?: string; alt: string };
 
-export function BeforeAfter({ before, after, width, height, className, label = "before-after" }: { before: Img; after: Img; width: number; height: number; className?: string; label?: string }) {
+export function BeforeAfter({ before, after, width, height, className, label = "before-after", priority = false }: { before: Img; after: Img; width: number; height: number; className?: string; label?: string; /** Above the fold: load right away. */ priority?: boolean }) {
   const [pos, setPos] = useState(50);
   const [moved, setMoved] = useState(false);
   const sizes = "(min-width: 1024px) 600px, 100vw";
 
   return (
     <div className={cn("relative select-none overflow-hidden rounded-2xl ring-1 ring-white/10", className)} style={{ aspectRatio: `${width} / ${height}` }}>
-      <img src={after.src} srcSet={after.srcSet} sizes={sizes} alt={after.alt} width={width} height={height} loading="lazy" decoding="async" className="absolute inset-0 h-full w-full object-cover" />
+      <img src={after.src} srcSet={after.srcSet} sizes={sizes} alt={after.alt} width={width} height={height} loading={priority ? "eager" : "lazy"} {...(priority ? ({ fetchpriority: "high" } as Record<string, string>) : {})} decoding="async" className="absolute inset-0 h-full w-full object-cover" />
       <img
         src={before.src}
         srcSet={before.srcSet}
@@ -22,18 +22,23 @@ export function BeforeAfter({ before, after, width, height, className, label = "
         alt={before.alt}
         width={width}
         height={height}
-        loading="lazy"
+        loading={priority ? "eager" : "lazy"}
         decoding="async"
         className="absolute inset-0 h-full w-full object-cover"
         style={{ clipPath: `inset(0 ${100 - pos}% 0 0)` }}
       />
-      <span className="pointer-events-none absolute left-3 top-3 rounded-full bg-black/70 px-3 py-1 text-xs font-bold uppercase tracking-wide text-white">Before</span>
-      <span className="pointer-events-none absolute right-3 top-3 rounded-full bg-turbo px-3 py-1 text-xs font-bold uppercase tracking-wide text-black">After</span>
+      <span className="pointer-events-none absolute left-3 top-3 rounded-full bg-black/70 px-3.5 py-1.5 text-sm font-bold uppercase tracking-wide text-white">Before</span>
+      <span className="pointer-events-none absolute right-3 top-3 rounded-full bg-turbo px-3.5 py-1.5 text-sm font-bold uppercase tracking-wide text-black">After</span>
       <div className="pointer-events-none absolute inset-y-0 w-0.5 bg-white shadow-[0_0_12px_rgba(0,0,0,0.6)]" style={{ left: `${pos}%` }} aria-hidden>
-        <span className="absolute left-1/2 top-1/2 grid h-10 w-10 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full bg-white text-black shadow-lg">
+        <span className="absolute left-1/2 top-1/2 grid h-12 w-12 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full bg-white text-black shadow-lg ring-2 ring-turbo">
           <MoveHorizontal className="h-5 w-5" />
         </span>
       </div>
+      {!moved && (
+        <span className="pointer-events-none absolute bottom-3 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-black/75 px-4 py-1.5 text-sm font-semibold text-white">
+          ← Slide to see the after →
+        </span>
+      )}
       <input
         type="range"
         min={0}

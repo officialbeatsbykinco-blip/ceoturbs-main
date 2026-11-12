@@ -182,9 +182,18 @@ export default function ComputerRepair() {
                 <p className="text-sm text-muted-foreground">Slow Windows computer? We clean it up and speed it up over the internet while you watch, from {itPrice("it-remote")}.</p>
               </div>
             </div>
-            <a href={smsHref("Hi Chris, I'd like a remote speed-up for my Windows computer. ")} data-call-location="computer repair remote sms" className="btn-ignite inline-flex items-center justify-center gap-2">
-              <MessageSquare className="h-4 w-4" aria-hidden /> Text for remote help
-            </a>
+            <BookOrText
+              phone={
+                <a href={smsHref("Hi Chris, I'd like a remote speed-up for my Windows computer. ")} data-call-location="computer repair remote sms" className="btn-ignite inline-flex items-center justify-center gap-2">
+                  <MessageSquare className="h-4 w-4" aria-hidden /> Text for remote help
+                </a>
+              }
+              desktop={
+                <InstallBookButton note="computer-repair-remote" booking={IT_BOOKING} title="Book a remote speed-up" variant="ignite" className="inline-flex items-center justify-center gap-2">
+                  <Calendar className="h-4 w-4" aria-hidden /> Book remote help
+                </InstallBookButton>
+              }
+            />
           </div>
         </div>
       </section>

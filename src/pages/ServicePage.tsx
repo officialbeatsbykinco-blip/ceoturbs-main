@@ -1,6 +1,8 @@
 import { Breadcrumbs, DirectAnswer, FAQList, SectionHeader } from "@/components/blocks/Basics";
 import { OfficeIntake } from "@/components/blocks/OfficeIntake";
 import { PriceBox } from "@/components/blocks/PriceBlocks";
+import { OFFICE_FROM, OFFICE_TIERS, OfficePrices } from "@/components/blocks/OfficePrices";
+import { BeforeAfter, OFFICE_BEFORE_AFTER } from "@/components/visuals/BeforeAfter";
 import { AdGallery, AdResultsGrid, GoogleAdProof, WorkGrid } from "@/components/blocks/Proof";
 import { Reveal } from "@/components/blocks/Reveal";
 import { BookingSection, ReviewCardPromo, ReviewCardStrip, ServiceGrid } from "@/components/blocks/Sales";
@@ -22,6 +24,8 @@ import type { ComponentProps } from "react";
 import { cn } from "@/lib/utils";
 import NotFound from "./NotFound";
 
+const OFFICE_SLUGS = ["home-office-setup", "apartment-home-office-setup", "office-transformation"];
+
 export default function ServicePage() {
   const { slug = "" } = useParams();
   // Phones get the tap-question text quiz, never a Cal.com calendar; computers keep the calendar.
@@ -34,6 +38,8 @@ export default function ServicePage() {
   const isAds = ["meta-ads", "google-ads", "tiktok-ads", "x-ads"].includes(s.slug);
   const isHomeOffice = CALL_FIRST_SLUGS.includes(s.slug);
   const isOfficeTransform = s.slug === "office-transformation";
+  // Office pages share the one office price list and the before/after desk photo.
+  const isOffice = OFFICE_SLUGS.includes(s.slug);
   const showCal = isHomeOffice;
   const calLink = (loc: string, cls: string) => (
     <SetupBookButton texting={texting} note={`${s.slug}-${loc}`} className={cls}>
@@ -59,10 +65,16 @@ export default function ServicePage() {
             <div className="hero-rise">
               <p className="chip">{s.outcome}</p>
               <h1 className="mt-5 text-4xl font-bold leading-[1.02] sm:text-6xl">{s.h1}</h1>
+              {isOffice && (
+                <>
+                  <BeforeAfter {...OFFICE_BEFORE_AFTER} label={`${s.slug} hero`} priority className="mt-6" />
+                  <p className="mt-2 text-sm text-muted-foreground">A real desk we set up in Tampa. <span className="font-semibold text-foreground">{OFFICE_FROM}.</span></p>
+                </>
+              )}
               <div className="mt-8 space-y-3">
                 {isHomeOffice || isOfficeTransform ? (
                   <>
-                    {/* DESKTOP (sm+): Primary = Book Online (ignite), Secondary = Call (chrome), Tertiary = Text Quote (chrome) */}
+                    {/* DESKTOP (sm+): Book online (calendar) + Call. Computers never get a text button. */}
                     <div className="hidden sm:flex sm:flex-wrap sm:items-center sm:gap-3">
                       {showCal && (
                         <SetupBookButton texting={texting}
@@ -82,14 +94,6 @@ export default function ServicePage() {
                         <Phone className="h-4 w-4 shrink-0 text-turbo" aria-hidden />
                         <span>Call {SITE.phone.display}</span>
                       </a>
-                      <TextQuoteButton
-                        service={s.short}
-                        smsText={smsQuoteBody}
-                        className="flex items-center justify-center gap-2"
-                      >
-                        <MessageSquare className="h-4 w-4 shrink-0 text-turbo" aria-hidden />
-                        <span>Text for quote</span>
-                      </TextQuoteButton>
                     </div>
 
                     {/* MOBILE (<sm): Primary = Call (ignite), Grid = Text quote + Book online */}
@@ -102,15 +106,17 @@ export default function ServicePage() {
                         <Phone className="h-4 w-4 shrink-0" aria-hidden />
                         <span>Call {SITE.phone.display}</span>
                       </a>
-                      <div className="grid grid-cols-2 gap-2">
-                        <TextQuoteButton
-                          service={s.short}
-                          smsText={smsQuoteBody}
-                          className="flex w-full items-center justify-center gap-1.5 !px-3"
-                        >
-                          <MessageSquare className="h-4 w-4 shrink-0 text-turbo" aria-hidden />
-                          <span>Text quote</span>
-                        </TextQuoteButton>
+                      <div className="grid auto-cols-fr grid-flow-col gap-2">
+                        {texting && (
+                          <TextQuoteButton
+                            service={s.short}
+                            smsText={smsQuoteBody}
+                            className="flex w-full items-center justify-center gap-1.5 !px-3"
+                          >
+                            <MessageSquare className="h-4 w-4 shrink-0 text-turbo" aria-hidden />
+                            <span>Text quote</span>
+                          </TextQuoteButton>
+                        )}
                         {showCal && (
                           <SetupBookButton texting={texting}
                             note={`${s.slug}-hero`}
@@ -126,15 +132,19 @@ export default function ServicePage() {
 
                     {/* SUB-ACTIONS: Clean text links */}
                     <div className="flex flex-wrap items-center gap-x-4 text-sm text-muted-foreground">
-                      <a
-                        href={`sms:${SITE.phone.e164}?&body=${encodeURIComponent(smsQuoteBody)}`}
-                        data-call-location={`${s.slug}-hero-text`}
-                        className="inline-flex min-h-10 items-center gap-1.5 transition hover:text-turbo"
-                      >
-                        <MessageSquare className="h-3.5 w-3.5 text-turbo" aria-hidden />
-                        <span>Text for a quote</span>
-                      </a>
-                      <span className="text-border" aria-hidden>•</span>
+                      {texting && (
+                        <>
+                          <a
+                            href={`sms:${SITE.phone.e164}?&body=${encodeURIComponent(smsQuoteBody)}`}
+                            data-call-location={`${s.slug}-hero-text`}
+                            className="inline-flex min-h-10 items-center gap-1.5 transition hover:text-turbo"
+                          >
+                            <MessageSquare className="h-3.5 w-3.5 text-turbo" aria-hidden />
+                            <span>Text for a quote</span>
+                          </a>
+                          <span className="text-border" aria-hidden>•</span>
+                        </>
+                      )}
                       <a href="#included" className="inline-flex min-h-10 items-center transition hover:text-foreground">
                         What's included
                       </a>
@@ -228,11 +238,11 @@ export default function ServicePage() {
               </li>
             ))}
           </ol>
-          <div className="mt-14 grid items-start gap-8 lg:grid-cols-[1fr_1.1fr]">
+          <div className={cn("mt-14 grid items-start gap-8", !isOffice && "lg:grid-cols-[1fr_1.1fr]")}>
             <div>
               <h2 className="text-2xl font-bold sm:text-3xl">How much does {s.short} cost?</h2>
               <p className="mt-3 max-w-xl leading-relaxed text-muted-foreground">
-                {prices.length ? `${prices.map((p) => `${p.name}: ${priceLabel(p)}`).join(". ")}.` : "Priced by scope."} Need more than one piece? A package covers it for less — pay once for setup, and monthly only where the work keeps paying off.{isAds ? " Ad spend is paid directly to the platform from your own ad account, never marked up." : ""}
+                {isOffice ? `${OFFICE_TIERS.map((t) => `${t.name}: ${t.price} ${t.note}`).join(". ")}.` : prices.length ? `${prices.map((p) => `${p.name}: ${priceLabel(p)}`).join(". ")}.` : "Priced by scope."}{isHomeOffice || isOfficeTransform ? " One flat price, in writing, before we start. Pay when the job is done." : " Need more than one piece? A package covers it for less — pay once for setup, and monthly only where the work keeps paying off."}{isAds ? " Ad spend is paid directly to the platform from your own ad account, never marked up." : ""}
               </p>
               {isHomeOffice || isOfficeTransform ? (
                 <div className="mt-6 flex flex-col gap-3">
@@ -252,14 +262,6 @@ export default function ServicePage() {
                       <Phone className="h-4 w-4 shrink-0 text-turbo" aria-hidden />
                       Call for a flat quote
                     </a>
-                    <TextQuoteButton
-                      service={s.short}
-                      smsText={smsQuoteBody}
-                      className="inline-flex items-center justify-center gap-2"
-                    >
-                      <MessageSquare className="h-4 w-4 shrink-0 text-turbo" aria-hidden />
-                      Text for quote
-                    </TextQuoteButton>
                   </div>
 
                   {/* Mobile pricing CTAs */}
@@ -272,15 +274,17 @@ export default function ServicePage() {
                       <Phone className="h-4 w-4 shrink-0" aria-hidden />
                       Call for a flat quote
                     </a>
-                    <div className="grid grid-cols-2 gap-2">
-                      <TextQuoteButton
-                        service={s.short}
-                        smsText={smsQuoteBody}
-                        className="w-full inline-flex items-center justify-center gap-1.5 !px-3"
-                      >
-                        <MessageSquare className="h-4 w-4 shrink-0 text-turbo" aria-hidden />
-                        Text quote
-                      </TextQuoteButton>
+                    <div className="grid auto-cols-fr grid-flow-col gap-2">
+                      {texting && (
+                        <TextQuoteButton
+                          service={s.short}
+                          smsText={smsQuoteBody}
+                          className="w-full inline-flex items-center justify-center gap-1.5 !px-3"
+                        >
+                          <MessageSquare className="h-4 w-4 shrink-0 text-turbo" aria-hidden />
+                          Text quote
+                        </TextQuoteButton>
+                      )}
                       {showCal && (
                         <SetupBookButton texting={texting} note={`${s.slug}-pricing`} variant="chrome" className="w-full inline-flex items-center justify-center gap-1.5 !px-3">
                           <Calendar className="h-4 w-4 shrink-0" aria-hidden />
@@ -296,8 +300,9 @@ export default function ServicePage() {
                 </BookButton>
               )}
             </div>
-            <PriceBox items={prices} />
+            {!isOffice && <PriceBox items={prices} />}
           </div>
+          {isOffice && <OfficePrices className="mt-12" />}
         </div>
       </section>
 
@@ -331,7 +336,7 @@ export default function ServicePage() {
       {isHomeOffice && (
         <section className="section border-t border-border" aria-labelledby="areas">
           <div className="container-x">
-            <SectionHeader title={<span id="areas">Areas We Serve</span>} lede="We come to you anywhere within about 40 miles of Tampa. Remote speed-ups for slow Windows computers work anywhere." />
+            <SectionHeader title={<span id="areas">Areas We Serve</span>} lede="We come to you anywhere within about 40 miles of Tampa." />
             <div className="mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
               {SETUP_AREAS.map((r, i) => (
                 <Reveal key={r.region} delay={i * 70}>
@@ -375,8 +380,8 @@ export default function ServicePage() {
             </h2>
             <p className="mx-auto mt-3 max-w-xl text-muted-foreground">
               {isOfficeTransform
-                ? "Call or text for a free consultation and quote. We'll assess your space, discuss your needs, and give you a transparent one-time price."
-                : "Call or text and we'll confirm your price and a time that works. Seniors and accessibility needs welcome."}
+                ? "Book a time or call for a free quote. We look at your space and give you one flat price before we start."
+                : "Book a time or call and we'll confirm your price. Seniors and accessibility needs welcome."}
             </p>
 
             {/* Desktop buttons */}
@@ -395,14 +400,6 @@ export default function ServicePage() {
                 <Phone className="h-4 w-4 shrink-0 text-turbo" aria-hidden />
                 Call {SITE.phone.display}
               </a>
-              <TextQuoteButton
-                service={s.short}
-                smsText={smsQuoteBody}
-                className="inline-flex items-center gap-2"
-              >
-                <MessageSquare className="h-4 w-4 shrink-0 text-turbo" aria-hidden />
-                Text for quote
-              </TextQuoteButton>
             </div>
 
             {/* Mobile buttons */}
@@ -415,15 +412,17 @@ export default function ServicePage() {
                 <Phone className="h-4 w-4 shrink-0" aria-hidden />
                 Call {SITE.phone.display}
               </a>
-              <div className="grid grid-cols-2 gap-2">
-                <TextQuoteButton
-                  service={s.short}
-                  smsText={smsQuoteBody}
-                  className="w-full inline-flex items-center justify-center gap-1.5 !px-3"
-                >
-                  <MessageSquare className="h-4 w-4 shrink-0 text-turbo" aria-hidden />
-                  Text quote
-                </TextQuoteButton>
+              <div className="grid auto-cols-fr grid-flow-col gap-2">
+                {texting && (
+                  <TextQuoteButton
+                    service={s.short}
+                    smsText={smsQuoteBody}
+                    className="w-full inline-flex items-center justify-center gap-1.5 !px-3"
+                  >
+                    <MessageSquare className="h-4 w-4 shrink-0 text-turbo" aria-hidden />
+                    Text quote
+                  </TextQuoteButton>
+                )}
                 {showCal && (
                   <SetupBookButton texting={texting} note={`${s.slug}-footer`} variant="chrome" className="w-full inline-flex items-center justify-center gap-1.5 !px-3">
                     <Calendar className="h-4 w-4 shrink-0" aria-hidden />
