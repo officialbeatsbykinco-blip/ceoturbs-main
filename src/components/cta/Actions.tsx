@@ -4,6 +4,9 @@ import { InstallCalModal } from "@/components/booking/InstallCalModal";
 import { BOOKING, INSTALL_BOOKING, SITE, fromPriceLabel, type CalEvent } from "@/config/site";
 import { SHOP_PATH } from "@/content/review-cards";
 import { openBooking } from "@/lib/cal";
+import { useTexting } from "@/components/booking/BookOrText";
+import { openTechQuiz } from "@/lib/tech-quiz-open";
+import { QUICK_TEXT, QUICK_TECH_TEXT, smsHref } from "@/lib/sms";
 import { track, serverTrack } from "@/lib/track";
 import { cn } from "@/lib/utils";
 
@@ -43,8 +46,10 @@ export function BookButton({
     e.preventDefault();
     void openBooking(note, prefill);
   };
+  // On a phone openBooking opens the text quiz; the href is the no-JS fallback, so it opens Messages there.
+  const texting = useTexting();
   return (
-    <a href={BOOKING.url} onClick={onClick} className={cn(variantClass[variant], className)} rel="noopener">
+    <a href={texting ? smsHref(QUICK_TEXT) : BOOKING.url} onClick={onClick} className={cn(variantClass[variant], className)} rel="noopener">
       {children}
     </a>
   );
@@ -76,10 +81,13 @@ export function InstallBookButton({
   title?: string;
 }) {
   const [modalOpen, setModalOpen] = useState(false);
+  const texting = useTexting();
 
   const onClick = (e: MouseEvent<HTMLAnchorElement>) => {
     if (e.metaKey || e.ctrlKey || e.shiftKey) return;
     e.preventDefault();
+    // Phones get the tap-question tech quiz (texted to us), never the calendar.
+    if (openTechQuiz(note ?? "install-button")) return;
     const id = track("booking_open", { source: note ?? "install-button", content_name: title ?? "Book install" });
     serverTrack("booking_open", id, { contentName: title ?? "Book install" });
     setModalOpen(true);
@@ -88,7 +96,7 @@ export function InstallBookButton({
   return (
     <>
       <a
-        href={booking.url}
+        href={texting ? smsHref(QUICK_TECH_TEXT) : booking.url}
         onClick={onClick}
         className={cn(variantClass[variant], className)}
         rel="noopener"

@@ -5,6 +5,8 @@ import { BookButton } from "@/components/cta/Actions";
 import { CallLink } from "@/components/site/CallLink";
 import { GoogleAdProof } from "@/components/blocks/Proof";
 import { InlineBooking } from "@/components/booking/InlineBooking";
+import { BookOrText } from "@/components/booking/BookOrText";
+import { TextQuiz } from "@/components/quiz/TextQuiz";
 import { FAQList, SectionHeader } from "@/components/blocks/Basics";
 import { LOCAL_GOOGLE_ADS_FAQS } from "@/content/faqs";
 import { price } from "@/content/pricing";
@@ -78,7 +80,7 @@ export default function GoogleAdsLocal() {
       <section id="book" className="section scroll-mt-16 border-t border-border" aria-labelledby="pick">
         <div className="container-x max-w-3xl">
           <SectionHeader title={<span id="pick">Pick a time for your free call</span>} lede={`30 minutes with ${SITE.founder.name}. Or call ${SITE.phone.display} now.`} />
-          <InlineBooking source={`${SOURCE} — calendar`} className="mt-8" />
+          <BookOrText phone={<TextQuiz source={`${SOURCE} — quiz`} variant="inline" className="mt-8" />} desktop={<InlineBooking source={`${SOURCE} — calendar`} className="mt-8" />} />
         </div>
       </section>
 

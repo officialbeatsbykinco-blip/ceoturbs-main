@@ -2,9 +2,9 @@
 // they leave a mobile number instead and get the calendar. Answers reach the sheet either way.
 import { useEffect, useId, useRef, useState, type FormEvent, type MouseEvent } from "react";
 import { Link } from "react-router-dom";
-import { ArrowLeft, ArrowRight, CalendarCheck, Check, Loader2, MessageSquare } from "lucide-react";
+import { ArrowLeft, ArrowRight, Check, Loader2, MessageSquare } from "lucide-react";
 import { InlineBooking } from "@/components/booking/InlineBooking";
-import { BookButton } from "@/components/cta/Actions";
+import { SITE } from "@/config/site";
 import { CallLink } from "@/components/site/CallLink";
 import { CALL_MULTIPLIER, EMPTY_ANSWERS, TIMELINES, goalsFor, labelOf, leadValue, textMessage, type Answers, type Audience } from "@/content/quiz";
 import { sendLead } from "@/lib/lead-outbox";
@@ -188,9 +188,9 @@ export function TextQuiz({ source, audience, variant = "inline", className }: { 
             <AudienceTiles selected={answers.audience} onPick={(a) => go("goal", { audience: a, stage: "grow", goal: undefined })} />
             {variant === "sheet" && (
               <p className="mt-3 text-center text-sm">
-                <BookButton note={`${source} — text quiz`} variant="link">
-                  <CalendarCheck className="h-4 w-4" aria-hidden /> Rather pick a time?
-                </BookButton>
+                <CallLink location="text quiz sheet" className="inline-flex min-h-[44px] items-center font-semibold text-turbo underline underline-offset-2">
+                  Rather call? {SITE.phone.display}
+                </CallLink>
               </p>
             )}
           </>
@@ -291,9 +291,6 @@ export function TextQuiz({ source, audience, variant = "inline", className }: { 
               <CallLink location="text quiz" className="inline-flex min-h-[44px] items-center font-semibold text-foreground underline underline-offset-2">
                 Call us
               </CallLink>
-              <BookButton note={`${source} — text quiz`} prefill={message} variant="link">
-                <CalendarCheck className="h-4 w-4" aria-hidden /> Pick a time
-              </BookButton>
             </div>
             <Back onClick={() => go("timeline")} />
           </form>

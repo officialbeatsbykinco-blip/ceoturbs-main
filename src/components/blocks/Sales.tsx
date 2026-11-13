@@ -4,7 +4,8 @@ import { Link } from "react-router-dom";
 import { ArrowRight, Check, Globe, Mail, MapPin, Megaphone, MessageSquare, Search, UserRound, Music2 } from "lucide-react";
 import { CallLink } from "@/components/site/CallLink";
 import { InlineBooking } from "@/components/booking/InlineBooking";
-import { PhoneOnly } from "@/components/booking/BookOrText";
+import { BookOrText, PhoneOnly, useTexting } from "@/components/booking/BookOrText";
+import { TextQuiz } from "@/components/quiz/TextQuiz";
 import { SERVICES, type Service } from "@/content/services";
 import { AUDIENCES } from "@/content/audiences";
 import { clientsIn } from "@/content/clients";
@@ -159,15 +160,21 @@ export function BookingSection({
   /** Unused since the quiz left this section; kept so existing call sites still compile. */
   primary?: boolean;
 }) {
+  // Phones answer a few tap questions that text us; computers get the calendar.
+  const texting = useTexting();
   return (
     <section id="book" className="section relative scroll-mt-16 overflow-hidden">
       <div className="pointer-events-none absolute left-1/2 top-0 h-[500px] w-[900px] -translate-x-1/2 glow-ignite opacity-50" aria-hidden />
       <div className="container-x relative">
         <div className="grid items-start gap-10 lg:grid-cols-[0.85fr_1.15fr]">
           <div className="lg:sticky lg:top-28">
-            <p className="text-sm font-medium text-ignite">Free call · {BOOKING.length}</p>
-            <h2 className="h-section mt-2">{title}</h2>
-            <p className="lede">Pick any open time. {SITE.founder.name} looks at your ads, Google profile and website with you, live.</p>
+            <p className="text-sm font-medium text-ignite">{texting ? "Free · takes under a minute" : `Free call · ${BOOKING.length}`}</p>
+            <h2 className="h-section mt-2">{texting ? "Want more customers? Tap a few answers." : title}</h2>
+            <p className="lede">
+              {texting
+                ? `Tap your answers and text them to us. ${SITE.founder.name} texts you back with what would bring you the most customers.`
+                : `Pick any open time. ${SITE.founder.name} looks at your ads, Google profile and website with you, live.`}
+            </p>
             <ul className="mt-6 space-y-3 text-[15px]">
               {["A live look at your site, Google profile, socials and ads", "The one change that would bring the most customers fastest", "A fixed price if you want us to do it — no obligation"].map((t) => (
                 <li key={t} className="flex gap-3">
@@ -191,7 +198,7 @@ export function BookingSection({
               </div>
             </div>
           </div>
-          <InlineBooking source={note ?? "Booking section"} prefill={prefill} />
+          <BookOrText phone={<TextQuiz source={note ?? "Booking section"} variant="inline" className="min-w-0" />} desktop={<InlineBooking source={note ?? "Booking section"} prefill={prefill} />} />
         </div>
       </div>
     </section>

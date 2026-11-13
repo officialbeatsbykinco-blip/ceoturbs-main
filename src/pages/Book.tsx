@@ -12,6 +12,8 @@ import { FAQList, SectionHeader } from "@/components/blocks/Basics";
 import { FitCheck } from "@/components/blocks/Boost";
 import { ShopCardsButton } from "@/components/cta/Actions";
 import { InlineBooking } from "@/components/booking/InlineBooking";
+import { BookOrText } from "@/components/booking/BookOrText";
+import { TextQuiz } from "@/components/quiz/TextQuiz";
 import { CallLink } from "@/components/site/CallLink";
 import { trackBooked } from "@/lib/track";
 
@@ -45,7 +47,7 @@ export default function Book() {
             </CallLink>
           </div>
           <div id="book" className="min-w-0 scroll-mt-20">
-            <InlineBooking source={`${SOURCE} — hero calendar`} />
+            <BookOrText phone={<TextQuiz source={`${SOURCE} — hero quiz`} variant="inline" />} desktop={<InlineBooking source={`${SOURCE} — hero calendar`} />} />
           </div>
         </div>
       </section>

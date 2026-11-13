@@ -11,7 +11,7 @@ import { InstallBookButton } from "@/components/cta/Actions";
 import { FAQList, SectionHeader } from "@/components/blocks/Basics";
 import { REPAIR_FAQS } from "@/content/tech-faqs";
 import { TechQuiz } from "@/components/tech/TechQuiz";
-import { BookOrText, CalCard, useTexting } from "@/components/booking/BookOrText";
+import { BookOrText, CalCard, PhoneOnly, useTexting } from "@/components/booking/BookOrText";
 import { IT_SERVICES, itPrice } from "@/content/pricing";
 import { ServiceAreaList } from "@/components/blocks/ServiceAreaList";
 import { IT_SERVICES_PATH, OFFICE_SETUP_PATH } from "@/content/tech-pages";
@@ -298,14 +298,22 @@ export default function ComputerRepair() {
             <div className="pointer-events-none absolute -top-32 left-1/2 h-72 w-[700px] -translate-x-1/2 glow-turbo" aria-hidden />
             <h2 id="final" className="h-section relative">Broken right now? Get it fixed today.</h2>
             <p className="lede relative mx-auto">
-              Text or call {SITE.phone.display}. Price up front, no fix no charge.
+              <PhoneOnly desktop={<>Call {SITE.phone.display} or pick a time. Price up front, no fix no charge.</>}>Text or call {SITE.phone.display}. Price up front, no fix no charge.</PhoneOnly>
             </p>
             <Ctas where="final" className="relative mt-7 sm:justify-center" />
             <p className="relative mt-4 text-sm">
-              <a href="#fix" className="font-semibold text-turbo underline underline-offset-4">
-                <Phone className="mr-1 inline h-3.5 w-3.5" aria-hidden />
-                Or tap a few answers and get your price by text
-              </a>
+              <PhoneOnly
+                desktop={
+                  <a href="#fix" className="font-semibold text-turbo underline underline-offset-4">
+                    Or pick a time on the calendar
+                  </a>
+                }
+              >
+                <a href="#fix" className="font-semibold text-turbo underline underline-offset-4">
+                  <Phone className="mr-1 inline h-3.5 w-3.5" aria-hidden />
+                  Or tap a few answers and get your price by text
+                </a>
+              </PhoneOnly>
             </p>
           </div>
         </div>

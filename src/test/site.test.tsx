@@ -326,6 +326,16 @@ describe("hero booking", () => {
     // The hero card: computers get the Cal.com calendar, only phones that can text get the text quiz.
     expect(home).toMatch(/<BookOrText\s+phone=\{<TextQuiz[^]*desktop=\{[^]*<InlineBooking/);
     expect(home).not.toMatch(/<TextQuiz source="Home hero card"[^>]*sm:block/);
+    // Site-wide rule: phones never get Cal.com, computers never get a text flow.
+    const cal = read("../lib/cal.ts");
+    expect(cal).toMatch(/export async function openBooking[^]*?canText\(\) && openTextQuiz\(/);
+    const actions = read("../components/cta/Actions.tsx");
+    expect(actions).toContain('if (openTechQuiz(note ?? "install-button")) return;');
+    expect(actions).toContain("texting ? smsHref(QUICK_TEXT) : BOOKING.url");
+    for (const f of ["../components/blocks/Sales.tsx", "../components/blocks/Boost.tsx", "../pages/Book.tsx", "../pages/GoogleAdsLocal.tsx"]) {
+      expect(read(f), f).toMatch(/<BookOrText[^]*phone=\{<TextQuiz[^]*desktop=\{[^]*<InlineBooking/);
+    }
+    expect(read("../components/quiz/TextQuiz.tsx")).not.toContain("<BookButton");
     expect(home).toContain("Pick a time");
     expect(home).toContain("Schedule my free call");
     expect(home).not.toContain("BrandBoostQuiz");

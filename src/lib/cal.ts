@@ -2,6 +2,8 @@
 // competes with the page's first paint, and every booking shows as an inline calendar on the page.
 import { BOOKING, INSTALL_BOOKING, type CalEvent } from "@/config/site";
 import { attribution, track, trackBooked, serverTrack } from "@/lib/track";
+import { canText } from "@/lib/sms";
+import { openTextQuiz } from "@/lib/text-quiz-open";
 
 export { track, trackBooked, serverTrack };
 
@@ -233,6 +235,8 @@ export type BookingRequest = Prefill;
  * Without that dialog mounted, falls back to Cal.com's modal, then to the booking page if the calendar fails.
  */
 export async function openBooking(source?: string, prefill?: string, person?: Person, extra: Omit<Prefill, "source" | "prefill" | "person"> = {}) {
+  // Phones never get the calendar: every "book a call" button opens the tap-question text quiz instead.
+  if (canText() && openTextQuiz({ source: source || "book-button" })) return;
   const id = track("booking_open", { source: source || "book-button", content_name: "Brand Boost call" });
   serverTrack("booking_open", id, { contentName: "Brand Boost call" });
   if (window.__ctBookingModal) {

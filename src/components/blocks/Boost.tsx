@@ -7,6 +7,8 @@ import { AD_TOTALS, money } from "@/content/results";
 import { CLIENTS } from "@/content/clients";
 import { price } from "@/content/pricing";
 import { InlineBooking } from "@/components/booking/InlineBooking";
+import { BookOrText } from "@/components/booking/BookOrText";
+import { TextQuiz } from "@/components/quiz/TextQuiz";
 import { CallLink } from "@/components/site/CallLink";
 import { ProofStats } from "@/components/blocks/Proof";
 import { SectionHeader } from "@/components/blocks/Basics";
@@ -40,19 +42,24 @@ export function BoostHero({ title, lede, source, top }: { title: ReactNode; lede
               {AD_TOTALS.leads} Meta leads at {money(AD_TOTALS.avgCpl)} average · {CLIENTS.length} client sites live · {SITE.founder.name} runs every call himself
             </p>
           </div>
-          <div className="panel p-4 sm:p-6">
-            <h2 className="font-display text-xl font-bold sm:text-2xl">Pick a time for your free call</h2>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Free · {BOOKING.length} · {SITE.founder.name} runs every call
-            </p>
-            <InlineBooking source={source} className="mt-4" />
-            <p className="mt-4 text-center text-sm text-muted-foreground">
-              Rather talk now?{" "}
-              <CallLink location={`${source} — hero`} className="inline-flex min-h-[44px] items-center font-semibold text-turbo underline underline-offset-2">
-                Call {SITE.phone.display}
-              </CallLink>
-            </p>
-          </div>
+          <BookOrText
+            phone={<TextQuiz source={source} variant="inline" className="min-w-0" />}
+            desktop={
+              <div className="panel p-4 sm:p-6">
+                <h2 className="font-display text-xl font-bold sm:text-2xl">Pick a time for your free call</h2>
+                <p className="mt-1 text-sm text-muted-foreground">
+                  Free · {BOOKING.length} · {SITE.founder.name} runs every call
+                </p>
+                <InlineBooking source={source} className="mt-4" />
+                <p className="mt-4 text-center text-sm text-muted-foreground">
+                  Rather talk now?{" "}
+                  <CallLink location={`${source} — hero`} className="inline-flex min-h-[44px] items-center font-semibold text-turbo underline underline-offset-2">
+                    Call {SITE.phone.display}
+                  </CallLink>
+                </p>
+              </div>
+            }
+          />
         </div>
         <PlatformLogos className="mt-14" />
         <div className="mt-12">
