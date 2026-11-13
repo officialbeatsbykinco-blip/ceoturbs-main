@@ -18,6 +18,19 @@ const EVENTS = {
 const text = (v, max) => (typeof v === "string" ? v.replace(/[\u0000-\u001f\u007f<>]/g, " ").trim().slice(0, max) : "");
 
 /**
+ * event_source_url for Meta / TikTok (exported for tests). The page carries the landing query string, and with it
+ * the fbclid: cutting it at a fixed length chopped long fbclids, which Meta flags as a "modified Meta ClickID".
+ * A page that is too long, or holds characters a URL can't, keeps its path only. It is never cut mid-value.
+ */
+export function sourceUrl(page) {
+  const p = typeof page === "string" ? page.trim() : "";
+  const path = p.startsWith("/") ? p : `/${p}`;
+  if (path.length <= 2000 && /^[\x21-\x7e]+$/.test(path) && !/[<>"\\]/.test(path)) return `https://www.ceoturbo.com${path}`;
+  const bare = path.split(/[?#]/)[0].slice(0, 300).replace(/[^\x21-\x7e]|[<>"\\]/g, "");
+  return `https://www.ceoturbo.com${bare || "/"}`;
+}
+
+/**
  * The lead-sheet row for a real Call / Text tap on a phone (exported for tests). Google Ads counts these taps
  * as "Contact" conversions, but a tap carries no name or message, so without this row the conversion had
  * nothing to match in the sheet. The click ids (gclid…) and UTMs show which ad it came from.
@@ -65,7 +78,7 @@ export default async function handler(req, res) {
 
   let body;
   try {
-    body = await readJson(req, 5_000);
+    body = await readJson(req, 8_000);
   } catch {
     return send(res, 400, { error: "body" });
   }
@@ -79,7 +92,7 @@ export default async function handler(req, res) {
     buildEvent({
       eventName: p.eventName,
       eventId,
-      url: `https://www.ceoturbo.com${text(body.page, 600).replace(/^(?!\/)/, "/") || "/"}`,
+      url: sourceUrl(body.page),
       user: { externalId: text(body.visitorId, 60) || undefined },
       attribution: attr,
       ip: signals.ip || clientIp(req),
@@ -93,7 +106,7 @@ export default async function handler(req, res) {
       buildEvent({
         eventName: "Lead",
         eventId: `${eventId}_lead`,
-        url: `https://www.ceoturbo.com${text(body.page, 600).replace(/^(?!\/)/, "/") || "/"}`,
+        url: sourceUrl(body.page),
         user: { externalId: text(body.visitorId, 60) || undefined },
         attribution: attr,
         ip: signals.ip || clientIp(req),

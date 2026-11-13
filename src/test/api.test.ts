@@ -6,7 +6,7 @@ import { cleanLead, isBot, scoreLead } from "../../api/_lib/leads.js";
 import { buildEvent, hashedUser, cleanAttribution, requestSignals, withSignals } from "../../api/_lib/meta-capi.js";
 import { buildTiktokEvent } from "../../api/_lib/tiktok-events.js";
 import { quizFields, devFields } from "../../api/lead.js";
-import { tapRecord, trackPayload } from "../../api/track.js";
+import { sourceUrl, tapRecord, trackPayload } from "../../api/track.js";
 import { sameOrigin, isJson } from "../../api/_lib/http.js";
 import { deliveryResult, forwardLead } from "../../api/_lib/leads.js";
 import { vi, afterEach } from "vitest";
@@ -470,6 +470,17 @@ describe("server copies of browser events (/api/track)", () => {
     expect(trackPayload({ event: "add_to_cart", value: 39.99 })?.eventName).toBe("AddToCart");
     expect(trackPayload({ event: "Purchase", value: 1 })).toBeNull();
     expect(trackPayload({ event: "generate_lead" })).toBeNull();
+  });
+
+  it("never cuts the fbclid out of the page address sent to Meta", () => {
+    const fbclid = `IwZXh0bgNhZW0BMABhZGlkAasT${"Ab9_".repeat(120)}`;
+    const page = `/computer-repair-tampa?utm_source=facebook&utm_campaign=${"x".repeat(200)}&fbclid=${fbclid}`;
+    expect(page.length).toBeGreaterThan(600);
+    expect(sourceUrl(page)).toBe(`https://www.ceoturbo.com${page}`);
+    expect(sourceUrl(`/tampa?fbclid=${"A".repeat(2100)}`)).toBe("https://www.ceoturbo.com/tampa");
+    expect(sourceUrl("/a b?x=<y>")).toBe("https://www.ceoturbo.com/ab");
+    expect(sourceUrl(undefined)).toBe("https://www.ceoturbo.com/");
+    expect(sourceUrl("office-setup-tampa")).toBe("https://www.ceoturbo.com/office-setup-tampa");
   });
 
   it("files a call or text tap on the lead sheet with the ad click id, so every Google Ads Contact has a row", () => {
