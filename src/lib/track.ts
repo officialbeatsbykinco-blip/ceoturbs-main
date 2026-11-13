@@ -397,7 +397,7 @@ export function attribution(): Attribution {
 const SERVER_COPY = new Set(["page_view", "view_item", "customize_product", "add_to_cart", "begin_checkout", "click_to_call", "click_to_text"]);
 
 /** Server-side copy of a browser event (api/track.js). Fire-and-forget; never throws. */
-export function serverTrack(event: string, eventId: string, data: { value?: number; currency?: string; contentName?: string; contentCategory?: string; contentIds?: string[]; numItems?: number; user?: UserData } = {}) {
+export function serverTrack(event: string, eventId: string, data: { value?: number; currency?: string; contentName?: string; location?: string; contentCategory?: string; contentIds?: string[]; numItems?: number; user?: UserData } = {}) {
   if (typeof window === "undefined" || !SERVER_COPY.has(event)) return;
   const page = window.location.pathname + window.location.search;
   void metaParamsReady().then(() => {
@@ -441,7 +441,7 @@ export function installCallTracking() {
       const event = text ? "click_to_text" : "click_to_call";
       const contentName = text ? "Text message" : "Phone call";
       const id = track(event, { location, content_name: contentName });
-      serverTrack(event, id, { contentName });
+      serverTrack(event, id, { contentName, location });
     },
     { capture: true },
   );

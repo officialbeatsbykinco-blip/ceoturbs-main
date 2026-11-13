@@ -1,8 +1,9 @@
 // POST /api/track — server-side (Conversions API) copies of browser events, sent with the same event_id
 // as the Pixel so Meta de-duplicates them: PageView, ViewContent / AddToCart / InitiateCheckout (review
-// card and shirt shops), CustomizeProduct (shirt designer) and Contact (tap-to-call). Raises Meta's "events covered by Conversions API" rate. Leads, bookings and purchases have their own server paths (api/lead.js, api/audit.js,
+// card and shirt shops), CustomizeProduct (shirt designer) and Contact (tap-to-call / tap-to-text, also filed on the lead sheet). Raises Meta's "events covered by Conversions API" rate. Leads, bookings and purchases have their own server paths (api/lead.js, api/audit.js,
 // api/cal-webhook.js, Shopify's Facebook & Instagram app).
 import { readJson, send, clientIp, rateLimited, sameOrigin, isJson } from "./_lib/http.js";
+import { forwardLead } from "./_lib/leads.js";
 import { buildEvent, cleanAttribution, requestSignals, sendMetaEvents, withSignals } from "./_lib/meta-capi.js";
 
 const EVENTS = {
@@ -15,6 +16,25 @@ const EVENTS = {
   click_to_text: "Contact",
 };
 const text = (v, max) => (typeof v === "string" ? v.replace(/[\u0000-\u001f\u007f<>]/g, " ").trim().slice(0, max) : "");
+
+/**
+ * The lead-sheet row for a real Call / Text tap on a phone (exported for tests). Google Ads counts these taps
+ * as "Contact" conversions, but a tap carries no name or message, so without this row the conversion had
+ * nothing to match in the sheet. The click ids (gclid…) and UTMs show which ad it came from.
+ */
+export function tapRecord(body, attr, eventId) {
+  const call = body?.event === "click_to_call";
+  if (!call && body?.event !== "click_to_text") return null;
+  return {
+    type: "phone-tap",
+    name: "",
+    service: call ? "Call tap" : "Text tap",
+    note: `${call ? "Tapped Call" : "Tapped Text"} (button: ${text(body.location, 60) || "link"}). Check your phone's call log / texts at this time — the tap alone doesn't mean they went through with it.`,
+    page: text(body.page, 120),
+    eventId,
+    ...attr,
+  };
+}
 
 /** Validated CAPI custom_data for an allowed event, or null (exported for tests). */
 export function trackPayload(body) {
@@ -86,6 +106,9 @@ export default async function handler(req, res) {
     );
   }
   const testCode = body.testEventCode || body.attribution?.test_event_code;
-  const meta = await sendMetaEvents(events, testCode);
+  // Sheet row for call/text taps; a tighter per-visitor limit keeps a bot from flooding the sheet.
+  const tap = tapRecord(body, attr, eventId);
+  const sheet = tap && !rateLimited(`tap:${clientIp(req)}`, 6, 10 * 60_000) ? forwardLead(tap) : null;
+  const [meta] = await Promise.all([sendMetaEvents(events, testCode), sheet]);
   return send(res, 200, { ok: true, meta: !!meta.sent });
 }

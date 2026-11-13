@@ -6,7 +6,7 @@ import { cleanLead, isBot, scoreLead } from "../../api/_lib/leads.js";
 import { buildEvent, hashedUser, cleanAttribution, requestSignals, withSignals } from "../../api/_lib/meta-capi.js";
 import { buildTiktokEvent } from "../../api/_lib/tiktok-events.js";
 import { quizFields, devFields } from "../../api/lead.js";
-import { trackPayload } from "../../api/track.js";
+import { tapRecord, trackPayload } from "../../api/track.js";
 import { sameOrigin, isJson } from "../../api/_lib/http.js";
 import { deliveryResult, forwardLead } from "../../api/_lib/leads.js";
 import { vi, afterEach } from "vitest";
@@ -470,5 +470,13 @@ describe("server copies of browser events (/api/track)", () => {
     expect(trackPayload({ event: "add_to_cart", value: 39.99 })?.eventName).toBe("AddToCart");
     expect(trackPayload({ event: "Purchase", value: 1 })).toBeNull();
     expect(trackPayload({ event: "generate_lead" })).toBeNull();
+  });
+
+  it("files a call or text tap on the lead sheet with the ad click id, so every Google Ads Contact has a row", () => {
+    const call = tapRecord({ event: "click_to_call", location: "header", page: "/office-setup-tampa" }, { gclid: "G1", utm_campaign: "pmax" }, "call_1");
+    expect(call).toMatchObject({ type: "phone-tap", service: "Call tap", page: "/office-setup-tampa", eventId: "call_1", gclid: "G1", utm_campaign: "pmax" });
+    expect(call?.note).toContain("button: header");
+    expect(tapRecord({ event: "click_to_text" }, {}, "t1")).toMatchObject({ service: "Text tap", note: expect.stringContaining("button: link") });
+    expect(tapRecord({ event: "page_view" }, {}, "p1")).toBeNull();
   });
 });

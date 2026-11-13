@@ -226,6 +226,12 @@ const TABS = {
     ATTR,
     { "Form page": "page", "Event ID": "eventId" }
   ),
+  // Call / Text button taps on a phone (Google Ads "Contact" conversions). No name: match the time to your call log / texts.
+  "Call & Text Taps": Object.assign(
+    { Received: "receivedAt", Tapped: "service", "What to check": "note", Status: "", Notes: "" },
+    ATTR,
+    { "Tapped on page": "page", "Event ID": "eventId" }
+  ),
   "Other Leads": Object.assign({ Received: "receivedAt", Name: "name", Phone: "phone", Email: "email", Company: "business", Type: "type", Note: "note" }, ATTR, { "Form page": "page" }),
 };
 
@@ -270,6 +276,11 @@ const STATUS = {
     ["Done", "#a8e6a8", "#0f4d0f"],
     ["Lost", "#e3e3e3", "#555555"],
   ],
+  "Call & Text Taps": [
+    ["New", "#cce0ff", "#1a3a6b"],
+    ["Real lead", "#d4edda", "#1e5631"],
+    ["No call/text came", "#e3e3e3", "#555555"],
+  ],
   "Call Quiz Leads": [
     ["New", "#cce0ff", "#1a3a6b"],
     ["Contacted", "#fff2b3", "#6b5200"],
@@ -289,6 +300,7 @@ function tabFor(type) {
   if (type === "dev-intake") return "Dev Intake Leads";
   if (type === "office-setup") return "Office Setup Leads";
   if (type === "battery") return "Battery Leads";
+  if (type === "phone-tap") return "Call & Text Taps";
   return "Other Leads";
 }
 
