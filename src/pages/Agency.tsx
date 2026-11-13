@@ -14,7 +14,9 @@ import { Founder, BookingSection, ReviewCardPromo } from "@/components/blocks/Sa
 import { SectionHeader, FAQList } from "@/components/blocks/Basics";
 import { HOME_FAQS } from "@/content/faqs";
 import { price } from "@/content/pricing";
-import { SITE, fromPriceLabel } from "@/config/site";
+import { BOOKING, SITE, fromPriceLabel } from "@/config/site";
+import { BookOrText } from "@/components/booking/BookOrText";
+import { InlineBooking } from "@/components/booking/InlineBooking";
 import { SiteWall } from "@/components/visuals/SiteWall";
 import { MobileMore } from "@/components/blocks/MobileMore";
 
@@ -70,7 +72,27 @@ export default function Agency() {
               ))}
             </ul>
           </div>
-          <TextQuiz source="Home hero card" variant="inline" className="relative z-10 mx-auto hidden w-full max-w-lg text-left sm:block" />
+          {/* Computers book on the Cal.com calendar right here; touch phones and tablets that can text get the tap quiz. */}
+          <div className="relative z-10 mx-auto hidden w-full max-w-lg text-left sm:block">
+            <BookOrText
+              phone={<TextQuiz source="Home hero card" variant="inline" />}
+              desktop={
+                <div id="hero-book" className="panel scroll-mt-24 p-4 sm:p-6">
+                  <h2 className="font-display text-xl font-bold sm:text-2xl">Pick a time for your free call</h2>
+                  <p className="mt-1 text-sm text-muted-foreground">
+                    Free · {BOOKING.length} · {SITE.founder.name} runs every call
+                  </p>
+                  <InlineBooking source="Home hero calendar" className="mt-4" />
+                  <p className="mt-4 text-center text-sm text-muted-foreground">
+                    Rather talk now?{" "}
+                    <CallLink location="home hero calendar" className="inline-flex min-h-[44px] items-center font-semibold text-turbo underline underline-offset-2">
+                      Call {SITE.phone.display}
+                    </CallLink>
+                  </p>
+                </div>
+              }
+            />
+          </div>
         </div>
       </section>
 

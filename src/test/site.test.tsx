@@ -323,6 +323,9 @@ describe("hero booking", () => {
     const home = read("../pages/Agency.tsx");
     expect(home).toContain("<AudienceTiles");
     expect(home).toContain("<TextQuiz");
+    // The hero card: computers get the Cal.com calendar, only phones that can text get the text quiz.
+    expect(home).toMatch(/<BookOrText\s+phone=\{<TextQuiz[^]*desktop=\{[^]*<InlineBooking/);
+    expect(home).not.toMatch(/<TextQuiz source="Home hero card"[^>]*sm:block/);
     expect(home).toContain("Pick a time");
     expect(home).toContain("Schedule my free call");
     expect(home).not.toContain("BrandBoostQuiz");
