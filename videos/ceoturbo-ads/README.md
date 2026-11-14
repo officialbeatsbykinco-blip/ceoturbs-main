@@ -54,3 +54,9 @@ Web copy for the site: `public/media/websites-and-ads.mp4` (1280x720, 1.4 MB) wi
 
 `ad21-websites-ads-9x16.html` - 1080x1920 cut of ad20 for Reels, Stories, TikTok and Shorts. Same scenes, copy, numbers and timing as ad20, so it reuses the ad20 sound bed. Everything important sits above the bottom caption area and left of the right-side buttons.
 Build: `./stage.sh ad21-websites-ads-9x16 ad20`, then `npx hyperframes render --quality high --output ../../renders/ad21-websites-ads-9x16.mp4` inside `.build/ad21-websites-ads-9x16`. Thumbnail: `renders/ad21-websites-ads-9x16-thumb.jpg` (frame at 1.6s, the "Zero calls" hook).
+
+## Landscape ad: "Get Found" (24s, 16:9)
+
+`ad22-get-found-16x9.html` - 1920x1080 for YouTube. No narration; works muted. Hook: someone types "plumber near me", three competitors show up and "Your business: Not found" ("They searched. You weren't there."). An AI assistant answers "Who's a good plumber near me?" with the same three names, stamped "Not on the list". "We fix what Google & AI read": six fixes (Google Business Profile, Google + Bing indexing, booking calendar, SEO, llms.txt, tracking) dock onto a Business Profile card. "Now they find you": your listing slides into the results, Call is tapped, incoming call. End card: Turbo Start $497 one-time, keep the site you have (from `src/content/pricing.ts`), "Book a free call", ceoturbo.com/pricing. Competitor names are made up, the AI assistant is generic, and the search scenes are footnoted "Illustrative example. Rankings depend on Google and aren't guaranteed."
+Bed + SFX: `node assets/audio/make-bed-ad22.mjs` → `ad22bed.wav`, then the same loudnorm line as ad19 → `ad22.wav`.
+Build: `./stage.sh ad22-get-found-16x9 ad22`, then `npx hyperframes render --quality high --output ../../renders/ad22-get-found-16x9.mp4` inside `.build/ad22-get-found-16x9`. Thumbnail: `renders/ad22-get-found-16x9-thumb.jpg` (frame at 3.2s, "You weren't there").
