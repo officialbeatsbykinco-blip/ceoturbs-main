@@ -49,3 +49,8 @@ Web copy for the site: `public/media/tampa-tech-help.mp4` (1280x720, 1.3 MB) wit
 Bed + SFX: `node assets/audio/make-bed-ad20.mjs` → `ad20bed.wav`, then the same loudnorm line as ad19 → `ad20.wav`.
 Build: `./stage.sh ad20-websites-ads-16x9 ad20`, then `npx hyperframes render --quality high --output ../../renders/ad20-websites-ads-16x9.mp4` inside `.build/ad20-websites-ads-16x9`. Thumbnail: `renders/ad20-websites-ads-16x9-thumb.jpg` (frame at 18.6s).
 Web copy for the site: `public/media/websites-and-ads.mp4` (1280x720, 1.4 MB) with poster `public/media/websites-and-ads-poster.webp`.
+
+## Vertical ad: "Websites + Ads" (20s, 9:16)
+
+`ad21-websites-ads-9x16.html` - 1080x1920 cut of ad20 for Reels, Stories, TikTok and Shorts. Same scenes, copy, numbers and timing as ad20, so it reuses the ad20 sound bed. Everything important sits above the bottom caption area and left of the right-side buttons.
+Build: `./stage.sh ad21-websites-ads-9x16 ad20`, then `npx hyperframes render --quality high --output ../../renders/ad21-websites-ads-9x16.mp4` inside `.build/ad21-websites-ads-9x16`. Thumbnail: `renders/ad21-websites-ads-9x16-thumb.jpg` (frame at 1.6s, the "Zero calls" hook).
