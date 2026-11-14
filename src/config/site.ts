@@ -118,6 +118,16 @@ export const PITCH_VIDEO = {
   height: 960,
 } as const;
 
+/** 20-second 16:9 animation: we build the website, then run the ads (homepage). Source: videos/ceoturbo-ads/ad20-websites-ads-16x9.html. */
+export const WEB_ADS_VIDEO = {
+  src: "/media/websites-and-ads.mp4",
+  poster: "/media/websites-and-ads-poster.webp",
+  title: "Website + ads, done for you",
+  length: "0:20",
+  width: 1280,
+  height: 720,
+} as const;
+
 /**
  * The Google review card (NFC, NTAG215) — shipped from the US, blank or programmed by us for a fee.
  * Checkout runs on Shopify: the site's own buy box creates a Shopify cart through the

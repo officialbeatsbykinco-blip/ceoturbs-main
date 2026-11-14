@@ -2,6 +2,7 @@ import { type ReactNode, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ArrowDown, ArrowRight, Building2, CalendarCheck, Check, Dumbbell, Hammer, House, Laptop, Megaphone, MessageSquare, Monitor, Phone, Scissors, Shirt, Star, Store, UtensilsCrossed, Wrench } from "lucide-react";
 import { BookButton, InstallBookButton } from "@/components/cta/Actions";
+import { VideoWide } from "@/components/blocks/Sales";
 import { SectionHeader } from "@/components/blocks/Basics";
 import { ContactBand } from "@/components/shop/StoreSections";
 import { BestResults, ProofStats, AdGallery } from "@/components/blocks/Proof";
@@ -263,6 +264,13 @@ export default function Home() {
           <Link to="/portfolio" className="inline-flex min-h-[44px] items-center gap-1.5 text-sm font-semibold text-turbo underline-offset-4 hover:underline">
             See every site <ArrowRight className="h-4 w-4" aria-hidden />
           </Link>
+        </div>
+      </section>
+
+      <section className="section" aria-labelledby="web-ads-video">
+        <div className="container-x">
+          <SectionHeader kicker="Websites + ads" title={<span id="web-ads-video">We build the site. Then we run the ads.</span>} lede="20 seconds on how a website and ads work together to make your phone ring." />
+          <VideoWide note="Home — websites + ads video" className="mt-8" />
         </div>
       </section>
 

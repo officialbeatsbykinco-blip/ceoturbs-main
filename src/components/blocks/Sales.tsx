@@ -9,7 +9,7 @@ import { TextQuiz } from "@/components/quiz/TextQuiz";
 import { SERVICES, type Service } from "@/content/services";
 import { AUDIENCES } from "@/content/audiences";
 import { clientsIn } from "@/content/clients";
-import { SITE, BOOKING, PITCH_VIDEO, fromPriceLabel } from "@/config/site";
+import { SITE, BOOKING, PITCH_VIDEO, WEB_ADS_VIDEO, fromPriceLabel } from "@/config/site";
 import { BookButton } from "@/components/cta/Actions";
 import { SCENES } from "@/components/visuals/Scenes";
 import { SETUP_PATH, SHOP_PATH } from "@/content/review-cards";
@@ -202,6 +202,44 @@ export function BookingSection({
         </div>
       </div>
     </section>
+  );
+}
+
+/** The 16:9 "Website + ads" animation. Only the poster loads until the visitor taps play. */
+export function VideoWide({ note, className }: { note: string; className?: string }) {
+  const ref = useRef<HTMLVideoElement>(null);
+  const [playing, setPlaying] = useState(false);
+  const play = () => {
+    setPlaying(true);
+    track("video_play", { source: note });
+    requestAnimationFrame(() => void ref.current?.play());
+  };
+  return (
+    <figure className={`relative mx-auto w-full max-w-4xl ${className ?? ""}`}>
+      <div className="pointer-events-none absolute -inset-8 -z-10 rounded-[3rem] bg-turbo/20 blur-3xl" aria-hidden />
+      <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-black shadow-[0_40px_80px_-30px_rgba(0,0,0,0.9)] sm:rounded-3xl">
+        <video
+          ref={ref}
+          src={playing ? WEB_ADS_VIDEO.src : undefined}
+          poster={WEB_ADS_VIDEO.poster}
+          width={WEB_ADS_VIDEO.width}
+          height={WEB_ADS_VIDEO.height}
+          controls={playing}
+          playsInline
+          preload="none"
+          className="aspect-video w-full object-cover"
+          aria-label={WEB_ADS_VIDEO.title}
+        />
+        {!playing && (
+          <button type="button" onClick={play} className="group absolute inset-0 grid place-items-center bg-black/35 transition-colors hover:bg-black/25" aria-label={`Play video: ${WEB_ADS_VIDEO.title}`}>
+            <span className="grid h-12 w-12 place-items-center rounded-full bg-ignite text-white shadow-[0_0_0_8px_rgba(255,107,26,0.25)] transition-transform group-hover:scale-110 sm:h-20 sm:w-20">
+              <Play className="ml-0.5 h-5 w-5 fill-current sm:ml-1 sm:h-8 sm:w-8" aria-hidden />
+            </span>
+            <span className="absolute bottom-3 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-black/60 px-3 py-1 text-xs font-semibold text-white sm:bottom-5 sm:text-sm">Watch · {WEB_ADS_VIDEO.length}</span>
+          </button>
+        )}
+      </div>
+    </figure>
   );
 }
 
