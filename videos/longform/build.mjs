@@ -272,6 +272,7 @@ for (const d of ["assets/fonts", "assets/audio", "assets/img"]) mkdirSync(path.j
 copyFileSync(path.join(ADS, "gsap.min.js"), path.join(OUT, "assets/gsap.min.js"));
 for (const f of ["Inter.woff2", "SpaceGrotesk.woff2"]) copyFileSync(path.join(ADS, "fonts", f), path.join(OUT, "assets/fonts", f));
 for (const f of ["card-tap", "card-counter", "card-hero"]) copyFileSync(path.join(IMG, `${f}-1600.webp`), path.join(OUT, `assets/img/${f}.webp`));
+copyFileSync(path.join(ADS, "img/ceo-turbo-logo.png"), path.join(OUT, "assets/img/logo.png"));
 writeFileSync(path.join(OUT, "index.html"), page);
 writeFileSync(path.join(OUT, "hyperframes.json"), JSON.stringify({ paths: { assets: "assets" }, media: { autoProxy: true } }, null, 2) + "\n");
 writeFileSync(path.join(OUT, "meta.json"), JSON.stringify({ id: EP, name: EP }, null, 2) + "\n");
@@ -280,7 +281,8 @@ writeFileSync(path.join(OUT, "meta.json"), JSON.stringify({ id: EP, name: EP }, 
 const mmss = (t) => `${Math.floor(t / 60)}:${String(Math.floor(t % 60)).padStart(2, "0")}`;
 const chapters = scenes.filter((s, i) => i === 0 || s.chapter !== scenes[i - 1].chapter).map((s, i) => `${i === 0 ? "0:00" : mmss(s.S)} ${s.chapter}`);
 mkdirSync(path.join(HERE, "renders"), { recursive: true });
-if (!mod.SIZE) writeFileSync(path.join(HERE, "renders", `${EP}-youtube.txt`), `${TITLE}
+if (!mod.SIZE && mod.DESCRIPTION) writeFileSync(path.join(HERE, "renders", `${EP}-youtube.txt`), `${TITLE}\n\n${mod.DESCRIPTION(chapters)}\n`);
+else if (!mod.SIZE) writeFileSync(path.join(HERE, "renders", `${EP}-youtube.txt`), `${TITLE}
 
 Get the one-tap Google review card (from $16.99, free US shipping): https://${LINKS.cards}
 Want more calls, not just reviews? Book a free 30-minute Brand Boost call: https://${LINKS.call}
