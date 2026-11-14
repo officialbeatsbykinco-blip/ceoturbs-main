@@ -686,7 +686,6 @@ export const SCENES = [
         c.sfx("pop", l.start + 0.3);
       });
       c.js(`tl.fromTo("${c.q("@m0")} .cal i", { backgroundColor: "#eef2f6" }, { backgroundColor: "#1aa3ff", duration: 0.12, stagger: 0.06 }, ${T(a.start + 0.8)});`);
-      c.js(`tl.fromTo("${c.q("@tag")}", { scale: 1 }, { scale: 1.25, duration: 0.25, yoyo: true, repeat: 1 }, ${T(b.start + b.dur * 0.5)});`);
       c.to("@line, .ws-ms", { autoAlpha: 0, duration: 0.4 }, f.start - 0.1);
       c.in("@vans", f.start + 0.1, { y: 0 });
       c.in("@v1", f.start + 0.2, { x: -600, y: 0 });
@@ -697,7 +696,7 @@ export const SCENES = [
       c.js(`const b2${c.id("x").replace(/-/g, "_")} = { v: 43.27 }; tl.fromTo(b2${c.id("x").replace(/-/g, "_")}, { v: 43.27 }, { v: 18640.55, duration: 1.6, ease: "power2.out", onUpdate: () => { document.getElementById("${c.id("bal")}").textContent = "$" + b2${c.id("x").replace(/-/g, "_")}.v.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }); } }, ${T(f.start + f.dur * 0.55)});`);
       c.sfx("ding", f.start + f.dur * 0.55 + 1.6);
       const X = [300, 740, 1180, 1620];
-      const lab = [["1 month", "Calendar full most days", `<div class="cal" style="display:grid;grid-template-columns:repeat(7,1fr);gap:4px;width:210px;margin:18px auto 0">${Array.from({ length: 14 }, () => `<i style="display:block;height:24px;border-radius:5px;background:#eef2f6"></i>`).join("")}</div>`], ["3 months", "Raised his prices", `<div class="ic"><span id="${c.id("tag")}" style="display:inline-block">📈</span></div>`], ["6 months", "Hired his first helper", `<div class="ic">🤝</div>`], ["1 year", "Two vans", `<div class="ic">🚐🚐</div>`]];
+      const lab = [["1 month", "Calendar full most days", `<div class="cal" style="display:grid;grid-template-columns:repeat(7,1fr);gap:4px;width:210px;margin:18px auto 0">${Array.from({ length: 14 }, () => `<i style="display:block;height:24px;border-radius:5px;background:#eef2f6"></i>`).join("")}</div>`], ["3 months", "Raised his prices", `<div class="ic">📈</div>`], ["6 months", "Hired his first helper", `<div class="ic">🤝</div>`], ["1 year", "Two vans", `<div class="ic">🚐🚐</div>`]];
       return `<div class="ws-tl h" id="@line"><div class="fill" id="@fill"></div></div>
       ${lab.map(([t, s, ic], i) => `<div class="ws-ms h" id="@m${i}" style="left:${X[i]}px"><div class="dt"></div><b>${t}</b><span>${s}</span>${ic}</div>`).join("")}
       <div class="set h" id="@vans"><div class="ws-sun" style="left:880px;top:90px"></div></div>
