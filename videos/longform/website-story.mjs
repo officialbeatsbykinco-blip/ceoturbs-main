@@ -24,15 +24,15 @@ Marcus's bookings, prices and balances are illustrative. Results depend on your 
 
 #smallbusiness #website #webdesign #localseo #googlebusinessprofile #facebookads #entrepreneur`;
 
-const T = (n) => n.toFixed(3);
-const who = (id, mood, w, elId) => `<div class="who" id="${elId}" style="width:${w}px;height:${w * 2.25}px">${person(id, mood)}</div>`;
-const mood = (c, sel, m, t) => c.js(`tl.set("${c.q(sel)} [class^='m-']", { opacity: 0 }, ${T(t)}); tl.set("${c.q(sel)} .m-${m}", { opacity: 1 }, ${T(t)});`);
-const talk = (c, sel, t, d) => c.js(`tl.to("${c.q(sel)} .talk", { opacity: 1, duration: 0.09, yoyo: true, repeat: ${2 * Math.floor(d / 0.18) + 1}, ease: "steps(1)" }, ${T(t)});`);
-const MARCUS = "extra4";
-const marcus = (m = "smile", w = 260, id = "@marcus") => who(MARCUS, m, w, id);
+export const T = (n) => n.toFixed(3);
+export const who = (id, mood, w, elId) => `<div class="who" id="${elId}" style="width:${w}px;height:${w * 2.25}px">${person(id, mood)}</div>`;
+export const mood = (c, sel, m, t) => c.js(`tl.set("${c.q(sel)} [class^='m-']", { opacity: 0 }, ${T(t)}); tl.set("${c.q(sel)} .m-${m}", { opacity: 1 }, ${T(t)});`);
+export const talk = (c, sel, t, d) => c.js(`tl.to("${c.q(sel)} .talk", { opacity: 1, duration: 0.09, yoyo: true, repeat: ${2 * Math.floor(d / 0.18) + 1}, ease: "steps(1)" }, ${T(t)});`);
+export const MARCUS = "extra4";
+export const marcus = (m = "smile", w = 260, id = "@marcus") => who(MARCUS, m, w, id);
 
 /** Marcus's van. */
-const van = (id, extra = "") => `<div class="ws-van h" id="${id}" ${extra}><svg viewBox="0 0 560 280" xmlns="http://www.w3.org/2000/svg">
+export const van = (id, extra = "") => `<div class="ws-van h" id="${id}" ${extra}><svg viewBox="0 0 560 280" xmlns="http://www.w3.org/2000/svg">
   <path d="M30 70q0-40 40-40h300q30 0 50 20l90 80q20 18 20 44v56q0 20-20 20H50q-20 0-20-20z" fill="#f8fafc"/>
   <path d="M390 60l78 70H390z" fill="#93c5fd"/><rect x="70" y="60" width="290" height="70" rx="12" fill="#e2e8f0"/>
   <rect x="30" y="170" width="500" height="22" fill="#ff6a1f"/>
@@ -41,11 +41,11 @@ const van = (id, extra = "") => `<div class="ws-van h" id="${id}" ${extra}><svg 
   <circle cx="140" cy="240" r="38" fill="#111827"/><circle cx="140" cy="240" r="16" fill="#9ca3af"/>
   <circle cx="440" cy="240" r="38" fill="#111827"/><circle cx="440" cy="240" r="16" fill="#9ca3af"/>
 </svg></div>`;
-const phone = (id, screen, extra = "") => `<div class="ws-phone h" id="${id}" ${extra}><div class="notch"></div><div class="scr">${screen}</div></div>`;
-const browser = (id, url, body, extra = "") => `<div class="ws-br h" id="${id}" ${extra}><div class="chrome"><i></i><i></i><i></i><div class="url">${url}</div></div><div class="page">${body}</div></div>`;
-const res = (name, rt, cls = "", id = "") => `<div class="ws-res ${cls}"${id ? ` id="${id}"` : ""}><div class="pin">${cls.includes("you") ? "🚐" : cls.includes("miss") ? "❓" : "📍"}</div><div><b>${name}</b><small>${rt}</small></div>${cls.includes("you") ? `<div class="call">Book</div>` : ""}</div>`;
-const search = (id, q, rows, extra = "") => `<div class="ws-search h" id="${id}" ${extra}><div class="sbar">🔍 <span>${q}</span></div><div class="tabs"><b>All</b><span>Maps</span><span>Reviews</span></div><div class="rows">${rows}</div></div>`;
-const rows3 = res("Shine Pro Detailing", "★ 4.8 (231) · Open now") + res("Bay Auto Spa", "★ 4.7 (164) · Open now") + res("Elite Mobile Wash", "★ 4.6 (97) · Closes 6 PM");
+export const phone = (id, screen, extra = "") => `<div class="ws-phone h" id="${id}" ${extra}><div class="notch"></div><div class="scr">${screen}</div></div>`;
+export const browser = (id, url, body, extra = "") => `<div class="ws-br h" id="${id}" ${extra}><div class="chrome"><i></i><i></i><i></i><div class="url">${url}</div></div><div class="page">${body}</div></div>`;
+export const res = (name, rt, cls = "", id = "") => `<div class="ws-res ${cls}"${id ? ` id="${id}"` : ""}><div class="pin">${cls.includes("you") ? "🚐" : cls.includes("miss") ? "❓" : "📍"}</div><div><b>${name}</b><small>${rt}</small></div>${cls.includes("you") ? `<div class="call">Book</div>` : ""}</div>`;
+export const search = (id, q, rows, extra = "") => `<div class="ws-search h" id="${id}" ${extra}><div class="sbar">🔍 <span>${q}</span></div><div class="tabs"><b>All</b><span>Maps</span><span>Reviews</span></div><div class="rows">${rows}</div></div>`;
+export const rows3 = res("Shine Pro Detailing", "★ 4.8 (231) · Open now") + res("Bay Auto Spa", "★ 4.7 (164) · Open now") + res("Elite Mobile Wash", "★ 4.6 (97) · Closes 6 PM");
 
 export const CSS = `
 .ws-van { position: absolute; width: 560px; height: 280px; } .ws-van svg { width: 100%; height: 100%; display: block; filter: drop-shadow(0 30px 40px rgba(0,0,0,.5)); }
