@@ -47,7 +47,8 @@ export const SITE = {
     addressCountry: "US",
   },
   /** Center of the in-person service area (downtown Tampa) and how far we drive. */
-  geo: { latitude: 27.9506, longitude: -82.4572 },
+  /** Temple Terrace: the center of the 40-mile in-person service area. */
+  geo: { latitude: 28.0353, longitude: -82.3893 },
   serviceRadiusMiles: 40,
   logo: "/img/brand/ceo-turbo-logo.png",
   ogImage: "/og/tampa-it-support.jpg",

@@ -151,7 +151,7 @@ export function InstallQuiz({ page, id = "book", className }: { page: InstallPag
         <span>
           {page.remote ? (
             <>
-              <b>Remote anywhere in the US</b>, or in person within 40 miles of Tampa. Price before we start.
+              <b>Remote anywhere in the world</b>, or in person within 40 miles of Tampa. Price before we start.
             </>
           ) : (
             <>

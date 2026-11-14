@@ -30,6 +30,9 @@
       "maxDuration": 40
     }
   },
+  "rewrites": [
+    { "source": "/computers/:handle", "destination": "/computers/__listing" }
+  ],
   "redirects": [
     { "source": "/it-services-duluth-ga", "destination": "/computer-repair-tampa", "permanent": true },
     { "source": "/pc-technician-duluth-ga", "destination": "/computer-repair-tampa", "permanent": true },

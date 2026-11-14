@@ -11,7 +11,7 @@ export const HOME_FAQS: FAQ[] = [
   { q: "How much do your services cost?", a: `Every price is published: setup packages from ${price("pkg-start")} — the whole package with a new website, SEO/AEO/GEO, tracking, profiles, email and ad setup is ${price("pkg-launch")} — and monthly plans from ${price("care")}/mo (${price("growth")}/mo with ads management). Need one thing? Google Business Profile setup is ${price("gbp-setup")}. No long-term contracts, and ad spend goes straight to the platform from your own account. Full list at ceoturbo.com/pricing.` },
   { q: "Will this actually bring me more customers?", a: "That's exactly what we're built for. Our Meta lead campaigns have delivered 161 leads at about $7.40 each. In two weeks of Google Ads, Appliance King got 42 conversions at about $4.19 each. And 19 client websites we built are live and bringing in business. We put the work where it moves your numbers fastest — and you see those numbers every week." },
   { q: "Do you guarantee results?", a: `Yes, on the ads. ${PRICING_TERMS.guarantee}` },
-  { q: "Where are you based?", a: "CEO Turbo is founder-led and based in Tampa, Florida. Tech repair and office setups are in person within about 40 miles of Tampa (remote speed-ups for slow Windows computers work anywhere), and websites and ads are handled online for business owners and artists worldwide." },
+  { q: "Where are you based?", a: "CEO Turbo is founder-led and based in Tampa, Florida. Tech repair and office setups are in person within about 40 miles of Temple Terrace and Tampa (remote support for Windows computers works anywhere in the world), and websites and ads are handled online for business owners and artists worldwide." },
 ];
 
 export const AUDIT_FAQS: FAQ[] = [

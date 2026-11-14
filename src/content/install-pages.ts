@@ -262,7 +262,7 @@ const remoteSpeed = byId(IT_SERVICES, "it-remote");
 const homeSpeed = byId(IT_SERVICES, "it-speedup");
 const ssd = byId(IT_SERVICES, "it-ssd");
 
-/** Gaming PC FPS boost: consumer (Meta, organic and AI search). Remote anywhere in the US, in person around Tampa. */
+/** Gaming PC FPS boost: consumer (Meta, organic and AI search). Remote anywhere in the world, in person around Tampa. */
 INSTALL_PAGES.push({
   slug: "fps-boost",
   path: "/gaming-pc-fps-boost",
@@ -271,12 +271,12 @@ INSTALL_PAGES.push({
   category: "gaming_fps",
   booking: FPS_BOOKING,
   remote: { question: "how", inPerson: "inperson" },
-  chip: "Remote anywhere in the US · in person around Tampa",
+  chip: "Remote anywhere in the world · in person around Tampa",
   h1: ["Low FPS, stutter or lag?", "We tune your gaming PC for more FPS."],
   lede: "A one-on-one tune-up of your Windows gaming PC: graphics drivers, Windows settings, background apps, temps and your in-game settings. Done live with you over the internet, or in person around Tampa. We check your FPS before and after, so you see the difference.",
   promises: ["FPS checked before and after", "Live with you, about an hour", "Remote or in person in Tampa", "Price before we start"],
   pricesLede: "Price before we start. Parts like a faster drive are extra, at cost, and only if you want them.",
-  areaLede: "Remote works anywhere in the US. In person: Tampa and about 40 miles around it.",
+  areaLede: "Remote works anywhere in the world. In person: Tampa and about 40 miles around it.",
   schemaName: "Gaming PC FPS boost, remote or in Tampa Bay",
   prices: [
     { ...remoteSpeed, name: "Remote FPS boost", summary: "Live over the internet: drivers, Windows, background apps and game settings tuned." },
@@ -313,7 +313,7 @@ INSTALL_PAGES.push({
   ],
   faqs: [
     { q: "How much does a gaming PC FPS boost cost?", a: `${usd(remoteSpeed.price)} and up remotely, ${usd(homeSpeed.price)} and up in person within about 40 miles of Tampa. You get the exact price by text before we start, and you pay after it's done.` },
-    { q: "Can you boost my FPS remotely?", a: "Yes. We connect over the internet while you watch, using a screen share you can end any time, and tune everything live. It works anywhere in the US on a Windows gaming PC or laptop." },
+    { q: "Can you boost my FPS remotely?", a: "Yes. We connect over the internet while you watch, using a screen share you can end any time, and tune everything live. It works anywhere in the world on a Windows gaming PC or laptop." },
     { q: "How much more FPS will I get?", a: "It depends on your hardware. The biggest gains usually come from clean graphics drivers, the right Windows and in-game settings, and stopping background apps. We check your FPS before and after so you see the real difference. If your hardware is the limit, we tell you which upgrade gives the most FPS for the money." },
     { q: "Which games do you tune for?", a: "Any PC game, including Fortnite, Call of Duty and Warzone, Valorant, CS2, Minecraft, Apex Legends and GTA V. We tune Windows for gaming and the settings of the games you actually play." },
     { q: "Is it safe? Will you overclock my PC?", a: "We don't overclock, change hardware or delete your files without asking you first. Every change is explained as we go." },
@@ -325,7 +325,7 @@ INSTALL_PAGES.push({
   value: 120,
   seo: {
     title: "Gaming PC FPS Boost Service: Remote or Tampa | CEO Turbo",
-    description: `Low FPS, stutter or input lag? We tune your Windows gaming PC live, remote anywhere in the US or in person in Tampa. From ${usd(remoteSpeed.price)}. Text ${SITE.phone.display}.`,
+    description: `Low FPS, stutter or input lag? We tune your Windows gaming PC live, remote anywhere in the world or in person in Tampa. From ${usd(remoteSpeed.price)}. Text ${SITE.phone.display}.`,
   },
 });
 

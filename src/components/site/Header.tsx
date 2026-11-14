@@ -4,6 +4,7 @@ import { Calendar, ChevronDown, Menu, MessageSquare, Phone, X } from "lucide-rea
 import { Logo } from "./Logo";
 import { BookButton, InstallBookButton } from "@/components/cta/Actions";
 import { IT_SERVICES_PATH, OFFICE_SETUP_PATH, techBooking } from "@/content/tech-pages";
+import { COMPUTERS_PATH } from "@/content/computer-shop";
 import { SERVICES } from "@/content/services";
 import { SITE, fromPriceLabel } from "@/config/site";
 import { CallLink } from "./CallLink";
@@ -80,6 +81,7 @@ const MORE: Menu = {
   to: "/services",
   items: [
     { to: "/tampa", label: "Tampa Bay", sub: "Where we work in person" },
+    { to: SHIRTS_PATH, label: "Company shirts", sub: "Your logo on tees, no minimum" },
     { to: "/pricing", label: "Pricing", sub: "Clear prices for websites and ads" },
     { to: "/services", label: "All services", sub: "Everything we do" },
     { to: "/free-audit", label: "Free check", sub: "See how you show up online" },
@@ -123,7 +125,10 @@ export function Header({ focus: focusProp = false }: { focus?: boolean }) {
         {!focus && (
           <nav aria-label="Main" className="hidden items-center gap-0.5 xl:flex">
             <NavLink to={IT_SERVICES_PATH} className={linkCls}>
-              Tech repair
+              Computer repair
+            </NavLink>
+            <NavLink to={COMPUTERS_PATH} className={linkCls}>
+              Computer shop
             </NavLink>
             <NavLink to={OFFICE_SETUP_PATH} className={linkCls}>
               Office setup
@@ -133,9 +138,6 @@ export function Header({ focus: focusProp = false }: { focus?: boolean }) {
             </NavLink>
             <NavLink to={SHOP_PATH} className={linkCls}>
               Google review cards
-            </NavLink>
-            <NavLink to={SHIRTS_PATH} className={linkCls}>
-              Company shirts
             </NavLink>
             <Dropdown menu={MORE} active={MORE.items.some((i) => i.to === pathname)} />
           </nav>
@@ -207,12 +209,13 @@ export function Header({ focus: focusProp = false }: { focus?: boolean }) {
               <span aria-hidden>›</span>
             </FixMyTechLink>
             {[
-              [SHOP_PATH, `Google review cards · ${fromPriceLabel}`],
+              [COMPUTERS_PATH, "Computer shop: laptops & desktops"],
               [OFFICE_SETUP_PATH, "Office setup & cables"],
               ["/computer-setup-tampa", "Computer setup"],
               ["/security-camera-installation-tampa", "Security cameras"],
               ["/wifi-installation-tampa", "Wi-Fi & internet"],
               ["/grow", "Websites & ads"],
+              [SHOP_PATH, `Google review cards · ${fromPriceLabel}`],
               [SHIRTS_PATH, "Company t-shirts"],
             ].map(([to, label]) => (
               <Link key={to} to={to} onClick={() => setOpen(false)} className="panel flex items-center justify-between px-4 py-4 text-lg font-semibold">

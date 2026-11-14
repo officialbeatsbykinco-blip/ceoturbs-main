@@ -222,3 +222,8 @@ export async function createStandCheckout(opt: StandOption, business: string, re
   );
   return { url, variantId: numericId(variant.id), price: Number(variant.price.amount), available: variant.availableForSale };
 }
+
+/** The computer shop: one computer (the chosen variant), straight to Shopify checkout. */
+export async function createComputerCheckout(variantId: string, name: string, choice?: string) {
+  return cartCheckout([{ merchandiseId: variantId, quantity: 1 }], attributionAttributes({ Product: name, Option: choice }));
+}

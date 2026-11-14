@@ -5,7 +5,8 @@
 import { CustomerReview, FounderBadge } from "@/components/tech/FounderBadge";
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Building2, Calendar, Check, ClipboardCheck, Cpu, Gauge, Globe, Home, Laptop, MapPin, MessageSquare, Phone, ShieldCheck, Smartphone, Tv, Wrench, type LucideIcon } from "lucide-react";
+import { ArrowRight, Building2, Calendar, Check, ClipboardCheck, Cpu, Gauge, Globe, Home, Laptop, MapPin, MessageSquare, Phone, ShieldCheck, ShoppingBag, Smartphone, Tv, Wrench, type LucideIcon } from "lucide-react";
+import { COMPUTERS_PATH } from "@/content/computer-shop";
 import { CallLink } from "@/components/site/CallLink";
 import { InstallBookButton } from "@/components/cta/Actions";
 import { FAQList, SectionHeader } from "@/components/blocks/Basics";
@@ -24,8 +25,24 @@ import { cn } from "@/lib/utils";
 
 const PRICE_GROUPS: { icon: LucideIcon; title: string; ids: string[] }[] = [
   { icon: Laptop, title: "Computers & laptops", ids: ["it-speedup", "it-remote", "it-virus", "it-pc-repair", "it-ssd", "it-data", "it-printer"] },
-  { icon: Smartphone, title: "Phones & tablets", ids: ["it-iphone-screen", "it-iphone-battery", "it-tablet-screen"] },
+  { icon: Smartphone, title: "Phone screens & batteries", ids: ["it-iphone-screen", "it-iphone-battery", "it-tablet-screen"] },
   { icon: Tv, title: "TVs, Wi-Fi & business", ids: ["it-tv-mount", "it-tv-setup", "it-wifi", "it-mesh", "it-business-hour"] },
+];
+
+/** "If it's a computer, we fix it": the problems people search for, in their words. */
+const WE_FIX = [
+  "Won't turn on or won't boot",
+  "Crashing, freezing or blue screens",
+  "Slow computer and long startups",
+  "Viruses, pop-ups and scam warnings",
+  "SSD, memory and parts upgrades",
+  "Cracked laptop screens and broken keyboards",
+  "Charging and battery problems",
+  "Windows reinstalls and updates gone wrong",
+  "Overheating and loud fans",
+  "Lost files: backup, recovery and transfer",
+  "Printers, email and software",
+  "Desktops, laptops, Windows and Mac",
 ];
 
 const PROMISES = ["Price up front, before any work", `Diagnosis ${itPrice("it-visit")}, credited to the repair`, "No fix, no charge", "Pay after it works"];
@@ -87,19 +104,20 @@ export default function ComputerRepair() {
         <div className="container-x relative grid items-start gap-8 lg:grid-cols-[1fr_1fr] lg:gap-12">
           <div className="hero-rise min-w-0">
             <p className="chip">
-              <MapPin className="h-3.5 w-3.5 text-turbo" aria-hidden /> Tampa Bay + 40 miles · or remote
+              <MapPin className="h-3.5 w-3.5 text-turbo" aria-hidden /> 40 miles around Temple Terrace & Tampa · remote worldwide
             </p>
             <h1 id="hero" className="mt-4 text-[32px] font-bold leading-[1.05] sm:text-5xl md:text-[52px]">
               <span className="text-chrome-grad">Slow, crashing or broken computer?</span> <span className="text-turbo-grad">Fixed at your door in Tampa.</span>
             </h1>
             <p className="mt-4 max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg">
-              Computers, laptops, phones and tablets. We come to your home or business, or speed up your Windows computer remotely. You get the price before we start.
+              Anything wrong with a computer: won't turn on, crashing, slow, viruses or ready for an upgrade. Phone and tablet screens and batteries too. We come to your home or business, or fix your Windows computer remotely from anywhere in the world. You get the price before we start.
             </p>
             <div className="mt-5 flex flex-wrap gap-2 text-xs">
               {[
                 ["Speed-up", itPrice("it-speedup")],
                 ["Remote speed-up", itPrice("it-remote")],
                 ["Virus removal", itPrice("it-virus")],
+                ["Won't turn on", itPrice("it-pc-repair")],
                 ["iPhone screen", itPrice("it-iphone-screen")],
               ].map(([k, v]) => (
                 <span key={k} className="rounded-full border border-border/80 bg-white/[0.03] px-3 py-1.5 text-muted-foreground">
@@ -162,6 +180,20 @@ export default function ComputerRepair() {
         </div>
       </section>
 
+      <section className="section border-t border-border" aria-labelledby="we-fix">
+        <div className="container-x">
+          <SectionHeader title={<span id="we-fix">If it's a computer, we fix it.</span>} lede="Desktops and laptops, Windows and Mac, at your door around Tampa. Phones and tablets: screens and batteries." />
+          <ul className="mt-8 grid gap-x-6 gap-y-3 sm:grid-cols-2 lg:grid-cols-3">
+            {WE_FIX.map((t) => (
+              <li key={t} className="flex items-start gap-2.5 text-[15px]">
+                <Check className="mt-0.5 h-5 w-5 shrink-0 text-turbo" aria-hidden />
+                {t}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
       <section className="section border-t border-border" aria-labelledby="new">
         <div className="container-x">
           <SectionHeader title={<span id="new">Make your old computer feel new</span>} lede="Most slow computers don't need replacing. A cleanup and the right upgrade usually brings them back to fast." />
@@ -178,8 +210,8 @@ export default function ComputerRepair() {
             <div className="flex items-start gap-3">
               <Globe className="mt-0.5 h-6 w-6 shrink-0 text-turbo" aria-hidden />
               <div>
-                <p className="font-display text-lg font-bold">Not in Tampa? We can speed it up remotely.</p>
-                <p className="text-sm text-muted-foreground">Slow Windows computer? We clean it up and speed it up over the internet while you watch, from {itPrice("it-remote")}.</p>
+                <p className="font-display text-lg font-bold">Not in Tampa? Remote support, anywhere in the world.</p>
+                <p className="text-sm text-muted-foreground">Slow Windows computer, pop-ups or software trouble? We fix it over the internet while you watch, from {itPrice("it-remote")}.</p>
               </div>
             </div>
             <BookOrText
@@ -265,6 +297,23 @@ export default function ComputerRepair() {
         </div>
       </section>
 
+      <section className="section border-t border-border" aria-labelledby="shop">
+        <div className="container-x">
+          <div className="panel flex flex-col gap-4 p-6 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex items-start gap-3">
+              <ShoppingBag className="mt-0.5 h-6 w-6 shrink-0 text-turbo" aria-hidden />
+              <div>
+                <h2 id="shop" className="font-display text-lg font-bold">Time for a new computer?</h2>
+                <p className="text-sm text-muted-foreground">Laptops and desktops from our computer shop, set up at your place with your files moved over.</p>
+              </div>
+            </div>
+            <Link to={COMPUTERS_PATH} className="btn-chrome inline-flex items-center justify-center gap-2">
+              Shop computers <ArrowRight className="h-4 w-4" aria-hidden />
+            </Link>
+          </div>
+        </div>
+      </section>
+
       <section className="section border-t border-border" aria-labelledby="business">
         <div className="container-x">
           <div className="panel flex flex-col gap-4 p-6 sm:flex-row sm:items-center sm:justify-between">
@@ -284,7 +333,7 @@ export default function ComputerRepair() {
 
       <section className="section border-t border-border" aria-labelledby="area">
         <div className="container-x">
-          <SectionHeader title={<span id="area">Where we come to you</span>} lede="Tampa and about 40 miles around it. Remote speed-ups for slow Windows PCs work anywhere." />
+          <SectionHeader title={<span id="area">Where we come to you</span>} lede="About 40 miles around Temple Terrace and Tampa. Remote support for Windows computers works anywhere in the world." />
           <ServiceAreaList className="mt-8" />
           <p className="mt-4 text-sm text-muted-foreground">Somewhere else nearby? Text your ZIP code and we'll tell you.</p>
         </div>

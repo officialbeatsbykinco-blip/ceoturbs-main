@@ -1,4 +1,4 @@
-// Cities served in person (Tampa Bay, about 40 miles from Tampa). Remote help works anywhere.
+// Cities served in person (Tampa Bay, about 40 miles from Temple Terrace). Remote help works anywhere in the world.
 export const SETUP_AREAS: { region: string; note?: string; cities: string[] }[] = [
   { region: "Tampa", note: "Home base", cities: ["Tampa", "Carrollwood", "Town 'n' Country", "Westchase", "Temple Terrace", "Lutz", "Citrus Park", "Seffner"] },
   { region: "Pinellas County", cities: ["St. Petersburg", "Clearwater", "Largo", "Pinellas Park", "Seminole", "Dunedin", "Palm Harbor", "Oldsmar", "Safety Harbor", "Tarpon Springs"] },

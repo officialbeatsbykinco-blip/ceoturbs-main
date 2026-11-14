@@ -28,6 +28,8 @@ const GetMoreReviews = lazy(() => import("./pages/GetMoreReviews"));
 const AdsNotConverting = lazy(() => import("./pages/AdsNotConverting"));
 const GoogleAdsLocal = lazy(() => import("./pages/GoogleAdsLocal"));
 const ComputerRepair = lazy(() => import("./pages/ComputerRepair"));
+const ComputerShop = lazy(() => import("./pages/ComputerShop"));
+const ComputerProduct = lazy(() => import("./pages/ComputerProduct"));
 const OfficeSetup = lazy(() => import("./pages/OfficeSetup"));
 const InstallPage = lazy(() => import("./pages/InstallPage"));
 const AppMarketing = lazy(() => import("./pages/AppMarketing"));
@@ -68,6 +70,8 @@ export default function App() {
           <Route path="/ads-not-converting" element={<AdsNotConverting />} />
           <Route path="/google-ads-for-local-business" element={<GoogleAdsLocal />} />
           <Route path="/computer-repair-tampa" element={<ComputerRepair />} />
+          <Route path="/computers" element={<ComputerShop />} />
+          <Route path="/computers/:handle" element={<ComputerProduct />} />
           <Route path="/office-setup-tampa" element={<OfficeSetup />} />
           {INSTALL_PATHS.map((p) => (
             <Route key={p} path={p} element={<InstallPage path={p} />} />

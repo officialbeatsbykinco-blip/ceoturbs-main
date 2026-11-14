@@ -18,6 +18,8 @@ const OFFICE_PRICES = ["office-basic", "office-complete", "office-transform-basi
 import { RESTAURANT_FAQS, RESTAURANTS_PATH } from "@/content/restaurants";
 import { NICHES } from "@/content/niches";
 import * as S from "./schema";
+import { computerPageFor } from "./computers";
+import { COMPUTERS_PATH, SHOP_FAQS as SHOP_COMPUTER_FAQS } from "@/content/computer-shop";
 
 export type PageMeta = {
   path: string;
@@ -376,6 +378,8 @@ function build(): PageMeta[] {
         S.faqPage(p.faqs, p.path),
       ],
     })),
+    // The computer shop: listings come from Shopify; each one gets its own page (src/seo/computers.ts).
+    { path: COMPUTERS_PATH, title: "Computers for Sale in Tampa: Laptops & Desktops | CEO Turbo", description: "Laptops and desktops for sale from a Tampa computer tech. Buy online with secure checkout, get it set up at your place and repaired by the same person.", ogImage: IT_OG.repair, priority: 0.9, changefreq: "weekly", group: "Core", schema: [...base(), S.webPage(COMPUTERS_PATH, "CEO Turbo computer shop", "Laptops and desktops for sale from a Tampa computer tech, with setup and repairs.", "CollectionPage"), S.breadcrumbs([{ name: "Computers", path: COMPUTERS_PATH }]), S.faqPage(SHOP_COMPUTER_FAQS, COMPUTERS_PATH)] },
     { path: "/book", title: "Book Your Free 30-Minute Call | CEO Turbo", description: "Pick a time for a free 30-minute call with Christopher Robinson: what's costing you calls and bookings, and a fixed price to fix it.", ogImage: "/og/brand-boost.jpg", noindex: true, priority: 0.1, changefreq: "yearly", group: "Core", schema: base() },
     { path: "/booked", title: "You're Booked | CEO Turbo", description: "Your Brand Boost call is booked. Here's how to get the most from it.", noindex: true, priority: 0.1, changefreq: "yearly", group: "Core", schema: base() },
     {
@@ -436,7 +440,7 @@ function build(): PageMeta[] {
 }
 
 export const PAGES = build();
-export const pageFor = (path: string) => PAGES.find((p) => p.path === path);
+export const pageFor = (path: string) => PAGES.find((p) => p.path === path) ?? computerPageFor(path);
 export const NOT_FOUND_META: PageMeta = {
   path: "/404",
   title: "Page not found | CEO Turbo",

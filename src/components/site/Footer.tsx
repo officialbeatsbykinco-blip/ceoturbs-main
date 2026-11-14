@@ -3,6 +3,7 @@ import { Logo } from "./Logo";
 import { SERVICES } from "@/content/services";
 import { GUIDES, guidePath } from "@/content/guides";
 import { IT_SERVICES_PATH, OFFICE_SETUP_PATH } from "@/content/tech-pages";
+import { COMPUTERS_PATH } from "@/content/computer-shop";
 import { SITE, fromPriceLabel } from "@/config/site";
 import { SETUP_PATH, SHOP_PATH } from "@/content/review-cards";
 import { SHIRTS_PATH, shirtFromLabel } from "@/content/company-shirts";
@@ -13,7 +14,8 @@ import { Check } from "lucide-react";
 import { FixMyTechLink } from "@/components/tech/FixMyTechLink";
 
 const FOOTER_POINTS = [
-  "Computers, phones and tablets fixed at your door. Slow Windows PCs sped up remotely",
+  "Any computer problem fixed at your door. Phone screens & batteries. Remote speed-ups worldwide",
+  "Laptops and desktops for sale in our computer shop",
   "Offices set up: monitors, cables, printers, Wi-Fi",
   "Websites and ads that make the phone ring",
   "Tampa-based, 40 miles around. Price up front",
@@ -85,6 +87,7 @@ export function Footer({ focus = false }: { focus?: boolean }) {
             title="Tampa tech help"
             links={[
               { to: IT_SERVICES_PATH, label: "Computer & phone repair" },
+              { to: COMPUTERS_PATH, label: "Computer shop" },
               { to: OFFICE_SETUP_PATH, label: "Office setup & cable management" },
               { to: "/computer-setup-tampa", label: "Computer setup" },
               { to: "/security-camera-installation-tampa", label: "Security camera installation" },

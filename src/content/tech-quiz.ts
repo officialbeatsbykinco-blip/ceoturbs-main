@@ -13,22 +13,23 @@ export const DEVICES = [
 ] as const;
 
 type Group = "computer" | "mobile" | "home";
-/** Which problem list a device gets: a phone never sees "blue screen", a printer never sees "cracked screen". */
+/** Which problem list a device gets: a phone never sees "blue screen", a printer never sees "cracked screen". Phones and tablets: screens and batteries only. */
 export const deviceGroup = (d?: string): Group => (d === "iphone" || d === "android" || d === "tablet" ? "mobile" : d === "other" ? "home" : "computer");
 
 export const PROBLEMS = [
-  { id: "slow", label: "Slow or freezing", for: ["computer", "mobile"] },
+  { id: "slow", label: "Slow or freezing", for: ["computer"] },
   { id: "crash", label: "Crashing or error screens", for: ["computer"] },
-  { id: "dead", label: "Won't turn on", for: ["computer", "mobile"] },
+  { id: "dead", label: "Won't turn on", for: ["computer"] },
   { id: "virus", label: "Virus, pop-ups or scam warnings", for: ["computer"] },
   { id: "screen", label: "Cracked or broken screen", for: ["computer", "mobile"] },
   { id: "battery", label: "Battery dies fast or won't charge", for: ["computer", "mobile"] },
+  { id: "upgrade", label: "Upgrade (SSD, memory, parts)", for: ["computer"] },
   { id: "setup", label: "Printer, software or email help", for: ["computer"] },
-  { id: "data", label: "Move files, photos or contacts", for: ["computer", "mobile"] },
+  { id: "data", label: "Move files or photos", for: ["computer"] },
   { id: "printer", label: "Printer not working", for: ["home"] },
   { id: "wifi", label: "Wi-Fi slow or dropping", for: ["home"] },
   { id: "tv", label: "TV mounting or setup", for: ["home"] },
-  { id: "other", label: "Something else", for: ["computer", "mobile", "home"] },
+  { id: "other", label: "Something else", for: ["computer", "home"] },
 ] as const;
 
 /** The problems offered for a device, in order. */
@@ -42,13 +43,16 @@ export const WHEN = [
 
 export const WHERE = [
   { id: "home", label: "Come to me", sub: "Home or business" },
-  { id: "remote", label: "Speed it up remotely", sub: "Over the internet" },
+  { id: "remote", label: "Fix it remotely", sub: "Over the internet" },
 ] as const;
 
-/** Remote is only a speed-up for a slow Windows computer (the it-remote price). Anything else needs a visit. */
+/** Problems on a Windows computer we can fix over the internet, anywhere in the world (software only, no parts). */
+export const REMOTE_PROBLEMS: readonly ProblemId[] = ["slow", "virus", "setup"];
+
+/** Remote support: one Windows computer whose problems are all software (slow, pop-ups, software/email). Anything else needs a visit. */
 export const remoteOk = (a: Pick<TechAnswers, "devices" | "problems">) => {
   const win = a.problems.windows ?? [];
-  return a.devices.length === 1 && a.devices[0] === "windows" && win.length > 0 && win.every((p) => p === "slow");
+  return a.devices.length === 1 && a.devices[0] === "windows" && win.length > 0 && win.every((p) => REMOTE_PROBLEMS.includes(p));
 };
 
 /** Longest free-text note we accept (the quiz box, the text and the lead sheet all agree). */

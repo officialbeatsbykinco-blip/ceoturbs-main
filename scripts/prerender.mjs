@@ -10,7 +10,11 @@ const SSR = path.resolve("dist-ssr/entry-server.js");
 const SITE = "https://www.ceoturbo.com";
 const TODAY = new Date().toISOString().slice(0, 10);
 
-const { render, head, pages, guides, merchantFeed } = await import(pathToFileURL(SSR).href);
+const { render, head, pages: sitePages, guides, merchantFeed, loadComputers } = await import(pathToFileURL(SSR).href);
+// Computer shop listings from Shopify: one page each, plus the shell vercel.json serves for newer ones.
+const computers = await loadComputers();
+const pages = [...sitePages, ...computers.pages];
+const COMPUTERS_DATA = `<script>window.__COMPUTERS__=${computers.json}</script>`;
 const assets = await readdir(path.join(DIST, "assets"));
 const fontPreloads = assets
   .filter((f) => /^(inter|space-grotesk)-latin-wght-normal-.*\.woff2$/.test(f))
@@ -23,7 +27,9 @@ const problems = [];
 
 for (const page of pages) {
   const appHtml = await render(page.path);
-  const html = template.replace("<!--head-->", head(page.path)).replace("<!--app-->", appHtml);
+  const data = page.path === "/computers" || page.path.startsWith("/computers/") ? COMPUTERS_DATA : "";
+  // Function replacers: listing text from Shopify can contain "$&" or "$'", which a string replacement would expand.
+  const html = template.replace("<!--head-->", () => head(page.path) + data).replace("<!--app-->", () => appHtml);
 
   const h1s = (appHtml.match(/<h1[\s>]/g) || []).length;
   if (h1s !== 1) problems.push(`${page.path}: ${h1s} <h1> tags`);
@@ -80,14 +86,14 @@ const section = (g) => {
 };
 const llms = `# CEO Turbo
 
-> CEO Turbo (ceoturbo.com) is a Tampa, Florida IT support and growth company. It fixes computers, phones and tablets in person within about 40 miles of Tampa, speeds up slow Windows computers remotely (https://www.ceoturbo.com/computer-repair-tampa), boosts FPS on Windows gaming PCs and laptops remotely anywhere in the US or in person around Tampa, from $99 (https://www.ceoturbo.com/gaming-pc-fps-boost), sets up and organizes home and business offices (https://www.ceoturbo.com/office-setup-tampa), makes custom company t-shirts, and sells NFC Google review cards. Founded by Christopher Robinson (StackmodeChris), it also builds websites, runs Meta, Google, TikTok and X ads, sets up and optimizes Google Business Profiles and social media profiles, designs promotional email campaigns, and does SEO, AEO and GEO for independent artists, local service businesses and Shopify stores. It offers a free online SEO, AEO and GEO visibility audit (https://www.ceoturbo.com/free-audit). Free 30-minute "Brand Boost" growth calls are booked at https://cal.com/ceoturbo/ceoturbo-brandboost.
+> CEO Turbo (ceoturbo.com) is a Tampa, Florida IT support and growth company. It fixes any computer problem (won't turn on, crashing, slow, viruses, upgrades) and replaces phone and tablet screens and batteries in person within about 40 miles of Temple Terrace and Tampa, gives remote support for Windows computers anywhere in the world (https://www.ceoturbo.com/computer-repair-tampa), sells laptops and desktops in its computer shop (https://www.ceoturbo.com/computers), boosts FPS on Windows gaming PCs and laptops remotely anywhere in the world or in person around Tampa, from $99 (https://www.ceoturbo.com/gaming-pc-fps-boost), sets up and organizes home and business offices (https://www.ceoturbo.com/office-setup-tampa), makes custom company t-shirts, and sells NFC Google review cards. Founded by Christopher Robinson (StackmodeChris), it also builds websites, runs Meta, Google, TikTok and X ads, sets up and optimizes Google Business Profiles and social media profiles, designs promotional email campaigns, and does SEO, AEO and GEO for independent artists, local service businesses and Shopify stores. It offers a free online SEO, AEO and GEO visibility audit (https://www.ceoturbo.com/free-audit). Free 30-minute "Brand Boost" growth calls are booked at https://cal.com/ceoturbo/ceoturbo-brandboost.
 
 Key facts:
 - 19 live client websites, including Mor Handy, Appliance King, OJ Junk Removal, Kingstone Landscaping, BIGZO, 7UVHAVIN and Beyond Labels Gifts.
 - Meta lead campaigns (Jul–Oct 2026): 161 leads for $1,193.92, $7.42 average cost per lead, lowest $4.31.
 - Google Ads (Appliance King, Oct 26 – Nov 8, 2026): 42 conversions from 166 clicks for $176, $4.19 per conversion, $1.06 per click.
 - Artist profile campaign (BIGZO): 165 profile visits at $0.32 each.
-- Based in Tampa, Florida; in-person tech repair and office setup within about 40 miles of Tampa, remote speed-ups for slow Windows computers anywhere in the US, and websites and ads for business owners and artists worldwide.
+- Based in Tampa, Florida; in-person computer repair and office setup within about 40 miles of Temple Terrace and Tampa, remote support for Windows computers anywhere in the world, and websites and ads for business owners and artists worldwide.
 - Sells NFC Google review cards (https://www.ceoturbo.com/google-review-cards): customers tap their phone on the card and the business's Google review form opens. Works on iPhone XS and newer and NFC Android phones, no app, no subscription, free US shipping. Setup guide: https://www.ceoturbo.com/google-review-card-setup
 - Phone: (678) 558-4327 (call or text).
 - Social: Instagram https://www.instagram.com/ceoturbo_/ · Facebook https://www.facebook.com/profile.php?id=61595439263484 · YouTube https://www.youtube.com/@CEOTurbo7 · X https://x.com/CEO_Turbo · LinkedIn https://www.linkedin.com/showcase/ceoturbo · Pinterest https://www.pinterest.com/ceoturbo/

@@ -34,9 +34,11 @@ describe("tech repair quiz", () => {
     expect(f.note).toContain("x".repeat(900));
   });
 
-  it("only allows remote for a slow Windows computer", () => {
+  it("only allows remote for software problems on one Windows computer", () => {
     expect(remoteOk({ devices: ["windows"], problems: { windows: ["slow"] } })).toBe(true);
-    expect(remoteOk({ devices: ["windows"], problems: { windows: ["slow", "virus"] } })).toBe(false);
+    expect(remoteOk({ devices: ["windows"], problems: { windows: ["slow", "virus", "setup"] } })).toBe(true);
+    expect(remoteOk({ devices: ["windows"], problems: { windows: ["slow", "dead"] } })).toBe(false);
+    expect(remoteOk({ devices: ["windows"], problems: { windows: ["upgrade"] } })).toBe(false);
     expect(remoteOk({ devices: ["windows", "iphone"], problems: { windows: ["slow"], iphone: ["slow"] } })).toBe(false);
     expect(remoteOk({ devices: ["mac"], problems: { mac: ["slow"] } })).toBe(false);
     expect(remoteOk({ devices: ["iphone"], problems: { iphone: ["slow"] } })).toBe(false);
