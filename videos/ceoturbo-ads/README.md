@@ -35,3 +35,10 @@ Gotcha: do not pass `svgOrigin` inside a tween on an element that already has on
 `ad9-one-tap-16x9.html` - 1920x1080 for YouTube, in-stream and the site. No narration; captions carry it, so it works muted. Hook ("They loved it... and left no review."), 3D card reveal, one-tap triptych (barber, coffee shop, plumber), review counter 12 → 287 with the list reshuffling (labeled "Illustrative example"), "No app / No typing links / No monthly fee" stamps, end card with the stand, $16.99 and ceoturbo.com/google-review-cards.
 Bed + SFX: `node assets/audio/make-bed-ad9.mjs` → `ad9bed.wav`, then `ffmpeg -i ad9bed.wav -af "loudnorm=I=-14:TP=-1.5:LRA=9,volume=0.6dB,alimiter=limit=0.84" ad9.wav`.
 Build: `./stage.sh ad9-one-tap-16x9 ad9`, then `npx hyperframes render --quality high --output ../../renders/ad9-one-tap-16x9.mp4` inside `.build/ad9-one-tap-16x9`. Thumbnail: `renders/ad9-one-tap-16x9-thumb.jpg` (frame at 17.5s).
+
+## Landscape ad: "Tampa Tech Help" (20s, 16:9)
+
+`ad19-tampa-tech-16x9.html` - 1920x1080 for YouTube, Meta landscape placements and the site. No narration; captions carry it, so it works muted. Hook ("Computer acting up?" with a laptop drowning in error pop-ups until the screen dies), six problem tiles flip from BROKEN to FIXED, "We come to you" map (pin at Temple Terrace, van drives to a home and a business, "Or remote for Windows, anywhere"), promise stamps ("We fix it. Test it with you. Then you pay." + "No fix, no charge", footnoted as applying to the repair), end card with logo, "Book a visit" and ceoturbo.com/computer-repair-tampa. No phone number on screen.
+Bed + SFX: `node assets/audio/make-bed-ad19.mjs` → `ad19bed.wav`, then `ffmpeg -i ad19bed.wav -af "loudnorm=I=-14:TP=-1.5:LRA=9,volume=0.6dB,alimiter=limit=0.84" ad19.wav`.
+Build: `./stage.sh ad19-tampa-tech-16x9 ad19`, then `npx hyperframes render --quality high --output ../../renders/ad19-tampa-tech-16x9.mp4` inside `.build/ad19-tampa-tech-16x9`. Thumbnail: `renders/ad19-tampa-tech-16x9-thumb.jpg` (frame at 18.5s).
+Web copy for the site: `public/media/tampa-tech-help.mp4` (1280x720, 1.3 MB) with poster `public/media/tampa-tech-help-poster.webp`.
