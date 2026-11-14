@@ -42,3 +42,10 @@ Build: `./stage.sh ad9-one-tap-16x9 ad9`, then `npx hyperframes render --quality
 Bed + SFX: `node assets/audio/make-bed-ad19.mjs` → `ad19bed.wav`, then `ffmpeg -i ad19bed.wav -af "loudnorm=I=-14:TP=-1.5:LRA=9,volume=0.6dB,alimiter=limit=0.84" ad19.wav`.
 Build: `./stage.sh ad19-tampa-tech-16x9 ad19`, then `npx hyperframes render --quality high --output ../../renders/ad19-tampa-tech-16x9.mp4` inside `.build/ad19-tampa-tech-16x9`. Thumbnail: `renders/ad19-tampa-tech-16x9-thumb.jpg` (frame at 18.5s).
 Web copy for the site: `public/media/tampa-tech-help.mp4` (1280x720, 1.3 MB) with poster `public/media/tampa-tech-help-poster.webp`.
+
+## Landscape ad: "Websites + Ads" (20s, 16:9)
+
+`ad20-websites-ads-16x9.html` - 1920x1080 for YouTube, Meta landscape placements and the site. No narration; works muted. Hook ("Nice website. Zero calls." with an empty skeleton site and a phone showing 0 new calls), "We build the site" (a site assembles: nav, hero, Book now button, reviews, fast-on-phones badge), "Then we run the ads" (Google, Facebook, Instagram, Microsoft, TikTok and Reddit send traffic into the site, leads pop up), "Real results" (161 leads and $4.31 lowest cost per lead, straight from `src/content/results.ts`, footnoted with the source and "Results vary by business"), end card with Turbo Launch $1,997 one-time setup (from `src/content/pricing.ts`), "Book a free call" and ceoturbo.com/pricing. If prices or results change, update the numbers in the HTML and re-render.
+Bed + SFX: `node assets/audio/make-bed-ad20.mjs` → `ad20bed.wav`, then the same loudnorm line as ad19 → `ad20.wav`.
+Build: `./stage.sh ad20-websites-ads-16x9 ad20`, then `npx hyperframes render --quality high --output ../../renders/ad20-websites-ads-16x9.mp4` inside `.build/ad20-websites-ads-16x9`. Thumbnail: `renders/ad20-websites-ads-16x9-thumb.jpg` (frame at 18.6s).
+Web copy for the site: `public/media/websites-and-ads.mp4` (1280x720, 1.4 MB) with poster `public/media/websites-and-ads-poster.webp`.
