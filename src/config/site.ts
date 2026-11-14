@@ -50,7 +50,7 @@ export const SITE = {
   geo: { latitude: 27.9506, longitude: -82.4572 },
   serviceRadiusMiles: 40,
   logo: "/img/brand/ceo-turbo-logo.png",
-  ogImage: "/og/ceoturbo.jpg",
+  ogImage: "/og/tampa-it-support.jpg",
   /** CEO Turbo's own profiles (Organization schema + the social icons). */
   social: [
     { network: "instagram", label: "Instagram", href: "https://www.instagram.com/ceoturbo_/" },

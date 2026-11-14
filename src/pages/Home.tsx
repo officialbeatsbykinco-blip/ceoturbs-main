@@ -166,7 +166,6 @@ export default function Home() {
               </a>
             </PhoneOnly>
           </div>
-          <ReviewCardStrip where="Home hero" className="mx-auto mt-3 max-w-6xl" />
         </div>
       </section>
 

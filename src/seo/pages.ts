@@ -2,7 +2,7 @@
 // The prerender script, sitemap, llms.txt and client-side head updates all read from here.
 import { SITE, PITCH_VIDEO, fromPriceLabel } from "@/config/site";
 import { CLIENTS } from "@/content/clients";
-import { SERVICES } from "@/content/services";
+import { CALL_FIRST_SLUGS, SERVICES } from "@/content/services";
 import { AUDIENCES, PRODUCERS, VISUAL_ARTISTS } from "@/content/audiences";
 import { GUIDES, guideImage, guidePath } from "@/content/guides";
 import { HOME_FAQS, AUDIT_FAQS, BOOK_FAQS, ADS_NOT_CONVERTING_FAQS } from "@/content/faqs";
@@ -47,6 +47,19 @@ const suffix = (t: string) => fit(`${t} | CEO Turbo`, t);
 
 const base = () => [S.organization(), S.website(), S.founder()];
 
+// IT share / search images (rendered from scripts/og/it.html). The site default, SITE.ogImage, is the Tampa IT one.
+const IT_OG = { repair: "/og/computer-repair.jpg", office: "/og/office-setup.jpg", setup: "/og/computer-setup.jpg" };
+const INSTALL_OG: Record<string, string> = {
+  "computer-setup": IT_OG.setup,
+  "security-camera-installation": "/og/security-cameras.jpg",
+  "wifi-installation": "/og/wifi.jpg",
+  "business-tech-setup": "/og/business-tech.jpg",
+  "fps-boost": "/og/gaming-pc.jpg",
+};
+/** Office and computer setup services get the IT pictures; marketing services the "more calls" one. */
+const serviceOgImage = (slug: string) =>
+  slug === "computer-build-setup" ? IT_OG.setup : (CALL_FIRST_SLUGS as readonly string[]).includes(slug) || slug.endsWith("-setup") || slug === "office-transformation" ? IT_OG.office : "/og/local-business.jpg";
+
 function build(): PageMeta[] {
   const pages: PageMeta[] = [];
 
@@ -65,6 +78,7 @@ function build(): PageMeta[] {
     title: "SEO, AEO & GEO Websites + Google & Meta Ads | CEO Turbo",
     description:
       "SEO, AEO and GEO websites that get you found on Google and ChatGPT, plus Google, Meta and YouTube ads that book calls. Free strategy call.",
+    ogImage: "/og/local-business.jpg",
     priority: 0.9,
     changefreq: "weekly",
     group: "Core",
@@ -182,6 +196,7 @@ function build(): PageMeta[] {
       path,
       title: suffix(s.metaTitle),
       description: s.metaDescription,
+      ogImage: serviceOgImage(s.slug),
       priority: 0.8,
       changefreq: "monthly",
       group: "Services",
@@ -342,13 +357,14 @@ function build(): PageMeta[] {
     // Google Search ad landing for the local-service offer; noindex so it doesn't compete with / and /services/google-ads.
     { path: "/google-ads-for-local-business", title: "Get More Calls From Google Ads | CEO Turbo", description: `Get more calls from people searching Google. Search campaigns for appliance repair, HVAC, plumbing and cleaning, every call tracked. Setup ${price("pkg-start")}.`, noindex: true, priority: 0.1, changefreq: "yearly", group: "Core", schema: base() },
     // Meta ads landing for tech repair in Tampa (computers, phones, tablets; in-home within 40 miles or remote). Indexed for "computer repair Tampa".
-    { path: "/computer-repair-tampa", title: "Computer Repair in Tampa, FL: We Come to You | CEO Turbo", description: `Slow, crashing or dead computer, phone or tablet? Fixed at your door in Tampa Bay or remotely. Speed-up from $149. Call or text ${SITE.phone.display}.`, priority: 0.9, changefreq: "monthly", group: "Core", schema: [...base(), S.webPage("/computer-repair-tampa", "Computer repair in Tampa", "In-home computer, phone and tablet repair within 40 miles of Tampa, FL, and remote speed-ups for slow Windows computers."), S.breadcrumbs([{ name: "Computer repair Tampa", path: "/computer-repair-tampa" }]), S.localService({ path: "/computer-repair-tampa", name: "Computer, phone and tablet repair in Tampa Bay", serviceType: "Computer repair", description: "In-home and on-site repair of computers, laptops, iPhones, Android phones and tablets within about 40 miles of Tampa, FL, plus remote speed-ups for slow Windows computers. Price up front, no fix no charge.", prices: IT_SERVICES }), S.faqPage(REPAIR_FAQS, "/computer-repair-tampa")] },
+    { path: "/computer-repair-tampa", title: "Computer Repair in Tampa, FL: We Come to You | CEO Turbo", description: `Slow, crashing or dead computer, phone or tablet? Fixed at your door in Tampa Bay or remotely. Speed-up from $149. Call or text ${SITE.phone.display}.`, ogImage: IT_OG.repair, priority: 0.9, changefreq: "monthly", group: "Core", schema: [...base(), S.webPage("/computer-repair-tampa", "Computer repair in Tampa", "In-home computer, phone and tablet repair within 40 miles of Tampa, FL, and remote speed-ups for slow Windows computers."), S.breadcrumbs([{ name: "Computer repair Tampa", path: "/computer-repair-tampa" }]), S.localService({ path: "/computer-repair-tampa", name: "Computer, phone and tablet repair in Tampa Bay", serviceType: "Computer repair", description: "In-home and on-site repair of computers, laptops, iPhones, Android phones and tablets within about 40 miles of Tampa, FL, plus remote speed-ups for slow Windows computers. Price up front, no fix no charge.", prices: IT_SERVICES }), S.faqPage(REPAIR_FAQS, "/computer-repair-tampa")] },
     // Google & Microsoft Ads landing for office setup and cable management in Tampa.
-    { path: "/office-setup-tampa", title: "Office Setup & Cable Management in Tampa, FL | CEO Turbo", description: `Multi-monitor workstations, cable management, printers, Wi-Fi and Microsoft/Google setup for Tampa Bay homes and offices. From $99 per desk.`, priority: 0.9, changefreq: "monthly", group: "Core", schema: [...base(), S.webPage("/office-setup-tampa", "Office setup in Tampa", "Office setup, workstation and cable management services around Tampa, FL."), S.breadcrumbs([{ name: "Office setup Tampa", path: "/office-setup-tampa" }]), S.localService({ path: "/office-setup-tampa", name: "Office setup and cable management in Tampa Bay", serviceType: "Office setup", description: "Multi-monitor workstations, cable management, printers, Wi-Fi and Microsoft or Google setup for homes and businesses within about 40 miles of Tampa, FL. Flat price in writing first.", prices: OFFICE_PRICES }), S.faqPage(OFFICE_FAQS, "/office-setup-tampa")] },
+    { path: "/office-setup-tampa", title: "Office Setup & Cable Management in Tampa, FL | CEO Turbo", ogImage: IT_OG.office, description: `Multi-monitor workstations, cable management, printers, Wi-Fi and Microsoft/Google setup for Tampa Bay homes and offices. From $99 per desk.`, priority: 0.9, changefreq: "monthly", group: "Core", schema: [...base(), S.webPage("/office-setup-tampa", "Office setup in Tampa", "Office setup, workstation and cable management services around Tampa, FL."), S.breadcrumbs([{ name: "Office setup Tampa", path: "/office-setup-tampa" }]), S.localService({ path: "/office-setup-tampa", name: "Office setup and cable management in Tampa Bay", serviceType: "Office setup", description: "Multi-monitor workstations, cable management, printers, Wi-Fi and Microsoft or Google setup for homes and businesses within about 40 miles of Tampa, FL. Flat price in writing first.", prices: OFFICE_PRICES }), S.faqPage(OFFICE_FAQS, "/office-setup-tampa")] },
     ...INSTALL_PAGES.map((p) => ({
       path: p.path,
       title: p.seo.title,
       description: p.seo.description,
+      ogImage: INSTALL_OG[p.slug] ?? SITE.ogImage,
       priority: 0.85,
       changefreq: "monthly" as const,
       group: "Core" as const,
@@ -408,6 +424,13 @@ function build(): PageMeta[] {
     { path: "/app-marketing", title: "Software & App Marketing for Developers — CEO Turbo", description: "You built the code. We engineer the distribution. High-converting landing pages, Reddit & Meta ads, telemetry and ASO for software developers.", noindex: true, priority: 0.1, changefreq: "monthly", group: "Core", schema: [...base(), S.webPage("/app-marketing", "Software & app marketing for developers", "Landing pages, ASO, Reddit ads, telemetry and launch strategy for software developers.")] },
     { path: "/promptshop", title: "Prompt Shop — Coming Soon | CEO Turbo", description: "AI prompts, scanners and templates from CEO Turbo — coming soon.", noindex: true, priority: 0.1, changefreq: "yearly", group: "Company", schema: base() },
   );
+
+  // Tell search engines which picture belongs to each page (the same one shared on social).
+  for (const p of pages) {
+    const img = `${SITE.url}${p.ogImage ?? SITE.ogImage}`;
+    const node = p.schema.find((n) => n["@id"] === `${SITE.url}${p.path === "/" ? "/" : p.path}#webpage`);
+    if (node) node.primaryImageOfPage = { "@type": "ImageObject", url: img, width: 1200, height: 630 };
+  }
 
   return pages;
 }

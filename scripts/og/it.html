@@ -1,0 +1,162 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8" />
+<!-- IT share / search images (1200×630). Rendered by scripts/og/render-it.mjs: one variant per #hash. -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800&family=Space+Grotesk:wght@600;700&display=block" />
+<style>
+  * { box-sizing: border-box; margin: 0; }
+  html, body { width: 1200px; height: 630px; overflow: hidden; background: #05070b; font-family: Inter, sans-serif; color: #fff; }
+  .wrap { position: relative; width: 1200px; height: 630px; padding: 56px 64px; }
+  .glow { position: absolute; right: -160px; top: -220px; width: 900px; height: 760px; background: radial-gradient(closest-side, rgba(26,159,255,.32), transparent); }
+  .glow2 { position: absolute; left: -220px; bottom: -320px; width: 800px; height: 620px; background: radial-gradient(closest-side, rgba(255,107,26,.2), transparent); }
+  .grid { position: absolute; inset: 0; background-image: linear-gradient(rgba(255,255,255,.04) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.04) 1px, transparent 1px); background-size: 56px 56px; }
+  .brand { position: relative; display: flex; align-items: center; gap: 14px; font: 700 26px "Space Grotesk"; }
+  .brand img { height: 46px; }
+  .brand b { color: #1a9fff; }
+  .loc { position: relative; display: inline-flex; margin-top: 30px; padding: 8px 16px; border-radius: 999px; font: 700 18px Inter; letter-spacing: .02em; color: #9fd6ff; background: rgba(26,159,255,.12); box-shadow: inset 0 0 0 1px rgba(26,159,255,.4); }
+  h1 { position: relative; margin-top: 18px; font: 700 70px/0.98 "Space Grotesk"; letter-spacing: -0.04em; max-width: 600px; }
+  h1 .c { background: linear-gradient(180deg,#fff 10%,#c8d3df 60%,#8b97a6); -webkit-background-clip: text; color: transparent; }
+  h1 .t { background: linear-gradient(100deg,#1a9fff,#6cc6ff 50%,#ffb347); -webkit-background-clip: text; color: transparent; }
+  .sub { position: relative; margin-top: 20px; font: 600 24px/1.35 Inter; color: #c8d3df; max-width: 560px; }
+  .cta { position: absolute; left: 64px; bottom: 52px; display: inline-flex; align-items: center; gap: 10px; padding: 17px 26px; border-radius: 16px; font: 800 23px Inter; color: #fff; background: linear-gradient(180deg,#ff9a3d,#ff6b1a); box-shadow: 0 16px 40px -10px rgba(255,107,26,.7); }
+  .cta2 { position: absolute; left: 64px; bottom: 22px; font: 600 15px Inter; color: #8b97a6; }
+
+  /* Right side: a job ticket on a device */
+  .stage { position: absolute; right: 56px; top: 64px; width: 500px; height: 500px; }
+  .device { position: absolute; inset: 0 0 auto 0; height: 330px; border-radius: 22px; background: linear-gradient(160deg,#1a2433,#0b111a 60%); box-shadow: 0 50px 90px -30px rgba(26,159,255,.55), 0 0 0 1px rgba(255,255,255,.12), inset 0 1px 0 rgba(255,255,255,.12); display: grid; place-items: center; }
+  .device svg { width: 210px; height: 210px; filter: drop-shadow(0 18px 40px rgba(26,159,255,.5)); }
+  .badge { position: absolute; right: -14px; top: -14px; padding: 10px 16px; border-radius: 14px; font: 800 20px Inter; color: #05210f; background: linear-gradient(180deg,#5ef28f,#22c55e); box-shadow: 0 14px 30px -10px rgba(34,197,94,.8); }
+  .ticket { position: absolute; left: 24px; right: 24px; bottom: 0; padding: 20px 24px; border-radius: 18px; background: #0f1621; box-shadow: 0 30px 60px -20px rgba(0,0,0,.9), 0 0 0 1px rgba(255,255,255,.12); }
+  .ticket li { list-style: none; display: flex; align-items: center; gap: 12px; font: 600 21px/1.2 Inter; color: #e6edf5; }
+  .ticket li + li { margin-top: 12px; }
+  .ticket li i { flex: none; width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; font: 800 15px Inter; font-style: normal; color: #05210f; background: #22c55e; }
+  .ticket li span { margin-left: auto; color: #ffb347; font-weight: 800; }
+
+  /* Office variant: real before/after photo */
+  .photo { position: absolute; right: 56px; top: 64px; width: 520px; height: 390px; border-radius: 22px; overflow: hidden; box-shadow: 0 50px 90px -30px rgba(26,159,255,.55), 0 0 0 1px rgba(255,255,255,.14); }
+  .photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .photo .tag { position: absolute; left: 16px; top: 16px; padding: 7px 14px; border-radius: 10px; font: 800 17px Inter; background: rgba(5,7,11,.78); }
+  .before { position: absolute; right: 340px; top: 405px; width: 220px; height: 165px; border-radius: 16px; overflow: hidden; transform: rotate(-4deg); box-shadow: 0 30px 60px -20px rgba(0,0,0,.95), 0 0 0 3px #05070b, 0 0 0 4px rgba(255,255,255,.2); }
+  .before img { width: 100%; height: 100%; object-fit: cover; filter: saturate(.8); }
+  .before .tag { position: absolute; left: 10px; top: 10px; padding: 4px 10px; border-radius: 8px; font: 800 14px Inter; background: rgba(5,7,11,.8); color: #ffb347; }
+  .price { position: absolute; right: 80px; top: 420px; padding: 16px 22px; border-radius: 16px; background: #0f1621; box-shadow: 0 30px 60px -20px rgba(0,0,0,.9), 0 0 0 1px rgba(255,255,255,.12); font: 600 18px Inter; color: #c8d3df; }
+  .price b { display: block; font: 700 40px "Space Grotesk"; color: #ffb347; letter-spacing: -.03em; }
+
+  /* Home variant: three service tiles */
+  .tiles { position: absolute; right: 56px; top: 70px; width: 500px; display: grid; gap: 16px; }
+  .tile { display: flex; align-items: center; gap: 18px; padding: 18px 22px; border-radius: 18px; background: linear-gradient(160deg,#162030,#0c121b); box-shadow: 0 30px 60px -24px rgba(0,0,0,.9), 0 0 0 1px rgba(255,255,255,.12); }
+  .tile .ic { flex: none; width: 74px; height: 74px; border-radius: 16px; display: grid; place-items: center; background: rgba(26,159,255,.12); box-shadow: inset 0 0 0 1px rgba(26,159,255,.4); overflow: hidden; }
+  .tile .ic svg { width: 40px; height: 40px; }
+  .tile .ic img { width: 100%; height: 100%; object-fit: cover; }
+  .tile h3 { font: 700 26px "Space Grotesk"; letter-spacing: -.02em; }
+  .tile p { margin-top: 4px; font: 600 17px Inter; color: #9aa7b6; }
+  .tile .pr { margin-left: auto; text-align: right; font: 700 15px Inter; color: #8b97a6; }
+  .tile .pr b { display: block; font: 700 28px "Space Grotesk"; color: #ffb347; }
+</style>
+</head>
+<body>
+<div class="wrap" id="og">
+  <div class="grid"></div><div class="glow"></div><div class="glow2"></div>
+  <div class="brand"><img src="../../public/img/brand/ceo-turbo-logo.webp" alt="" /> CEO <b>Turbo</b></div>
+  <div class="loc" id="loc"></div>
+  <h1 id="h"></h1>
+  <p class="sub" id="sub"></p>
+  <div id="art"></div>
+  <div class="cta" id="cta"></div>
+  <div class="cta2" id="cta2"></div>
+</div>
+<script>
+  // Lucide-style icons, stroke only.
+  const icon = (paths, color = "#6cc6ff", w = 1.6) => `<svg viewBox="0 0 24 24" fill="none" stroke="${color}" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round">${paths}</svg>`;
+  const I = {
+    laptop: '<rect x="3" y="4" width="18" height="12" rx="2"/><path d="M2 20h20"/><path d="M9 10l2 2 4-4" stroke="#5ef28f"/>',
+    phone: '<rect x="6" y="2" width="12" height="20" rx="2.5"/><path d="M11 18h2"/>',
+    monitors: '<rect x="2" y="4" width="9" height="7" rx="1"/><rect x="13" y="4" width="9" height="7" rx="1"/><path d="M6.5 11v4M17.5 11v4M4 15h16M12 15v5M8 20h8"/>',
+    wifi: '<path d="M2 8.8a15 15 0 0 1 20 0"/><path d="M5 12.6a10 10 0 0 1 14 0"/><path d="M8.5 16.4a5 5 0 0 1 7 0"/><circle cx="12" cy="20" r="1" fill="#6cc6ff"/>',
+    camera: '<path d="M16.5 7.5 21 5v9l-4.5-2.5"/><rect x="2" y="5" width="14.5" height="9" rx="2"/><path d="M7 14v3M4 20h6"/><circle cx="9" cy="9.5" r="2.2"/>',
+    building: '<rect x="4" y="2" width="16" height="20" rx="2"/><path d="M9 22v-4h6v4M8 6h.01M12 6h.01M16 6h.01M8 10h.01M12 10h.01M16 10h.01M8 14h.01M12 14h.01M16 14h.01"/>',
+    gauge: '<path d="M12 14l4-4"/><path d="M3.3 19a10 10 0 1 1 17.4 0"/>',
+    tower: '<rect x="6" y="2" width="12" height="20" rx="2"/><path d="M10 6h4M10 10h4"/><circle cx="12" cy="16" r="2"/>',
+  };
+  const ticket = (big, badge, rows) =>
+    `<div class="stage"><div class="device">${icon(I[big], "#6cc6ff", 1.3)}<div class="badge">${badge}</div></div><ul class="ticket">${rows.map(([t, p]) => `<li><i>✓</i>${t}${p ? `<span>${p}</span>` : ""}</li>`).join("")}</ul></div>`;
+  const tile = (ic, h, p, pr) => `<div class="tile"><div class="ic">${ic}</div><div><h3>${h}</h3><p>${p}</p></div><div class="pr">from<b>${pr}</b></div></div>`;
+
+  const V = {
+    "tampa-it-support": {
+      loc: "Tampa, FL · we come to you",
+      h: '<span class="c">Tampa IT support</span><br><span class="t">that shows up.</span>',
+      sub: "Computers, phones & tablets fixed. Offices, Wi-Fi and cameras set up. Homes and businesses.",
+      cta: "Price up front · no fix, no charge",
+      cta2: "In person within 40 miles of Tampa · remote anywhere",
+      art: `<div class="tiles">${tile(icon(I.laptop), "Computer repair", "Slow, viruses, won't turn on", "$99")}${tile(icon(I.phone), "Phone & iPad repair", "Screens & batteries at your door", "$99")}${tile('<img src="../../public/img/office/after-640.webp"/>', "Office setup", "Desks, cables, printers, Wi-Fi", "$99")}</div>`,
+    },
+    "computer-repair": {
+      loc: "Computer repair · Tampa Bay",
+      h: '<span class="c">Slow or broken</span><br><span class="t">computer? Fixed.</span>',
+      sub: "PCs, Macs, laptops, iPhones and tablets repaired at your door, or sped up remotely.",
+      cta: "Speed-up from $149 · remote $99",
+      cta2: "Price up front · no fix, no charge",
+      art: ticket("laptop", "FIXED", [["Viruses & pop-ups removed", ""], ["Windows sped up", "3× faster"], ["Files & photos saved", ""], ["Cracked screens replaced", "$149"]]),
+    },
+    "office-setup": {
+      loc: "Office setup · Tampa Bay",
+      h: '<span class="c">From cable mess</span><br><span class="t">to clean desk.</span>',
+      sub: "Multi-monitor workstations, cable management, printers, Wi-Fi and Microsoft 365.",
+      cta: "From $99 per desk",
+      cta2: "Homes, offices & clinics · flat price in writing",
+      art: '<div class="photo"><img src="../../public/img/office/after-1200.webp"/><div class="tag">After</div></div><div class="before"><img src="../../public/img/office/before-640.webp"/><div class="tag">Before</div></div>',
+    },
+    "computer-setup": {
+      loc: "Computer setup · Tampa Bay",
+      h: '<span class="c">New computer?</span><br><span class="t">Ready to use.</span>',
+      sub: "Unboxed, updated, files moved over, printer and monitors connected, cables tidy.",
+      cta: "We come to your home or office",
+      cta2: "Price before we start",
+      art: ticket("monitors", "SET UP", [["Files & email moved over", ""], ["Monitors & printer connected", ""], ["Updates & security on", ""], ["Cables tidied", ""]]),
+    },
+    "security-cameras": {
+      loc: "Doorbells & cameras · Tampa Bay",
+      h: '<span class="c">See who\'s there</span><br><span class="t">from anywhere.</span>',
+      sub: "Ring, Nest, Blink and Wyze doorbells and Wi-Fi cameras installed and on your phone.",
+      cta: "Doorbell installed $119",
+      cta2: "Homes & storefronts · price up front",
+      art: ticket("camera", "LIVE", [["Doorbell mounted & wired", "$119"], ["Wi-Fi cameras installed", "$99"], ["Set up in the app", ""], ["Alerts on your phone", ""]]),
+    },
+    wifi: {
+      loc: "Wi-Fi & internet · Tampa Bay",
+      h: '<span class="c">Strong Wi-Fi</span><br><span class="t">in every room.</span>',
+      sub: "Dead spots, drops and slow speeds fixed. Routers and mesh systems set up right.",
+      cta: "Wi-Fi fix from $129",
+      cta2: "Homes & businesses · price up front",
+      art: ticket("wifi", "ONLINE", [["Dead spots gone", ""], ["Router or mesh set up", "$179"], ["Every device reconnected", ""], ["Speed tested before & after", ""]]),
+    },
+    "business-tech": {
+      loc: "Business IT · Tampa Bay",
+      h: '<span class="c">Your office tech,</span><br><span class="t">handled.</span>',
+      sub: "Workstations, business Wi-Fi, printers, Microsoft 365, cameras and TVs. On-site.",
+      cta: "Flat price in writing first",
+      cta2: "Offices, shops & clinics within 40 miles of Tampa",
+      art: ticket("building", "DONE", [["Workstations & monitors", "$99"], ["Business Wi-Fi & network", ""], ["Printers & Microsoft 365", ""], ["On-site IT by the hour", "$125"]]),
+    },
+    "gaming-pc": {
+      loc: "Gaming PC tune-up",
+      h: '<span class="c">More FPS.</span><br><span class="t">Less stutter.</span>',
+      sub: "Drivers, Windows settings, temps and in-game settings tuned live with you.",
+      cta: "FPS checked before & after",
+      cta2: "Remote anywhere, or in person around Tampa",
+      art: ticket("tower", "+FPS", [["Graphics drivers clean-installed", ""], ["Background bloat removed", ""], ["Temps checked", ""], ["In-game settings tuned", ""]]),
+    },
+  };
+  const v = V[location.hash.slice(1)] || V["tampa-it-support"];
+  document.getElementById("loc").textContent = v.loc;
+  document.getElementById("h").innerHTML = v.h;
+  document.getElementById("sub").textContent = v.sub;
+  document.getElementById("cta").textContent = v.cta;
+  document.getElementById("cta2").textContent = v.cta2;
+  document.getElementById("art").innerHTML = v.art;
+  window.VARIANTS = Object.keys(V);
+</script>
+</body>
+</html>
