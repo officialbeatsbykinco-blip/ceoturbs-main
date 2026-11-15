@@ -273,6 +273,8 @@ copyFileSync(path.join(ADS, "gsap.min.js"), path.join(OUT, "assets/gsap.min.js")
 for (const f of ["Inter.woff2", "SpaceGrotesk.woff2"]) copyFileSync(path.join(ADS, "fonts", f), path.join(OUT, "assets/fonts", f));
 for (const f of ["card-tap", "card-counter", "card-hero"]) copyFileSync(path.join(IMG, `${f}-1600.webp`), path.join(OUT, `assets/img/${f}.webp`));
 copyFileSync(path.join(ADS, "img/ceo-turbo-logo.png"), path.join(OUT, "assets/img/logo.png"));
+// a script can export IMAGES = [[path under public/, name in assets/img/]]
+for (const [src, name] of mod.IMAGES ?? []) copyFileSync(path.join(HERE, "../../public", src), path.join(OUT, "assets/img", name));
 writeFileSync(path.join(OUT, "index.html"), page);
 writeFileSync(path.join(OUT, "hyperframes.json"), JSON.stringify({ paths: { assets: "assets" }, media: { autoProxy: true } }, null, 2) + "\n");
 writeFileSync(path.join(OUT, "meta.json"), JSON.stringify({ id: EP, name: EP }, null, 2) + "\n");

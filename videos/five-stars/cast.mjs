@@ -20,6 +20,8 @@ const P = {
   extra4: { skin: "#c68642", shirt: "#ef4444", pants: "#57534e", hair: "curly", hairColor: "#111827" },
   extra5: { skin: "#f1c27d", shirt: "#78716c", pants: "#44403c", hair: "bald" },
   extra6: { skin: "#ffdbac", shirt: "#14b8a6", pants: "#334155", hair: "bob", hairColor: "#facc15" },
+  nina: { skin: "#d9a066", shirt: "#b91c1c", pants: "#1f2937", hair: "bun", hairColor: "#111827", apron: true },
+  luis: { skin: "#a0662f", shirt: "#111827", pants: "#111827", hair: "part", hairColor: "#111827", apron: true },
   extra7: { skin: "#a0662f", shirt: "#f97316", pants: "#1f2937", hair: "part", hairColor: "#111827" },
 };
 

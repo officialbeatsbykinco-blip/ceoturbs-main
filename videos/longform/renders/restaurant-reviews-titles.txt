@@ -1,0 +1,39 @@
+RESTAURANT REVIEWS VIDEO — titles, thumbnail, tags, pinned comment
+Upload: renders/restaurant-reviews.mp4 · description + chapters: renders/restaurant-reviews-youtube.txt
+
+TITLE (use this one)
+Her Food Was Better. So Why Was Their Restaurant Packed?
+
+A/B TITLES (YouTube Studio → Test & Compare, run all 3)
+1. Her Food Was Better. So Why Was Their Restaurant Packed?
+2. Restaurant Owners: Put This on Every Table
+3. Why the Restaurant With 612 Reviews Beats the One With Better Food
+
+More options for later uploads / Shorts
+- 23 Reviews vs 612 Reviews: Which Restaurant Would You Pick?
+- The $16.99 Card That Fills Empty Restaurant Tables
+- "Leave Us a Review" Doesn't Work. Do This at Every Table.
+- How Restaurants Get Google Reviews Without Begging
+- Your Food Isn't the Problem. Your Google Reviews Are.
+
+THUMBNAIL (16:9, 1280x720)
+Left: Google result "Casa Nina ★4.9 (23)" with a red circle around (23).
+Right: "The Copper Fork ★4.7 (612)" with a green check.
+Big text, 3 words max: "BETTER FOOD. EMPTY TABLES." or "23 vs 612"
+Small: the white review card on a table with a phone tapping it.
+Faces read best at thumbnail size: use Nina's worried face (scene "open", around 0:17).
+
+TAGS
+restaurant marketing, google reviews for restaurants, how to get more google reviews, restaurant owner tips,
+nfc review card, google review card, restaurant google business profile, get more restaurant customers,
+local seo for restaurants, restaurant reviews, small business marketing
+
+PINNED COMMENT
+Restaurant owners: what's your Google review count right now? Drop it below 👇
+Cards for every table (from $16.99, free US shipping): https://ceoturbo.com/google-review-cards
+Free 30-min call for Maps, DoorDash/Uber Eats and TV menus: https://ceoturbo.com/restaurants
+
+END SCREEN (last 20 s)
+Element 1: "Video" → "I Stopped Asking for Google Reviews. I Started Handing Them This."
+Element 2: Subscribe
+Card at 3:38 (the card scene): link to ceoturbo.com/google-review-cards (needs YouTube Partner Program or an associated website)
