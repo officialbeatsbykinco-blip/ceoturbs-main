@@ -1,7 +1,7 @@
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { BookButton } from "@/components/cta/Actions";
 import { CALL_FIRST_SLUGS } from "@/content/services";
-import { MessageSquare, Phone, Wrench } from "lucide-react";
+import { MessageSquare, Phone, Search, Wrench } from "lucide-react";
 import { SITE, fromPriceLabel } from "@/config/site";
 import { IT_SERVICES_PATH, techBooking } from "@/content/tech-pages";
 import { FixMyTechLink } from "@/components/tech/FixMyTechLink";
@@ -11,9 +11,36 @@ import { SHIRTS_PATH } from "@/content/company-shirts";
 import { ARTIST_MERCH_PATH } from "@/content/artist-merch";
 import { CARD_TEXT, QUICK_TECH_TEXT, QUICK_TEXT, smsHref } from "@/lib/sms";
 
+/** Growth pages: the free Google & AI check is the first tap, not tech repair. */
+const MARKETING_SLUGS = ["seo-aeo-geo", "website-design", "meta-ads", "google-ads", "tiktok-ads", "x-ads", "google-business-profile", "social-media-optimization", "email-marketing", "conversion-tracking"];
+const MARKETING_PAGES = ["/grow", "/results", "/local-business", "/artist", "/producers", "/visual-artists", "/shopify", "/salons", "/barbershops", "/how-to-get-more-customers", "/watch", "/about", "/services"];
+export const isMarketingPage = (p: string) =>
+  MARKETING_PAGES.includes(p) || MARKETING_SLUGS.some((s) => p === `/services/${s}`) || p.startsWith("/guides") || p.startsWith("/portfolio") || p === "/how-to-get-more-google-reviews";
+
 /** Sticky bottom bar on phones: the money actions are always one tap away. The shop pages have their own buy bars. */
 export function MobileActionBar() {
   const { pathname } = useLocation();
+  // /free-audit has its own bar (jump to the check); the home page has its own too.
+  if (pathname === "/free-audit") return null;
+  if (isMarketingPage(pathname))
+    return (
+      <div className="pb-safe fixed inset-x-0 bottom-0 z-40 border-t border-border/80 bg-background/95 px-2.5 pt-2.5 backdrop-blur-xl sm:hidden">
+        <div className="flex items-center gap-1.5">
+          <Link to="/free-audit" data-cta-location="mobile bar" className="btn-ignite flex flex-[1.4] items-center justify-center gap-1.5 whitespace-nowrap !px-2 !py-3.5 !text-base font-bold shadow-lg">
+            <Search className="h-4 w-4 shrink-0" aria-hidden />
+            <span>Free check</span>
+          </Link>
+          <CallLink location="mobile bar" className="btn-blue flex flex-1 items-center justify-center gap-1.5 whitespace-nowrap !px-2 !py-3.5 !text-base font-bold">
+            <Phone className="h-4 w-4 shrink-0" aria-hidden />
+            <span>Call</span>
+          </CallLink>
+          <a href={smsHref(QUICK_TEXT)} data-call-location="mobile bar text" className="btn-chrome flex flex-1 items-center justify-center gap-1.5 whitespace-nowrap !px-2 !py-3.5 !text-base font-bold">
+            <MessageSquare className="h-4 w-4 shrink-0" aria-hidden />
+            <span>Text</span>
+          </a>
+        </div>
+      </div>
+    );
   if (pathname === "/" || pathname === SHOP_PATH || pathname === SHIRTS_PATH || pathname === ARTIST_MERCH_PATH) return null;
   if (pathname === REVIEWS_AD_PATH)
     return (

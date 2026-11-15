@@ -7,8 +7,10 @@ import { FAQList, SectionHeader } from "@/components/blocks/Basics";
 import { AUDIT_FAQS } from "@/content/faqs";
 import { CLIENTS } from "@/content/clients";
 import { AD_TOTALS, money } from "@/content/results";
+import { FREE_CHECK_NAME } from "@/components/audit/AuditTool";
 
 const PILLARS = [
+  { k: "Maps", t: "Win on Google Maps", items: ["Are you on Google Maps — and open?", "Your real star rating and review count", "The top 3 competitors near you, side by side", "Review link on your site"] },
   { k: "SEO", t: "Get found on Google", items: ["Title, description and headings", "Readable content (not JavaScript-only)", "Mobile setup, speed and sitemap", "Indexing blocks that hide you"] },
   { k: "AEO", t: "Get quoted in AI answers", items: ["Schema markup for your business or artist", "FAQ content assistants can lift", "Phone, location and what you do — up front", "Clear section structure"] },
   { k: "GEO", t: "Get recommended by AI", items: ["ChatGPT, Perplexity and Claude crawler access", "llms.txt summary for AI tools", "Links between your site and profiles", "Presence in Wikidata, MusicBrainz and maps"] },
@@ -19,13 +21,19 @@ export default function FreeAudit() {
     <div className="pb-16 sm:pb-0">
       <AuditHero
         source="Free audit page"
-        eyebrow="Free · about 60 seconds · no credit card"
+        eyebrow={`${FREE_CHECK_NAME} · 60 seconds · no card`}
         title={
           <>
-            <span className="text-chrome-grad">Free SEO, AEO &amp; GEO audit.</span> <span className="text-turbo-grad">See what's costing you customers.</span>
+            <span className="text-chrome-grad">Why do customers pick your competitor?</span> <span className="text-turbo-grad">Find out free in 60 seconds.</span>
           </>
         }
-        lede="Type your business or artist name. We scan your website and the sources Google and AI tools trust, score you out of 100, and show you exactly what to fix first."
+        lede="Type your business name and city. We check your Google Maps listing, reviews, website and what ChatGPT can see, compare you to the top competitors near you, and score you out of 100. You see your score before we ask for anything."
+        points={[
+          <><span className="font-semibold">Google Maps:</span> <span className="text-muted-foreground">your rating and reviews vs the top 3 near you</span></>,
+          <><span className="font-semibold">Website:</span> <span className="text-muted-foreground">can Google find, read and rank it?</span></>,
+          <><span className="font-semibold">AI answers:</span> <span className="text-muted-foreground">can ChatGPT, Gemini and Perplexity name you?</span></>,
+          <><span className="font-semibold">Fix list:</span> <span className="text-muted-foreground">ranked by how many customers each costs you</span></>,
+        ]}
         footer={
           <>
             Built by the team behind {CLIENTS.length} live client sites and {AD_TOTALS.leads} Meta leads at {money(AD_TOTALS.avgCpl)} average.
@@ -35,8 +43,8 @@ export default function FreeAudit() {
 
       <section className="section" aria-labelledby="checks">
         <div className="container-x">
-          <SectionHeader title={<span id="checks">What the audit checks</span>} lede="Search changed. Customers still Google you — but more and more ask ChatGPT, Gemini or Perplexity first. You need to show up in all three." />
-          <div className="mt-12 grid gap-5 md:grid-cols-3">
+          <SectionHeader title={<span id="checks">What does the free check look at?</span>} lede="Four things decide who gets the call: your Google Maps listing and reviews, your website, and whether AI assistants trust you enough to name you. The check scores all four in about 60 seconds, using live data from Google and your own site." />
+          <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
             {PILLARS.map((p) => (
               <div key={p.k} className="panel group p-6 transition-shadow duration-300 hover:shadow-[0_0_0_1px_hsl(var(--turbo)/0.5),0_30px_60px_-30px_hsl(var(--turbo)/0.5)]">
                 <p className="font-display text-4xl font-bold text-turbo-grad">{p.k}</p>
@@ -54,7 +62,7 @@ export default function FreeAudit() {
           </div>
           <div className="mt-10 flex flex-wrap gap-3">
             <a href="#audit" className="btn-ignite btn-shine">
-              Run my free audit <ArrowRight className="h-4 w-4" aria-hidden />
+              Run my free check <ArrowRight className="h-4 w-4" aria-hidden />
             </a>
             <Link to="/guides/seo-vs-aeo-vs-geo" className="btn-chrome">
               SEO vs AEO vs GEO, explained
@@ -87,18 +95,18 @@ export default function FreeAudit() {
         </div>
       </section>
 
-      <FAQList faqs={AUDIT_FAQS} title="Audit questions" />
+      <FAQList faqs={AUDIT_FAQS} title="Free check questions" />
       <BookingSection note="Free audit page — booking section" title="Rather talk it through? Pick a time." />
 
       {/* Mobile floating action bar for ad visitors who scroll */}
       <aside aria-label="Quick audit" className="fixed inset-x-0 bottom-0 z-40 border-t border-white/10 bg-background/95 px-4 py-3 backdrop-blur-xl sm:hidden">
         <div className="flex items-center justify-between gap-3">
           <div className="min-w-0">
-            <p className="truncate text-xs font-bold text-foreground">Free Visibility Audit</p>
-            <p className="truncate text-[11px] text-muted-foreground">Takes 60s · No credit card</p>
+            <p className="truncate text-xs font-bold text-foreground">Free Google &amp; AI check</p>
+            <p className="truncate text-[11px] text-muted-foreground">60 seconds · see your score first</p>
           </div>
           <a href="#audit" className="btn-ignite btn-shine shrink-0 !px-4 !py-2.5 !text-xs font-semibold">
-            Scan business <ArrowRight className="h-3.5 w-3.5" aria-hidden />
+            Check mine <ArrowRight className="h-3.5 w-3.5" aria-hidden />
           </a>
         </div>
       </aside>

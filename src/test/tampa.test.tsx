@@ -104,6 +104,21 @@ describe("call and text taps", () => {
     expect(fbq.some((c) => c[0] === "track" && c[1] === "Contact")).toBe(true);
   });
 
+  it("counts the \"Call us\" link inside a quiz as a call (only the quiz's own text button is skipped)", () => {
+    mobile = true;
+    for (const location of ["text quiz call", "office quiz call"]) {
+      fbq.length = 0;
+      const a = document.createElement("a");
+      a.href = "tel:+16785584327";
+      a.dataset.callLocation = location;
+      a.addEventListener("click", (e) => e.preventDefault());
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      expect(fbq.some((c) => c[0] === "track" && c[1] === "Contact"), location).toBe(true);
+    }
+  });
+
   it("keeps a desktop click (which only shows the number) out of Meta Contact", () => {
     mobile = false;
     clickTel();

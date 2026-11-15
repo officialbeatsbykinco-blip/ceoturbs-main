@@ -23,9 +23,12 @@ export type Report = {
   categories: string[];
   checks: Check[];
   top: string[];
-  meta: { site: string | null; platform: string | null; psi: boolean; checkedAt: string };
+  google?: GoogleData | null;
+  meta: { site: string | null; platform: string | null; psi: boolean; google?: boolean; checkedAt: string };
 };
-type Stage = "business" | "questions" | "contact" | "scan" | "report" | "failed";
+type Place = { name: string; rating: number | null; reviews: number; mapsUrl?: string; category?: string };
+type GoogleData = { found: boolean; place: Place | null; competitors: Place[] };
+type Stage = "business" | "questions" | "scan" | "teaser" | "unlocking" | "report" | "failed";
 
 type Form = {
   kind: Kind;
@@ -68,7 +71,11 @@ const QUESTIONS: Record<Kind, { key: keyof Form; label: string; options: [string
   ],
 };
 
-const SCAN_STEPS = ["Loading your website", "Reading titles, headings and content", "Checking schema and FAQ markup", "Testing AI crawler access (ChatGPT, Perplexity, Claude)", "Searching knowledge graphs for your name", "Scoring SEO, AEO and GEO", "Writing your action plan"];
+const SCAN_STEPS = ["Looking you up on Google Maps", "Finding your top competitors nearby", "Loading your website", "Reading titles, headings and content", "Checking schema and FAQ markup", "Testing AI access (ChatGPT, Perplexity, Claude)", "Scoring Google, AI and reviews"];
+const ARTIST_SCAN_STEPS = ["Loading your website or main link", "Reading titles, headings and content", "Checking schema and FAQ markup", "Testing AI access (ChatGPT, Perplexity, Claude)", "Searching music and knowledge databases", "Scoring SEO, AEO and GEO", "Writing your action plan"];
+
+/** The name used everywhere for the lead magnet. */
+export const FREE_CHECK_NAME = "Free Google & AI Visibility Check";
 
 const EMAIL = /^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i;
 const STORE = "ct_audit_v1";
@@ -90,6 +97,7 @@ export function AuditTool({ source = "audit", onStageChange, compact = false }: 
   const [report, setReport] = useState<Report | null>(null);
   const [scanStep, setScanStep] = useState(0);
   const [failure, setFailure] = useState<"rate" | "server" | "network">("server");
+  const [unlocked, setUnlocked] = useState(false);
   const started = useRef(0);
   const top = useRef<HTMLDivElement>(null);
   const uid = useId();
@@ -110,8 +118,14 @@ export function AuditTool({ source = "audit", onStageChange, compact = false }: 
       if (saved?.report) {
         setForm({ ...EMPTY, ...saved.form });
         setReport(saved.report);
-        setStage("report");
+        setUnlocked(saved.unlocked !== false);
+        setStage(saved.unlocked === false ? "teaser" : "report");
+        return;
       }
+      // Prefill from the homepage hero (/free-audit?b=Business&c=City&w=what).
+      const q = new URLSearchParams(window.location.search);
+      const b = q.get("b")?.slice(0, 100) || "";
+      if (b) setForm((f) => ({ ...f, business: b, city: q.get("c")?.slice(0, 60) || f.city, what: q.get("w")?.slice(0, 60) || f.what }));
     } catch {
       /* ignore */
     }
@@ -121,7 +135,7 @@ export function AuditTool({ source = "audit", onStageChange, compact = false }: 
   useEffect(() => {
     if (stage !== "scan") return;
     setScanStep(0);
-    const t = setInterval(() => setScanStep((i) => Math.min(i + 1, SCAN_STEPS.length - 1)), 650);
+    const t = setInterval(() => setScanStep((i) => Math.min(i + 1, SCAN_STEPS.length - 1)), 800);
     return () => clearInterval(t);
   }, [stage]);
 
@@ -140,20 +154,64 @@ export function AuditTool({ source = "audit", onStageChange, compact = false }: 
   const questions = QUESTIONS[form.kind];
   const answered = questions.every((q) => form[q.key]);
 
-  const submitContact = async (e: FormEvent) => {
-    e.preventDefault();
-    const errs: typeof errors = {};
-    if (form.name.trim().length < 2) errs.name = "Enter your name.";
-    if (!EMAIL.test(form.email.trim())) errs.email = "Enter a valid email.";
-    const digits = form.phone.replace(/\D/g, "");
-    if (digits.length < 10 || digits.length > 15) errs.phone = "Enter a valid phone number.";
-    if (Object.keys(errs).length) return setErrors(errs);
+  const save = (r: Report, isUnlocked: boolean, f: Form = form) => {
+    try {
+      sessionStorage.setItem(STORE, JSON.stringify({ form: { ...f, company_site: "" }, report: r, unlocked: isUnlocked }));
+    } catch {
+      /* ignore */
+    }
+  };
 
+  /** Step 3: run the real scan with no contact details. The visitor sees a teaser, then unlocks it. */
+  const runScan = async () => {
     setStage("scan");
     scrollTop();
+    const minWait = new Promise((r) => setTimeout(r, 4800));
+    try {
+      const { name: _n, email: _e, phone: _p, smsOptIn: _s, ...business } = form;
+      const res = await fetch("/api/audit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...business, mode: "scan", elapsedMs: Date.now() - (started.current || Date.now()), page: window.location.pathname }),
+      });
+      const data = await res.json().catch(() => ({}));
+      await minWait;
+      if (res.ok && data.report) {
+        setReport(data.report);
+        setUnlocked(false);
+        setStage("teaser");
+        scrollTop();
+        track("audit_teaser", { score: data.report.overall, source, google: !!data.report.google?.found });
+        save(data.report, false);
+        return;
+      }
+      if (res.status === 400 && data.error === "business") {
+        setErrors({ business: "Enter your business or artist name." });
+        return setStage("business");
+      }
+      setFailure(res.status === 429 ? "rate" : "server");
+      setStage("failed");
+    } catch {
+      await minWait;
+      setFailure("network");
+      setStage("failed");
+    }
+  };
+
+  /** Step 4: first name + mobile unlock the full report. This is the lead (same sheet fields as before). */
+  const submitUnlock = async (e: FormEvent) => {
+    e.preventDefault();
+    if (!report) return;
+    const errs: typeof errors = {};
+    if (form.name.trim().length < 2) errs.name = "Enter your first name.";
+    const digits = form.phone.replace(/\D/g, "");
+    if (digits.length < 10 || digits.length > 15) errs.phone = "Enter a valid mobile number.";
+    if (form.email.trim() && !EMAIL.test(form.email.trim())) errs.email = "Check your email (or leave it blank).";
+    if (Object.keys(errs).length) return setErrors(errs);
+
+    setStage("unlocking");
     // One id shared by the browser Pixel and the server's Lead so Meta counts it once. The browser copy
-    // fires only after the server takes the lead: a typo'd phone that comes back 400 must not count as a
-    // Lead, then count again when they fix it.
+    // fires only after the server takes the lead: a typo'd phone that comes back 400 must not count.
     const leadEventId = newEventId("generate_lead");
     let counted = false;
     const countLead = () => {
@@ -165,46 +223,49 @@ export function AuditTool({ source = "audit", onStageChange, compact = false }: 
         { eventId: leadEventId, user: { email: form.email, phone: form.phone, name: form.name, externalId: visitorId() } },
       );
     };
-    const minWait = new Promise((r) => setTimeout(r, 4200));
-    try {
-      const res = await fetch("/api/audit", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...form, visitorId: visitorId(), elapsedMs: Date.now() - (started.current || Date.now()), page: window.location.pathname, eventId: leadEventId, attribution: attribution() }),
-      });
-      const data = await res.json().catch(() => ({}));
-      // The server saved the lead (a 503 means the scan failed but the lead is in): count it now.
-      if (res.status !== 400 && res.status !== 429) countLead();
-      await minWait;
-      if (res.ok && data.report) {
-        setReport(data.report);
-        setStage("report");
-        scrollTop();
-        track("audit_complete", { score: data.report.overall, source });
-        try {
-          sessionStorage.setItem(STORE, JSON.stringify({ form: { ...form, company_site: "" }, report: data.report }));
-        } catch {
-          /* ignore */
+    const topLabels = report.top.map((id) => report.checks.find((c) => c.id === id)?.label).filter(Boolean);
+    const payload = JSON.stringify({
+      ...form,
+      mode: "unlock",
+      summary: { overall: report.overall, scores: report.scores, top: topLabels },
+      visitorId: visitorId(),
+      elapsedMs: Date.now() - (started.current || Date.now()),
+      page: window.location.pathname,
+      eventId: leadEventId,
+      attribution: attribution(),
+    });
+    const reveal = () => {
+      setUnlocked(true);
+      setStage("report");
+      scrollTop();
+      track("audit_complete", { score: report.overall, source });
+      save(report, true);
+    };
+    // Up to 3 tries on a server or network hiccup; the sheet de-duplicates on the event id.
+    for (let attempt = 0; attempt < 3; attempt++) {
+      try {
+        const res = await fetch("/api/audit", { method: "POST", headers: { "Content-Type": "application/json" }, body: payload, keepalive: true });
+        const data = await res.json().catch(() => ({}));
+        if (res.status === 400 && ["name", "email", "phone"].includes(data.error)) {
+          setErrors({ [data.error]: data.error === "phone" ? "Enter a valid mobile number." : data.error === "email" ? "Check your email (or leave it blank)." : "Enter your first name." });
+          return setStage("teaser");
         }
-        return;
+        if (res.status === 429) {
+          countLead();
+          return reveal();
+        }
+        if (res.ok) {
+          countLead();
+          return reveal();
+        }
+      } catch {
+        /* retry */
       }
-      if (res.status === 400 && ["name", "email", "phone"].includes(data.error)) {
-        setErrors({ [data.error]: data.error === "phone" ? "Enter a valid phone number." : data.error === "email" ? "Enter a valid email." : "Enter your name." });
-        return setStage("contact");
-      }
-      if (res.status === 400 && data.error === "business") {
-        setErrors({ business: "Enter your business or artist name." });
-        return setStage("business");
-      }
-      setFailure(res.status === 429 ? "rate" : "server");
-      setStage("failed");
-    } catch {
-      // No answer at all: the server may still have it, so count it rather than lose the conversion.
-      countLead();
-      await minWait;
-      setFailure("network");
-      setStage("failed");
+      await new Promise((r) => setTimeout(r, 900 * (attempt + 1)));
     }
+    // They gave us their number: never hold the report hostage to our own outage.
+    countLead();
+    reveal();
   };
 
   const restart = () => {
@@ -214,6 +275,7 @@ export function AuditTool({ source = "audit", onStageChange, compact = false }: 
       /* ignore */
     }
     setReport(null);
+    setUnlocked(false);
     setForm((f) => ({ ...EMPTY, kind: f.kind, name: f.name, email: f.email, phone: f.phone, smsOptIn: f.smsOptIn }));
     started.current = Date.now();
     setStage("business");
@@ -222,7 +284,14 @@ export function AuditTool({ source = "audit", onStageChange, compact = false }: 
 
   const stepNo = stage === "business" ? 1 : stage === "questions" ? 2 : 3;
 
-  if (stage === "report" && report) return <div ref={top} className="scroll-mt-24"><AuditReport report={report} form={form} source={source} onRestart={restart} /></div>;
+  if ((stage === "teaser" || stage === "unlocking") && report)
+    return (
+      <div ref={top} className="scroll-mt-24">
+        <AuditTeaser report={report} form={form} errors={errors} uid={uid} busy={stage === "unlocking"} set={set} onSubmit={submitUnlock} />
+      </div>
+    );
+
+  if (stage === "report" && report && unlocked) return <div ref={top} className="scroll-mt-24"><AuditReport report={report} form={form} source={source} onRestart={restart} /></div>;
 
   return (
     <div ref={top} className={cn("audit-card relative scroll-mt-20 overflow-clip rounded-3xl p-5 sm:scroll-mt-24 sm:p-7", compact && "sm:p-6")}>
@@ -230,7 +299,7 @@ export function AuditTool({ source = "audit", onStageChange, compact = false }: 
       {stage !== "scan" && stage !== "failed" && (
         <div className="relative mb-5 flex items-center justify-between gap-3">
           <p className="flex items-center gap-2 text-sm font-semibold text-foreground">
-            <Sparkles className="h-4 w-4 text-turbo" aria-hidden /> Free Brand Visibility Check
+            <Sparkles className="h-4 w-4 text-turbo" aria-hidden /> {FREE_CHECK_NAME}
           </p>
           <div className="flex items-center gap-2 text-xs text-muted-foreground" aria-label={`Step ${stepNo} of 3`}>
             {[1, 2, 3].map((n) => (
@@ -278,9 +347,9 @@ export function AuditTool({ source = "audit", onStageChange, compact = false }: 
             </Field>
           </div>
           <button type="submit" className="btn-ignite btn-shine mt-5 w-full !py-4 !text-base">
-            Scan my visibility <ArrowRight className="h-4 w-4" aria-hidden />
+            {form.kind === "artist" ? "Check my visibility" : "Check my Google & AI visibility"} <ArrowRight className="h-4 w-4" aria-hidden />
           </button>
-          <p className="mt-3 text-center text-xs text-muted-foreground">Free · about 60 seconds · Google, Maps &amp; reviews</p>
+          <p className="mt-3 text-center text-xs text-muted-foreground">Free · about 60 seconds · no card · see your score before we ask for anything</p>
         </form>
       )}
 
@@ -307,72 +376,20 @@ export function AuditTool({ source = "audit", onStageChange, compact = false }: 
             <button type="button" onClick={() => { setStage("business"); scrollTop(); }} className="btn-chrome !px-4">
               Back
             </button>
-            <button type="button" disabled={!answered} onClick={() => { setStage("contact"); scrollTop(); }} className="btn-ignite btn-shine flex-1 disabled:pointer-events-none disabled:opacity-40">
-              Continue <ArrowRight className="h-4 w-4" aria-hidden />
+            <button type="button" disabled={!answered} onClick={runScan} className="btn-ignite btn-shine flex-1 !py-4 disabled:pointer-events-none disabled:opacity-40">
+              Run my free check <ArrowRight className="h-4 w-4" aria-hidden />
             </button>
           </div>
         </div>
-      )}
-
-      {stage === "contact" && (
-        <form onSubmit={submitContact} className="relative animate-step" noValidate>
-          <div className="relative mb-5 flex items-center gap-4 overflow-hidden rounded-2xl bg-white/[0.03] p-4 ring-1 ring-white/5">
-            <div className="relative grid h-16 w-16 shrink-0 place-items-center rounded-full border-[6px] border-turbo/40 blur-[1.5px]" aria-hidden>
-              <span className="font-display text-xl font-bold">??</span>
-            </div>
-            <div className="min-w-0">
-              <p className="flex items-center gap-1.5 text-sm font-semibold">
-                <Lock className="h-3.5 w-3.5 text-turbo" aria-hidden /> Your report is ready to run
-              </p>
-              <p className="mt-1 text-xs leading-relaxed text-muted-foreground">Score, every problem we find and how to fix each one — for {form.business}.</p>
-            </div>
-          </div>
-          <div className="grid gap-3">
-            <Field id={`${uid}-name`} label="Your name" error={errors.name}>
-              <input id={`${uid}-name`} data-clarity-mask="true" className="field" value={form.name} onChange={(e) => set("name", e.target.value)} autoComplete="name" maxLength={100} />
-            </Field>
-            <div className="grid gap-3 sm:grid-cols-2">
-              <Field id={`${uid}-email`} label="Email" error={errors.email}>
-                <input id={`${uid}-email`} data-clarity-mask="true" type="email" className="field" value={form.email} onChange={(e) => set("email", e.target.value)} autoComplete="email" inputMode="email" maxLength={200} />
-              </Field>
-              <Field id={`${uid}-phone`} label="Mobile phone" error={errors.phone}>
-                <input id={`${uid}-phone`} data-clarity-mask="true" type="tel" className="field" value={form.phone} onChange={(e) => set("phone", e.target.value)} autoComplete="tel" inputMode="tel" maxLength={30} placeholder="(404) 555-0123" />
-              </Field>
-            </div>
-            <label className="hidden" aria-hidden>
-              Company site
-              <input tabIndex={-1} autoComplete="off" value={form.company_site} onChange={(e) => set("company_site", e.target.value)} />
-            </label>
-            <label className="flex cursor-pointer items-start gap-3 text-xs leading-relaxed text-muted-foreground">
-              <input type="checkbox" className="mt-0.5 h-4 w-4 shrink-0 accent-[hsl(var(--turbo))]" checked={form.smsOptIn} onChange={(e) => set("smsOptIn", e.target.checked)} />
-              <span>I agree to receive text messages from CEO Turbo about my audit report and follow-up. Message frequency varies. Msg &amp; data rates may apply. Reply STOP to opt out, HELP for help. Consent is not a condition of purchase. <Link to="/terms" className="underline underline-offset-2 hover:text-foreground">Terms</Link> &amp; <Link to="/privacy-policy" className="underline underline-offset-2 hover:text-foreground">Privacy</Link>.</span>
-            </label>
-          </div>
-          <div className="mt-5 flex items-center gap-3">
-            <button type="button" onClick={() => { setStage("questions"); scrollTop(); }} className="btn-chrome !px-4">
-              Back
-            </button>
-            <button type="submit" className="btn-ignite btn-shine flex-1 !py-4">
-              Show my free report <ArrowRight className="h-4 w-4" aria-hidden />
-            </button>
-          </div>
-          <p className="mt-3 text-[11px] leading-relaxed text-muted-foreground">
-            By continuing you agree that CEO Turbo may email or call you about your report (texts only if you ticked the box). No spam, no selling your info —{" "}
-            <Link to="/privacy-policy" className="underline underline-offset-2 hover:text-foreground">
-              privacy policy
-            </Link>
-            .
-          </p>
-        </form>
       )}
 
       {stage === "scan" && (
         <div className="relative py-2" role="status" aria-live="polite">
           <div className="scan-beam pointer-events-none absolute inset-x-0 top-0 h-24" aria-hidden />
           <p className="font-display text-xl font-bold">Scanning {form.business}…</p>
-          <p className="mt-1 text-sm text-muted-foreground">{form.website ? form.website.replace(/^https?:\/\//, "") : "No website — checking where you can be found"}</p>
+          <p className="mt-1 text-sm text-muted-foreground">{form.website ? form.website.replace(/^https?:\/\//, "") : form.kind === "business" ? "Checking Google, your website and AI answers" : "Checking where fans can find you"}</p>
           <ol className="mt-6 space-y-3">
-            {SCAN_STEPS.map((s, i) => (
+            {(form.kind === "artist" ? ARTIST_SCAN_STEPS : SCAN_STEPS).map((s, i) => (
               <li key={s} className={cn("flex items-center gap-3 text-sm transition-opacity duration-300", i > scanStep ? "opacity-30" : "opacity-100")}>
                 <span className="grid h-6 w-6 shrink-0 place-items-center rounded-full bg-white/5">
                   {i < scanStep ? <Check className="h-3.5 w-3.5 text-emerald-400" aria-hidden /> : i === scanStep ? <Loader2 className="h-3.5 w-3.5 animate-spin text-turbo" aria-hidden /> : null}
@@ -395,7 +412,7 @@ export function AuditTool({ source = "audit", onStageChange, compact = false }: 
               Book my free audit call
             </button>
             <CallLink location="audit failed" icon className="btn-chrome" />
-            <button type="button" className="btn-chrome" onClick={() => setStage("contact")}>
+            <button type="button" className="btn-chrome" onClick={runScan}>
               <RotateCcw className="h-4 w-4" aria-hidden /> Try again
             </button>
           </div>
@@ -472,6 +489,12 @@ export function AuditReport({ report: r, form: f, source, onRestart }: { report:
         </div>
       </div>
 
+      {r.google && (r.google.competitors.length > 0 || !r.google.found) && (
+        <div className="mt-6">
+          <GoogleCompare google={r.google} name={r.name} what={f.what} city={f.city} />
+        </div>
+      )}
+
       {topChecks.length > 0 && (
         <div className="mt-8">
           <h3 className="text-2xl font-bold">Fix these first</h3>
@@ -508,9 +531,12 @@ export function AuditReport({ report: r, form: f, source, onRestart }: { report:
               Book a free call. Christopher walks through your report, shows you which fix brings customers fastest, and gives you a fixed price. Keep the plan either way.
             </p>
           </div>
-          <button type="button" onClick={() => book("main CTA")} className="btn-ignite btn-shine !px-7 !py-4 !text-base">
-            Book my free fix call <ArrowRight className="h-4 w-4" aria-hidden />
-          </button>
+          <div className="flex flex-col gap-2.5">
+            <button type="button" onClick={() => book("main CTA")} className="btn-ignite btn-shine !px-7 !py-4 !text-base">
+              Book my free fix call <ArrowRight className="h-4 w-4" aria-hidden />
+            </button>
+            <CallLink location="audit report" icon className="btn-chrome justify-center" />
+          </div>
         </div>
       </div>
 
@@ -542,6 +568,7 @@ export function AuditReport({ report: r, form: f, source, onRestart }: { report:
               Ask {l} <ArrowRight className="h-3.5 w-3.5 -rotate-45" aria-hidden />
             </a>
           ))}
+          <ShareResults report={r} />
         </div>
       </div>
 
@@ -587,9 +614,184 @@ export function AuditReport({ report: r, form: f, source, onRestart }: { report:
           </button>
         </div>
         <p className="mt-6 text-xs leading-relaxed text-muted-foreground">
-          Automated checks of your public website and open data sources (Wikidata{r.kind === "artist" ? ", Wikipedia, MusicBrainz" : ", OpenStreetMap"}{r.meta.psi ? ", Google PageSpeed" : ""}), plus your answers. Rankings and AI answers change constantly; this is a snapshot, not a guarantee.
+          Automated checks of your public website and open data sources (Wikidata{r.kind === "artist" ? ", Wikipedia, MusicBrainz" : ", OpenStreetMap"}{r.meta.psi ? ", Google PageSpeed" : ""}), {r.meta.google ? ", Google Maps" : ""}, plus your answers. Rankings and AI answers change constantly; this is a snapshot, not a guarantee.
         </p>
       </div>
     </div>
+  );
+}
+
+/** Real Google numbers: the business vs the top competitors for its category in its city. */
+export function GoogleCompare({ google, name, what, city }: { google: GoogleData; name: string; what?: string; city?: string }) {
+  const rows: (Place & { you?: boolean })[] = [...(google.place ? [{ ...google.place, you: true }] : [{ name, rating: null, reviews: 0, you: true }]), ...google.competitors];
+  const max = Math.max(1, ...rows.map((r) => r.reviews));
+  return (
+    <div className="rounded-2xl bg-white/[0.03] p-4 ring-1 ring-white/5 sm:p-5">
+      <p className="text-sm font-semibold">
+        On Google{what && city ? ` for “${what} in ${city}”` : ""}
+      </p>
+      {!google.found && <p className="mt-1 text-xs text-[#ff8080]">We couldn't find {name} on Google Maps — customers can't either.</p>}
+      <ul className="mt-3 space-y-2.5">
+        {rows.map((r, i) => (
+          <li key={`${r.name}-${i}`} className="text-sm">
+            <div className="flex items-baseline justify-between gap-3">
+              <span className={cn("min-w-0 truncate", r.you ? "font-semibold text-foreground" : "text-muted-foreground")}>
+                {r.you ? "You" : r.name}
+              </span>
+              <span className="shrink-0 tabular-nums text-muted-foreground">
+                {r.rating ? `${r.rating.toFixed(1)}★ · ` : ""}
+                <span className={cn("font-semibold", r.you ? "text-foreground" : "")}>{r.reviews}</span> reviews
+              </span>
+            </div>
+            <div className="mt-1 h-1.5 overflow-hidden rounded-full bg-white/10">
+              <div className={cn("bar-grow h-full rounded-full", r.you ? "bg-[hsl(var(--ignite-hot))]" : "bg-white/30")} style={{ width: `${Math.max(3, (r.reviews / max) * 100)}%` }} />
+            </div>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+function AuditTeaser({
+  report: r,
+  form: f,
+  errors,
+  uid,
+  busy,
+  set,
+  onSubmit,
+}: {
+  report: Report;
+  form: Form;
+  errors: Partial<Record<keyof Form | "form", string>>;
+  uid: string;
+  busy: boolean;
+  set: <K extends keyof Form>(k: K, v: Form[K]) => void;
+  onSubmit: (e: FormEvent) => void;
+}) {
+  const g = grade(r.overall);
+  const topChecks = r.top.map((id) => r.checks.find((c) => c.id === id)).filter(Boolean) as Check[];
+  const shown = topChecks.slice(0, 2);
+  const hidden = r.checks.filter((c) => c.status !== "pass").length - shown.length;
+  const formRef = useRef<HTMLFormElement>(null);
+  useEffect(() => {
+    track("audit_unlock_view", { score: r.overall });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  return (
+    <div className="animate-step space-y-4">
+      <div className="audit-card relative overflow-clip rounded-3xl p-5 sm:p-7">
+        <div className="pointer-events-none absolute -left-20 -top-28 h-72 w-72 rounded-full bg-turbo/20 blur-3xl" aria-hidden />
+        <div className="relative flex flex-col items-center gap-5 sm:flex-row sm:gap-7">
+          <ScoreGauge value={r.overall} />
+          <div className="text-center sm:text-left">
+            <p className="text-sm font-medium text-muted-foreground">Your free check is done</p>
+            <h2 className="mt-1 text-2xl font-bold leading-tight sm:text-3xl">
+              {r.name}: <span className={g.tone}>{g.label}</span>
+            </h2>
+            <p className="mt-2 max-w-xl text-sm text-muted-foreground sm:text-base">{g.line}</p>
+          </div>
+        </div>
+        {r.google && (
+          <div className="relative mt-5">
+            <GoogleCompare google={r.google} name={r.name} what={f.what} city={f.city} />
+          </div>
+        )}
+      </div>
+
+      {shown.length > 0 && (
+        <div className="panel p-4 sm:p-5">
+          <h3 className="text-lg font-bold">Your 2 biggest problems</h3>
+          <ol className="mt-3 space-y-3">
+            {shown.map((c, i) => (
+              <li key={c.id} className="flex gap-3">
+                <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-[#ff6b6b]/15 font-display text-sm font-bold text-[#ff8080]">{i + 1}</span>
+                <div className="min-w-0">
+                  <p className="font-semibold">{c.label}</p>
+                  <p className="mt-0.5 text-sm leading-relaxed text-muted-foreground">{c.detail}</p>
+                </div>
+              </li>
+            ))}
+          </ol>
+          {hidden > 0 && (
+            <div className="relative mt-4 overflow-hidden rounded-xl">
+              <ul className="space-y-2 blur-[5px] select-none" aria-hidden>
+                {Array.from({ length: Math.min(3, hidden) }).map((_, i) => (
+                  <li key={i} className="h-10 rounded-lg bg-white/[0.06]" />
+                ))}
+              </ul>
+              <button type="button" onClick={() => formRef.current?.querySelector("input")?.focus()} className="absolute inset-0 grid place-items-center text-sm font-semibold">
+                <span className="inline-flex items-center gap-2 rounded-full bg-background/80 px-4 py-2 ring-1 ring-white/10">
+                  <Lock className="h-3.5 w-3.5 text-turbo" aria-hidden /> +{hidden} more fixes, step by step
+                </span>
+              </button>
+            </div>
+          )}
+        </div>
+      )}
+
+      <form ref={formRef} onSubmit={onSubmit} className="audit-card relative overflow-clip rounded-3xl p-5 sm:p-7" noValidate>
+        <p className="flex items-center gap-2 font-display text-xl font-bold">
+          <Lock className="h-4 w-4 text-turbo" aria-hidden /> Unlock your full report
+        </p>
+        <p className="mt-1 text-sm text-muted-foreground">Every fix ranked by how many customers it's costing you{r.google?.competitors.length ? ", plus how you stack up against your top competitors" : ""}. Free — we just need where to send it.</p>
+        <div className="mt-4 grid gap-3 sm:grid-cols-2">
+          <Field id={`${uid}-name`} label="First name" error={errors.name}>
+            <input id={`${uid}-name`} data-clarity-mask="true" className="field" value={f.name} onChange={(e) => set("name", e.target.value)} autoComplete="given-name" maxLength={100} />
+          </Field>
+          <Field id={`${uid}-phone`} label="Mobile number" error={errors.phone}>
+            <input id={`${uid}-phone`} data-clarity-mask="true" type="tel" className="field" value={f.phone} onChange={(e) => set("phone", e.target.value)} autoComplete="tel" inputMode="tel" maxLength={30} placeholder="(813) 555-0123" />
+          </Field>
+          <div className="sm:col-span-2">
+            <Field id={`${uid}-email`} label="Email (optional)" error={errors.email}>
+              <input id={`${uid}-email`} data-clarity-mask="true" type="email" className="field" value={f.email} onChange={(e) => set("email", e.target.value)} autoComplete="email" inputMode="email" maxLength={200} />
+            </Field>
+          </div>
+          <label className="hidden" aria-hidden>
+            Company site
+            <input tabIndex={-1} autoComplete="off" value={f.company_site} onChange={(e) => set("company_site", e.target.value)} />
+          </label>
+          <label className="flex cursor-pointer items-start gap-3 text-xs leading-relaxed text-muted-foreground sm:col-span-2">
+            <input type="checkbox" className="mt-0.5 h-4 w-4 shrink-0 accent-[hsl(var(--turbo))]" checked={f.smsOptIn} onChange={(e) => set("smsOptIn", e.target.checked)} />
+            <span>I agree to receive text messages from CEO Turbo about my audit report and follow-up. Message frequency varies. Msg &amp; data rates may apply. Reply STOP to opt out, HELP for help. Consent is not a condition of purchase. <Link to="/terms" className="underline underline-offset-2 hover:text-foreground">Terms</Link> &amp; <Link to="/privacy-policy" className="underline underline-offset-2 hover:text-foreground">Privacy</Link>.</span>
+          </label>
+        </div>
+        <button type="submit" disabled={busy} className="btn-ignite btn-shine mt-5 w-full !py-4 !text-base disabled:opacity-70">
+          {busy ? <Loader2 className="h-4 w-4 animate-spin" aria-hidden /> : null}
+          {busy ? "Unlocking…" : "Show my full report"} {!busy && <ArrowRight className="h-4 w-4" aria-hidden />}
+        </button>
+        <p className="mt-3 text-[11px] leading-relaxed text-muted-foreground">
+          By continuing you agree CEO Turbo may call or email you about your report (texts only if you ticked the box). No spam, no selling your info —{" "}
+          <Link to="/privacy-policy" className="underline underline-offset-2 hover:text-foreground">
+            privacy policy
+          </Link>
+          .
+        </p>
+      </form>
+    </div>
+  );
+}
+
+function ShareResults({ report: r }: { report: Report }) {
+  const [done, setDone] = useState(false);
+  const topChecks = r.top.map((id) => r.checks.find((c) => c.id === id)).filter(Boolean) as Check[];
+  const text = `${r.name} — ${FREE_CHECK_NAME}: ${r.overall}/100 (${r.categories.map((c) => `${CATEGORY[c].short} ${r.scores[c]}`).join(", ")}).${r.google?.place ? ` Google: ${r.google.place.reviews} reviews${r.google.place.rating ? `, ${r.google.place.rating.toFixed(1)}★` : ""}.` : ""} Top fixes: ${topChecks.slice(0, 3).map((c) => c.label).join("; ")}. Run yours free: https://www.ceoturbo.com/free-audit`;
+  const share = async () => {
+    track("audit_share", { score: r.overall });
+    try {
+      if (navigator.share) await navigator.share({ title: FREE_CHECK_NAME, text });
+      else await navigator.clipboard.writeText(text);
+      setDone(true);
+    } catch {
+      /* cancelled */
+    }
+  };
+  return (
+    <button type="button" onClick={share} className="choice">
+      {done ? <Check className="h-3.5 w-3.5" aria-hidden /> : null}
+      {done ? "Copied" : "Share or save my results"}
+    </button>
   );
 }

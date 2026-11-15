@@ -12,6 +12,7 @@ import { computerMeta, computerShellMeta } from "./seo/computers";
 import { GUIDES, guidePath } from "./content/guides";
 export { merchantFeed } from "./seo/feed";
 export { PITCH_VIDEO as pitchVideo } from "./config/site";
+export { VIDEOS as youtubeVideos } from "./content/videos";
 
 export function render(url: string): Promise<string> {
   return new Promise((resolve, reject) => {

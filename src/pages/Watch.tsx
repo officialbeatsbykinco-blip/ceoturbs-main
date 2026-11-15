@@ -4,6 +4,8 @@ import { Link } from "react-router-dom";
 import { Breadcrumbs } from "@/components/blocks/Basics";
 import { BookButton } from "@/components/cta/Actions";
 import { PITCH_VIDEO } from "@/config/site";
+import { YouTubeLite } from "@/components/blocks/YouTubeLite";
+import { VIDEOS } from "@/content/videos";
 
 export const WATCH_PATH = "/watch";
 
@@ -28,12 +30,23 @@ export default function Watch() {
         <div className="mt-8 flex flex-wrap items-center gap-4">
           <BookButton note="Watch page">Book my free call</BookButton>
           <Link to="/free-audit" className="btn-chrome">
-            Free visibility check
+            Free Google &amp; AI check
           </Link>
           <Link to="/how-to-get-more-customers" className="inline-flex min-h-10 items-center text-sm font-semibold text-turbo underline underline-offset-4">
             Read the step-by-step tutorial
           </Link>
         </div>
+      </div>
+      <div className="container-x mt-16">
+        <h2 className="h-section">More videos: real campaigns and stories</h2>
+        <p className="lede">How reviews, websites and ads bring local businesses more customers, with the real numbers.</p>
+        <ul className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {VIDEOS.map((v) => (
+            <li key={v.id}>
+              <YouTubeLite video={v} where="watch" />
+            </li>
+          ))}
+        </ul>
       </div>
     </section>
   );

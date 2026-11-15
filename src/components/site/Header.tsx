@@ -1,6 +1,6 @@
 import { Fragment, useEffect, useState } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
-import { Calendar, ChevronDown, Menu, MessageSquare, Phone, X } from "lucide-react";
+import { Calendar, ChevronDown, Menu, MessageSquare, Phone, Search, X } from "lucide-react";
 import { Logo } from "./Logo";
 import { BookButton, InstallBookButton } from "@/components/cta/Actions";
 import { IT_SERVICES_PATH, OFFICE_SETUP_PATH, techBooking } from "@/content/tech-pages";
@@ -75,17 +75,34 @@ const MENUS: Menu[] = [
   },
 ];
 
+/** Tech support, IT and computers: real work, second to growth, so it lives in one menu. */
+const TECH: Menu = {
+  label: "Tech support",
+  to: IT_SERVICES_PATH,
+  items: [
+    { to: IT_SERVICES_PATH, label: "Computer & phone repair", sub: "At your door around Tampa, or remote" },
+    { to: COMPUTERS_PATH, label: "Computer shop", sub: "Laptops & desktops, ready to use" },
+    { to: OFFICE_SETUP_PATH, label: "Office setup & cables", sub: "Desks, monitors, printers, Wi-Fi" },
+    { to: "/business-tech-setup-tampa", label: "Business IT setup", sub: "Workstations, network, POS" },
+    { to: "/computer-setup-tampa", label: "Computer setup", sub: "New computer moved and ready" },
+    { to: "/security-camera-installation-tampa", label: "Security cameras", sub: "Installed and on your phone" },
+    { to: "/wifi-installation-tampa", label: "Wi-Fi & internet", sub: "Whole-home and office coverage" },
+  ],
+};
+
 /** Everything past the main nav links, in one menu. */
 const MORE: Menu = {
   label: "More",
   to: "/services",
   items: [
-    { to: "/tampa", label: "Tampa Bay", sub: "Where we work in person" },
-    { to: SHIRTS_PATH, label: "Company shirts", sub: "Your logo on tees, no minimum" },
-    { to: "/pricing", label: "Pricing", sub: "Clear prices for websites and ads" },
     { to: "/services", label: "All services", sub: "Everything we do" },
-    { to: "/free-audit", label: "Free check", sub: "See how you show up online" },
+    { to: "/pricing", label: "Pricing", sub: "Clear prices for websites and ads" },
+    { to: "/artist", label: "Artists", sub: "More listeners and fans" },
+    { to: "/producers", label: "Producers", sub: "Get heard, sell more beats" },
     ...MENUS.find((m) => m.label === "Results")!.items,
+    { to: "/watch", label: "Videos", sub: "Real campaigns, real numbers" },
+    { to: SHIRTS_PATH, label: "Company shirts", sub: "Your logo on tees, no minimum" },
+    { to: "/tampa", label: "Tampa Bay", sub: "Where we work in person" },
   ],
 };
 
@@ -96,7 +113,8 @@ export function Header({ focus: focusProp = false }: { focus?: boolean }) {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const { pathname } = useLocation();
-  // Tech-repair ad pages run in focus mode (no nav to wander off into) and book a tech visit instead of the agency call.
+  // Tech-repair ad pages run in focus mode on phones (no menu to wander off into) and book a tech visit
+  // instead of the agency call. Computers always keep the full nav: a missing nav reads as a broken site.
   const tech = techBooking(pathname);
   const texting = useTexting();
   const focus = focusProp || !!tech;
@@ -122,30 +140,29 @@ export function Header({ focus: focusProp = false }: { focus?: boolean }) {
       <div className="container-x flex h-16 items-center justify-between gap-4">
         <Logo className="shrink-0" onNavigate={() => setOpen(false)} />
 
-        {!focus && (
-          <nav aria-label="Main" className="hidden items-center gap-0.5 xl:flex">
-            <NavLink to={IT_SERVICES_PATH} className={linkCls}>
-              Computer repair
-            </NavLink>
-            <NavLink to={COMPUTERS_PATH} className={linkCls}>
-              Computer shop
-            </NavLink>
-            <NavLink to={OFFICE_SETUP_PATH} className={linkCls}>
-              Office setup
-            </NavLink>
-            <NavLink to="/grow" className={linkCls}>
-              Websites & ads
-            </NavLink>
-            <NavLink to={SHOP_PATH} className={linkCls}>
-              Google review cards
-            </NavLink>
-            <Dropdown menu={MORE} active={MORE.items.some((i) => i.to === pathname)} />
-          </nav>
-        )}
+        <nav aria-label="Main" className="hidden items-center gap-0.5 lg:flex">
+          <NavLink to="/free-audit" className={({ isActive }) => cn("mr-1 inline-flex items-center gap-1.5 whitespace-nowrap rounded-full px-3 py-1.5 text-[13px] font-semibold ring-1 transition-colors xl:text-sm", isActive ? "bg-turbo/20 text-foreground ring-turbo/60" : "bg-turbo/10 text-turbo ring-turbo/30 hover:bg-turbo/20")}>
+            <Search className="h-3.5 w-3.5" aria-hidden /> Free check
+          </NavLink>
+          <NavLink to="/grow" className={linkCls}>
+            Websites &amp; ads
+          </NavLink>
+          <NavLink to="/services/google-business-profile" className={linkCls}>
+            Google profile
+          </NavLink>
+          <NavLink to={SHOP_PATH} className={linkCls}>
+            Review cards
+          </NavLink>
+          <NavLink to="/portfolio" className={({ isActive }) => cn(linkCls({ isActive }), "hidden xl:block")}>
+            Our work
+          </NavLink>
+          <Dropdown menu={TECH} active={TECH.items.some((i) => i.to === pathname)} />
+          <Dropdown menu={MORE} active={MORE.items.some((i) => i.to === pathname)} align="right" />
+        </nav>
 
         <div className="flex items-center gap-2">
-          <CallLink location={focus ? "ad page header" : "header"} icon className="hidden min-h-[44px] whitespace-nowrap px-2 text-base font-bold text-foreground transition-colors hover:text-turbo lg:inline-flex" />
-          <CallLink location={focus ? "ad page header icon" : "header icon"} className="inline-flex h-10 w-10 items-center justify-center rounded-xl text-foreground ring-1 ring-white/10 hover:bg-white/5 lg:hidden">
+          <CallLink location={focus ? "ad page header" : "header"} icon className="hidden min-h-[44px] whitespace-nowrap px-2 text-base font-bold text-foreground transition-colors hover:text-turbo xl:inline-flex" />
+          <CallLink location={focus ? "ad page header icon" : "header icon"} className="inline-flex h-10 w-10 items-center justify-center rounded-xl text-foreground ring-1 ring-white/10 hover:bg-white/5 xl:hidden">
             <Phone className="h-[18px] w-[18px]" aria-hidden />
             <span className="sr-only">Call {SITE.name} at {SITE.phone.display}</span>
           </CallLink>
@@ -189,7 +206,7 @@ export function Header({ focus: focusProp = false }: { focus?: boolean }) {
           {!focus && (
             <button
               type="button"
-              className="inline-flex h-10 w-10 items-center justify-center rounded-xl text-foreground xl:hidden"
+              className="inline-flex h-10 w-10 items-center justify-center rounded-xl text-foreground lg:hidden"
               aria-label={open ? "Close menu" : "Open menu"}
               aria-expanded={open}
               aria-controls="mobile-menu"
@@ -202,21 +219,19 @@ export function Header({ focus: focusProp = false }: { focus?: boolean }) {
       </div>
 
       {open && !focus && (
-        <div id="mobile-menu" className="container-x h-[calc(100dvh-4rem)] overflow-y-auto pb-32 pt-2 xl:hidden">
+        <div id="mobile-menu" className="container-x h-[calc(100dvh-4rem)] overflow-y-auto pb-32 pt-2 lg:hidden">
           <div className="grid gap-2">
-            <FixMyTechLink source="mobile menu" onOpen={() => setOpen(false)} className="btn-ignite justify-between !px-4 !py-4 !text-lg">
-              Computer & phone repair
+            <Link to="/free-audit" onClick={() => setOpen(false)} className="btn-ignite justify-between !px-4 !py-4 !text-lg">
+              <span className="inline-flex items-center gap-2">
+                <Search className="h-5 w-5" aria-hidden /> Run my free check
+              </span>
               <span aria-hidden>›</span>
-            </FixMyTechLink>
+            </Link>
             {[
-              [COMPUTERS_PATH, "Computer shop: laptops & desktops"],
-              [OFFICE_SETUP_PATH, "Office setup & cables"],
-              ["/computer-setup-tampa", "Computer setup"],
-              ["/security-camera-installation-tampa", "Security cameras"],
-              ["/wifi-installation-tampa", "Wi-Fi & internet"],
               ["/grow", "Websites & ads"],
+              ["/services/google-business-profile", "Google Business Profile"],
               [SHOP_PATH, `Google review cards · ${fromPriceLabel}`],
-              [SHIRTS_PATH, "Company t-shirts"],
+              ["/portfolio", "Our work"],
             ].map(([to, label]) => (
               <Link key={to} to={to} onClick={() => setOpen(false)} className="panel flex items-center justify-between px-4 py-4 text-lg font-semibold">
                 {label}
@@ -237,6 +252,22 @@ export function Header({ focus: focusProp = false }: { focus?: boolean }) {
           <Link to="/" onClick={() => { setOpen(false); window.scrollTo({ top: 0, behavior: "smooth" }); }} className="mt-6 block px-1 py-2 text-base font-medium">
             Home
           </Link>
+          <details className="group border-t border-border py-1 [&_summary::-webkit-details-marker]:hidden">
+            <summary className="flex cursor-pointer list-none items-center justify-between px-1 py-3 text-base font-medium">
+              Tech support, IT &amp; computers
+              <ChevronDown className="h-4 w-4 text-muted-foreground transition-transform group-open:rotate-180" aria-hidden />
+            </summary>
+            <div className="grid gap-1 pb-3">
+              <FixMyTechLink source="mobile menu" onOpen={() => setOpen(false)} className="rounded-xl bg-white/[0.03] px-3 py-3.5 text-sm font-semibold">
+                Computer &amp; phone repair
+              </FixMyTechLink>
+              {TECH.items.slice(1).concat([{ to: SHIRTS_PATH, label: "Company t-shirts" }]).map((i) => (
+                <Link key={i.to} to={i.to} onClick={() => setOpen(false)} className="rounded-xl bg-white/[0.03] px-3 py-3.5 text-sm font-medium">
+                  {i.label}
+                </Link>
+              ))}
+            </div>
+          </details>
           {MENUS.map((m) => (
             <details key={m.label} className="group border-t border-border py-1 [&_summary::-webkit-details-marker]:hidden">
               <summary className="flex cursor-pointer list-none items-center justify-between px-1 py-3 text-base font-medium">
@@ -261,13 +292,13 @@ export function Header({ focus: focusProp = false }: { focus?: boolean }) {
   );
 }
 
-function Dropdown({ menu, active }: { menu: Menu; active: boolean }) {
+function Dropdown({ menu, active, align = "center" }: { menu: Menu; active: boolean; align?: "center" | "right" }) {
   return (
     <div className="group relative">
       <Link to={menu.to} className={cn("flex items-center gap-1 whitespace-nowrap rounded-lg px-2 py-2 text-[13px] font-medium transition-colors hover:bg-white/5 hover:text-foreground xl:px-2.5 xl:text-sm", active ? "text-foreground" : "text-muted-foreground")}>
         {menu.label} <ChevronDown className="h-3.5 w-3.5 transition-transform group-hover:rotate-180" aria-hidden />
       </Link>
-      <div className={cn("invisible absolute left-1/2 top-full -translate-x-1/2 pt-2 opacity-0 transition-all duration-150 group-focus-within:visible group-focus-within:opacity-100 group-hover:visible group-hover:opacity-100", menu.wide ? "w-[560px] max-w-[calc(100vw-2rem)]" : "w-[300px]")}>
+      <div className={cn("invisible absolute top-full pt-2", align === "right" ? "right-0" : "left-1/2 -translate-x-1/2", " opacity-0 transition-all duration-150 group-focus-within:visible group-focus-within:opacity-100 group-hover:visible group-hover:opacity-100", menu.wide ? "w-[560px] max-w-[calc(100vw-2rem)]" : "w-[300px]")}>
         <div className={cn("grid max-h-[75vh] gap-1 overflow-y-auto rounded-2xl border border-white/10 bg-[hsl(218_33%_7%)] p-2 shadow-[0_24px_60px_-12px_rgba(0,0,0,0.8)]", menu.wide && "dropdown-scroll grid-cols-2")}>
           {menu.items.map((i, idx) => (
             <Fragment key={i.to + i.label}>

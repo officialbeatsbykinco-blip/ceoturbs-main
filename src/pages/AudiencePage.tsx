@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { FreeCheckStrip } from "@/components/blocks/FreeCheckStrip";
 import { ArrowRight } from "lucide-react";
 import { audienceBySlug, type Audience } from "@/content/audiences";
 import { SERVICES } from "@/content/services";
@@ -174,9 +175,15 @@ export default function AudiencePage({ slug }: { slug: Audience["slug"] }) {
           <div className="mt-10 flex flex-wrap gap-3">
             <BookButton note={a.bookingNote} prefill={a.bookingNote}>{a.ctaLabel}</BookButton>
             <Link to="/free-audit" className="btn-chrome">
-              Run a free visibility audit
+              Run my free check
             </Link>
           </div>
+        </div>
+      </section>
+
+      <section className="pb-4" aria-label="Free check">
+        <div className="container-x">
+          <FreeCheckStrip where={`audience ${a.slug}`} title={a.slug === "artist" || a.slug === "producers" || a.slug === "visual-artists" ? "Can fans find you when they Google your name?" : "Not sure where you're losing customers?"} />
         </div>
       </section>
 

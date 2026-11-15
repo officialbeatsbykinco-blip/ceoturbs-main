@@ -1,4 +1,4 @@
-// One small, dismissible nudge to the free visibility check after 12 seconds on the site.
+// One small, dismissible nudge to the free visibility check after 20 seconds on the site.
 // Once per browser session, never on the money pages (checkout, booking, the check itself), and never
 // on top of an open dialog (booking calendar, quiz) — it must not get between a visitor and a booking.
 import { useEffect, useState } from "react";
@@ -8,7 +8,10 @@ import { track } from "@/lib/track";
 import { INSTALL_PATHS } from "@/content/install-pages";
 
 const KEY = "ct_check_popup";
-const DELAY_MS = 12_000;
+const DELAY_MS = 20_000;
+/** Marketing service pages, where the free check is the natural next step (tech setup slugs stay skipped). */
+const MARKETING_SERVICES = ["seo-aeo-geo", "website-design", "meta-ads", "google-ads", "tiktok-ads", "x-ads", "google-business-profile", "social-media-optimization", "email-marketing", "conversion-tracking"].map((s) => `/services/${s}`);
+// "/" has the check in its hero and sticky bar already.
 const SKIP = ["/", "/computer-repair-tampa", "/office-setup-tampa", "/tampa", "/google-ads-for-local-business", "/free-audit", "/book", "/booked", "/brand-boost", "/google-review-cards", "/google-review-card-setup", "/custom-company-t-shirts", "/artist-merch", "/restaurants", "/privacy-policy", "/terms", "/shipping-returns"];
 
 const seen = () => {
@@ -32,7 +35,7 @@ export function FreeCheckPopup() {
   // Ready buyers (pricing, results, any service page) never get pulled away from booking.
   // Tech and local-service pages (every install page, anything "-tampa") are ad landing pages: an agency
   // offer there pulls a visitor off the quiz, so the popup never shows on them.
-  const skip = SKIP.includes(pathname) || INSTALL_PATHS.includes(pathname) || pathname.includes("tampa") || pathname === "/pricing" || pathname === "/results" || pathname.startsWith("/services");
+  const skip = SKIP.includes(pathname) || INSTALL_PATHS.includes(pathname) || pathname.includes("tampa") || pathname === "/pricing" || pathname === "/results" || (pathname.startsWith("/services") && !MARKETING_SERVICES.includes(pathname));
 
   useEffect(() => {
     if (skip || seen()) return;
@@ -55,8 +58,8 @@ export function FreeCheckPopup() {
       <button type="button" onClick={() => setShow(false)} aria-label="Close" className="absolute right-1 top-1 grid h-11 w-11 place-items-center rounded-full text-muted-foreground hover:bg-white/5">
         <X className="h-4 w-4" aria-hidden />
       </button>
-      <p className="font-semibold">See how people find you — free</p>
-      <p className="mt-1 text-sm text-muted-foreground">A 60-second scan of your Google profile, reviews and website. No card needed.</p>
+      <p className="font-semibold">Why do customers pick your competitor?</p>
+      <p className="mt-1 text-sm text-muted-foreground">Free 60-second check: your Google rating and reviews vs the top 3 near you, your website and what ChatGPT sees. Score first, no card.</p>
       <Link to="/free-audit" onClick={() => track("check_popup_click", { page: pathname })} className="btn-ignite mt-3 w-full justify-center !py-3 !text-sm">
         Run my free check <ArrowRight className="h-4 w-4" aria-hidden />
       </Link>

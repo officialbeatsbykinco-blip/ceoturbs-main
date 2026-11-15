@@ -2,6 +2,7 @@
 // robots.txt, sitemap and llms.txt, then checks public knowledge sources
 // (Wikidata, Wikipedia, MusicBrainz, OpenStreetMap) and, when available, Google PageSpeed.
 import { fetchPage, getJson, normalizeUrl } from "./fetch-page.js";
+import { lookupPlaces } from "./places.js";
 
 const SOCIAL_HOSTS = {
   "instagram.com": "Instagram",
@@ -256,16 +257,21 @@ export async function runAudit(input) {
   const name = input.name;
   const what = input.what || "";
   const city = input.city || "";
-  const url = normalizeUrl(input.website);
+  // Real Google data (optional). When the visitor left the website blank, we use the one on
+  // their Google profile so the site checks still run.
+  const placesP = kind === "business" ? lookupPlaces({ name, what, city }).catch(() => null) : Promise.resolve(null);
+  const google = input.website ? null : await placesP;
+  const url = normalizeUrl(input.website || google?.place?.website || "");
   const platform = url ? platformFor(url.hostname) : null;
   const ownSite = url && !platform ? url : null;
 
-  const [site, wikidata, wikipedia, musicbrainz, osm] = await Promise.all([
+  const [site, wikidata, wikipedia, musicbrainz, osm, places] = await Promise.all([
     sitePart(ownSite),
     lookupWikidata(name),
     kind === "artist" ? lookupWikipedia(name) : Promise.resolve(null),
     kind === "artist" ? lookupMusicBrainz(name) : Promise.resolve(null),
     kind === "business" && city ? lookupOsm(name, city) : Promise.resolve(null),
+    google ? Promise.resolve(google) : placesP,
   ]);
 
   const checks = [];
@@ -400,12 +406,35 @@ export async function runAudit(input) {
   }
 
   // ——— Reviews (businesses) ———
+  const place = places?.found ? places.place : null;
+  const rivals = places?.competitors || [];
+  if (kind === "business" && places) {
+    // Real Google data beats self-reported answers.
+    if (place) {
+      const closed = place.status && place.status !== "OPERATIONAL";
+      add("reviews", "gbp", 4, closed ? "fail" : "pass", closed ? "Google shows your business as closed" : "Found on Google Maps", `${place.name}${place.category ? ` · ${place.category}` : ""}${place.address ? ` · ${place.address}` : ""}.`, closed ? "Mark the profile open and confirm your hours — a closed listing loses every call." : "");
+      const r = place.reviews;
+      const star = place.rating ? `${place.rating.toFixed(1)}★` : "no rating";
+      add("reviews", "review-count", 4, r >= 100 ? "pass" : r >= 25 ? "warn" : "fail", `${r} Google reviews · ${star}`, r >= 100 ? "Strong review count. Keep them coming — recent reviews matter." : "Google says review count and rating factor into local ranking. Most customers compare review counts before they call.", "Ask every customer at checkout — a tap card on the counter turns the ask into a 10-second tap.");
+      if (place.rating !== null) add("reviews", "rating", 2, place.rating >= 4.6 ? "pass" : place.rating >= 4.2 ? "warn" : "fail", `Star rating: ${place.rating.toFixed(1)}`, place.rating >= 4.6 ? "Customers trust ratings above 4.5." : "Many customers filter out businesses under 4.5 stars.", "Get more recent reviews from happy customers — new reviews lift your average fastest.");
+    } else {
+      add("reviews", "gbp", 4, input.gbp === "yes" ? "warn" : "fail", "We couldn't find you on Google Maps", `We searched Google for “${name}${city ? ` ${city}` : ""}” and your business didn't come up.`, "Claim and verify your Google Business Profile with the exact name customers search, then fill every field.");
+    }
+    const top = rivals[0];
+    if (top) {
+      const mine = place?.reviews || 0;
+      const gap = top.reviews - mine;
+      add("reviews", "competitors", 3, gap <= 0 ? "pass" : gap < top.reviews / 2 ? "warn" : "fail", gap <= 0 ? `You out-review the top ${what || "competitor"} nearby` : `${top.name} has ${gap} more reviews than you`, `Top results for “${what} in ${city}”: ${rivals.map((c) => `${c.name} (${c.reviews} reviews${c.rating ? `, ${c.rating.toFixed(1)}★` : ""})`).join(" · ")}.`, "Close the gap: ask every customer in person, and reply to every review so Google sees an active profile.");
+    }
+  }
+
   if (kind === "business") {
     const gbpMap = { yes: "pass", unsure: "warn", no: "fail" };
-    add("reviews", "gbp", 4, gbpMap[input.gbp] || "warn", input.gbp === "yes" ? "Google Business Profile claimed" : input.gbp === "no" ? "No Google Business Profile" : "Google Business Profile status unknown", input.gbp === "yes" ? "You control your Maps listing." : "Your Google Business Profile is what shows in the map pack and “near me” searches — it's the #1 source of local calls.", "Claim and verify your profile, then fill every field: category, services, hours, photos and service area.");
+    const real = !!places;
+    if (!real) add("reviews", "gbp", 4, gbpMap[input.gbp] || "warn", input.gbp === "yes" ? "Google Business Profile claimed" : input.gbp === "no" ? "No Google Business Profile" : "Google Business Profile status unknown", input.gbp === "yes" ? "You control your Maps listing." : "Your Google Business Profile is what shows in the map pack and “near me” searches — it's the #1 source of local calls.", "Claim and verify your profile, then fill every field: category, services, hours, photos and service area.");
     const revMap = { "0-9": "fail", "10-49": "warn", "50-99": "warn", "100+": "pass" };
-    const rev = input.reviews;
-    add("reviews", "review-count", 4, revMap[rev] || "fail", rev === "100+" ? "100+ Google reviews" : `${rev || "0–9"} Google reviews`, rev === "100+" ? "Strong review count. Keep them coming — recent reviews matter." : "Google says review count and rating factor into local ranking. Most customers compare review counts before they call.", "Ask every customer at checkout — a tap card on the counter turns the ask into a 10-second tap.");
+    const rev = place ? (place.reviews >= 100 ? "100+" : place.reviews >= 50 ? "50-99" : place.reviews >= 10 ? "10-49" : "0-9") : input.reviews;
+    if (!place) add("reviews", "review-count", 4, revMap[rev] || "fail", rev === "100+" ? "100+ Google reviews" : `${rev || "0–9"} Google reviews`, rev === "100+" ? "Strong review count. Keep them coming — recent reviews matter." : "Google says review count and rating factor into local ranking. Most customers compare review counts before they call.", "Ask every customer at checkout — a tap card on the counter turns the ask into a 10-second tap.");
     if (loaded) {
       const hasLink = /g\.page\/r\/|writereview|search\.google\.com\/local|maps\.app\.goo\.gl/i.test(h.anchors.join(" "));
       add("reviews", "review-link", 1, hasLink ? "pass" : "warn", hasLink ? "“Review us” link on your website" : "No “Review us on Google” link on your site", hasLink ? "Happy customers can find your review page." : "Customers who want to leave a review have to hunt for it.", "Add your Google review link to your site, receipts, emails and texts.");
@@ -429,6 +458,7 @@ export async function runAudit(input) {
     categories,
     checks,
     top,
-    meta: { site: ownSite?.hostname || null, platform, psi: !!site?.psi, checkedAt: new Date().toISOString() },
+    google: places ? { found: !!place, place, competitors: rivals } : null,
+    meta: { site: ownSite?.hostname || null, platform, psi: !!site?.psi, google: !!places, checkedAt: new Date().toISOString() },
   };
 }

@@ -1,4 +1,5 @@
 import { Fragment } from "react";
+import { FreeCheckStrip } from "@/components/blocks/FreeCheckStrip";
 import { Link, useParams } from "react-router-dom";
 import { CompareTable } from "@/components/blocks/CompareTable";
 import { GUIDES, guideBySlug, guideImage, guidePath, type Guide } from "@/content/guides";
@@ -191,6 +192,11 @@ function GuideArticle({ g }: { g: Guide }) {
           </div>
         </div>
       </article>
+      <section className="pb-4" aria-label="Free check">
+        <div className="container-x max-w-4xl">
+          <FreeCheckStrip where={`guide ${g.slug}`} />
+        </div>
+      </section>
       {g.faqs.length > 0 && <FAQList faqs={g.faqs} />}
     </>
   );

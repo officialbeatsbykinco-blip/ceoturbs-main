@@ -1,6 +1,7 @@
 // JSON-LD builders. Every node references the shared Organization/Person/WebSite
 // by @id so search engines and AI systems see one consistent entity graph.
 import { SITE, BOOKING, REVIEW_CARD, fromPrice, PITCH_VIDEO, SHIRT, ARTIST_SHIRT, packPath, packSku, shirtSku, type ShirtProduct } from "@/config/site";
+import { isoDuration, youtubeThumb, youtubeUrl, type YouTubeVideo } from "@/content/videos";
 import { SHIRTS_PATH } from "@/content/company-shirts";
 import { ARTIST_MERCH_PATH } from "@/content/artist-merch";
 import { ALL_SETUP_CITIES } from "@/content/service-areas";
@@ -367,14 +368,32 @@ export const artistMerchProduct = (): JsonLd =>
 export const auditTool = (): JsonLd => ({
   "@type": "WebApplication",
   "@id": AUDIT_ID,
-  name: "CEO Turbo Free SEO, AEO & GEO Audit",
+  name: "CEO Turbo Free Google & AI Visibility Check",
+  alternateName: ["Free SEO, AEO & GEO audit", "Free Google Business Profile check"],
   url: abs("/free-audit"),
   applicationCategory: "BusinessApplication",
   operatingSystem: "Any",
-  description: "Free online audit that scores a business or artist's visibility on Google (SEO), in AI answers (AEO) and in generative AI recommendations (GEO), with a prioritized fix list.",
+  description: "Free 60-second check that looks up a business on Google Maps, compares its rating and review count with the top competitors nearby, scans its website for SEO, and checks whether AI assistants like ChatGPT can read and recommend it. Returns a score out of 100 and a ranked fix list.",
+  featureList: ["Google Maps listing and status check", "Google rating and review count vs top 3 local competitors", "Website SEO scan: titles, headings, speed, mobile, sitemap", "AI visibility: schema, FAQ, AI crawler access, llms.txt", "Ranked fix list"],
+  isAccessibleForFree: true,
   offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
   provider: { "@id": ORG_ID },
 });
+
+/** VideoObject nodes for our YouTube videos (embedded with a click-to-load player). */
+export const youtubeVideos = (list: YouTubeVideo[]): JsonLd[] =>
+  list.map((v) => ({
+    "@type": "VideoObject",
+    "@id": `${youtubeUrl(v.id)}#video`,
+    name: v.title,
+    description: v.summary,
+    thumbnailUrl: [youtubeThumb(v.id)],
+    uploadDate: v.uploadDate,
+    duration: isoDuration(v.seconds),
+    contentUrl: youtubeUrl(v.id),
+    embedUrl: `https://www.youtube-nocookie.com/embed/${v.id}`,
+    publisher: { "@id": ORG_ID },
+  }));
 
 export const caseStudy = (c: Client): JsonLd => ({
   "@type": "CreativeWork",

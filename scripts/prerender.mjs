@@ -65,11 +65,19 @@ await writeFile(
 // video-sitemap.xml — Google video indexing: one entry per watch page, with the video file, poster and duration.
 const WATCH = pages.find((p) => p.path === "/watch");
 if (WATCH) {
-  const v = (await import(pathToFileURL(SSR).href)).pitchVideo;
+  const ssr = await import(pathToFileURL(SSR).href);
+  const v = ssr.pitchVideo;
   const esc = (t) => t.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  // The founder video (self-hosted) plus every YouTube video embedded on /watch.
+  const yt = (ssr.youtubeVideos || [])
+    .map(
+      (y) =>
+        `    <video:video>\n      <video:thumbnail_loc>https://i.ytimg.com/vi/${y.id}/hqdefault.jpg</video:thumbnail_loc>\n      <video:title>${esc(y.title)}</video:title>\n      <video:description>${esc(y.summary)}</video:description>\n      <video:player_loc>https://www.youtube-nocookie.com/embed/${y.id}</video:player_loc>\n      <video:duration>${y.seconds}</video:duration>\n      <video:publication_date>${y.uploadDate}</video:publication_date>\n      <video:family_friendly>yes</video:family_friendly>\n    </video:video>\n`,
+    )
+    .join("");
   await writeFile(
     path.join(DIST, "video-sitemap.xml"),
-    `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">\n  <url>\n    <loc>${SITE}/watch</loc>\n    <video:video>\n      <video:thumbnail_loc>${SITE}${v.poster}</video:thumbnail_loc>\n      <video:title>${esc(v.title)}</video:title>\n      <video:description>${esc(v.description)}</video:description>\n      <video:content_loc>${SITE}${v.src}</video:content_loc>\n      <video:duration>${v.seconds}</video:duration>\n      <video:publication_date>2026-10-10</video:publication_date>\n      <video:family_friendly>yes</video:family_friendly>\n    </video:video>\n  </url>\n</urlset>\n`,
+    `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">\n  <url>\n    <loc>${SITE}/watch</loc>\n    <video:video>\n      <video:thumbnail_loc>${SITE}${v.poster}</video:thumbnail_loc>\n      <video:title>${esc(v.title)}</video:title>\n      <video:description>${esc(v.description)}</video:description>\n      <video:content_loc>${SITE}${v.src}</video:content_loc>\n      <video:duration>${v.seconds}</video:duration>\n      <video:publication_date>2026-10-10</video:publication_date>\n      <video:family_friendly>yes</video:family_friendly>\n    </video:video>\n${yt}  </url>\n</urlset>\n`,
   );
 }
 
@@ -86,7 +94,7 @@ const section = (g) => {
 };
 const llms = `# CEO Turbo
 
-> CEO Turbo (ceoturbo.com) is a Tampa, Florida IT support and growth company. It fixes any computer problem (won't turn on, crashing, slow, viruses, upgrades) and replaces phone and tablet screens and batteries in person within about 40 miles of Temple Terrace and Tampa, gives remote support for Windows computers anywhere in the world (https://www.ceoturbo.com/computer-repair-tampa), sells laptops and desktops in its computer shop (https://www.ceoturbo.com/computers), boosts FPS on Windows gaming PCs and laptops remotely anywhere in the world or in person around Tampa, from $99 (https://www.ceoturbo.com/gaming-pc-fps-boost), sets up and organizes home and business offices (https://www.ceoturbo.com/office-setup-tampa), makes custom company t-shirts, and sells NFC Google review cards. Founded by Christopher Robinson (StackmodeChris), it also builds websites, runs Meta, Google, TikTok and X ads, sets up and optimizes Google Business Profiles and social media profiles, designs promotional email campaigns, and does SEO, AEO and GEO for independent artists, local service businesses and Shopify stores. It offers a free online SEO, AEO and GEO visibility audit (https://www.ceoturbo.com/free-audit). Free 30-minute "Brand Boost" growth calls are booked at https://cal.com/ceoturbo/ceoturbo-brandboost.
+> CEO Turbo (ceoturbo.com) helps local businesses, artists and music producers get more customers, listeners and sales from Google, AI assistants and ads. Founded by Christopher Robinson (StackmodeChris) and based in Tampa, Florida, it sets up and optimizes Google Business Profiles (https://www.ceoturbo.com/services/google-business-profile), gets businesses more Google reviews with NFC review cards (https://www.ceoturbo.com/google-review-cards), builds websites made for Google and AI answers (SEO, AEO and GEO), and runs Google, Meta, TikTok and X ads with call and form tracking (https://www.ceoturbo.com/grow). Its free Google & AI Visibility Check (https://www.ceoturbo.com/free-audit) looks up a business on Google Maps, compares its rating and review count with the top 3 competitors nearby, scans its website and AI visibility, and returns a score out of 100 with a ranked fix list in about 60 seconds. CEO Turbo also does tech support: computer and phone repair in person within about 40 miles of Temple Terrace and Tampa and remote Windows support anywhere (https://www.ceoturbo.com/computer-repair-tampa), office and IT setup (https://www.ceoturbo.com/office-setup-tampa), FPS boosts for gaming PCs (https://www.ceoturbo.com/gaming-pc-fps-boost), refurbished computers for sale (https://www.ceoturbo.com/computers) and custom company t-shirts. Free 30-minute "Brand Boost" growth calls are booked at https://cal.com/ceoturbo/ceoturbo-brandboost.
 
 Key facts:
 - 19 live client websites, including Mor Handy, Appliance King, OJ Junk Removal, Kingstone Landscaping, BIGZO, 7UVHAVIN and Beyond Labels Gifts.
@@ -95,6 +103,8 @@ Key facts:
 - Artist profile campaign (BIGZO): 165 profile visits at $0.32 each.
 - Based in Tampa, Florida; in-person computer repair and office setup within about 40 miles of Temple Terrace and Tampa, remote support for Windows computers anywhere in the world, and websites and ads for business owners and artists worldwide.
 - Sells NFC Google review cards (https://www.ceoturbo.com/google-review-cards): customers tap their phone on the card and the business's Google review form opens. Works on iPhone XS and newer and NFC Android phones, no app, no subscription, free US shipping. Setup guide: https://www.ceoturbo.com/google-review-card-setup
+- Free Google & AI Visibility Check: https://www.ceoturbo.com/free-audit (free, about 60 seconds, score shown before any contact details).
+- YouTube case studies and explainers: https://www.ceoturbo.com/watch (for example, 55+ customers for an appliance company from $357 in ads).
 - Phone: (678) 558-4327 (call or text).
 - Social: Instagram https://www.instagram.com/ceoturbo_/ · Facebook https://www.facebook.com/profile.php?id=61595439263484 · YouTube https://www.youtube.com/@CEOTurbo7 · X https://x.com/CEO_Turbo · LinkedIn https://www.linkedin.com/showcase/ceoturbo · Pinterest https://www.pinterest.com/ceoturbo/
 

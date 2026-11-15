@@ -1,4 +1,5 @@
 import { Link, useParams } from "react-router-dom";
+import { FreeCheckStrip } from "@/components/blocks/FreeCheckStrip";
 import { ArrowUpRight, Check } from "lucide-react";
 import { clientBySlug, CLIENTS, CATEGORY_LABEL, domainOf } from "@/content/clients";
 import { AD_RESULTS } from "@/content/results";
@@ -141,6 +142,12 @@ export default function CaseStudy() {
           </section>
         )}
       </article>
+
+      <section className="pb-4" aria-label="Free check">
+        <div className="container-x">
+          <FreeCheckStrip where="case study" title="Want to see how your business stacks up?" />
+        </div>
+      </section>
 
       {more.length > 0 && (
         <section className="section border-t border-border" aria-labelledby="more">

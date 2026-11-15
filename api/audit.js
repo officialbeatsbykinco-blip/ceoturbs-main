@@ -11,6 +11,19 @@ import { buildTiktokEvent, sendTiktokEvents } from "./_lib/tiktok-events.js";
 const pick = (v, allowed) => (allowed.includes(v) ? v : "");
 const text = (v, max) => (typeof v === "string" ? v.replace(/[\u0000-\u001f\u007f<>]/g, " ").trim().slice(0, max) : "");
 
+const score = (v) => (Number.isFinite(Number(v)) && v !== "" && v !== null ? Math.max(0, Math.min(100, Math.round(Number(v)))) : "");
+
+/** The scores a visitor's browser sends back on unlock (from its own scan), sanitised for the sheet. */
+function clientSummary(s) {
+  if (!s || typeof s !== "object") return null;
+  const sc = s.scores && typeof s.scores === "object" ? s.scores : {};
+  return {
+    overall: score(s.overall),
+    scores: { seo: score(sc.seo), aeo: score(sc.aeo), geo: score(sc.geo), reviews: score(sc.reviews) },
+    topLabels: (Array.isArray(s.top) ? s.top : []).slice(0, 5).map((t) => text(t, 120)).filter(Boolean),
+  };
+}
+
 const withTimeout = (p, ms) => Promise.race([p, new Promise((_, reject) => setTimeout(() => reject(new Error("audit-timeout")), ms))]);
 
 export default async function handler(req, res) {
@@ -20,14 +33,17 @@ export default async function handler(req, res) {
   }
   if (!sameOrigin(req)) return send(res, 403, { error: "origin" });
   if (!isJson(req)) return send(res, 415, { error: "content-type" });
-  if (rateLimited(`audit:${clientIp(req)}`, 6, 10 * 60_000)) return send(res, 429, { error: "rate" });
-
   let body;
   try {
     body = await readJson(req);
   } catch {
     return send(res, 400, { error: "body" });
   }
+  // Modes: "scan" runs the check with no contact details (teaser, no lead);
+  // "unlock" saves the lead for a report the visitor already scanned;
+  // no mode = the original one-shot flow (contact + scan + lead), kept for old cached pages.
+  const mode = body.mode === "scan" || body.mode === "unlock" ? body.mode : "";
+  if (rateLimited(`audit${mode ? `-${mode}` : ""}:${clientIp(req)}`, 6, 10 * 60_000)) return send(res, 429, { error: "rate" });
   if (isBot(body)) return send(res, 400, { error: "invalid" });
 
   const kind = body.kind === "artist" ? "artist" : "business";
@@ -45,14 +61,28 @@ export default async function handler(req, res) {
   };
   if (input.name.length < 2) return send(res, 400, { error: "business" });
 
-  const { lead, error } = cleanLead({ ...body, business: input.name });
+  if (mode === "scan") {
+    try {
+      const report = await withTimeout(runAudit(input), 28_000);
+      return send(res, 200, { report });
+    } catch (e) {
+      console.error("[audit] scan failed", e?.message);
+      return send(res, 503, { error: "audit" });
+    }
+  }
+
+  const { lead, error } = cleanLead({ ...body, business: input.name }, mode === "unlock" ? { emailOptional: true } : undefined);
   if (error) return send(res, 400, { error });
 
   let report = null;
-  try {
-    report = await withTimeout(runAudit(input), 28_000);
-  } catch (e) {
-    console.error("[audit] failed", e?.message);
+  if (mode === "unlock") {
+    report = clientSummary(body.summary);
+  } else {
+    try {
+      report = await withTimeout(runAudit(input), 28_000);
+    } catch (e) {
+      console.error("[audit] failed", e?.message);
+    }
   }
 
   // Server-side Meta "Lead", de-duplicated with the browser Pixel via the shared event id.
@@ -82,7 +112,7 @@ export default async function handler(req, res) {
     sendTiktokEvents([buildTiktokEvent({ event: "Lead", eventId, url, user: { email: lead.email, phone: lead.phone, externalId }, attribution: attr, ip, userAgent: req.headers["user-agent"], properties: { content_name: contentName, value: FREE_CHECK_VALUE, currency: "USD" } })]),
   ]);
 
-  const failing = report ? report.checks.filter((c) => report.top.includes(c.id)).map((c) => c.label) : [];
+  const failing = report ? (report.topLabels || report.checks.filter((c) => report.top.includes(c.id)).map((c) => c.label)) : [];
   const { stored } = await forwardLead({
     type: kind === "artist" ? "audit-artist" : "audit-business",
     ...lead,
@@ -106,6 +136,7 @@ export default async function handler(req, res) {
   });
   const [meta] = await capi;
 
+  if (mode === "unlock") return send(res, stored ? 200 : 502, { stored: !!stored, meta: !!meta.sent });
   if (!report) return send(res, 503, { error: "audit", stored: !!stored, meta: !!meta.sent });
   return send(res, 200, { report, stored: !!stored, meta: !!meta.sent });
 }

@@ -20,6 +20,10 @@ const guides = [...src.matchAll(/slug: "([^"]+)",[\s\S]*?\n    title: "([^"]+)"/
 
 /** Short, punchy headline per guide (falls back to the title). */
 const HEADLINES = {
+  "free-google-business-profile-check": ["Check your", "Google profile free"],
+  "why-competitor-ranks-higher-google-maps": ["Why they rank", "first on Maps"],
+  "how-to-sell-beats-online": ["How to sell", "beats online"],
+  "computer-repair-vs-replace": ["Repair or", "replace it?"],
   "seo-vs-aeo-vs-geo": ["SEO vs AEO", "vs GEO"],
   "facebook-ads-cost-per-lead": ["Facebook ads:", "cost per lead"],
   "how-to-get-recommended-by-chatgpt": ["Get recommended", "by ChatGPT"],

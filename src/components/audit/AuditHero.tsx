@@ -57,13 +57,13 @@ export function AuditHero({ title, lede, eyebrow, footer, source, points }: { ti
                 href="#audit"
                 className="mt-4 inline-flex min-h-[44px] items-center gap-1.5 rounded-full bg-turbo/10 px-4 py-1.5 text-xs font-semibold text-turbo ring-1 ring-turbo/25 hover:bg-turbo/20 lg:hidden"
               >
-                <span>Enter your business below</span>
+                <span>Start your free check below</span>
                 <ArrowDown className="h-3.5 w-3.5" aria-hidden />
               </a>
             </div>
           )}
           <div id="audit" className={cn("relative z-10 scroll-mt-20 sm:scroll-mt-24", wide && "mx-auto w-full max-w-[920px]")}>
-            <AuditTool source={source} onStageChange={(s) => setWide(s === "report")} />
+            <AuditTool source={source} onStageChange={(s) => setWide(s === "report" || s === "teaser" || s === "unlocking")} />
           </div>
         </div>
       </div>

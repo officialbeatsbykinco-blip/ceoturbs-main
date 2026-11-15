@@ -1,4 +1,5 @@
 import { Breadcrumbs, DirectAnswer, FAQList, SectionHeader } from "@/components/blocks/Basics";
+import { FreeCheckStrip } from "@/components/blocks/FreeCheckStrip";
 import { OfficeIntake } from "@/components/blocks/OfficeIntake";
 import { PriceBox } from "@/components/blocks/PriceBlocks";
 import { OFFICE_FROM, OFFICE_TIERS, OfficePrices } from "@/components/blocks/OfficePrices";
@@ -355,6 +356,14 @@ export default function ServicePage() {
               ))}
             </div>
             <p className="mt-6 text-sm text-muted-foreground">Don't see your city? If you're within about 40 miles of Tampa, call {SITE.phone.display} and we'll tell you the same day.</p>
+          </div>
+        </section>
+      )}
+
+      {!isHomeOffice && (
+        <section className="pb-4" aria-label="Free check">
+          <div className="container-x">
+            <FreeCheckStrip where={`service ${s.slug}`} />
           </div>
         </section>
       )}

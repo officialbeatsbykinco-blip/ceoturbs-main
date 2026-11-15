@@ -18,6 +18,7 @@ const OFFICE_PRICES = ["office-basic", "office-complete", "office-transform-basi
 import { RESTAURANT_FAQS, RESTAURANTS_PATH } from "@/content/restaurants";
 import { NICHES } from "@/content/niches";
 import * as S from "./schema";
+import { VIDEOS } from "@/content/videos";
 import { computerPageFor } from "./computers";
 import { COMPUTERS_PATH, SHOP_FAQS as SHOP_COMPUTER_FAQS } from "@/content/computer-shop";
 
@@ -67,12 +68,12 @@ function build(): PageMeta[] {
 
   pages.push({
     path: "/",
-    title: "Tampa IT Support, Computer Repair & Office Setup | CEO Turbo",
-    description: `Tampa IT support for homes and businesses: computers, phones and tablets fixed at your door or remotely, offices and Wi-Fi set up, plus websites and ads.`,
+    title: "Get More Customers: Google Profile, Sites & Ads | CEO Turbo",
+    description: "More calls from Google Maps, reviews, websites and ads. Run the free 60-second Google & AI check: your reviews vs the top 3 competitors near you.",
     priority: 1,
     changefreq: "weekly",
     group: "Core",
-    schema: [...base(), S.webPage("/", "CEO Turbo", SITE.description)],
+    schema: [...base(), S.webPage("/", "CEO Turbo", SITE.description), S.auditTool(), ...S.youtubeVideos(VIDEOS.filter((v) => !v.short)), S.faqPage(HOME_FAQS, "/")],
   });
 
   pages.push({
@@ -126,14 +127,13 @@ function build(): PageMeta[] {
 
   pages.push({
     path: "/free-audit",
-    title: "Free SEO, AEO & GEO Audit — Instant Report | CEO Turbo",
-    description:
-      "Type your business or artist name and get a free SEO, AEO & GEO report in 60 seconds: your visibility score, what's wrong and how to fix it.",
+    title: "Free Google Profile & AI Visibility Check | CEO Turbo",
+    description: "Free 60-second check: your Google rating and reviews vs the top 3 competitors near you, your website's SEO and what ChatGPT sees. Score first, no card.",
     ogImage: "/og/free-audit.jpg",
     priority: 0.9,
     changefreq: "monthly",
     group: "Core",
-    schema: [...base(), S.webPage("/free-audit", "Free SEO, AEO & GEO audit", "Free visibility audit"), S.auditTool(), S.breadcrumbs([{ name: "Free audit", path: "/free-audit" }]), S.faqPage(AUDIT_FAQS, "/free-audit")],
+    schema: [...base(), S.webPage("/free-audit", "Free Google & AI Visibility Check", "Free 60-second check of your Google Maps listing, reviews vs competitors, website and AI visibility"), S.auditTool(), S.breadcrumbs([{ name: "Free check", path: "/free-audit" }]), S.faqPage(AUDIT_FAQS, "/free-audit")],
   });
 
   pages.push({
@@ -313,7 +313,7 @@ function build(): PageMeta[] {
     { path: "/privacy-policy", title: "Privacy Policy: What Data CEO Turbo Collects and Why", description: "How CEO Turbo collects, uses and protects your personal information, including what we collect, why, and how you can control it.", priority: 0.2, changefreq: "yearly", group: "Company", schema: [...base(), S.webPage("/privacy-policy", "Privacy Policy", "How CEO Turbo handles personal information.", "WebPage", "2026-10-10"), S.breadcrumbs([{ name: "Privacy Policy", path: "/privacy-policy" }])] },
     { path: "/terms", title: "Terms & Conditions for CEO Turbo Products & Services", description: "Terms for using ceoturbo.com and buying CEO Turbo products and services: payments, review cards, the free audit, results, liability and SMS terms.", priority: 0.2, changefreq: "yearly", group: "Company", schema: [...base(), S.webPage("/terms", "Terms & Conditions", "Terms for CEO Turbo products and services.", "WebPage", "2026-10-10"), S.breadcrumbs([{ name: "Terms", path: "/terms" }])] },
     { path: "/shipping-returns", title: "Shipping & Returns for Google Review Cards | CEO Turbo", description: "Shipping times and costs, the 30-day return policy for Google review cards, custom t-shirt terms, and what to do if a CEO Turbo card doesn't work.", priority: 0.3, changefreq: "yearly", group: "Company", schema: [...base(), S.webPage("/shipping-returns", "Shipping & Returns", "Shipping and return policy.", "WebPage", "2026-10-14"), S.breadcrumbs([{ name: "Shipping & Returns", path: "/shipping-returns" }])] },
-    { path: "/watch", title: "Watch: How to Get More Customers in 2026 | CEO Turbo", description: "A 1-minute video from Christopher Robinson of CEO Turbo on getting found on Google, Maps and AI assistants, and turning that attention into customers.", ogImage: "/media/brand-boost-poster.webp", priority: 0.6, changefreq: "monthly", group: "Core", schema: [...base(), S.webPage("/watch", "Watch: how to get more customers in 2026", PITCH_VIDEO.description), S.video("/watch"), S.breadcrumbs([{ name: "Watch", path: "/watch" }])] },
+    { path: "/watch", title: "Watch: How Local Businesses Get More Customers | CEO Turbo", description: "Real campaigns and stories from CEO Turbo: Google reviews, websites and ads that made the phone ring, including 55+ customers for $357 in ads.", ogImage: "/media/brand-boost-poster.webp", priority: 0.6, changefreq: "monthly", group: "Core", schema: [...base(), S.webPage("/watch", "Watch: how to get more customers in 2026", PITCH_VIDEO.description), S.video("/watch"), ...S.youtubeVideos(VIDEOS), S.breadcrumbs([{ name: "Watch", path: "/watch" }])] },
     {
       path: "/how-to-get-more-customers",
       title: "How to Get More Customers in 2026: Step by Step | CEO Turbo",

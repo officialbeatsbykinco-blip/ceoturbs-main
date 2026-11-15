@@ -288,7 +288,7 @@ export function TextQuiz({ source, audience, variant = "inline", className }: { 
             )}
 
             <div className="flex items-center justify-center gap-4 text-sm">
-              <CallLink location="text quiz" className="inline-flex min-h-[44px] items-center font-semibold text-foreground underline underline-offset-2">
+              <CallLink location="text quiz call" className="inline-flex min-h-[44px] items-center font-semibold text-foreground underline underline-offset-2">
                 Call us
               </CallLink>
             </div>

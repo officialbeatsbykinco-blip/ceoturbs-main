@@ -231,7 +231,7 @@ export function OfficeTextQuiz({ id = "book", className, quiz = OFFICE_QUIZ }: {
             <p className="text-center text-xs text-muted-foreground">Opens Messages with this filled in. Add a photo of the space if you can.</p>
             <p className="text-center text-sm">
               Rather talk?{" "}
-              <CallLink location="office quiz" className="font-semibold text-foreground underline underline-offset-2">
+              <CallLink location="office quiz call" className="font-semibold text-foreground underline underline-offset-2">
                 Call us
               </CallLink>
             </p>

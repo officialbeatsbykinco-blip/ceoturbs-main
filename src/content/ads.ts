@@ -10,6 +10,10 @@ export type AdCreative = {
 };
 
 export const ADS: AdCreative[] = [
+  { slug: "appliance-king-oven", client: "Appliance King", clientSlug: "appliance-king", hook: "Your oven gave up on dinner. We showed up.", format: "Portrait", vertical: "local" },
+  { slug: "electronic-reboot-phone-repair", client: "ElectronicReboot", hook: "Cracked phone or tablet? We fix that — mobile repair, quote first", format: "Portrait", vertical: "local" },
+  { slug: "rapid-prep-slicer", client: "Rapid-Prep", hook: "Stop knife prep — slice, dice & julienne in seconds", format: "Portrait", vertical: "shopify" },
+  { slug: "yari-beats-15", client: "Prod. Yari", hook: "Beats for $15 — instant download", format: "Portrait", vertical: "artist" },
   { slug: "mor-handy-electrical-panel", client: "Mor Handy", clientSlug: "mor-handy", hook: "One spark away from disaster — before/after panel swap", format: "Square", vertical: "local" },
   { slug: "1stikk-mock-kit", client: "1 Stikk Mobile", clientSlug: "1stikk-mobile", hook: "$75 all-in-one drug-screen mock kit", format: "Square", vertical: "local" },
   { slug: "ryan-pool-kangen-water", client: "Ryan Pool Enagic", clientSlug: "ryan-pool", hook: "What's really in your water?", format: "Square", vertical: "brand" },

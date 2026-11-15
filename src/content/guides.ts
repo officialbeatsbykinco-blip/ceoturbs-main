@@ -917,6 +917,188 @@ export const GUIDES: Guide[] = [
       { label: "Meta ads management", to: "/services/meta-ads" },
     ],
   },
+  {
+    slug: "free-google-business-profile-check",
+    title: "How to check your Google Business Profile (free, in 60 seconds)",
+    metaTitle: "Free Google Business Profile Check: What to Look At",
+    metaDescription: "How to check your Google Business Profile in 60 seconds: listing status, rating, review count vs competitors, website and AI visibility. Free tool inside.",
+    summary: "Search your business name and city on Google Maps, confirm the listing shows as open with the right category, then compare your rating and review count with the top 3 competitors for your service. The free CEO Turbo check does all of that, plus your website and AI visibility, in about 60 seconds.",
+    audience: "local",
+    published: "2026-11-15",
+    updated: "2026-11-15",
+    readMinutes: 6,
+    sections: [
+      {
+        h2: "What should you check on your Google Business Profile?",
+        answer: "Check five things: that your business appears on Google Maps when you search its name and city, that it shows as open with correct hours, that the primary category matches what you sell, how your star rating and review count compare with the top competitors, and that the website link works and loads fast on a phone.",
+        bullets: ["Listing found on Maps for your exact name", "Status open, hours correct, phone matches your website", "Primary category is the most specific one that fits", "Rating and review count vs the top 3 results for your service", "Website link loads and says what you do and where"],
+      },
+      {
+        h2: "How do you compare your reviews with competitors?",
+        answer: "Search your service and city the way a customer would, for example “plumber in Tampa”, and note the rating and review count of the first three businesses in the map results. If they have three or four times your reviews, that gap is often the first thing to close, because customers compare those numbers before they call.",
+        body: ["Google's own help page on local ranking says results are based mainly on relevance, distance and prominence, and that review count and rating factor into prominence (support.google.com/business/answer/7091). You can't change distance. You can change relevance (categories, services, website text) and prominence (reviews, links, mentions)."],
+        table: { head: ["What you see", "What it usually means", "First fix"], rows: [["Not on Maps at all", "Profile unclaimed, suspended or under another name", "Claim and verify the profile"], ["On Maps, few reviews", "Customers never get asked at the right moment", "Ask in person with a tap card"], ["Good reviews, low rank", "Weak category, services or website", "Fix categories and the website text"], ["Rating under 4.5", "A few bad reviews and too few new ones", "Steady new reviews from happy customers"]] },
+      },
+      {
+        h2: "What does the free CEO Turbo check do?",
+        answer: "It looks up your business on Google Maps, pulls your real rating and review count, finds the top three competitors for your service in your city, scans your website for the basics Google needs, and checks whether AI tools like ChatGPT can read it. You get a score out of 100 and a fix list ranked by how many customers each problem likely costs you.",
+        bullets: ["Takes about 60 seconds", "You see your score before giving any contact details", "Works without a website (it uses the one on your Google profile, if any)", "Free, no card"],
+      },
+      {
+        h2: "What are the limits of a quick check?",
+        answer: "A 60-second check reads public data at one moment. It can't see your Google Business Profile dashboard, your call history or your Search Console data, and rankings move by location and by day. Treat it as a fast way to spot the biggest gaps, then confirm the fixes inside your own Google accounts.",
+      },
+      {
+        h2: "What should you fix first?",
+        answer: "Fix anything that stops customers from finding or calling you before anything cosmetic: an unclaimed or closed listing, a wrong primary category, a broken website link, and a big review gap against the top competitor. Those four usually move calls faster than new photos or posts.",
+      },
+    ],
+    faqs: [
+      { q: "Is the Google Business Profile check really free?", a: "Yes. It's free with no card. You see your score and two biggest problems first, then add a first name and mobile number to unlock the full fix list." },
+      { q: "Do I need a website to run the check?", a: "No. If your Google profile lists a website, the check uses it. If you have none, the report shows what that costs you against competitors who do." },
+      { q: "How often should I check my profile?", a: "Monthly is enough for most businesses, and any time calls drop suddenly. Suspensions, changed hours and competitor review spikes are the usual causes." },
+    ],
+    related: [
+      { label: "Run the free Google & AI check", to: "/free-audit" },
+      { label: "Google Business Profile checklist", to: "/guides/google-business-profile-checklist" },
+      { label: "How to get more Google reviews", to: "/how-to-get-more-google-reviews" },
+    ],
+  },
+  {
+    slug: "why-competitor-ranks-higher-google-maps",
+    title: "Why does my competitor show up first on Google Maps?",
+    metaTitle: "Why Your Competitor Ranks First on Google Maps",
+    metaDescription: "The real reasons a competitor beats you in the Google Maps pack: categories, reviews, distance, website and links. How to check each one and close the gap.",
+    summary: "Google ranks local results on relevance, distance and prominence. A competitor usually wins on one of four things you can change: a better matching category, more and newer reviews, a website that clearly says the service and city, or more mentions and links across the web.",
+    audience: "local",
+    published: "2026-11-15",
+    updated: "2026-11-15",
+    readMinutes: 7,
+    sections: [
+      {
+        h2: "How does Google decide who shows up first on Maps?",
+        answer: "Google says local results are based mainly on relevance (how well a profile matches the search), distance (how far the business is from the searcher or the place named) and prominence (how well known the business is, including reviews, links and articles). You can't move your shop, so relevance and prominence are where the work goes.",
+      },
+      {
+        h2: "Is it the categories?",
+        answer: "Often, yes. If someone searches “emergency plumber” and your competitor's primary category is Plumber with services listed for emergency repair, while yours is a broad category like Contractor, Google has a clearer match for them. Pick the most specific primary category that fits, then add every secondary category that truly applies.",
+        bullets: ["Primary category: the single most specific match", "Secondary categories: every real service line", "Services list: each service with a short description", "Business name: your real name, no keyword stuffing (it breaks Google's guidelines)"],
+      },
+      {
+        h2: "Is it the reviews?",
+        answer: "Reviews are the most visible gap. Count them: if the top result has 300 reviews and you have 25, customers see that before they see anything else. Recent reviews matter too, so a steady flow of a few new reviews every week beats a burst followed by silence.",
+        body: ["Ask every customer, in person, at the moment they're happiest, and make it a single tap. Google doesn't allow offering anything in return for reviews or only asking customers you expect to be happy."],
+      },
+      {
+        h2: "Is it the website?",
+        answer: "The website on your profile is part of relevance. If its title and first lines never mention your service and city, Google and AI assistants have less to match. A clear title like “Plumber in Tampa | Your Name”, a service page for each main service and a tap-to-call number help both rankings and calls.",
+      },
+      {
+        h2: "How do you check all of this quickly?",
+        answer: "Run the free CEO Turbo check with your business name, service and city. It pulls your Google rating and reviews, lists the top three competitors for that search with theirs, and scans your website and AI visibility, so you can see which of the four gaps is the biggest in about a minute.",
+        table: { head: ["Gap", "How to spot it", "Typical time to improve"], rows: [["Category", "Competitor's category is more specific", "Days"], ["Reviews", "Competitor has several times your count", "Weeks to months"], ["Website", "Your title never names the service or city", "Days to weeks"], ["Mentions and links", "Competitor appears in local directories and news", "Months"]] },
+      },
+      {
+        h2: "What can't you control?",
+        answer: "Distance. A searcher standing next to a competitor will often see them first no matter what you do, and results differ block by block. That's why it's worth tracking calls and bookings, not just one ranking screenshot from your own phone.",
+      },
+    ],
+    faqs: [
+      { q: "Can I pay Google to rank higher on Maps?", a: "Not in the organic map results. Local Services Ads and Google Ads can show above them, which is separate paid placement." },
+      { q: "How long until I move up?", a: "Category and website fixes can show results in days to weeks. Closing a large review gap usually takes a few months of steady asking." },
+      { q: "Should I add keywords to my business name?", a: "No. Google's guidelines ban it and it can get a profile suspended. Put keywords in categories, services and your website instead." },
+    ],
+    related: [
+      { label: "Run the free Google & AI check", to: "/free-audit" },
+      { label: "Google Business Profile setup", to: "/services/google-business-profile" },
+      { label: "Google review cards", to: "/google-review-cards" },
+    ],
+  },
+  {
+    slug: "how-to-sell-beats-online",
+    title: "How to sell beats online (and get heard) as a producer",
+    metaTitle: "How to Sell Beats Online: A Producer's Playbook",
+    metaDescription: "How producers sell beats online: a beat store you own, clear lease prices, YouTube type beats, short clips and simple ads: what works and what wastes cash.",
+    summary: "Sell from a beat store you own with clear lease prices and instant download, upload every beat to YouTube with an artist-style title, post short clips daily, collect emails, and only run ads once the store converts. Most producers lose sales to a confusing checkout, not a lack of beats.",
+    audience: "artist",
+    published: "2026-11-15",
+    updated: "2026-11-15",
+    readMinutes: 7,
+    sections: [
+      {
+        h2: "Where should you sell beats online?",
+        answer: "Use a store you control on your own domain, with marketplaces as extra reach. Your own store keeps the customer's email, lets you run discounts like “buy 2 get 1” and works with ad tracking. Marketplaces bring traffic but take fees and keep the buyer relationship.",
+        table: { head: ["Option", "Best for", "Honest limit"], rows: [["Your own beat store", "Keeping buyers and emails, running offers and ads", "You have to bring the traffic"], ["Beat marketplaces", "Extra discovery", "Fees and you don't own the buyer"], ["YouTube", "Being found by artists searching type beats", "Views don't equal sales without a store link"]] },
+      },
+      {
+        h2: "How should you price beat leases?",
+        answer: "Keep it to three or four clear tiers: a low-priced MP3 lease to get first-time buyers, a WAV lease, a trackout or stems lease, and exclusive rights by request. A simple low entry price, like a $15 lease, removes the risk for artists who have never bought from you.",
+      },
+      {
+        h2: "How do you get your beats heard?",
+        answer: "Upload every beat to YouTube with an artist-style title (for example “Detroit type beat”), a clean thumbnail and the store link in the first line of the description. Then cut 15 to 30 second clips for TikTok, Reels and Shorts, and post daily. Consistency beats any single viral video.",
+        bullets: ["One beat, one YouTube upload, one store link", "Short clips with the hook in the first 2 seconds", "Collaborate with artists who already have listeners", "Collect emails with a free beat, then send new drops weekly"],
+      },
+      {
+        h2: "When should a producer run ads?",
+        answer: "Only after the store converts visitors into buyers. Test with a small daily budget sending people to one beat or one bundle, track purchases, and keep only the ads that pay back. Ads poured into a slow or confusing store mostly buy bounces.",
+      },
+      {
+        h2: "Can people find you when they Google your producer name?",
+        answer: "Check it. Search your producer name and see whether your store, YouTube and socials come first. If they don't, a simple site with your name as the title and links to every profile fixes most of it. The free CEO Turbo check scores this for artists and producers in about a minute.",
+      },
+    ],
+    faqs: [
+      { q: "Do I need my own website to sell beats?", a: "It isn't required, but it's how you keep buyers' emails, run your own offers and track ads properly. Marketplaces work best as extra reach." },
+      { q: "What's a good starting price for a beat lease?", a: "Many producers start an MP3 lease around $15 to $30 to make the first purchase easy, with WAV and stems tiers above it." },
+      { q: "How many beats should I upload?", a: "Enough to post consistently. A steady schedule, like several uploads a week, matters more than a huge catalog at once." },
+    ],
+    related: [
+      { label: "Producers: sell more beats", to: "/producers" },
+      { label: "Run the free visibility check", to: "/free-audit" },
+      { label: "How to get more Spotify listeners", to: "/guides/how-to-get-more-spotify-listeners" },
+    ],
+  },
+  {
+    slug: "computer-repair-vs-replace",
+    title: "Repair or replace your computer? A cost guide (Tampa)",
+    metaTitle: "Computer Repair vs Replace: Cost Guide (Tampa)",
+    metaDescription: "Should you repair or replace a slow or broken computer? Real repair prices, when an SSD upgrade beats a new PC, and when replacing is the smarter buy.",
+    summary: "Repair when the fix costs well under half the price of a comparable new computer and the machine is still supported: speed-ups, virus removal, SSD upgrades and screen or battery swaps usually qualify. Replace when the motherboard has failed, the computer can't run a supported operating system, or repairs would cost close to a new one.",
+    audience: "local",
+    published: "2026-11-15",
+    updated: "2026-11-15",
+    readMinutes: 5,
+    sections: [
+      {
+        h2: "Should you repair or replace a slow computer?",
+        answer: "Usually repair. Most slow computers are slowed by an old hard drive, startup clutter or malware, not by the processor. A cleanup or an SSD upgrade often makes a five-year-old Windows laptop feel new for a fraction of the cost of replacing it.",
+      },
+      {
+        h2: "When is replacing the better choice?",
+        answer: "Replace when the motherboard or graphics chip has failed, when the computer can't run a supported version of Windows or macOS, or when the repair would cost close to a comparable new or refurbished machine. Security updates matter: an unsupported system stays exposed no matter how fast it is.",
+        table: { head: ["Problem", "Usually", "Why"], rows: [["Slow, freezing", "Repair", "Cleanup or SSD fixes most cases"], ["Viruses and pop-ups", "Repair", "Removal plus updates"], ["Cracked screen or weak battery", "Repair", "Parts are usually available"], ["Won't power on after liquid damage", "Depends", "Board damage can cost near replacement"], ["Can't run a supported OS", "Replace", "No more security updates"]] },
+      },
+      {
+        h2: "How much does computer repair cost in Tampa?",
+        answer: "CEO Turbo publishes its prices: in-person speed-ups, remote Windows speed-ups, virus removal, SSD upgrades and iPhone screens all have a set starting price on the computer repair page, and you get the price before any work starts. If we can't fix it, you don't pay for the fix.",
+      },
+      {
+        h2: "What about buying a refurbished computer instead?",
+        answer: "A tested refurbished computer can be the middle ground: newer than your old machine, cheaper than new, and ready to use. If yours isn't worth fixing, ask for a refurbished option and have your files moved over at the same visit.",
+      },
+    ],
+    faqs: [
+      { q: "Do you come to me?", a: "Yes, within about 40 miles of Tampa. Windows speed-ups can also be done remotely anywhere." },
+      { q: "Will I lose my files?", a: "A repair or upgrade keeps your files. For an SSD swap we clone your drive so everything is where you left it." },
+      { q: "How fast can you fix it?", a: "Many speed-ups and virus removals are done the same day. Parts like screens can take a little longer." },
+    ],
+    related: [
+      { label: "Computer & phone repair", to: "/computer-repair-tampa" },
+      { label: "Computer shop", to: "/computers" },
+      { label: "Office setup", to: "/office-setup-tampa" },
+    ],
+  },
 ];
 
 export const guideBySlug = (slug: string) => GUIDES.find((g) => g.slug === slug);
