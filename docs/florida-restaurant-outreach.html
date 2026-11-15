@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Restaurant Outreach Board</title>
+<style>
+  :root { --bg:#f6f7fb; --card:#fff; --ink:#14213d; --mute:#5b6577; --line:#dfe3ec; --blue:#1d5fd1; --orange:#e8590c; --green:#1b8a4b; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font:16px/1.45 -apple-system, system-ui, "Segoe UI", sans-serif; }
+  header { position:sticky; top:0; z-index:5; background:var(--ink); color:#fff; padding:12px 16px; }
+  header h1 { margin:0 0 6px; font-size:18px; }
+  .bar { display:flex; gap:8px; flex-wrap:wrap; align-items:center; font-size:14px; }
+  .bar input { padding:6px 8px; border-radius:6px; border:0; min-width:220px; flex:1; max-width:420px; }
+  .bar a.chip { color:#fff; text-decoration:none; background:#ffffff22; padding:4px 10px; border-radius:99px; }
+  main { max-width:900px; margin:0 auto; padding:16px; }
+  h2 { margin:28px 0 4px; font-size:20px; }
+  .sub { color:var(--mute); margin:0 0 12px; font-size:14px; }
+  .tips, .skip { background:var(--card); border:1px solid var(--line); border-radius:10px; padding:12px 16px; font-size:14px; }
+  .tips li { margin:3px 0; }
+  .lead { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:14px 16px; margin:12px 0; }
+  .lead.done { opacity:.55; }
+  .top { display:flex; justify-content:space-between; gap:10px; align-items:flex-start; }
+  .name { font-weight:700; font-size:18px; }
+  .meta { color:var(--mute); font-size:14px; }
+  .why { font-size:14px; margin:6px 0 10px; }
+  .row { display:flex; flex-wrap:wrap; gap:8px; margin:6px 0; }
+  button, a.btn { font:inherit; font-size:14px; font-weight:600; padding:9px 12px; border-radius:8px; border:0; cursor:pointer; text-decoration:none; display:inline-block; }
+  button.copy { background:var(--blue); color:#fff; }
+  button.copy.ok { background:var(--green); }
+  a.btn.go { background:var(--orange); color:#fff; }
+  a.btn.ghost { background:#eef1f7; color:var(--ink); }
+  label.done { font-size:14px; white-space:nowrap; cursor:pointer; }
+  details { margin-top:8px; font-size:14px; }
+  summary { cursor:pointer; color:var(--mute); }
+  pre { white-space:pre-wrap; background:#f3f5fa; border-radius:8px; padding:10px; margin:6px 0; font:13px/1.45 ui-monospace, Menlo, monospace; }
+  .skip li { margin:4px 0; }
+  @media (max-width:520px){ main{padding:12px;} .bar input{min-width:100%;} }
+</style>
+</head>
+<body>
+<header>
+  <h1>Restaurant Outreach Board <span id="count" style="font-weight:400;font-size:14px"></span></h1>
+  <div class="bar">
+    <input id="addr" placeholder="Your business address (goes in emails, saved here)" autocomplete="off">
+    <a class="chip" href="#t1">1 · Drive-by</a><a class="chip" href="#t2">2 · Ship</a><a class="chip" href="#t3">3 · Out of state</a><a class="chip" href="#skip">Skip</a>
+  </div>
+</header>
+<main>
+  <ul class="tips">
+    <li><b>Order that works:</b> call first (30 sec) → Facebook DM the same day → email → follow-up DM on day 3 → breakup DM on day 14. Tick "Done" as you go; it saves on this device.</li>
+    <li><b>Do not cold text.</b> Text only after they say yes on the phone (your playbook rule). Calls, Messenger and email are fine.</li>
+    <li>First DM has no link on purpose (links from strangers land in Message Requests or get filtered). The link goes in the day-3 follow-up.</li>
+    <li>"I'll be in [city] this week" is in the Tier 1 messages. If you are not driving there, change that line.</li>
+    <li>Prices used: 1 card $16.99, 5 for $59.99, 10 for $99.99, counter stand $29.99, free US shipping. No freebies-for-reviews language anywhere (Google bans it).</li>
+  </ul>
+
+  <h2 id="t1">Tier 1 · Drive-by (Lakeland, Winter Haven, Bartow, Auburndale, Kenneth City)</h2>
+  <p class="sub">Inside your 40-mile Tampa radius. Goal: two-minute stop-by, let them tap a card on their own phone.</p>
+  <div id="list1"></div>
+
+  <h2 id="t2">Tier 2 · Florida, ship the cards</h2>
+  <p class="sub">Orlando, Hernando Beach, Fort Myers, Key West, Davie. Sell by phone/DM, mail the cards. Visit only if you are out there anyway.</p>
+  <div id="list2"></div>
+
+  <h2 id="t3">Tier 3 · Out of state, ship the cards</h2>
+  <p class="sub">Free US shipping makes these real leads. Work them by phone and email; mind their time zones (AL, IL, OK, TX, MO are Central; NV is Pacific).</p>
+  <div id="list3"></div>
+
+  <h2 id="skip">Skipped (not a fit for the review-card pitch)</h2>
+  <ul class="skip">
+    <li><b>JH Town Services</b> (Deltona/Orlando/Kissimmee, 407-562-6906, jhtownservices@gmail.com): a service business offering free quotes, not a restaurant. Different pitch (reviews for contractors) if you want it later.</li>
+    <li><b>Grand Blanc Chamber of Commerce</b> (MI): not a restaurant. Could be a referral partner for Michigan restaurants, but not a buyer.</li>
+    <li><b>Pinellas Nutrition / Pinellas Social Spot</b> (Pinellas Park, 941-539-8399, mycoacharturo@pinellassocialspot.com): shake shop and coaching, local to you. Reviews help them too, but it is a shop, not a table-service pitch. Use the Tier 1 DM with "counter" if you want it.</li>
+  </ul>
+</main>
+
+<script>
+const CARD = "https://www.ceoturbo.com/restaurants";
+const PHONE = "(678) 558-4327";
+
+const L = [
+  // ---- Tier 1 ----
+  { t:1, id:"tipsy", name:"Tipsy Hen Wings & Beer", city:"Winter Haven", phone:"863-268-4247", email:"thtwinterhaven@gmail.com", fb:"https://www.facebook.com/TipsyHenWingsAndBeer", site:"tipsyhen.com",
+    hook:"Winter Haven's glam dive bar with 3.5K followers and 100% recommend on Facebook", q:"wings near me", spot:"table", why:"Bar with a big following and few reviews on Facebook (16). Dine-in = cards on every table and the bar." },
+  { t:1, id:"philly", name:"Philly Steak & Wing", city:"Lakeland", phone:"863-606-6122", email:"phillysteaklakeland@gmail.com", fb:"https://www.facebook.com/phillysteakandwinglakeland", site:"phillysteakwingfl.com",
+    hook:"fresh sliced ribeye on Amoroso's rolls, cooked to order, with 6.4K people following you", q:"cheesesteak near me", spot:"table", why:"6.4K followers, dine-in and to-go. Strong product, review count is the lever." },
+  { t:1, id:"unique", name:"Unique Wings & Thangs", city:"Lakeland", phone:"863-853-0654", email:"uniquewingsandthangs@gmail.com", fb:"https://www.facebook.com/SoulFoodSunda", site:"",
+    hook:"\"Why eat basic when you can eat #UNIQUE\" is a great line, and 11K followers say people are paying attention", q:"wings near me", spot:"counter and in every to-go bag", why:"11K followers, takeout only. Card on the counter and dropped in bags." },
+  { t:1, id:"mjs", name:"Mj's Pizza & Wings", city:"Winter Haven", phone:"863-268-2715", email:"", fb:"https://www.facebook.com/mjspizzawingswinterhaven", site:"mjspizzawinterhaven.com",
+    hook:"fresh New York style pizza, locally owned and operated", q:"pizza near me", spot:"table", why:"Dine-in plus online ordering. No email listed: phone + DM." },
+  { t:1, id:"brendas", name:"Brenda's Wings 'n Things", city:"Bartow", phone:"863-533-7891", email:"bjthorn04@yahoo.com", fb:"https://www.facebook.com/brendaswingsnthings", site:"",
+    hook:"congrats on the new spot on Hwy 17 N", q:"wings near me", spot:"table", why:"Brand-new location = best time to start collecting Google reviews. (Phone is the number you added.)" },
+  { t:1, id:"jbuff", name:"J Buffalo Wings", city:"Kenneth City", phone:"727-428-7282", email:"jbuffalowingstyronesquare@gmail.com", fb:"https://www.facebook.com/profile.php?id=100093605206734", site:"jbuffalowingssp.com",
+    hook:"the Buffalo Wings Meal post made me hungry", q:"wings near me", spot:"table", why:"Dine-in, takeout, delivery. Pinellas side, an easy drive from Tampa." },
+  { t:1, id:"slice", name:"Sar's Pizza (Lakeland)", city:"Lakeland", phone:"863-816-6950", email:"sarsourpizza@gmail.com", fb:"https://www.facebook.com/profile.php?id=100063768661603", site:"",
+    hook:"pickup and delivery through Slice", q:"pizza near me", spot:"counter and in every box", why:"Pickup/delivery heavy: card on the counter and in the bag. Name guessed from the email; confirm on the call." },
+  { t:1, id:"auburn", name:"Auburndale pizzeria (391 Berkley Rd)", city:"Auburndale", phone:"863-247-8992", email:"", fb:"https://www.facebook.com/profile.php?id=61577970209342", site:"",
+    hook:"fresh slices and lunch specials all day, locally owned", q:"pizza near me", spot:"counter", why:"Newer page (671 followers). Ask for the owner by name on the call and use it." },
+
+  // ---- Tier 2 ----
+  { t:2, id:"kow", name:"King of Wings Express", city:"Orlando", phone:"407-668-2094", email:"kingofwingexpress2@gmail.com", fb:"https://www.facebook.com/profile.php?id=100077018280215", site:"IG kowexpress · TikTok kingofwingsexpress",
+    hook:"\"Central Florida favorite wings\" with delivery, takeout and curbside", q:"wings near me", spot:"counter and in every bag", ship:true, why:"Delivery/takeout/curbside = people read reviews before they order. Active on IG, TikTok, X: DM there too." },
+  { t:2, id:"silver", name:"Silver Dolphin Restaurant & Country Store", city:"Hernando Beach", phone:"352-701-2152", email:"silverdolphincountrystore@gmail.com", fb:"https://www.facebook.com/silverdolphinhb", site:"silverdolphinrestaurant.com",
+    hook:"breakfast, lunch and dinner with a country store full of homemade fudge", q:"breakfast near me", spot:"table", ship:true, why:"8.3K followers, destination spot with tourist traffic." },
+  { t:2, id:"banana", name:"Banana Cafe", city:"Key West", phone:"305-294-7227", email:"bananacafe@comcast.net", fb:"https://www.facebook.com/BananaCafe", site:"bananacafekw.com",
+    hook:"a French bistro with a Caribbean twist on Duval Street", q:"Key West breakfast", spot:"table", ship:true, why:"Tourists choose by Google rating, so review volume is everything here. 9.4K followers." },
+  { t:2, id:"blackjack", name:"Black Jack's Rum Bar", city:"Davie", phone:"954-314-7025", email:"info@blackjacksrumbar.com", fb:"https://www.facebook.com/blackjacksrumbar", site:"blackjacksrumbar.com",
+    hook:"full-service restaurant and bar in downtown Davie with happy hour every day", q:"bars near me", spot:"table and the bar", ship:true, why:"Bar + restaurant, dine-in and takeout." },
+  { t:2, id:"monparis", name:"Mon Paris Coffee Shop & Bakery", city:"Fort Myers", phone:"239-208-8692", email:"info@monparisbakery.com", fb:"", site:"monparisbakery.com",
+    hook:"a coffee shop and bakery that does delivery, pickup and outdoor seating", q:"bakery near me", spot:"counter and every table", ship:true, why:"No Facebook link in your paste: phone and email only." },
+
+  // ---- Tier 3 ----
+  { t:3, id:"fyre", name:"Fyre Pizza Co.", city:"Anderson, SC", phone:"864-314-8629", email:"fyrepizza11@gmail.com", fb:"https://www.facebook.com/Fyre.Pizza.Co", site:"fyrepizzaco.com",
+    hook:"dough and sauce made fresh in house", q:"pizza near me", spot:"table", ship:true, why:"3.7K followers, dine-in and pickup." },
+  { t:3, id:"jims", name:"Jim's Smokin' Cafe", city:"Niles, MI", phone:"269-635-5154", email:"jimssmokincafe@gmail.com", fb:"https://www.facebook.com/jimssmokincafe", site:"jimssmokincafe.com",
+    hook:"Midwest BBQ for lunch and dinner every day", q:"bbq near me", spot:"table", ship:true, why:"11K followers, daily lunch and dinner." },
+  { t:3, id:"derby", name:"The Derby", city:"New Market, MD", phone:"301-865-2222", email:"", fb:"https://www.facebook.com/thederbynewmarket", site:"thederbymd.com",
+    hook:"a unique spin on local favorites", q:"restaurants near me", spot:"table", ship:true, why:"11K followers. No email listed: phone + DM." },
+  { t:3, id:"nos", name:"Nos Greek", city:"Kansas City, MO", phone:"816-942-0029", email:"info@nosgreek.com", fb:"https://www.facebook.com/nosgreek", site:"nosgreek.com",
+    hook:"gyros, bowls and Greek loaded fries", q:"greek food near me", spot:"counter and every table", ship:true, why:"Active on IG, TikTok, X (nosgreek). Pickup/delivery too." },
+  { t:3, id:"eldo", name:"El Dorado Restaurant", city:"Alamo, TX", phone:"956-787-8822", email:"eldorado.marsha@gmail.com", fb:"https://www.facebook.com/ELDORADO956", site:"",
+    hook:"over 30 years of fresh, family-style cooking", q:"mexican food near me", spot:"table", ship:true, why:"30-year family place. Owner name on the email: Marsha." },
+  { t:3, id:"lumber", name:"Lumberjacks", city:"North Las Vegas, NV", phone:"702-487-5007", email:"lumberjackslasvegas@gmail.com", fb:"https://www.facebook.com/lumberjackslasvegas", site:"lumberjacksrestaurant.com",
+    hook:"big portions and hearty comfort food from breakfast to dinner", q:"breakfast near me", spot:"table", ship:true, why:"Breakfast to dinner, high traffic. Pacific time." },
+  { t:3, id:"buzz", name:"Buzzing Pines Cafe", city:"Oquawka, IL", phone:"309-220-7779", email:"buzzingpinescafe@gmail.com", fb:"https://www.facebook.com/BuzzingPines", site:"",
+    hook:"fresh-baked cheesecakes and pies, \"come for the coffee, stay for the buzz\"", q:"coffee near me", spot:"counter and every table", ship:true, why:"2.3K followers, small town. Reviews bring in out-of-towners." },
+  { t:3, id:"ernies", name:"Ernie's Cafe", city:"Colbert, OK", phone:"580-296-4445", email:"erniescafe24@gmail.com", fb:"https://www.facebook.com/profile.php?id=61558531070491", site:"erniescafecolbert.com",
+    hook:"family-owned home cooking", q:"cafe near me", spot:"table", ship:true, why:"1.7K followers, dine-in." },
+  { t:3, id:"casalinda", name:"Casa Linda", city:"Rogersville, AL", phone:"256-802-9008", email:"casalindacafellc@gmail.com", fb:"https://www.facebook.com/Casalindaelgin", site:"",
+    hook:"1.9K people follow you in Rogersville", q:"restaurants near me", spot:"table", ship:true, why:"Bio gives no cuisine detail: keep the pitch generic." },
+  { t:3, id:"moosewood", name:"Moosewood Creek Cafe", city:"Tidioute, PA", phone:"814-556-4572", email:"moosewoodcreekcafe@gmail.com", fb:"https://www.facebook.com/profile.php?id=61574446881668", site:"",
+    hook:"small-town comfort, fresh coffee and baked goods every day", q:"cafe near me", spot:"counter and every table", ship:true, why:"1.4K followers, takeout and dine-in. Small town, so tourists and travelers decide by Google." }
+];
+
+const $ = (s, r=document) => r.querySelector(s);
+const st = { get(k){ try { return localStorage.getItem(k); } catch(e){ return null; } }, set(k,v){ try { localStorage.setItem(k,v); } catch(e){} } };
+
+function utm(src, camp){ return `${CARD}?utm_source=${src}&utm_medium=outreach&utm_campaign=${camp}`; }
+
+function msgs(l){
+  const ship = !!l.ship;
+  const close1 = ship
+    ? `Free shipping to your door anywhere in the US, and I can set your Google review link on them for you. Want me to send you a photo of how one looks on a ${l.spot.includes("table") ? "table" : "counter"}?`
+    : `I'm in ${l.city} this week. Can I stop by for 2 minutes and let you tap one on your own phone?`;
+  const dm1 = `Hey! Christopher here with CEO Turbo, based in Tampa. Came across ${l.name}: ${l.hook}.
+
+I make tap-to-review cards. A guest holds their phone to the card and your Google review page opens. No app, no searching. Put one on every ${l.spot} and the reviews climb, and reviews are what decide who shows up first when people search "${l.q}".
+
+10 cards are $99.99 (one is $16.99) with free shipping.
+
+${close1}`;
+  const dm2 = `Hey, following up from the other day. Here's the 20-second version: guest taps the card, your Google review form opens, done. Nothing to download and no monthly fee.
+
+How it works and the prices: ${utm("facebook","dm2")}
+
+Who's the best person to show it to?`;
+  const dm3 = `Hi again. I haven't heard back, so I'll assume the timing's off and won't keep messaging. If you ever want review cards on your ${l.spot.split(" and ")[0]}s, just reply "yes" and I'll take care of it. Wishing ${l.name} a busy season!`;
+  const email = `Subject: ${l.name}'s Google reviews
+
+Hi,
+
+I'm Christopher with CEO Turbo. I came across ${l.name}: ${l.hook}.
+
+I make tap-to-review cards. A guest holds their phone to the card after they eat and your Google review form opens. More reviews push you higher on Google Maps, where "${l.q}" decides who gets the customer.
+
+Cards are $16.99 each or 10 for $99.99, with free shipping in the US and no monthly fee. Here's how it works:
+${utm("email","e1")}
+
+${ship ? "Want me to send a photo of how it looks on a table?" : `Can I stop by this week and let you tap one on your own phone?`}
+
+Christopher Robinson · CEO Turbo · ${PHONE}
+{{ADDR}} · Reply "no thanks" and I won't email again.`;
+  const call = ship
+    ? `"Hey, quick question. Who handles the Google reviews for ${l.name}?" ... "Got it. I'm Christopher with CEO Turbo. I make tap-to-review cards: guests tap their phone and your Google review page opens. 10 cards are $99.99 and I ship free. Can I text you a photo of one so you can see it?" (get the yes before you text)`
+    : `"Hey, quick question. Who handles the Google reviews for ${l.name}?" ... "Got it, and when is [he/she] usually in?" ... "Perfect. I'm Christopher with CEO Turbo, in Tampa. I put review cards on the tables at Exclusive Restaurant & Lounge in Covington. I'll be in ${l.city} this week. Can I stop by for two minutes to show [name]? And can I text you a photo of the card first?" (the goal of the call is the stop-by, not the sale)`;
+  return { dm1, dm2, dm3, email, call };
+}
+
+function copy(text, btn){
+  const done = () => { const o = btn.textContent; btn.classList.add("ok"); btn.textContent = "Copied ✓"; setTimeout(()=>{ btn.classList.remove("ok"); btn.textContent = o; }, 1100); };
+  if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(done, fallback); else fallback();
+  function fallback(){ const ta = document.createElement("textarea"); ta.value = text; document.body.appendChild(ta); ta.select(); try { document.execCommand("copy"); done(); } catch(e){} ta.remove(); }
+}
+
+function withAddr(t){ const a = ($("#addr").value || "").trim() || "[your business address]"; return t.replace("{{ADDR}}", a); }
+
+function card(l){
+  const m = msgs(l);
+  const el = document.createElement("div");
+  el.className = "lead"; el.id = l.id;
+  const subj = withAddr(m.email).split("\n")[0].replace("Subject: ","");
+  el.innerHTML = `
+    <div class="top">
+      <div><div class="name">${l.name}</div><div class="meta">${l.city}${l.site ? " · " + l.site : ""}</div></div>
+      <label class="done"><input type="checkbox"> Done</label>
+    </div>
+    <div class="why">${l.why}</div>
+    <div class="row">
+      ${l.phone ? `<a class="btn go" href="tel:+1${l.phone.replace(/\D/g,"")}">📞 Call ${l.phone}</a>` : ""}
+      ${l.fb ? `<a class="btn ghost" href="${l.fb}" target="_blank" rel="noopener">Open Facebook</a>` : ""}
+      ${l.email ? `<a class="btn ghost" data-mail>✉️ Open email draft</a>` : ""}
+    </div>
+    <div class="row">
+      ${l.fb ? `<button class="copy" data-k="dm1">Copy DM 1</button><button class="copy" data-k="dm2">Copy day-3 DM</button><button class="copy" data-k="dm3">Copy day-14 DM</button>` : ""}
+      ${l.email ? `<button class="copy" data-k="email">Copy email</button>` : ""}
+      <button class="copy" data-k="call">Copy call opener</button>
+    </div>
+    <details><summary>Preview DM 1</summary><pre>${m.dm1.replace(/</g,"&lt;")}</pre></details>
+    ${l.email ? `<details><summary>Preview email</summary><pre class="em"></pre></details>` : ""}`;
+  el.querySelectorAll("button.copy").forEach(b => b.addEventListener("click", () => copy(withAddr(m[b.dataset.k]), b)));
+  const mail = el.querySelector("[data-mail]");
+  const refreshMail = () => {
+    const full = withAddr(m.email); const body = full.split("\n").slice(2).join("\n");
+    if (mail) mail.href = `mailto:${l.email}?subject=${encodeURIComponent(subj)}&body=${encodeURIComponent(body)}`;
+    const pre = el.querySelector("pre.em"); if (pre) pre.textContent = full;
+  };
+  refreshMail(); el._refresh = refreshMail;
+  const cb = el.querySelector("input[type=checkbox]");
+  cb.checked = st.get("done:" + l.id) === "1"; el.classList.toggle("done", cb.checked);
+  cb.addEventListener("change", () => { st.set("done:" + l.id, cb.checked ? "1" : "0"); el.classList.toggle("done", cb.checked); tally(); });
+  return el;
+}
+
+function tally(){ const d = document.querySelectorAll(".lead input:checked").length; $("#count").textContent = `· ${d}/${L.length} done`; }
+
+L.forEach(l => $("#list" + l.t).appendChild(card(l)));
+$("#addr").value = st.get("addr") || "";
+$("#addr").addEventListener("input", e => { st.set("addr", e.target.value); document.querySelectorAll(".lead").forEach(x => x._refresh && x._refresh()); });
+tally();
+</script>
+</body>
+</html>
