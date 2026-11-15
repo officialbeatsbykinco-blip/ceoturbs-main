@@ -10,6 +10,8 @@ Animated YouTube explainers built on the titles in `ads/viral-video-titles.md`. 
 | `restaurant-reviews.mjs` | Her Food Was Better. So Why Was Their Restaurant Packed? (16:9, 9:19, 21 chapters) — Google review cards for restaurants, told through Nina, a made-up restaurant owner | ceoturbo.com/google-review-cards, then ceoturbo.com/restaurants (free call) |
 | `restaurant-reviews-short.mjs` | Same story as a 9:16 cut for Reels, TikTok and Shorts (1:38) | ceoturbo.com/google-review-cards (link in bio) |
 | `website-story-short.mjs` | Same story as a 9:16 cut for Reels, TikTok and Shorts (1:09) | ceoturbo.com/brand-boost (link in bio) |
+| `why-reviews.mjs` | Why the Worse Business Gets All the Customers (16:9, ~10 min, 23 chapters): why reviews decide where people spend money, told in an animal town with sourced stats | ceoturbo.com/google-review-cards |
+| `why-reviews-short.mjs` | Same story as a 9:16 cut for Reels, TikTok and Shorts (~1:30) | ceoturbo.com/google-review-cards (link in bio) |
 
 ## Make one
 
@@ -36,3 +38,12 @@ cd .build/stop-asking && npx hyperframes render --quality delivery --output ../.
 - Real facts only: card packs, counter stand, free US shipping, $5 programming and 30-day returns (`src/config/site.ts`), iPhone XS+ / NFC Android (`src/content/review-cards.ts`), Google's no-freebies rule (`src/content/restaurants.ts`), the Exclusive Restaurant & Lounge install photo (`public/media/restaurant-install-poster.webp`).
 - A script can export `IMAGES = [[path under public/, name]]`; `build.mjs` copies them to `assets/img/`. Titles to A/B test, thumbnail brief, tags and pinned comment: `renders/restaurant-reviews-titles.txt`.
 - `restaurant-reviews-short.mjs` reuses the long script's art (its helpers are now exported) with its own voice lines and vertical layouts; Nina is labeled fictional on screen from the first second. Social caption: `renders/restaurant-reviews-9x16-caption.txt`.
+
+## why-reviews notes
+
+- Pip (a hedgehog baker), Rocco (a raccoon), Hazel (a rabbit) and the town are fictional; the video says so in the first minute and in the description. Pip's review counts, the map and the 3-month result are labeled illustrative.
+- The cast lives in `animals.mjs`: original chibi animals (hedgehog, raccoon, rabbit, fox, bear, owl, turtle, beaver, cat, mouse, dog, squirrel) with the same mood/talk system as `../five-stars/cast.mjs`. `critter(kind, mood, width, id, { hat, apron, scarf, cap, glasses, phone, bag })`. Use 6-digit hex colors.
+- 3D: `stage()` + `L(z, html)` layers + `cam()` give the street real depth and parallax; `town()` is an isometric map with 3D blocks whose pins and trees face the camera (`spin()` turns the map and counter-turns them); `bars3d()` draws 3D bars.
+- Character voices: a line can carry `v: [voice, speed]` (Pip `am_puck`, Rocco `bm_george`, Hazel `af_sky`); the narrator stays `af_heart`.
+- Every stat shows its source on screen and is listed in the description (`SOURCES` in the script): BrightLocal Local Consumer Review Survey 2026 (97% read, 41% always, 47% <20 reviews, 9% ≤5, 74% last 3 months, 45% use AI, 89% expect replies), BrightLocal 2017 (68% left a review when asked), Spiegel Research Center (5 reviews = +270%, 4.0–4.7★ peak), Luca/HBS (+1 star = 5–9% revenue), Google's local-ranking help page, Google Maps content policy, the FTC fake-review rule (Aug 2024; the video says "more than $50,000 per violation" because the amount is inflation-adjusted each year). Check them again before re-cutting.
+- Titles to A/B test, thumbnail brief, tags, pinned comment and end screen: `renders/why-reviews-titles.txt`. Social caption for the short: `renders/why-reviews-9x16-caption.txt`.

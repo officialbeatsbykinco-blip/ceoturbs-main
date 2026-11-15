@@ -1,0 +1,30 @@
+WHY THE WORSE BUSINESS GETS ALL THE CUSTOMERS — titles, thumbnail, tags, pinned comment
+(video: videos/longform/why-reviews.mjs · description with chapters + sources: renders/why-reviews-youtube.txt)
+
+TITLES TO A/B TEST (YouTube "Test & compare")
+A. Why the Worse Business Gets All the Customers
+B. The Number That Secretly Decides Where You Spend Money
+C. Why You Always Pick the Place With More Reviews (it's not your fault)
+Start with A. It works for shoppers (curiosity) and owners (pain), which is the broad audience a big video needs.
+B is the pure-curiosity version. C names the psychology for the "why do I do this" crowd.
+
+THUMBNAIL (1280×720) — use a still from the cold open, then add the text on top
+• Left 60%: the street from the open. Crumb & Co. with a long line of cute animals, Pip's Bakery empty, and Pip (hedgehog in a chef hat) looking sad in his doorway.
+• Big floating review counts above each shop: "412" in green over Crumb & Co., "4" in red over Pip's. These two numbers are the hook, so make them huge.
+• Right 40%: 2–4 words max, heavy white type with a black stroke: "BETTER BREAD. EMPTY." or "4 vs 412".
+• A small red arrow pointing at the "4".
+• Keep any text out of the bottom-right corner (YouTube's timestamp sits there).
+Frame for the background: about 0:12 in the render (open scene, "The other one is empty").
+
+TAGS
+google reviews, why reviews matter, online reviews, small business, how to get more google reviews, customer reviews, social proof, consumer psychology, local seo, google business profile, google maps ranking, review cards, nfc review card, tap to review, small business marketing, bakery, marketing psychology, brightlocal survey, why businesses fail, how to get more customers
+
+PINNED COMMENT
+Every stat in this video has its source on screen and in the description (BrightLocal 2026, Northwestern's Spiegel Research Center, Harvard Business School, Google, the FTC).
+Which surprised you most: 97% read reviews, 47% won't try a place with fewer than 20, or 5 reviews = 270% more likely to buy? 👇
+Want the tap card Pip used? https://ceoturbo.com/google-review-cards
+
+END SCREEN (last 20 s)
+• Left: "Best for viewer" video
+• Right: the restaurant story (Her Food Was Better. So Why Was Their Restaurant Packed?)
+• Subscribe element over the red Subscribe button in the frame

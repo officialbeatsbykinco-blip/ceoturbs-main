@@ -17,7 +17,7 @@ export const VOICE = ["af_heart", 0.93];
 
 export const voPath = (ep, raw) => {
   const line = typeof raw === "string" ? { t: raw } : raw;
-  const [voice, speed] = VOICE;
+  const [voice, speed] = line.v ?? VOICE; // a line can take its own voice: { t, v: ["am_puck", 1.0] }
   const key = createHash("sha1").update(`${voice}|${speed}|${line.say ?? line.t}`).digest("hex").slice(0, 12);
   return path.join(HERE, "vo", ep, `${key}.wav`);
 };
@@ -28,10 +28,9 @@ async function main() {
   mkdirSync(path.join(HERE, "vo", ep), { recursive: true });
   const jobs = SCENES.flatMap((s) => s.lines).map((l) => (typeof l === "string" ? { t: l } : l)).filter((l) => !existsSync(voPath(ep, l)));
   console.log(`${jobs.length} lines to voice`);
-  const [voice, speed] = VOICE;
   const run = (l) =>
     new Promise((ok, fail) => {
-      const args = [path.join(TTS, "synth-v3.py"), path.join(TTS, "models/kokoro-v1.0.onnx"), path.join(TTS, "voices/voices-v1.0.bin"), l.say ?? l.t, voice, String(speed), voPath(ep, l), "en-us"];
+      const args = [path.join(TTS, "synth-v3.py"), path.join(TTS, "models/kokoro-v1.0.onnx"), path.join(TTS, "voices/voices-v1.0.bin"), l.say ?? l.t, (l.v ?? VOICE)[0], String((l.v ?? VOICE)[1]), voPath(ep, l), "en-us"];
       const p = spawn("python3", args, { stdio: "ignore" });
       p.on("exit", (c) => (c ? fail(new Error(`tts failed: ${l.t}`)) : ok()));
     });
