@@ -126,6 +126,17 @@ function build(): PageMeta[] {
   });
 
   pages.push({
+    path: "/check",
+    title: "Free Google & AI Check: Start in 60 Seconds | CEO Turbo",
+    description: "Start your free Google & AI visibility check: your Google rating and reviews vs the top 3 competitors near you, your website and what ChatGPT sees.",
+    noindex: true,
+    priority: 0,
+    changefreq: "monthly",
+    group: "Core",
+    schema: [...base(), S.webPage("/check", "Free Google & AI check", "Start the free Google & AI visibility check.")],
+  });
+
+  pages.push({
     path: "/free-audit",
     title: "Free Google Profile & AI Visibility Check | CEO Turbo",
     description: "Free 60-second check: your Google rating and reviews vs the top 3 competitors near you, your website's SEO and what ChatGPT sees. Score first, no card.",

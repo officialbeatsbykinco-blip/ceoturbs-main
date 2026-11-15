@@ -20,6 +20,7 @@ const ReviewCardSetup = lazy(() => import("./pages/ReviewCardSetup"));
 const CompanyShirts = lazy(() => import("./pages/CompanyShirts"));
 const ArtistMerch = lazy(() => import("./pages/ArtistMerch"));
 const FreeAudit = lazy(() => import("./pages/FreeAudit"));
+const CheckPage = lazy(() => import("./pages/Check"));
 const Pricing = lazy(() => import("./pages/Pricing"));
 const Book = lazy(() => import("./pages/Book"));
 const Watch = lazy(() => import("./pages/Watch"));
@@ -55,6 +56,7 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/grow" element={<Agency />} />
+          <Route path="/check" element={<CheckPage />} />
           <Route path="/artist" element={<AudiencePage slug="artist" />} />
           <Route path="/producers" element={<AudiencePage slug="producers" />} />
           <Route path="/visual-artists" element={<AudiencePage slug="visual-artists" />} />

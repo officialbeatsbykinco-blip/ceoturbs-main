@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ArrowRight, CalendarCheck, Check, Globe, Laptop, MapPin, Megaphone, MessageSquare, Mic2, Monitor, Music, Phone, Search, ShieldCheck, Sparkles, Star, Store, Timer, Wrench } from "lucide-react";
-import { AuditHero } from "@/components/audit/AuditHero";
 import { BookButton, InstallBookButton } from "@/components/cta/Actions";
 import { FAQList, SectionHeader } from "@/components/blocks/Basics";
 import { BestResults, ProofStats, AdGallery } from "@/components/blocks/Proof";
@@ -9,6 +8,7 @@ import { MobileMore } from "@/components/blocks/MobileMore";
 import { ReviewCardStrip } from "@/components/blocks/ReviewCardBlocks";
 import { VideoRow } from "@/components/blocks/YouTubeLite";
 import { FreeCheckStrip } from "@/components/blocks/FreeCheckStrip";
+import { CHECK_PATH } from "@/lib/free-check";
 import { SiteWall } from "@/components/visuals/SiteWall";
 import { CallLink } from "@/components/site/CallLink";
 import { PhoneOnly } from "@/components/booking/BookOrText";
@@ -63,48 +63,49 @@ export default function Home() {
   }, [navigate]);
   return (
     <>
-      <AuditHero
-        source="Home hero"
-        eyebrow="Free Google & AI check · 60 seconds · no card"
-        title={
-          <>
-            <span className="text-chrome-grad">Get more customers from</span> <span className="text-turbo-grad">Google, AI and ads.</span>
-          </>
-        }
-        lede={
-          <>
-            Google Business Profile, reviews, websites and ads for businesses, artists and producers.{" "}
-            <span className="hidden sm:inline">Start with the free check: your Google rating and reviews vs the top 3 competitors near you, scored in 60 seconds.</span>
-            <span className="sm:hidden">See how you stack up against competitors, free.</span>
-          </>
-        }
-        points={[
-          <><span className="font-semibold">{AD_TOTALS.leads} leads</span> <span className="text-muted-foreground">for clients at {money(AD_TOTALS.avgCpl)} each</span></>,
-          <><span className="font-semibold">{CLIENTS.length} client websites</span> <span className="text-muted-foreground">live and bringing in calls</span></>,
-          <><span className="font-semibold">Score first</span> <span className="text-muted-foreground">— we only ask where to send the full report</span></>,
-          <><span className="font-semibold">Leads-or-free</span> <span className="text-muted-foreground">guarantee on the ads we run</span></>,
-        ]}
-        footer={
-          <div className="hidden items-center gap-3 rounded-2xl border border-border bg-white/[0.02] p-3 sm:flex">
-            <img src={SITE.founder.image} alt="" width={44} height={44} className="h-11 w-11 shrink-0 rounded-xl object-cover" />
-            <p className="flex-1 text-sm leading-snug">
-              <span className="font-semibold text-foreground">Hi, I'm Chris.</span> <span>You talk to me, not a call center.</span>
+      <section className="relative overflow-clip pb-6 pt-24 sm:pt-32 lg:pb-10" aria-labelledby="hero">
+        <div className="pointer-events-none absolute inset-0 hero-rings" aria-hidden />
+        <div className="container-x relative grid items-center gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:gap-14">
+          <div className="hero-rise">
+            <p className="chip">Free Google &amp; AI check · 60 seconds</p>
+            <h1 id="hero" className="mt-4 font-display text-[40px] font-extrabold leading-[1.02] tracking-tight sm:text-6xl lg:text-[72px]">
+              Get more customers from <span className="text-turbo-grad">Google, AI and ads.</span>
+            </h1>
+            <p className="mt-4 max-w-xl text-[17px] leading-relaxed text-muted-foreground sm:text-lg">
+              See why customers pick your competitor: your Google rating and reviews vs the top 3 near you, your website and what ChatGPT sees. Free, in 60 seconds.
             </p>
-            <PhoneOnly
-              desktop={
-                <CallLink location="home hero founder" className="btn-chrome inline-flex shrink-0 items-center gap-2 !px-4 !py-2.5 !text-sm">
-                  <Phone className="h-4 w-4 text-turbo" aria-hidden /> {SITE.phone.display}
-                </CallLink>
-              }
-            >
-              <a href={smsHref(HOME_TEXT)} data-call-location="home hero founder text" className="grid h-11 w-11 shrink-0 place-items-center rounded-xl ring-1 ring-white/15">
-                <MessageSquare className="h-5 w-5 text-turbo" aria-hidden />
-                <span className="sr-only">Text {SITE.founder.name}</span>
-              </a>
-            </PhoneOnly>
+            <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:items-center">
+              <Link to={`${CHECK_PATH}?from=home-hero`} className="btn-ignite btn-shine inline-flex items-center justify-center gap-2 !rounded-2xl !px-8 !py-[18px] !text-lg font-bold shadow-xl">
+                Start my free check <ArrowRight className="h-5 w-5" aria-hidden />
+              </Link>
+              <PhoneOnly
+                desktop={
+                  <CallLink location="home hero call" className="inline-flex min-h-[48px] items-center justify-center gap-2 px-3 text-base font-semibold underline-offset-4 hover:underline">
+                    <Phone className="h-4 w-4 text-turbo" aria-hidden /> or call {SITE.phone.display}
+                  </CallLink>
+                }
+              >
+                <a href={smsHref(HOME_TEXT)} data-call-location="home hero text" className="inline-flex min-h-[48px] items-center justify-center gap-2 text-base font-semibold">
+                  <MessageSquare className="h-4 w-4 text-turbo" aria-hidden /> or text Chris
+                </a>
+              </PhoneOnly>
+            </div>
+            <ul className="mt-7 grid max-w-xl grid-cols-3 gap-2 sm:gap-3">
+              {[
+                [String(AD_TOTALS.leads), "leads for clients"],
+                [money(AD_TOTALS.avgCpl), "avg cost per lead"],
+                [String(CLIENTS.length), "client sites live"],
+              ].map(([n, l]) => (
+                <li key={l} className="rounded-2xl bg-white/70 px-3 py-3 text-center shadow-[0_1px_0_hsl(var(--border)),0_10px_30px_-20px_rgb(30_50_90/0.35)] ring-1 ring-border">
+                  <p className="font-display text-xl font-extrabold text-turbo sm:text-2xl">{n}</p>
+                  <p className="mt-0.5 text-[11px] font-medium leading-tight text-muted-foreground sm:text-xs">{l}</p>
+                </li>
+              ))}
+            </ul>
           </div>
-        }
-      />
+          <ReportPreview />
+        </div>
+      </section>
 
       {/* Tech support is real income and real calls, just not the headline: one compact row right under the hero. */}
       <section className="pt-8 sm:pt-10" aria-label="Tech support">
@@ -300,7 +301,7 @@ export default function Home() {
             <h2 id="last-call" className="h-section">See what's costing you customers. Free.</h2>
             <p className="lede mx-auto max-w-2xl">Run the 60-second check, or call or text {SITE.phone.display} and talk to Chris.</p>
             <div className="mt-7 grid gap-3 sm:flex sm:justify-center">
-              <Link to="/free-audit" className="btn-ignite btn-shine inline-flex items-center justify-center gap-2">
+              <Link to={`${CHECK_PATH}?from=home-final`} className="btn-ignite btn-shine inline-flex items-center justify-center gap-2">
                 <Search className="h-4 w-4" aria-hidden /> Run my free check
               </Link>
               <CallLink location="home final CTA" className="btn-blue inline-flex items-center justify-center gap-2">
@@ -351,18 +352,17 @@ function BookCallStrip({ note, className }: { note: string; className?: string }
 function HomeBar() {
   const [show, setShow] = useState(false);
   useEffect(() => {
-    const update = () => setShow(window.scrollY > 700);
+    const update = () => setShow(window.scrollY > 600);
     update();
     window.addEventListener("scroll", update, { passive: true });
     return () => window.removeEventListener("scroll", update);
   }, []);
-  const toCheck = () => document.getElementById("audit")?.scrollIntoView({ behavior: "smooth", block: "start" });
   return (
     <div className={cn("pb-safe fixed inset-x-0 bottom-0 z-40 border-t border-border/80 bg-background/90 px-3 pt-3 backdrop-blur-xl transition-transform duration-300 lg:pb-3", show ? "translate-y-0" : "translate-y-full")} aria-hidden={!show}>
       <div className="mx-auto flex max-w-3xl gap-2">
-        <button type="button" onClick={toCheck} tabIndex={show ? undefined : -1} className="btn-ignite inline-flex flex-[1.4] items-center justify-center gap-1.5 whitespace-nowrap !px-3 !py-3.5 !text-base">
+        <Link to={`${CHECK_PATH}?from=home-bar`} tabIndex={show ? undefined : -1} className="btn-ignite inline-flex flex-[1.4] items-center justify-center gap-1.5 whitespace-nowrap !px-3 !py-3.5 !text-base">
           <Search className="h-4 w-4 shrink-0" aria-hidden /> Free check
-        </button>
+        </Link>
         <CallLink location="home sticky bar" className="btn-blue inline-flex flex-1 items-center justify-center gap-1.5 whitespace-nowrap !px-3 !py-3.5 !text-base">
           <Phone className="h-4 w-4 shrink-0" aria-hidden /> Call
         </CallLink>
@@ -377,6 +377,68 @@ function HomeBar() {
             <MessageSquare className="h-4 w-4 shrink-0" aria-hidden /> Text
           </a>
         </PhoneOnly>
+      </div>
+    </div>
+  );
+}
+
+/**
+ * The hero visual: what the free check shows, drawn in code (no stock photo). Labelled as a sample so
+ * nobody mistakes it for a real client's numbers.
+ */
+function ReportPreview() {
+  const rows = [
+    { n: "You", r: 23, s: "4.3★", you: true },
+    { n: "Top competitor", r: 312, s: "4.8★" },
+    { n: "#2 nearby", r: 148, s: "4.6★" },
+  ];
+  return (
+    <div className="hero-rise relative mx-auto w-full max-w-md lg:max-w-none" style={{ animationDelay: "0.12s" }} aria-hidden>
+      <div className="absolute -inset-6 rounded-[2.5rem] bg-gradient-to-br from-turbo/15 via-transparent to-[hsl(var(--ignite)/0.18)] blur-2xl" />
+      <div className="relative rounded-[2rem] bg-white p-5 shadow-[0_30px_80px_-30px_rgb(20_40_90/0.45)] ring-1 ring-black/5 sm:p-7">
+        <div className="flex items-center justify-between">
+          <p className="text-xs font-bold uppercase tracking-[0.14em] text-turbo">Sample report</p>
+          <span className="rounded-full bg-[#e5484d]/10 px-2.5 py-1 text-xs font-bold text-[#e5484d]">Leaking customers</span>
+        </div>
+        <div className="mt-4 flex items-center gap-5">
+          <div className="relative grid h-24 w-24 shrink-0 place-items-center rounded-full" style={{ background: "conic-gradient(hsl(var(--ignite)) 0 58%, hsl(220 20% 92%) 58% 100%)" }}>
+            <div className="grid h-[76px] w-[76px] place-items-center rounded-full bg-white">
+              <span className="font-display text-3xl font-extrabold text-foreground">58</span>
+            </div>
+          </div>
+          <div>
+            <p className="font-display text-xl font-extrabold leading-tight text-foreground">Joe's Plumbing</p>
+            <p className="mt-1 text-sm text-muted-foreground">Plumber · Tampa, FL</p>
+          </div>
+        </div>
+        <p className="mt-6 text-sm font-semibold text-foreground">Google reviews vs competitors</p>
+        <ul className="mt-3 space-y-3">
+          {rows.map((r) => (
+            <li key={r.n}>
+              <div className="flex items-baseline justify-between text-sm">
+                <span className={r.you ? "font-bold text-foreground" : "text-muted-foreground"}>{r.n}</span>
+                <span className="tabular-nums text-muted-foreground">
+                  {r.s} · <span className={r.you ? "font-bold text-foreground" : ""}>{r.r}</span>
+                </span>
+              </div>
+              <div className="mt-1.5 h-2.5 overflow-hidden rounded-full bg-[hsl(220_20%_94%)]">
+                <div className={cn("bar-grow h-full rounded-full", r.you ? "bg-[hsl(var(--ignite))]" : "bg-turbo/70")} style={{ width: `${Math.max(6, (r.r / 312) * 100)}%` }} />
+              </div>
+            </li>
+          ))}
+        </ul>
+        <div className="mt-6 space-y-2">
+          {["Website title never says “plumber in Tampa”", "ChatGPT can't read the site (blocked)"].map((t, i) => (
+            <p key={t} className="flex items-center gap-2.5 rounded-xl bg-[hsl(220_30%_97%)] px-3 py-2.5 text-sm text-foreground">
+              <span className="grid h-6 w-6 shrink-0 place-items-center rounded-full bg-[#e5484d]/10 text-xs font-bold text-[#e5484d]">{i + 1}</span>
+              {t}
+            </p>
+          ))}
+        </div>
+      </div>
+      <div className="absolute -bottom-5 -left-3 flex items-center gap-2 rounded-2xl bg-white px-4 py-3 shadow-[0_20px_40px_-20px_rgb(20_40_90/0.5)] ring-1 ring-black/5 sm:-left-6">
+        <Star className="h-5 w-5 fill-amber-400 text-amber-400" />
+        <span className="text-sm font-bold text-foreground">Free · 60 seconds</span>
       </div>
     </div>
   );

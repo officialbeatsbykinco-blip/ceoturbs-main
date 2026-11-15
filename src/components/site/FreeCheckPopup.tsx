@@ -2,6 +2,7 @@
 // Once per browser session, never on the money pages (checkout, booking, the check itself), and never
 // on top of an open dialog (booking calendar, quiz) — it must not get between a visitor and a booking.
 import { useEffect, useState } from "react";
+import { CHECK_PATH } from "@/lib/free-check";
 import { Link, useLocation } from "react-router-dom";
 import { ArrowRight, X } from "lucide-react";
 import { track } from "@/lib/track";
@@ -12,7 +13,7 @@ const DELAY_MS = 20_000;
 /** Marketing service pages, where the free check is the natural next step (tech setup slugs stay skipped). */
 const MARKETING_SERVICES = ["seo-aeo-geo", "website-design", "meta-ads", "google-ads", "tiktok-ads", "x-ads", "google-business-profile", "social-media-optimization", "email-marketing", "conversion-tracking"].map((s) => `/services/${s}`);
 // "/" has the check in its hero and sticky bar already.
-const SKIP = ["/", "/computer-repair-tampa", "/office-setup-tampa", "/tampa", "/google-ads-for-local-business", "/free-audit", "/book", "/booked", "/brand-boost", "/google-review-cards", "/google-review-card-setup", "/custom-company-t-shirts", "/artist-merch", "/restaurants", "/privacy-policy", "/terms", "/shipping-returns"];
+const SKIP = ["/", "/check", "/computer-repair-tampa", "/office-setup-tampa", "/tampa", "/google-ads-for-local-business", "/free-audit", "/book", "/booked", "/brand-boost", "/google-review-cards", "/google-review-card-setup", "/custom-company-t-shirts", "/artist-merch", "/restaurants", "/privacy-policy", "/terms", "/shipping-returns"];
 
 const seen = () => {
   try {
@@ -60,7 +61,7 @@ export function FreeCheckPopup() {
       </button>
       <p className="font-semibold">Why do customers pick your competitor?</p>
       <p className="mt-1 text-sm text-muted-foreground">Free 60-second check: your Google rating and reviews vs the top 3 near you, your website and what ChatGPT sees. Score first, no card.</p>
-      <Link to="/free-audit" onClick={() => track("check_popup_click", { page: pathname })} className="btn-ignite mt-3 w-full justify-center !py-3 !text-sm">
+      <Link to={`${CHECK_PATH}?from=popup`} onClick={() => track("check_popup_click", { page: pathname })} className="btn-ignite mt-3 w-full justify-center !py-3 !text-sm">
         Run my free check <ArrowRight className="h-4 w-4" aria-hidden />
       </Link>
     </div>

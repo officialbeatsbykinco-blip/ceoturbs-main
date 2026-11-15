@@ -2,90 +2,18 @@ import { useEffect, useId, useRef, useState, type FormEvent, type ReactNode } fr
 import { Link } from "react-router-dom";
 import { AlertTriangle, ArrowRight, Building2, Check, ChevronDown, Loader2, Lock, Mic2, RotateCcw, Search, Sparkles, X } from "lucide-react";
 import { openBooking } from "@/lib/cal";
-import { attribution, newEventId, track, visitorId } from "@/lib/track";
+import { track } from "@/lib/track";
+import { CATEGORY, EMPTY, FREE_CHECK_NAME, QUESTIONS, SCAN_STEPS, clearCheck, contactErrors, grade, loadCheck, saveCheck, scanRequest, unlockRequest, type Check as AuditCheck, type Form, type GoogleData, type Kind, type Place, type Report, type Status } from "@/lib/free-check";
 import { CallLink } from "@/components/site/CallLink";
 import { BOOKING, fromPriceLabel } from "@/config/site";
 import { CardFace, ScoreGauge } from "@/components/visuals/ReviewVisuals";
 import { rememberBusiness } from "@/lib/review-link";
 import { cn } from "@/lib/utils";
 
-/** What a free-check lead is worth to the ad platforms (same number on the Pixel and the Conversions API). */
-const FREE_CHECK_VALUE = 10;
-
-type Kind = "business" | "artist";
-type Status = "pass" | "warn" | "fail";
-type Check = { cat: string; id: string; weight: number; status: Status; label: string; detail: string; fix: string };
-export type Report = {
-  kind: Kind;
-  name: string;
-  overall: number;
-  scores: Record<string, number>;
-  categories: string[];
-  checks: Check[];
-  top: string[];
-  google?: GoogleData | null;
-  meta: { site: string | null; platform: string | null; psi: boolean; google?: boolean; checkedAt: string };
-};
-type Place = { name: string; rating: number | null; reviews: number; mapsUrl?: string; category?: string };
-type GoogleData = { found: boolean; place: Place | null; competitors: Place[] };
 type Stage = "business" | "questions" | "scan" | "teaser" | "unlocking" | "report" | "failed";
-
-type Form = {
-  kind: Kind;
-  business: string;
-  what: string;
-  city: string;
-  website: string;
-  /** Starting out or growing. */
-  stage: string;
-  gbp: string;
-  reviews: string;
-  press: string;
-  nameRank: string;
-  name: string;
-  email: string;
-  phone: string;
-  smsOptIn: boolean;
-  company_site: string;
-};
-
-const EMPTY: Form = { kind: "business", business: "", what: "", city: "", website: "", stage: "", gbp: "", reviews: "", press: "", nameRank: "", name: "", email: "", phone: "", smsOptIn: false, company_site: "" };
-
-export const CATEGORY: Record<string, { short: string; title: string; question: string }> = {
-  seo: { short: "SEO", title: "Search engine optimization", question: "Can Google find and rank you?" },
-  aeo: { short: "AEO", title: "Answer engine optimization", question: "Can AI Overviews and assistants quote you?" },
-  geo: { short: "GEO", title: "Generative engine optimization", question: "Do ChatGPT, Gemini and Perplexity trust you enough to name you?" },
-  reviews: { short: "Reviews", title: "Google reviews & profile", question: "Will customers pick you over the business next door?" },
-};
-
-const QUESTIONS: Record<Kind, { key: keyof Form; label: string; options: [string, string][] }[]> = {
-  business: [
-    { key: "stage", label: "Where is your business right now?", options: [["start", "Just starting out"], ["grow", "Up and running — want more customers"]] },
-    { key: "gbp", label: "Is your Google Business Profile claimed?", options: [["yes", "Yes, verified"], ["unsure", "Not sure"], ["no", "No"]] },
-    { key: "reviews", label: "How many Google reviews do you have?", options: [["0-9", "0–9"], ["10-49", "10–49"], ["50-99", "50–99"], ["100+", "100+"]] },
-  ],
-  artist: [
-    { key: "stage", label: "Where are you in your music career?", options: [["start", "Just starting out"], ["grow", "Releasing music — want more listeners"]] },
-    { key: "nameRank", label: "Google your artist name. Are you the first result?", options: [["top", "Yes, #1"], ["somewhere", "On page 1"], ["no", "No"], ["unsure", "Haven't checked"]] },
-    { key: "press", label: "Any press, blog or playlist features?", options: [["none", "None yet"], ["some", "A few"], ["lots", "Lots"]] },
-  ],
-};
-
-const SCAN_STEPS = ["Looking you up on Google Maps", "Finding your top competitors nearby", "Loading your website", "Reading titles, headings and content", "Checking schema and FAQ markup", "Testing AI access (ChatGPT, Perplexity, Claude)", "Scoring Google, AI and reviews"];
-const ARTIST_SCAN_STEPS = ["Loading your website or main link", "Reading titles, headings and content", "Checking schema and FAQ markup", "Testing AI access (ChatGPT, Perplexity, Claude)", "Searching music and knowledge databases", "Scoring SEO, AEO and GEO", "Writing your action plan"];
-
-/** The name used everywhere for the lead magnet. */
-export const FREE_CHECK_NAME = "Free Google & AI Visibility Check";
-
-const EMAIL = /^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i;
-const STORE = "ct_audit_v1";
-
-function grade(score: number) {
-  if (score >= 90) return { label: "Strong", tone: "text-turbo", line: "You're ahead of most competitors. The job now is staying there." };
-  if (score >= 75) return { label: "Good, not dominant", tone: "text-turbo", line: "A few fixes stand between you and the top spot." };
-  if (score >= 50) return { label: "Leaking customers", tone: "text-[hsl(var(--ignite-hot))]", line: "People can find you, but competitors are getting calls that should be yours." };
-  return { label: "Hard to find", tone: "text-[#ff6b6b]", line: "Most people searching for what you do won't find you — on Google or in AI answers." };
-}
+const SCAN_STEPS_ALL = SCAN_STEPS;
+export { CATEGORY, FREE_CHECK_NAME };
+export type { Report };
 
 const statusIcon = (s: Status) =>
   s === "pass" ? <Check className="h-4 w-4 text-emerald-400" aria-label="Pass" /> : s === "warn" ? <AlertTriangle className="h-4 w-4 text-[hsl(var(--ignite-hot))]" aria-label="Needs work" /> : <X className="h-4 w-4 text-[#ff6b6b]" aria-label="Problem" />;
@@ -114,12 +42,12 @@ export function AuditTool({ source = "audit", onStageChange, compact = false }: 
   // Restore a finished report after navigating away and back in the same tab.
   useEffect(() => {
     try {
-      const saved = JSON.parse(sessionStorage.getItem(STORE) || "null");
-      if (saved?.report) {
-        setForm({ ...EMPTY, ...saved.form });
+      const saved = loadCheck();
+      if (saved) {
+        setForm(saved.form);
         setReport(saved.report);
-        setUnlocked(saved.unlocked !== false);
-        setStage(saved.unlocked === false ? "teaser" : "report");
+        setUnlocked(saved.unlocked);
+        setStage(saved.unlocked ? "report" : "teaser");
         return;
       }
       // Prefill from the homepage hero (/free-audit?b=Business&c=City&w=what).
@@ -135,9 +63,9 @@ export function AuditTool({ source = "audit", onStageChange, compact = false }: 
   useEffect(() => {
     if (stage !== "scan") return;
     setScanStep(0);
-    const t = setInterval(() => setScanStep((i) => Math.min(i + 1, SCAN_STEPS.length - 1)), 800);
+    const t = setInterval(() => setScanStep((i) => Math.min(i + 1, SCAN_STEPS_ALL[form.kind].length - 1)), 800);
     return () => clearInterval(t);
-  }, [stage]);
+  }, [stage, form.kind]);
 
   const scrollTop = () => requestAnimationFrame(() => top.current?.scrollIntoView({ behavior: "smooth", block: "start" }));
 
@@ -154,126 +82,49 @@ export function AuditTool({ source = "audit", onStageChange, compact = false }: 
   const questions = QUESTIONS[form.kind];
   const answered = questions.every((q) => form[q.key]);
 
-  const save = (r: Report, isUnlocked: boolean, f: Form = form) => {
-    try {
-      sessionStorage.setItem(STORE, JSON.stringify({ form: { ...f, company_site: "" }, report: r, unlocked: isUnlocked }));
-    } catch {
-      /* ignore */
-    }
-  };
-
   /** Step 3: run the real scan with no contact details. The visitor sees a teaser, then unlocks it. */
   const runScan = async () => {
     setStage("scan");
     scrollTop();
-    const minWait = new Promise((r) => setTimeout(r, 4800));
-    try {
-      const { name: _n, email: _e, phone: _p, smsOptIn: _s, ...business } = form;
-      const res = await fetch("/api/audit", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...business, mode: "scan", elapsedMs: Date.now() - (started.current || Date.now()), page: window.location.pathname }),
-      });
-      const data = await res.json().catch(() => ({}));
-      await minWait;
-      if (res.ok && data.report) {
-        setReport(data.report);
-        setUnlocked(false);
-        setStage("teaser");
-        scrollTop();
-        track("audit_teaser", { score: data.report.overall, source, google: !!data.report.google?.found });
-        save(data.report, false);
-        return;
-      }
-      if (res.status === 400 && data.error === "business") {
-        setErrors({ business: "Enter your business or artist name." });
-        return setStage("business");
-      }
-      setFailure(res.status === 429 ? "rate" : "server");
-      setStage("failed");
-    } catch {
-      await minWait;
-      setFailure("network");
-      setStage("failed");
+    const [result] = await Promise.all([scanRequest(form, started.current), new Promise((r) => setTimeout(r, 4800))]);
+    if ("report" in result) {
+      setReport(result.report);
+      setUnlocked(false);
+      setStage("teaser");
+      scrollTop();
+      track("audit_teaser", { score: result.report.overall, source, google: !!result.report.google?.found });
+      saveCheck(form, result.report, false);
+      return;
     }
+    if (result.error === "business") {
+      setErrors({ business: "Enter your business or artist name." });
+      return setStage("business");
+    }
+    setFailure(result.error);
+    setStage("failed");
   };
 
-  /** Step 4: first name + mobile unlock the full report. This is the lead (same sheet fields as before). */
+  /** Step 4: first name + mobile unlock the full report. This is the lead. */
   const submitUnlock = async (e: FormEvent) => {
     e.preventDefault();
     if (!report) return;
-    const errs: typeof errors = {};
-    if (form.name.trim().length < 2) errs.name = "Enter your first name.";
-    const digits = form.phone.replace(/\D/g, "");
-    if (digits.length < 10 || digits.length > 15) errs.phone = "Enter a valid mobile number.";
-    if (form.email.trim() && !EMAIL.test(form.email.trim())) errs.email = "Check your email (or leave it blank).";
+    const errs = contactErrors(form);
     if (Object.keys(errs).length) return setErrors(errs);
-
     setStage("unlocking");
-    // One id shared by the browser Pixel and the server's Lead so Meta counts it once. The browser copy
-    // fires only after the server takes the lead: a typo'd phone that comes back 400 must not count.
-    const leadEventId = newEventId("generate_lead");
-    let counted = false;
-    const countLead = () => {
-      if (counted) return;
-      counted = true;
-      track(
-        "generate_lead",
-        { lead_source: "free_check", kind: form.kind, stage: form.stage, source, value: FREE_CHECK_VALUE, currency: "USD", content_name: form.kind === "artist" ? "Artist visibility check" : "Business visibility check", content_category: `${form.kind === "artist" ? "Artist" : "Business"} · ${form.stage === "start" ? "Starting out" : "Growing"}` },
-        { eventId: leadEventId, user: { email: form.email, phone: form.phone, name: form.name, externalId: visitorId() } },
-      );
-    };
-    const topLabels = report.top.map((id) => report.checks.find((c) => c.id === id)?.label).filter(Boolean);
-    const payload = JSON.stringify({
-      ...form,
-      mode: "unlock",
-      summary: { overall: report.overall, scores: report.scores, top: topLabels },
-      visitorId: visitorId(),
-      elapsedMs: Date.now() - (started.current || Date.now()),
-      page: window.location.pathname,
-      eventId: leadEventId,
-      attribution: attribution(),
-    });
-    const reveal = () => {
-      setUnlocked(true);
-      setStage("report");
-      scrollTop();
-      track("audit_complete", { score: report.overall, source });
-      save(report, true);
-    };
-    // Up to 3 tries on a server or network hiccup; the sheet de-duplicates on the event id.
-    for (let attempt = 0; attempt < 3; attempt++) {
-      try {
-        const res = await fetch("/api/audit", { method: "POST", headers: { "Content-Type": "application/json" }, body: payload, keepalive: true });
-        const data = await res.json().catch(() => ({}));
-        if (res.status === 400 && ["name", "email", "phone"].includes(data.error)) {
-          setErrors({ [data.error]: data.error === "phone" ? "Enter a valid mobile number." : data.error === "email" ? "Check your email (or leave it blank)." : "Enter your first name." });
-          return setStage("teaser");
-        }
-        if (res.status === 429) {
-          countLead();
-          return reveal();
-        }
-        if (res.ok) {
-          countLead();
-          return reveal();
-        }
-      } catch {
-        /* retry */
-      }
-      await new Promise((r) => setTimeout(r, 900 * (attempt + 1)));
+    const fieldErrors = await unlockRequest(form, report, started.current, source);
+    if (fieldErrors) {
+      setErrors(fieldErrors);
+      return setStage("teaser");
     }
-    // They gave us their number: never hold the report hostage to our own outage.
-    countLead();
-    reveal();
+    setUnlocked(true);
+    setStage("report");
+    scrollTop();
+    track("audit_complete", { score: report.overall, source });
+    saveCheck(form, report, true);
   };
 
   const restart = () => {
-    try {
-      sessionStorage.removeItem(STORE);
-    } catch {
-      /* ignore */
-    }
+    clearCheck();
     setReport(null);
     setUnlocked(false);
     setForm((f) => ({ ...EMPTY, kind: f.kind, name: f.name, email: f.email, phone: f.phone, smsOptIn: f.smsOptIn }));
@@ -389,7 +240,7 @@ export function AuditTool({ source = "audit", onStageChange, compact = false }: 
           <p className="font-display text-xl font-bold">Scanning {form.business}…</p>
           <p className="mt-1 text-sm text-muted-foreground">{form.website ? form.website.replace(/^https?:\/\//, "") : form.kind === "business" ? "Checking Google, your website and AI answers" : "Checking where fans can find you"}</p>
           <ol className="mt-6 space-y-3">
-            {(form.kind === "artist" ? ARTIST_SCAN_STEPS : SCAN_STEPS).map((s, i) => (
+            {SCAN_STEPS_ALL[form.kind].map((s, i) => (
               <li key={s} className={cn("flex items-center gap-3 text-sm transition-opacity duration-300", i > scanStep ? "opacity-30" : "opacity-100")}>
                 <span className="grid h-6 w-6 shrink-0 place-items-center rounded-full bg-white/5">
                   {i < scanStep ? <Check className="h-3.5 w-3.5 text-emerald-400" aria-hidden /> : i === scanStep ? <Loader2 className="h-3.5 w-3.5 animate-spin text-turbo" aria-hidden /> : null}
@@ -446,7 +297,7 @@ function aiPrompt(r: Report, f: Form) {
 
 export function AuditReport({ report: r, form: f, source, onRestart }: { report: Report; form: Form; source: string; onRestart: () => void }) {
   const g = grade(r.overall);
-  const topChecks = r.top.map((id) => r.checks.find((c) => c.id === id)).filter(Boolean) as Check[];
+  const topChecks = r.top.map((id) => r.checks.find((c) => c.id === id)).filter(Boolean) as AuditCheck[];
   const fails = r.checks.filter((c) => c.status !== "pass").length;
   const prompt = aiPrompt(r, f);
   const lowReviews = r.kind === "business" && (r.scores.reviews ?? 100) < 75;
@@ -671,7 +522,7 @@ function AuditTeaser({
   onSubmit: (e: FormEvent) => void;
 }) {
   const g = grade(r.overall);
-  const topChecks = r.top.map((id) => r.checks.find((c) => c.id === id)).filter(Boolean) as Check[];
+  const topChecks = r.top.map((id) => r.checks.find((c) => c.id === id)).filter(Boolean) as AuditCheck[];
   const shown = topChecks.slice(0, 2);
   const hidden = r.checks.filter((c) => c.status !== "pass").length - shown.length;
   const formRef = useRef<HTMLFormElement>(null);
@@ -776,7 +627,7 @@ function AuditTeaser({
 
 function ShareResults({ report: r }: { report: Report }) {
   const [done, setDone] = useState(false);
-  const topChecks = r.top.map((id) => r.checks.find((c) => c.id === id)).filter(Boolean) as Check[];
+  const topChecks = r.top.map((id) => r.checks.find((c) => c.id === id)).filter(Boolean) as AuditCheck[];
   const text = `${r.name} — ${FREE_CHECK_NAME}: ${r.overall}/100 (${r.categories.map((c) => `${CATEGORY[c].short} ${r.scores[c]}`).join(", ")}).${r.google?.place ? ` Google: ${r.google.place.reviews} reviews${r.google.place.rating ? `, ${r.google.place.rating.toFixed(1)}★` : ""}.` : ""} Top fixes: ${topChecks.slice(0, 3).map((c) => c.label).join("; ")}. Run yours free: https://www.ceoturbo.com/free-audit`;
   const share = async () => {
     track("audit_share", { score: r.overall });

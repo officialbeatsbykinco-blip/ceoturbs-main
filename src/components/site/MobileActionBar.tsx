@@ -1,4 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
+import { CHECK_PATH } from "@/lib/free-check";
 import { BookButton } from "@/components/cta/Actions";
 import { CALL_FIRST_SLUGS } from "@/content/services";
 import { MessageSquare, Phone, Search, Wrench } from "lucide-react";
@@ -26,7 +27,7 @@ export function MobileActionBar() {
     return (
       <div className="pb-safe fixed inset-x-0 bottom-0 z-40 border-t border-border/80 bg-background/95 px-2.5 pt-2.5 backdrop-blur-xl sm:hidden">
         <div className="flex items-center gap-1.5">
-          <Link to="/free-audit" data-cta-location="mobile bar" className="btn-ignite flex flex-[1.4] items-center justify-center gap-1.5 whitespace-nowrap !px-2 !py-3.5 !text-base font-bold shadow-lg">
+          <Link to={`${CHECK_PATH}?from=mobile-bar`} data-cta-location="mobile bar" className="btn-ignite flex flex-[1.4] items-center justify-center gap-1.5 whitespace-nowrap !px-2 !py-3.5 !text-base font-bold shadow-lg">
             <Search className="h-4 w-4 shrink-0" aria-hidden />
             <span>Free check</span>
           </Link>
