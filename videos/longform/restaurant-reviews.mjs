@@ -40,41 +40,41 @@ Nina, Casa Nina and The Copper Fork are made up. Their review counts, covers and
 
 #restaurant #restaurantowner #googlereviews #restaurantmarketing #smallbusiness #localseo #nfc`;
 
-const REPLY = "You're right, Friday got busy and we were slow. Thank you for telling us. Next time, ask for me, and I'll make sure you're taken care of. — Nina";
-const nina = (m = "smile", w = 250, id = "@nina") => who("nina", m, w, id);
-const luis = (m = "smile", w = 230, id = "@luis") => who("luis", m, w, id);
-const GUESTS = ["extra1", "extra2", "extra6", "extra7", "extra5", "frank", "gary", "okafor", "juno", "extra4"];
-const STARS = (n = 5) => "★".repeat(n) + `<span style="color:#cbd5e1">${"★".repeat(5 - n)}</span>`;
+export const REPLY = "You're right, Friday got busy and we were slow. Thank you for telling us. Next time, ask for me, and I'll make sure you're taken care of. — Nina";
+export const nina = (m = "smile", w = 250, id = "@nina") => who("nina", m, w, id);
+export const luis = (m = "smile", w = 230, id = "@luis") => who("luis", m, w, id);
+export const GUESTS = ["extra1", "extra2", "extra6", "extra7", "extra5", "frank", "gary", "okafor", "juno", "extra4"];
+export const STARS = (n = 5) => "★".repeat(n) + `<span style="color:#cbd5e1">${"★".repeat(5 - n)}</span>`;
 
 /** A number that counts from `from` to `to` on the timeline. */
-const count = (c, el, from, to, t, d) => {
+export const count = (c, el, from, to, t, d) => {
   const v = `cv_${c.id(el).replace(/-/g, "_")}`;
   c.js(`const ${v} = { v: ${from} }; tl.fromTo(${v}, { v: ${from} }, { v: ${to}, duration: ${T(d)}, ease: "power1.inOut", onUpdate: () => { document.getElementById("${c.id(el)}").textContent = Math.round(${v}.v).toLocaleString("en-US"); } }, ${T(t)});`);
 };
 /** Tap rings that pulse out of an element. */
-const ripple = (c, sel, t) => c.js(`tl.fromTo("${c.q(sel)}", { scale: 0.3, autoAlpha: 0.9 }, { scale: 2.4, autoAlpha: 0, duration: 0.9, ease: "power2.out", immediateRender: false }, ${T(t)});`);
+export const ripple = (c, sel, t) => c.js(`tl.fromTo("${c.q(sel)}", { scale: 0.3, autoAlpha: 0.9 }, { scale: 2.4, autoAlpha: 0, duration: 0.9, ease: "power2.out", immediateRender: false }, ${T(t)});`);
 
 /** The little card that stands on every table. */
-const tent = (id, extra = "") => `<div class="rr-tent h" id="${id}" ${extra}><b>G</b><span>★★★★★</span><small>Tap your phone<br />to review us</small></div>`;
+export const tent = (id, extra = "") => `<div class="rr-tent h" id="${id}" ${extra}><b>G</b><span>★★★★★</span><small>Tap your phone<br />to review us</small></div>`;
 /** A dining table with guests sitting behind it and an optional review card. */
-const table = (id, x, y, guests = [], { card = true, moodOf = "smile", w = 92 } = {}) => `<div class="rr-table" id="${id}" style="left:${x}px;top:${y}px">
+export const table = (id, x, y, guests = [], { card = true, moodOf = "smile", w = 92 } = {}) => `<div class="rr-table" id="${id}" style="left:${x}px;top:${y}px">
   ${guests.map((g, k) => `<div class="rr-guest" id="${id}g${k}" style="left:${(k - (guests.length - 1) / 2) * 96 + 160 - w / 2}px">${who(g, moodOf, w, `${id}w${k}`)}</div>`).join("")}
   <div class="top"></div><div class="cloth"></div><span class="plate" style="left:60px">🍝</span><span class="plate" style="left:150px">🥗</span>
   ${card ? tent(`${id}c`, `style="left:232px;top:82px"`) : ""}<div class="rr-ring" id="${id}r" style="left:262px;top:118px"></div>
 </div>`;
 /** The dining room behind every inside scene. */
-const room = () => `<div class="rr-room"><div class="lights">${Array.from({ length: 16 }, (_, i) => `<i style="left:${i * 124 + 30}px;top:${40 + Math.sin(i * 0.8) * 16}px"></i>`).join("")}</div>
+export const room = () => `<div class="rr-room"><div class="lights">${Array.from({ length: 16 }, (_, i) => `<i style="left:${i * 124 + 30}px;top:${40 + Math.sin(i * 0.8) * 16}px"></i>`).join("")}</div>
   <div class="frame" style="left:260px;top:120px">🌶️</div><div class="frame" style="left:1500px;top:110px">🍋</div><div class="wains"></div></div>`;
 /** One storefront on the street. */
-const store = (id, name, x, cls, inside, extra = "") => `<div class="rr-bld ${cls}" id="${id}" style="left:${x}px" ${extra}>
+export const store = (id, name, x, cls, inside, extra = "") => `<div class="rr-bld ${cls}" id="${id}" style="left:${x}px" ${extra}>
   <div class="sign">${name}</div><div class="awn"></div><div class="win">${inside}</div><div class="door"></div></div>`;
-const heads = (list, gap = 92, w = 80, hide = []) => list.map((g, k) => `<div class="rr-head${hide.includes(k) ? " h" : ""}" style="left:${20 + k * gap}px">${who(g, "grin", w, `@hd-${g}-${k}`)}</div>`).join("");
+export const heads = (list, gap = 92, w = 80, hide = []) => list.map((g, k) => `<div class="rr-head${hide.includes(k) ? " h" : ""}" style="left:${20 + k * gap}px">${who(g, "grin", w, `@hd-${g}-${k}`)}</div>`).join("");
 /** A Google-style local result. */
-const row = (icon, name, rating, n, meta, cls = "", id = "", nid = "") => `<div class="ws-res ${cls}"${id ? ` id="${id}"` : ""}><div class="pin">${icon}</div><div><b>${name}</b><small><span style="color:#e8a200">${rating} ★</span> (<span${nid ? ` id="${nid}"` : ""}>${n}</span>) · ${meta}</small></div>${cls.includes("you") ? `<div class="call">Directions</div>` : ""}</div>`;
-const pack = (id, q, rows, extra = "") => `<div class="ws-search h" id="${id}" ${extra}><div class="sbar">🔍 <span id="${id}-q">${q}</span></div><div class="tabs"><b>All</b><span>Maps</span><span>Menus</span><span>Open now</span></div><div class="rows">${rows}</div></div>`;
-const FORK = (n = "612") => row("🍴", "The Copper Fork", "4.7", n, "American · $$ · 0.3 mi");
-const BISTRO = row("🍕", "Lucky Slice Pizza", "4.5", "288", "Pizza · $ · 0.6 mi");
-const NINA = (n = "23", cls = "you", id = "", nid = "") => row("🌮", "Casa Nina", "4.9", n, "Mexican · $$ · 0.3 mi", cls, id, nid);
+export const row = (icon, name, rating, n, meta, cls = "", id = "", nid = "") => `<div class="ws-res ${cls}"${id ? ` id="${id}"` : ""}><div class="pin">${icon}</div><div><b>${name}</b><small><span style="color:#e8a200">${rating} ★</span> (<span${nid ? ` id="${nid}"` : ""}>${n}</span>) · ${meta}</small></div>${cls.includes("you") ? `<div class="call">Directions</div>` : ""}</div>`;
+export const pack = (id, q, rows, extra = "") => `<div class="ws-search h" id="${id}" ${extra}><div class="sbar">🔍 <span id="${id}-q">${q}</span></div><div class="tabs"><b>All</b><span>Maps</span><span>Menus</span><span>Open now</span></div><div class="rows">${rows}</div></div>`;
+export const FORK = (n = "612") => row("🍴", "The Copper Fork", "4.7", n, "American · $$ · 0.3 mi");
+export const BISTRO = row("🍕", "Lucky Slice Pizza", "4.5", "288", "Pizza · $ · 0.6 mi");
+export const NINA = (n = "23", cls = "you", id = "", nid = "") => row("🌮", "Casa Nina", "4.9", n, "Mexican · $$ · 0.3 mi", cls, id, nid);
 
 export const CSS = WS_CSS + `
 .rr-street { position: absolute; inset: 0; background: linear-gradient(180deg, #050a1a 0%, #0d1733 62%, #1f2937 62%, #1f2937 78%, #374151 78%); }

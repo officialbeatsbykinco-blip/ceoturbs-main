@@ -8,6 +8,7 @@ Animated YouTube explainers built on the titles in `ads/viral-video-titles.md`. 
 | `stop-asking-short.mjs` | Same story as a 9:16 cut for Reels, TikTok and Shorts (1:08) | ceoturbo.com/google-review-cards (link in bio) |
 | `website-story.mjs` | He Had $43 in the Bank. Then He Got a Website. (16:9, 8:02, 18 chapters) — why your business needs a website, told through Marcus, a made-up mobile detailer | ceoturbo.com/brand-boost, then ceoturbo.com/pricing (Turbo Launch $1,997) |
 | `restaurant-reviews.mjs` | Her Food Was Better. So Why Was Their Restaurant Packed? (16:9, 9:19, 21 chapters) — Google review cards for restaurants, told through Nina, a made-up restaurant owner | ceoturbo.com/google-review-cards, then ceoturbo.com/restaurants (free call) |
+| `restaurant-reviews-short.mjs` | Same story as a 9:16 cut for Reels, TikTok and Shorts (1:38) | ceoturbo.com/google-review-cards (link in bio) |
 | `website-story-short.mjs` | Same story as a 9:16 cut for Reels, TikTok and Shorts (1:09) | ceoturbo.com/brand-boost (link in bio) |
 
 ## Make one
@@ -34,3 +35,4 @@ cd .build/stop-asking && npx hyperframes render --quality delivery --output ../.
 - Nina, Casa Nina and The Copper Fork are fictional; the video says so in the first 30 seconds and in the description. Her review counts, guests per night and map positions are labeled illustrative, and the climb scene says Google decides rankings.
 - Real facts only: card packs, counter stand, free US shipping, $5 programming and 30-day returns (`src/config/site.ts`), iPhone XS+ / NFC Android (`src/content/review-cards.ts`), Google's no-freebies rule (`src/content/restaurants.ts`), the Exclusive Restaurant & Lounge install photo (`public/media/restaurant-install-poster.webp`).
 - A script can export `IMAGES = [[path under public/, name]]`; `build.mjs` copies them to `assets/img/`. Titles to A/B test, thumbnail brief, tags and pinned comment: `renders/restaurant-reviews-titles.txt`.
+- `restaurant-reviews-short.mjs` reuses the long script's art (its helpers are now exported) with its own voice lines and vertical layouts; Nina is labeled fictional on screen from the first second. Social caption: `renders/restaurant-reviews-9x16-caption.txt`.
