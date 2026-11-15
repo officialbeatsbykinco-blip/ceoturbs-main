@@ -178,7 +178,7 @@ export const SCENES = [
     id: "later", chapter: "Three months later", music: "pulse",
     lines: [
       "Three months later, four reviews became a hundred and forty.",
-      { t: "And now there's a line on both sides of the street.", gap: 0.4 },
+      { t: "And now, there's a line on both sides of the street.", gap: 0.4 },
     ],
     draw(c) {
       const [a, b] = c.L;
