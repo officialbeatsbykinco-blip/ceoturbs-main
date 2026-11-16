@@ -69,7 +69,7 @@ function build(): PageMeta[] {
   pages.push({
     path: "/",
     title: "Get More Customers: Google Profile, Sites & Ads | CEO Turbo",
-    description: "More calls from Google Maps, reviews, websites and ads. Run the free 60-second Google & AI check: your reviews vs the top 3 competitors near you.",
+    description: "More calls from Google Maps, reviews, websites and ads. Run the free 60-second Google & AI check and see your score out of 100.",
     priority: 1,
     changefreq: "weekly",
     group: "Core",
@@ -128,7 +128,7 @@ function build(): PageMeta[] {
   pages.push({
     path: "/check",
     title: "Free Google & AI Check: Start in 60 Seconds | CEO Turbo",
-    description: "Start your free Google & AI visibility check: your Google rating and reviews vs the top 3 competitors near you, your website and what ChatGPT sees.",
+    description: "Start your free Google & AI visibility check: your Google profile, reviews, website and what ChatGPT sees, scored out of 100.",
     noindex: true,
     priority: 0,
     changefreq: "monthly",
@@ -139,12 +139,12 @@ function build(): PageMeta[] {
   pages.push({
     path: "/free-audit",
     title: "Free Google Profile & AI Visibility Check | CEO Turbo",
-    description: "Free 60-second check: your Google rating and reviews vs the top 3 competitors near you, your website's SEO and what ChatGPT sees. Score first, no card.",
+    description: "Free 60-second check of your Google profile, reviews, website SEO and what ChatGPT sees. Score out of 100 first, no card needed.",
     ogImage: "/og/free-audit.jpg",
     priority: 0.9,
     changefreq: "monthly",
     group: "Core",
-    schema: [...base(), S.webPage("/free-audit", "Free Google & AI Visibility Check", "Free 60-second check of your Google Maps listing, reviews vs competitors, website and AI visibility"), S.auditTool(), S.breadcrumbs([{ name: "Free check", path: "/free-audit" }]), S.faqPage(AUDIT_FAQS, "/free-audit")],
+    schema: [...base(), S.webPage("/free-audit", "Free Google & AI Visibility Check", "Free 60-second check of your Google profile, reviews, website and AI visibility"), S.auditTool(), S.breadcrumbs([{ name: "Free check", path: "/free-audit" }]), S.faqPage(AUDIT_FAQS, "/free-audit")],
   });
 
   pages.push({

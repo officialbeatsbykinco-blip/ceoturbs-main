@@ -922,7 +922,7 @@ export const GUIDES: Guide[] = [
     title: "How to check your Google Business Profile (free, in 60 seconds)",
     metaTitle: "Free Google Business Profile Check: What to Look At",
     metaDescription: "How to check your Google Business Profile in 60 seconds: listing status, rating, review count vs competitors, website and AI visibility. Free tool inside.",
-    summary: "Search your business name and city on Google Maps, confirm the listing shows as open with the right category, then compare your rating and review count with the top 3 competitors for your service. The free CEO Turbo check does all of that, plus your website and AI visibility, in about 60 seconds.",
+    summary: "Search your business name and city on Google Maps, confirm the listing shows as open with the right category, then compare your rating and review count with the top 3 competitors for your service. The free CEO Turbo check scores your profile, reviews, website and AI visibility in about 60 seconds.",
     audience: "local",
     published: "2026-11-15",
     updated: "2026-11-15",
@@ -941,7 +941,7 @@ export const GUIDES: Guide[] = [
       },
       {
         h2: "What does the free CEO Turbo check do?",
-        answer: "It looks up your business on Google Maps, pulls your real rating and review count, finds the top three competitors for your service in your city, scans your website for the basics Google needs, and checks whether AI tools like ChatGPT can read it. You get a score out of 100 and a fix list ranked by how many customers each problem likely costs you.",
+        answer: "It checks your Google profile and reviews, scans your website for the basics Google needs, and checks whether AI tools like ChatGPT can read it. You get a score out of 100 and a fix list ranked by how many customers each problem likely costs you.",
         bullets: ["Takes about 60 seconds", "You see your score before giving any contact details", "Works without a website (it uses the one on your Google profile, if any)", "Free, no card"],
       },
       {
@@ -995,7 +995,7 @@ export const GUIDES: Guide[] = [
       },
       {
         h2: "How do you check all of this quickly?",
-        answer: "Run the free CEO Turbo check with your business name, service and city. It pulls your Google rating and reviews, lists the top three competitors for that search with theirs, and scans your website and AI visibility, so you can see which of the four gaps is the biggest in about a minute.",
+        answer: "Run the free CEO Turbo check with your business name, service and city. It scores your Google profile and reviews, your website and your AI visibility, so you can see which gap is the biggest in about a minute. Then search your main service on Google Maps and note the top three businesses' review counts to see the review gap.",
         table: { head: ["Gap", "How to spot it", "Typical time to improve"], rows: [["Category", "Competitor's category is more specific", "Days"], ["Reviews", "Competitor has several times your count", "Weeks to months"], ["Website", "Your title never names the service or city", "Days to weeks"], ["Mentions and links", "Competitor appears in local directories and news", "Months"]] },
       },
       {

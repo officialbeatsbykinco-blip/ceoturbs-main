@@ -60,7 +60,7 @@ export function FreeCheckPopup() {
         <X className="h-4 w-4" aria-hidden />
       </button>
       <p className="font-semibold">Why do customers pick your competitor?</p>
-      <p className="mt-1 text-sm text-muted-foreground">Free 60-second check: your Google rating and reviews vs the top 3 near you, your website and what ChatGPT sees. Score first, no card.</p>
+      <p className="mt-1 text-sm text-muted-foreground">Free 60-second check of your Google profile, reviews, website and what ChatGPT sees. Score first, no card.</p>
       <Link to={`${CHECK_PATH}?from=popup`} onClick={() => track("check_popup_click", { page: pathname })} className="btn-ignite mt-3 w-full justify-center !py-3 !text-sm">
         Run my free check <ArrowRight className="h-4 w-4" aria-hidden />
       </Link>

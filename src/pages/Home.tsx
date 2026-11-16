@@ -72,7 +72,7 @@ export default function Home() {
               Get more customers from <span className="text-turbo-grad">Google, AI and ads.</span>
             </h1>
             <p className="mt-4 max-w-xl text-[17px] leading-relaxed text-muted-foreground sm:text-lg">
-              See why customers pick your competitor: your Google rating and reviews vs the top 3 near you, your website and what ChatGPT sees. Free, in 60 seconds.
+              See why customers pick your competitor: we check your Google profile and reviews, your website and what ChatGPT sees, then score you out of 100. Free, in 60 seconds.
             </p>
             <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:items-center">
               <Link to={`${CHECK_PATH}?from=home-hero`} className="btn-ignite btn-shine inline-flex items-center justify-center gap-2 !rounded-2xl !px-8 !py-[18px] !text-lg font-bold shadow-xl">
@@ -388,9 +388,9 @@ function HomeBar() {
  */
 function ReportPreview() {
   const rows = [
-    { n: "You", r: 23, s: "4.3★", you: true },
-    { n: "Top competitor", r: 312, s: "4.8★" },
-    { n: "#2 nearby", r: 148, s: "4.6★" },
+    { n: "Google profile & reviews", v: 46 },
+    { n: "Website (SEO)", v: 71 },
+    { n: "AI answers (ChatGPT)", v: 38 },
   ];
   return (
     <div className="hero-rise relative mx-auto w-full max-w-md lg:max-w-none" style={{ animationDelay: "0.12s" }} aria-hidden>
@@ -411,18 +411,16 @@ function ReportPreview() {
             <p className="mt-1 text-sm text-muted-foreground">Plumber · Tampa, FL</p>
           </div>
         </div>
-        <p className="mt-6 text-sm font-semibold text-foreground">Google reviews vs competitors</p>
+        <p className="mt-6 text-sm font-semibold text-foreground">Where you're losing customers</p>
         <ul className="mt-3 space-y-3">
           {rows.map((r) => (
             <li key={r.n}>
               <div className="flex items-baseline justify-between text-sm">
-                <span className={r.you ? "font-bold text-foreground" : "text-muted-foreground"}>{r.n}</span>
-                <span className="tabular-nums text-muted-foreground">
-                  {r.s} · <span className={r.you ? "font-bold text-foreground" : ""}>{r.r}</span>
-                </span>
+                <span className="text-muted-foreground">{r.n}</span>
+                <span className="font-bold tabular-nums text-foreground">{r.v}</span>
               </div>
               <div className="mt-1.5 h-2.5 overflow-hidden rounded-full bg-[hsl(220_20%_94%)]">
-                <div className={cn("bar-grow h-full rounded-full", r.you ? "bg-[hsl(var(--ignite))]" : "bg-turbo/70")} style={{ width: `${Math.max(6, (r.r / 312) * 100)}%` }} />
+                <div className={cn("bar-grow h-full rounded-full", r.v < 50 ? "bg-[hsl(var(--ignite))]" : "bg-turbo/70")} style={{ width: `${r.v}%` }} />
               </div>
             </li>
           ))}

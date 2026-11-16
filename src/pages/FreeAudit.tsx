@@ -10,7 +10,7 @@ import { AD_TOTALS, money } from "@/content/results";
 import { FREE_CHECK_NAME } from "@/components/audit/AuditTool";
 
 const PILLARS = [
-  { k: "Maps", t: "Win on Google Maps", items: ["Are you on Google Maps — and open?", "Your real star rating and review count", "The top 3 competitors near you, side by side", "Review link on your site"] },
+  { k: "Maps", t: "Win on Google Maps", items: ["Are you on Google Maps — and open?", "Your real star rating and review count", "How many reviews you need to compete", "Review link on your site"] },
   { k: "SEO", t: "Get found on Google", items: ["Title, description and headings", "Readable content (not JavaScript-only)", "Mobile setup, speed and sitemap", "Indexing blocks that hide you"] },
   { k: "AEO", t: "Get quoted in AI answers", items: ["Schema markup for your business or artist", "FAQ content assistants can lift", "Phone, location and what you do — up front", "Clear section structure"] },
   { k: "GEO", t: "Get recommended by AI", items: ["ChatGPT, Perplexity and Claude crawler access", "llms.txt summary for AI tools", "Links between your site and profiles", "Presence in Wikidata, MusicBrainz and maps"] },
@@ -27,9 +27,9 @@ export default function FreeAudit() {
             <span className="text-chrome-grad">Why do customers pick your competitor?</span> <span className="text-turbo-grad">Find out free in 60 seconds.</span>
           </>
         }
-        lede="Type your business name and city. We check your Google Maps listing, reviews, website and what ChatGPT can see, compare you to the top competitors near you, and score you out of 100. You see your score before we ask for anything."
+        lede="Type your business name and city. We check your Google profile, reviews, website and what ChatGPT can see, and score you out of 100. You see your score before we ask for anything."
         points={[
-          <><span className="font-semibold">Google Maps:</span> <span className="text-muted-foreground">your rating and reviews vs the top 3 near you</span></>,
+          <><span className="font-semibold">Google Maps:</span> <span className="text-muted-foreground">your profile, rating and reviews</span></>,
           <><span className="font-semibold">Website:</span> <span className="text-muted-foreground">can Google find, read and rank it?</span></>,
           <><span className="font-semibold">AI answers:</span> <span className="text-muted-foreground">can ChatGPT, Gemini and Perplexity name you?</span></>,
           <><span className="font-semibold">Fix list:</span> <span className="text-muted-foreground">ranked by how many customers each costs you</span></>,
@@ -43,7 +43,7 @@ export default function FreeAudit() {
 
       <section className="section" aria-labelledby="checks">
         <div className="container-x">
-          <SectionHeader title={<span id="checks">What does the free check look at?</span>} lede="Four things decide who gets the call: your Google Maps listing and reviews, your website, and whether AI assistants trust you enough to name you. The check scores all four in about 60 seconds, using live data from Google and your own site." />
+          <SectionHeader title={<span id="checks">What does the free check look at?</span>} lede="Four things decide who gets the call: your Google Maps listing and reviews, your website, and whether AI assistants trust you enough to name you. The check scores all four in about 60 seconds, using your answers and a live scan of your own site." />
           <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
             {PILLARS.map((p) => (
               <div key={p.k} className="panel group p-6 transition-shadow duration-300 hover:shadow-[0_0_0_1px_hsl(var(--turbo)/0.5),0_30px_60px_-30px_hsl(var(--turbo)/0.5)]">

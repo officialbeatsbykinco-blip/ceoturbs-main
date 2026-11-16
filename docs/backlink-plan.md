@@ -16,7 +16,7 @@ Backlinks can't be built in code. This is the list to work through by hand. Use 
 - [ ] Case-study posts on LinkedIn for Appliance King (42 conversions at $4.19) and the $357 → 55+ customers video
 
 ## Days 15–21: list the free tool
-- [ ] Product Hunt launch: "Free Google & AI Visibility Check: your reviews vs the top 3 competitors"
+- [ ] Product Hunt launch: "Free Google & AI Visibility Check: your Google, website and AI score in 60 seconds"
 - [ ] SaaSHub, AlternativeTo (as an alternative to paid local SEO audit tools), There's An AI For That (AI-visibility angle), BetaList
 - [ ] Answer real questions on Reddit (r/smallbusiness, r/Entrepreneur, r/beatmakers) and Quora with genuinely useful advice, linking the check only where it fits the question
 

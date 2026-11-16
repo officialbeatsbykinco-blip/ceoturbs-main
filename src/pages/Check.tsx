@@ -179,7 +179,7 @@ export default function CheckPage() {
               <Tile
                 icon={<Building2 className="h-6 w-6" aria-hidden />}
                 title="My business"
-                sub="Google Maps, reviews vs competitors, website, AI"
+                sub="Google profile, reviews, website, AI"
                 onClick={() => {
                   setForm((f) => ({ ...f, kind: "business", nameRank: "", press: "" }));
                   go("name");
@@ -207,7 +207,7 @@ export default function CheckPage() {
               onSubmit={(e) => {
                 e.preventDefault();
                 if (form.business.trim().length < 2) return setErrors({ business: form.kind === "artist" ? "Enter your artist name." : "Enter your business name." });
-                if (form.kind === "business" && form.city.trim().length < 2) return setErrors({ city: "Enter your city so we can find your competitors." });
+                if (form.kind === "business" && form.city.trim().length < 2) return setErrors({ city: "Enter your city so we can check your local results." });
                 if (!started.current) started.current = Date.now();
                 track("audit_start", { kind: form.kind, source: SOURCE });
                 rememberBusiness(form.business);
@@ -225,7 +225,7 @@ export default function CheckPage() {
         )}
 
         {step === "what" && (
-          <Screen kicker={form.business} title={form.kind === "artist" ? "What kind of artist are you?" : "What do you do?"} sub={form.kind === "artist" ? "Pick the closest one." : "We'll find the top 3 competitors near you for this."}>
+          <Screen kicker={form.business} title={form.kind === "artist" ? "What kind of artist are you?" : "What do you do?"} sub={form.kind === "artist" ? "Pick the closest one." : "So we check you for the searches your customers use."}>
             {!otherWhat ? (
               <div className="grid grid-cols-2 gap-3">
                 {WHAT[form.kind].map(([v, l]) => (
@@ -321,7 +321,7 @@ export default function CheckPage() {
               </>
             }
             title="Where should we text your full report?"
-            sub="Every fix, step by step, plus how you stack up against your competitors. Promise, no spam 🤞"
+            sub="Every fix, step by step, ranked by how many customers it's costing you. Promise, no spam 🤞"
           >
             <form id="contact-form" noValidate onSubmit={unlock} className="grid gap-3">
               <BigInput id="chk-name" label="First name" value={form.name} onChange={(v) => set("name", v)} autoComplete="given-name" error={errors.name} autoFocus />

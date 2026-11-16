@@ -71,7 +71,7 @@ export const QUESTIONS: Record<Kind, Question[]> = {
 };
 
 export const SCAN_STEPS: Record<Kind, string[]> = {
-  business: ["Looking you up on Google Maps", "Finding your top competitors nearby", "Loading your website", "Reading titles, headings and content", "Checking schema and FAQ markup", "Testing AI access (ChatGPT, Perplexity, Claude)", "Scoring Google, AI and reviews"],
+  business: ["Checking your Google profile and reviews", "Loading your website", "Reading titles, headings and content", "Checking schema and FAQ markup", "Testing AI access (ChatGPT, Perplexity, Claude)", "Scoring Google, AI and reviews"],
   artist: ["Loading your website or main link", "Reading titles, headings and content", "Checking schema and FAQ markup", "Testing AI access (ChatGPT, Perplexity, Claude)", "Searching music and knowledge databases", "Scoring SEO, AEO and GEO", "Writing your action plan"],
 };
 
