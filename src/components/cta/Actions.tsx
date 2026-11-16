@@ -49,7 +49,7 @@ export function BookButton({
   // On a phone openBooking opens the text quiz; the href is the no-JS fallback, so it opens Messages there.
   const texting = useTexting();
   return (
-    <a href={texting ? smsHref(QUICK_TEXT) : BOOKING.url} onClick={onClick} className={cn(variantClass[variant], className)} rel="noopener">
+    <a href={texting ? smsHref(QUICK_TEXT) : BOOKING.url} data-call-location={texting ? "book button quiz" : undefined} onClick={onClick} className={cn(variantClass[variant], className)} rel="noopener">
       {children}
     </a>
   );

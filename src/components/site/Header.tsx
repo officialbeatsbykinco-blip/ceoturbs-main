@@ -13,7 +13,8 @@ import { ARTIST_MERCH_PATH } from "@/content/artist-merch";
 import { SHIRTS_PATH } from "@/content/company-shirts";
 import { REVIEWS_AD_PATH, SHOP_PATH, SETUP_PATH } from "@/content/review-cards";
 import { QUICK_TECH_TEXT } from "@/lib/sms";
-import { CARD_TEXT, smsHref } from "@/lib/sms";
+import { CARD_TEXT, QUICK_TEXT, smsHref } from "@/lib/sms";
+import { TextQuizButton } from "@/components/quiz/TextQuizButton";
 import { cn } from "@/lib/utils";
 import { FixMyTechLink } from "@/components/tech/FixMyTechLink";
 import { ContactButton } from "@/components/cta/ContactChooser";
@@ -168,7 +169,13 @@ export function Header({ focus: focusProp = false }: { focus?: boolean }) {
             <span className="sr-only">Call {SITE.name} at {SITE.phone.display}</span>
           </CallLink>
           {/* The shop pages have no bottom bar, so their Text button sits up here. */}
-          {(pathname === "/" || pathname === SHOP_PATH || pathname === SHIRTS_PATH || pathname === ARTIST_MERCH_PATH) && (
+          {pathname === "/" && (
+            <TextQuizButton source="header text quiz" fallback={QUICK_TEXT} className="inline-flex h-10 w-10 items-center justify-center rounded-xl text-foreground ring-1 ring-white/10 hover:bg-white/5 sm:hidden">
+              <MessageSquare className="h-[18px] w-[18px]" aria-hidden />
+              <span className="sr-only">Text {SITE.name}</span>
+            </TextQuizButton>
+          )}
+          {(pathname === SHOP_PATH || pathname === SHIRTS_PATH || pathname === ARTIST_MERCH_PATH) && (
             <a href={smsHref(pathname === SHOP_PATH ? CARD_TEXT : QUICK_TECH_TEXT)} data-call-location={focus ? "ad page header text" : "header text"} className="inline-flex h-10 w-10 items-center justify-center rounded-xl text-foreground ring-1 ring-white/10 hover:bg-white/5 sm:hidden">
               <MessageSquare className="h-[18px] w-[18px]" aria-hidden />
               <span className="sr-only">Text {SITE.name}</span>

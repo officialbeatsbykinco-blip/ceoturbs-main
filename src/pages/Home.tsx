@@ -21,9 +21,9 @@ import { SHIRTS_PATH } from "@/content/company-shirts";
 import { SHOP_PATH } from "@/content/review-cards";
 import { itPrice, price } from "@/content/pricing";
 import { OFFICE_SETUP_PATH } from "@/content/tech-pages";
-import { smsHref } from "@/lib/sms";
 import { cn } from "@/lib/utils";
 import { FixMyTechLink } from "@/components/tech/FixMyTechLink";
+import { TextQuizButton } from "@/components/quiz/TextQuizButton";
 
 const HOME_TEXT = "Hi Chris, I want more customers for my business: ";
 
@@ -74,22 +74,29 @@ export default function Home() {
             <p className="mt-4 max-w-xl text-[17px] leading-relaxed text-muted-foreground sm:text-lg">
               See why customers pick your competitor: we check your Google profile and reviews, your website and what ChatGPT sees, then score you out of 100. Free, in 60 seconds.
             </p>
-            <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:items-center">
-              <Link to={`${CHECK_PATH}?from=home-hero`} className="btn-ignite btn-shine inline-flex items-center justify-center gap-2 !rounded-2xl !px-8 !py-[18px] !text-lg font-bold shadow-xl">
-                Start my free check <ArrowRight className="h-5 w-5" aria-hidden />
-              </Link>
-              <PhoneOnly
-                desktop={
+            {/* Computers: the free check, then call. Phones: the tap-question text quiz that texts our number, then the free check. */}
+            <PhoneOnly
+              desktop={
+                <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:items-center">
+                  <Link to={`${CHECK_PATH}?from=home-hero`} className="btn-ignite btn-shine inline-flex items-center justify-center gap-2 !rounded-2xl !px-8 !py-[18px] !text-lg font-bold shadow-xl">
+                    Start my free check <ArrowRight className="h-5 w-5" aria-hidden />
+                  </Link>
                   <CallLink location="home hero call" className="inline-flex min-h-[48px] items-center justify-center gap-2 px-3 text-base font-semibold underline-offset-4 hover:underline">
                     <Phone className="h-4 w-4 text-turbo" aria-hidden /> or call {SITE.phone.display}
                   </CallLink>
-                }
-              >
-                <a href={smsHref(HOME_TEXT)} data-call-location="home hero text" className="inline-flex min-h-[48px] items-center justify-center gap-2 text-base font-semibold">
-                  <MessageSquare className="h-4 w-4 text-turbo" aria-hidden /> or text Chris
-                </a>
-              </PhoneOnly>
-            </div>
+                </div>
+              }
+            >
+              <div className="mt-7 flex flex-col gap-3">
+                <TextQuizButton source="home hero text quiz" fallback={HOME_TEXT} className="btn-ignite btn-shine inline-flex w-full items-center justify-center gap-2 !rounded-2xl !px-6 !py-[18px] !text-lg font-bold shadow-xl">
+                  <MessageSquare className="h-5 w-5" aria-hidden /> Text us: 3 quick taps
+                </TextQuizButton>
+                <Link to={`${CHECK_PATH}?from=home-hero`} className="btn-blue inline-flex w-full items-center justify-center gap-2 !rounded-2xl !py-4 !text-base font-bold">
+                  <Search className="h-5 w-5" aria-hidden /> Or get my free Google check
+                </Link>
+                <p className="text-center text-sm text-muted-foreground">Chris texts you back from {SITE.phone.display}</p>
+              </div>
+            </PhoneOnly>
             <ul className="mt-7 grid max-w-xl grid-cols-3 gap-2 sm:gap-3">
               {[
                 [String(AD_TOTALS.leads), "leads for clients"],
@@ -314,9 +321,9 @@ export default function Home() {
                   </BookButton>
                 }
               >
-                <a href={smsHref(HOME_TEXT)} data-call-location="home final CTA text" className="btn-chrome inline-flex items-center justify-center gap-2">
+                <TextQuizButton source="home final CTA text quiz" fallback={HOME_TEXT} className="btn-chrome inline-flex items-center justify-center gap-2">
                   <MessageSquare className="h-4 w-4 text-turbo" aria-hidden /> Text us
-                </a>
+                </TextQuizButton>
               </PhoneOnly>
             </div>
           </div>
@@ -359,25 +366,33 @@ function HomeBar() {
   }, []);
   return (
     <div className={cn("pb-safe fixed inset-x-0 bottom-0 z-40 border-t border-border/80 bg-background/90 px-3 pt-3 backdrop-blur-xl transition-transform duration-300 lg:pb-3", show ? "translate-y-0" : "translate-y-full")} aria-hidden={!show}>
-      <div className="mx-auto flex max-w-3xl gap-2">
-        <Link to={`${CHECK_PATH}?from=home-bar`} tabIndex={show ? undefined : -1} className="btn-ignite inline-flex flex-[1.4] items-center justify-center gap-1.5 whitespace-nowrap !px-3 !py-3.5 !text-base">
-          <Search className="h-4 w-4 shrink-0" aria-hidden /> Free check
-        </Link>
-        <CallLink location="home sticky bar" className="btn-blue inline-flex flex-1 items-center justify-center gap-1.5 whitespace-nowrap !px-3 !py-3.5 !text-base">
-          <Phone className="h-4 w-4 shrink-0" aria-hidden /> Call
-        </CallLink>
-        <PhoneOnly
-          desktop={
+      <PhoneOnly
+        desktop={
+          <div className="mx-auto flex max-w-3xl gap-2">
+            <Link to={`${CHECK_PATH}?from=home-bar`} tabIndex={show ? undefined : -1} className="btn-ignite inline-flex flex-[1.4] items-center justify-center gap-1.5 whitespace-nowrap !px-3 !py-3.5 !text-base">
+              <Search className="h-4 w-4 shrink-0" aria-hidden /> Free check
+            </Link>
+            <CallLink location="home sticky bar" className="btn-blue inline-flex flex-1 items-center justify-center gap-1.5 whitespace-nowrap !px-3 !py-3.5 !text-base">
+              <Phone className="h-4 w-4 shrink-0" aria-hidden /> Call
+            </CallLink>
             <BookButton note="Home sticky bar" variant="chrome" className="inline-flex flex-1 items-center justify-center gap-1.5 whitespace-nowrap !px-3 !py-3.5 !text-base">
               <CalendarCheck className="h-4 w-4 shrink-0" aria-hidden /> Book a call
             </BookButton>
-          }
-        >
-          <a href={smsHref(HOME_TEXT)} data-call-location="home sticky bar text" tabIndex={show ? undefined : -1} className="btn-chrome inline-flex flex-1 items-center justify-center gap-1.5 whitespace-nowrap !px-3 !py-3.5 !text-base">
-            <MessageSquare className="h-4 w-4 shrink-0" aria-hidden /> Text
-          </a>
-        </PhoneOnly>
-      </div>
+          </div>
+        }
+      >
+        <div className="mx-auto flex max-w-3xl gap-1.5">
+          <TextQuizButton source="home sticky bar text quiz" fallback={HOME_TEXT} tabIndex={show ? undefined : -1} className="btn-ignite inline-flex flex-[1.4] items-center justify-center gap-1.5 whitespace-nowrap !px-2 !py-3.5 !text-base font-bold shadow-lg">
+            <MessageSquare className="h-4 w-4 shrink-0" aria-hidden /> Text us
+          </TextQuizButton>
+          <CallLink location="home sticky bar" className="btn-blue inline-flex flex-1 items-center justify-center gap-1.5 whitespace-nowrap !px-2 !py-3.5 !text-base">
+            <Phone className="h-4 w-4 shrink-0" aria-hidden /> Call
+          </CallLink>
+          <Link to={`${CHECK_PATH}?from=home-bar`} tabIndex={show ? undefined : -1} className="btn-chrome inline-flex flex-1 items-center justify-center gap-1.5 whitespace-nowrap !px-2 !py-3.5 !text-base">
+            <Search className="h-4 w-4 shrink-0" aria-hidden /> Check
+          </Link>
+        </div>
+      </PhoneOnly>
     </div>
   );
 }

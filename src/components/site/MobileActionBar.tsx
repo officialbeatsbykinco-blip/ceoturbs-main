@@ -6,6 +6,7 @@ import { MessageSquare, Phone, Search, Wrench } from "lucide-react";
 import { SITE, fromPriceLabel } from "@/config/site";
 import { IT_SERVICES_PATH, techBooking } from "@/content/tech-pages";
 import { FixMyTechLink } from "@/components/tech/FixMyTechLink";
+import { TextQuizButton } from "@/components/quiz/TextQuizButton";
 import { CallLink } from "./CallLink";
 import { REVIEWS_AD_PATH, SETUP_PATH, SHOP_PATH } from "@/content/review-cards";
 import { SHIRTS_PATH } from "@/content/company-shirts";
@@ -27,18 +28,19 @@ export function MobileActionBar() {
     return (
       <div className="pb-safe fixed inset-x-0 bottom-0 z-40 border-t border-border/80 bg-background/95 px-2.5 pt-2.5 backdrop-blur-xl sm:hidden">
         <div className="flex items-center gap-1.5">
-          <Link to={`${CHECK_PATH}?from=mobile-bar`} data-cta-location="mobile bar" className="btn-ignite flex flex-[1.4] items-center justify-center gap-1.5 whitespace-nowrap !px-2 !py-3.5 !text-base font-bold shadow-lg">
-            <Search className="h-4 w-4 shrink-0" aria-hidden />
-            <span>Free check</span>
-          </Link>
+          {/* Phones: the tap-question text quiz to our number first, then Call, then the free check. */}
+          <TextQuizButton source="mobile bar text quiz" fallback={QUICK_TEXT} className="btn-ignite flex flex-[1.4] items-center justify-center gap-1.5 whitespace-nowrap !px-2 !py-3.5 !text-base font-bold shadow-lg">
+            <MessageSquare className="h-4 w-4 shrink-0" aria-hidden />
+            <span>Text us</span>
+          </TextQuizButton>
           <CallLink location="mobile bar" className="btn-blue flex flex-1 items-center justify-center gap-1.5 whitespace-nowrap !px-2 !py-3.5 !text-base font-bold">
             <Phone className="h-4 w-4 shrink-0" aria-hidden />
             <span>Call</span>
           </CallLink>
-          <a href={smsHref(QUICK_TEXT)} data-call-location="mobile bar text" className="btn-chrome flex flex-1 items-center justify-center gap-1.5 whitespace-nowrap !px-2 !py-3.5 !text-base font-bold">
-            <MessageSquare className="h-4 w-4 shrink-0" aria-hidden />
-            <span>Text</span>
-          </a>
+          <Link to={`${CHECK_PATH}?from=mobile-bar`} data-cta-location="mobile bar" className="btn-chrome flex flex-1 items-center justify-center gap-1.5 whitespace-nowrap !px-2 !py-3.5 !text-base font-bold">
+            <Search className="h-4 w-4 shrink-0" aria-hidden />
+            <span>Check</span>
+          </Link>
         </div>
       </div>
     );
