@@ -13,7 +13,7 @@ export const DEVICES = [
 ] as const;
 
 type Group = "computer" | "mobile" | "home";
-/** Which problem list a device gets: a phone never sees "blue screen", a printer never sees "cracked screen". Phones and tablets: screens and batteries only. */
+/** Which problem list a device gets: a phone never sees "blue screen", a printer never sees "cracked screen". Phones and tablets: setup only (we don't repair them). */
 export const deviceGroup = (d?: string): Group => (d === "iphone" || d === "android" || d === "tablet" ? "mobile" : d === "other" ? "home" : "computer");
 
 export const PROBLEMS = [
@@ -21,15 +21,18 @@ export const PROBLEMS = [
   { id: "crash", label: "Crashing or error screens", for: ["computer"] },
   { id: "dead", label: "Won't turn on", for: ["computer"] },
   { id: "virus", label: "Virus, pop-ups or scam warnings", for: ["computer"] },
-  { id: "screen", label: "Cracked or broken screen", for: ["computer", "mobile"] },
-  { id: "battery", label: "Battery dies fast or won't charge", for: ["computer", "mobile"] },
+  { id: "screen", label: "Cracked or broken screen", for: ["computer"] },
+  { id: "battery", label: "Battery dies fast or won't charge", for: ["computer"] },
   { id: "upgrade", label: "Upgrade (SSD, memory, parts)", for: ["computer"] },
   { id: "setup", label: "Printer, software or email help", for: ["computer"] },
   { id: "data", label: "Move files or photos", for: ["computer"] },
   { id: "printer", label: "Printer not working", for: ["home"] },
   { id: "wifi", label: "Wi-Fi slow or dropping", for: ["home"] },
   { id: "tv", label: "TV mounting or setup", for: ["home"] },
-  { id: "other", label: "Something else", for: ["computer", "home"] },
+  { id: "phone-setup", label: "Set up a new phone or tablet", for: ["mobile"] },
+  { id: "phone-transfer", label: "Move photos, contacts and texts", for: ["mobile"] },
+  { id: "phone-email", label: "Email, apps and work accounts", for: ["mobile"] },
+  { id: "other", label: "Something else", for: ["computer", "home", "mobile"] },
 ] as const;
 
 /** The problems offered for a device, in order. */

@@ -13,7 +13,8 @@ import { FAQList, SectionHeader } from "@/components/blocks/Basics";
 import { OFFICE_FAQS } from "@/content/tech-faqs";
 import { BeforeAfter, OFFICE_BEFORE_AFTER } from "@/components/visuals/BeforeAfter";
 import { OFFICE_FROM, OfficePrices } from "@/components/blocks/OfficePrices";
-import { FounderBadge } from "@/components/tech/FounderBadge";
+import { CustomerReview, FounderBadge } from "@/components/tech/FounderBadge";
+import { ReviewWall } from "@/components/tech/ReviewWall";
 import { ServiceAreaList } from "@/components/blocks/ServiceAreaList";
 import { INSTALL_BOOKING, SITE } from "@/config/site";
 import { cn } from "@/lib/utils";
@@ -80,6 +81,7 @@ export default function OfficeSetup() {
             <p className="mt-2 text-sm text-muted-foreground">A real desk we set up in Tampa.</p>
             <Ctas where="hero" className="mt-6" />
             <FounderBadge className="mt-5 max-w-xl" line="I plan it with you and do the work myself. Call and you get me, not a call center." />
+            <CustomerReview job="Office IT setup" className="mt-3 max-w-xl" />
           </div>
           <BookOrText
             phone={<OfficeTextQuiz id="book" className="min-w-0" />}
@@ -108,6 +110,13 @@ export default function OfficeSetup() {
           <SectionHeader title={<span id="prices">Flat prices</span>} lede="Three simple prices. No surprises." />
           <OfficePrices className="mt-12" />
           <Ctas where="prices" className="mt-8" />
+        </div>
+      </section>
+
+      <section className="section border-t border-border" aria-labelledby="reviews">
+        <div className="container-x">
+          <SectionHeader title={<span id="reviews">What Tampa offices say</span>} lede="Real Google reviews, word for word." />
+          <ReviewWall className="mt-8" />
         </div>
       </section>
 

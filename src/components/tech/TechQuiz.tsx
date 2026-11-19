@@ -21,7 +21,7 @@ type Step = (typeof STEPS)[number];
 const STEP_NAMES: Record<Step, string> = { device: "Devices", problem: "Problems", when: "Timing", send: "Send" };
 
 const DEVICE_ICONS: Record<DeviceId, LucideIcon> = { windows: Laptop, mac: Monitor, iphone: Smartphone, android: Smartphone, tablet: Tablet, other: Printer };
-const PROBLEM_ICONS: Record<ProblemId, LucideIcon> = { slow: Gauge, crash: AlertTriangle, dead: Power, virus: ShieldAlert, screen: Monitor, battery: BatteryLow, upgrade: Cpu, setup: Mail, data: FolderOpen, printer: Printer, wifi: Wifi, tv: Tv, other: HelpCircle };
+const PROBLEM_ICONS: Record<ProblemId, LucideIcon> = { slow: Gauge, crash: AlertTriangle, dead: Power, virus: ShieldAlert, screen: Monitor, battery: BatteryLow, upgrade: Cpu, setup: Mail, data: FolderOpen, printer: Printer, wifi: Wifi, tv: Tv, "phone-setup": Smartphone, "phone-transfer": FolderOpen, "phone-email": Mail, other: HelpCircle };
 
 /** What a tech lead is worth to Meta's optimizer (an average first job). */
 export const TECH_LEAD_VALUE = 150;

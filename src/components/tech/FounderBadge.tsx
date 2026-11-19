@@ -16,9 +16,9 @@ export function FounderBadge({ line, className }: { line: string; className?: st
   );
 }
 
-/** The newest real Google review, shown under the founder badge on consumer tech pages. */
-export function CustomerReview({ className }: { className?: string }) {
-  const r = REVIEWS[0];
+/** A real Google review under the founder badge: the newest by default, or the one about this page's job. */
+export function CustomerReview({ className, job }: { className?: string; job?: (typeof REVIEWS)[number]["job"] }) {
+  const r = REVIEWS.find((x) => x.job === job) ?? REVIEWS[0];
   if (!r) return null;
   return (
     <figure className={cn("rounded-2xl border border-border bg-card/80 p-3", className)}>

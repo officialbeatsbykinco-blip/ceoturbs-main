@@ -14,7 +14,7 @@ import { Check } from "lucide-react";
 import { FixMyTechLink } from "@/components/tech/FixMyTechLink";
 
 const FOOTER_POINTS = [
-  "Any computer problem fixed at your door. Phone screens & batteries. Remote speed-ups worldwide",
+  "Any laptop or desktop problem fixed at your door. Phone & tablet setup. Remote speed-ups worldwide",
   "Laptops and desktops for sale in our computer shop",
   "Offices set up: monitors, cables, printers, Wi-Fi",
   "Websites and ads that make the phone ring",
@@ -86,7 +86,7 @@ export function Footer({ focus = false }: { focus?: boolean }) {
           <FooterCol
             title="Tampa tech help"
             links={[
-              { to: IT_SERVICES_PATH, label: "Computer & phone repair" },
+              { to: IT_SERVICES_PATH, label: "Computer & laptop repair" },
               { to: COMPUTERS_PATH, label: "Computer shop" },
               { to: OFFICE_SETUP_PATH, label: "Office setup & cable management" },
               { to: "/computer-setup-tampa", label: "Computer setup" },

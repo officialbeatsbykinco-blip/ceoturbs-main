@@ -1,7 +1,7 @@
 import { Fragment, useEffect, useState } from "react";
 import { CHECK_PATH } from "@/lib/free-check";
 import { Link, NavLink, useLocation } from "react-router-dom";
-import { Calendar, ChevronDown, Menu, MessageSquare, Phone, Search, X } from "lucide-react";
+import { Calendar, ChevronDown, Menu, MessageSquare, Phone, Search, Wrench, X } from "lucide-react";
 import { Logo } from "./Logo";
 import { BookButton, InstallBookButton } from "@/components/cta/Actions";
 import { IT_SERVICES_PATH, OFFICE_SETUP_PATH, techBooking } from "@/content/tech-pages";
@@ -77,12 +77,12 @@ const MENUS: Menu[] = [
   },
 ];
 
-/** Tech support, IT and computers: real work, second to growth, so it lives in one menu. */
+/** Tech support, IT and computers: the main business, first in the nav. */
 const TECH: Menu = {
   label: "Tech support",
   to: IT_SERVICES_PATH,
   items: [
-    { to: IT_SERVICES_PATH, label: "Computer & phone repair", sub: "At your door around Tampa, or remote" },
+    { to: IT_SERVICES_PATH, label: "Computer & laptop repair", sub: "At your door around Tampa, or remote" },
     { to: COMPUTERS_PATH, label: "Computer shop", sub: "Laptops & desktops, ready to use" },
     { to: OFFICE_SETUP_PATH, label: "Office setup & cables", sub: "Desks, monitors, printers, Wi-Fi" },
     { to: "/business-tech-setup-tampa", label: "Business IT setup", sub: "Workstations, network, POS" },
@@ -143,22 +143,22 @@ export function Header({ focus: focusProp = false }: { focus?: boolean }) {
         <Logo className="shrink-0" onNavigate={() => setOpen(false)} />
 
         <nav aria-label="Main" className="hidden items-center gap-0.5 lg:flex">
-          <NavLink to={`${CHECK_PATH}?from=nav`} className={({ isActive }) => cn("mr-1 inline-flex items-center gap-1.5 whitespace-nowrap rounded-full px-3 py-1.5 text-[13px] font-semibold ring-1 transition-colors xl:text-sm", isActive ? "bg-turbo/20 text-foreground ring-turbo/60" : "bg-turbo/10 text-turbo ring-turbo/30 hover:bg-turbo/20")}>
-            <Search className="h-3.5 w-3.5" aria-hidden /> Free check
+          <NavLink to={IT_SERVICES_PATH} className={({ isActive }) => cn("mr-1 inline-flex items-center gap-1.5 whitespace-nowrap rounded-full px-3 py-1.5 text-[13px] font-semibold ring-1 transition-colors xl:text-sm", isActive ? "bg-turbo/20 text-foreground ring-turbo/60" : "bg-turbo/10 text-turbo ring-turbo/30 hover:bg-turbo/20")}>
+            <Wrench className="h-3.5 w-3.5" aria-hidden /> Computer repair
           </NavLink>
+          <NavLink to={OFFICE_SETUP_PATH} className={linkCls}>
+            Office setup
+          </NavLink>
+          <Dropdown menu={TECH} active={TECH.items.some((i) => i.to === pathname)} />
           <NavLink to="/grow" className={linkCls}>
             Websites &amp; ads
           </NavLink>
-          <NavLink to="/services/google-business-profile" className={linkCls}>
-            Google profile
-          </NavLink>
-          <NavLink to={SHOP_PATH} className={linkCls}>
+          <NavLink to={SHOP_PATH} className={({ isActive }) => cn(linkCls({ isActive }), "hidden xl:block")}>
             Review cards
           </NavLink>
-          <NavLink to="/portfolio" className={({ isActive }) => cn(linkCls({ isActive }), "hidden xl:block")}>
-            Our work
+          <NavLink to={`${CHECK_PATH}?from=nav`} className={({ isActive }) => cn(linkCls({ isActive }), "hidden xl:block")}>
+            Free check
           </NavLink>
-          <Dropdown menu={TECH} active={TECH.items.some((i) => i.to === pathname)} />
           <Dropdown menu={MORE} active={MORE.items.some((i) => i.to === pathname)} align="right" />
         </nav>
 
@@ -170,10 +170,10 @@ export function Header({ focus: focusProp = false }: { focus?: boolean }) {
           </CallLink>
           {/* The shop pages have no bottom bar, so their Text button sits up here. */}
           {pathname === "/" && (
-            <TextQuizButton source="header text quiz" fallback={QUICK_TEXT} className="inline-flex h-10 w-10 items-center justify-center rounded-xl text-foreground ring-1 ring-white/10 hover:bg-white/5 sm:hidden">
+            <FixMyTechLink source="header text quiz" className="inline-flex h-10 w-10 items-center justify-center rounded-xl text-foreground ring-1 ring-white/10 hover:bg-white/5 sm:hidden">
               <MessageSquare className="h-[18px] w-[18px]" aria-hidden />
               <span className="sr-only">Text {SITE.name}</span>
-            </TextQuizButton>
+            </FixMyTechLink>
           )}
           {(pathname === SHOP_PATH || pathname === SHIRTS_PATH || pathname === ARTIST_MERCH_PATH) && (
             <a href={smsHref(pathname === SHOP_PATH ? CARD_TEXT : QUICK_TECH_TEXT)} data-call-location={focus ? "ad page header text" : "header text"} className="inline-flex h-10 w-10 items-center justify-center rounded-xl text-foreground ring-1 ring-white/10 hover:bg-white/5 sm:hidden">
@@ -183,7 +183,7 @@ export function Header({ focus: focusProp = false }: { focus?: boolean }) {
           )}
           {tech && texting ? (
             // Phones get the tap-question text flow, never the calendar.
-            pathname.replace(/\/$/, "") === IT_SERVICES_PATH ? (
+            pathname.replace(/\/$/, "") === IT_SERVICES_PATH || pathname === "/" ? (
               <FixMyTechLink source="tech page header" to={`${IT_SERVICES_PATH}#fix`} className="btn-ignite whitespace-nowrap !px-3 !py-2.5 !text-sm">
                 Get my price
               </FixMyTechLink>
@@ -267,7 +267,7 @@ export function Header({ focus: focusProp = false }: { focus?: boolean }) {
             </summary>
             <div className="grid gap-1 pb-3">
               <FixMyTechLink source="mobile menu" onOpen={() => setOpen(false)} className="rounded-xl bg-white/[0.03] px-3 py-3.5 text-sm font-semibold">
-                Computer &amp; phone repair
+                Computer &amp; laptop repair
               </FixMyTechLink>
               {TECH.items.slice(1).concat([{ to: SHIRTS_PATH, label: "Company t-shirts" }]).map((i) => (
                 <Link key={i.to} to={i.to} onClick={() => setOpen(false)} className="rounded-xl bg-white/[0.03] px-3 py-3.5 text-sm font-medium">

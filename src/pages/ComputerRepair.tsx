@@ -1,8 +1,9 @@
 // /computer-repair-tampa — the Meta ads landing page for tech repair around Tampa: slow, crashing or dead
-// computers, phones and tablets, fixed at the customer's door within 40 miles or remotely. Prices come from
+// laptops and desktops fixed at the customer's door within 40 miles or remotely; phones and tablets set up (not repaired). Prices come from
 // IT_SERVICES in content/pricing.ts. Conversion events: ViewContent on load, Lead from the quiz (TechQuiz),
 // Contact from call/text taps, Schedule from a Cal.com booking.
 import { CustomerReview, FounderBadge } from "@/components/tech/FounderBadge";
+import { ReviewWall } from "@/components/tech/ReviewWall";
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight, Building2, Calendar, Check, ClipboardCheck, Cpu, Gauge, Globe, Home, Laptop, MapPin, MessageSquare, Phone, ShieldCheck, ShoppingBag, Smartphone, Tv, Wrench, type LucideIcon } from "lucide-react";
@@ -24,8 +25,8 @@ import { cn } from "@/lib/utils";
 
 
 const PRICE_GROUPS: { icon: LucideIcon; title: string; ids: string[] }[] = [
-  { icon: Laptop, title: "Computers & laptops", ids: ["it-speedup", "it-remote", "it-virus", "it-pc-repair", "it-ssd", "it-data", "it-printer"] },
-  { icon: Smartphone, title: "Phone screens & batteries", ids: ["it-iphone-screen", "it-iphone-battery", "it-tablet-screen"] },
+  { icon: Laptop, title: "Laptops & desktops", ids: ["it-pc-repair", "it-desktop", "it-laptop-screen", "it-speedup", "it-remote", "it-virus", "it-ssd", "it-data"] },
+  { icon: Smartphone, title: "Setups: phones, tablets & printers", ids: ["it-phone-setup", "it-printer"] },
   { icon: Tv, title: "TVs, Wi-Fi & business", ids: ["it-tv-mount", "it-tv-setup", "it-wifi", "it-mesh", "it-business-hour"] },
 ];
 
@@ -107,10 +108,10 @@ export default function ComputerRepair() {
               <MapPin className="h-3.5 w-3.5 text-turbo" aria-hidden /> 40 miles around Temple Terrace & Tampa · remote worldwide
             </p>
             <h1 id="hero" className="mt-4 text-[32px] font-bold leading-[1.05] sm:text-5xl md:text-[52px]">
-              <span className="text-chrome-grad">Slow, crashing or broken computer?</span> <span className="text-turbo-grad">Fixed at your door in Tampa.</span>
+              <span className="text-chrome-grad">Laptop or desktop broken, slow or crashing?</span> <span className="text-turbo-grad">Computer repair at your door in Tampa.</span>
             </h1>
             <p className="mt-4 max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg">
-              Anything wrong with a computer: won't turn on, crashing, slow, viruses or ready for an upgrade. Phone and tablet screens and batteries too. We come to your home or business, or fix your Windows computer remotely from anywhere in the world. You get the price before we start.
+              Laptops and desktops, Windows and Mac: won't turn on, crashing, slow, viruses, cracked laptop screens, dead charging ports or ready for an upgrade. We come to your home or business, or fix your Windows computer remotely from anywhere in the world. You get the price before we start.
             </p>
             <div className="mt-5 flex flex-wrap gap-2 text-xs">
               {[
@@ -118,7 +119,7 @@ export default function ComputerRepair() {
                 ["Remote speed-up", itPrice("it-remote")],
                 ["Virus removal", itPrice("it-virus")],
                 ["Won't turn on", itPrice("it-pc-repair")],
-                ["iPhone screen", itPrice("it-iphone-screen")],
+                ["Desktop repair", itPrice("it-desktop")],
               ].map(([k, v]) => (
                 <span key={k} className="rounded-full border border-border/80 bg-white/[0.03] px-3 py-1.5 text-muted-foreground">
                   {k} <span className="font-semibold text-foreground">{v}</span>
@@ -127,7 +128,7 @@ export default function ComputerRepair() {
             </div>
             <Ctas where="hero" className="mt-6" />
             <FounderBadge className="mt-5 max-w-xl" line="I come to your door and fix it myself. Call or text, you get me, not a call center." />
-            <CustomerReview className="mt-3 max-w-xl" />
+            <CustomerReview job="Laptop" className="mt-3 max-w-xl" />
             <ul className="mt-6 grid max-w-xl gap-x-4 gap-y-2 text-sm text-muted-foreground sm:grid-cols-2">
               {PROMISES.map((t) => (
                 <li key={t} className="flex items-center gap-2">
@@ -182,7 +183,7 @@ export default function ComputerRepair() {
 
       <section className="section border-t border-border" aria-labelledby="we-fix">
         <div className="container-x">
-          <SectionHeader title={<span id="we-fix">If it's a computer, we fix it.</span>} lede="Desktops and laptops, Windows and Mac, at your door around Tampa. Phones and tablets: screens and batteries." />
+          <SectionHeader title={<span id="we-fix">If it's a computer, we fix it.</span>} lede="Desktops and laptops, Windows and Mac, at your door around Tampa. Phones and tablets we set up: new device, photos, contacts and email moved over." />
           <ul className="mt-8 grid gap-x-6 gap-y-3 sm:grid-cols-2 lg:grid-cols-3">
             {WE_FIX.map((t) => (
               <li key={t} className="flex items-start gap-2.5 text-[15px]">
@@ -191,6 +192,13 @@ export default function ComputerRepair() {
               </li>
             ))}
           </ul>
+        </div>
+      </section>
+
+      <section className="section border-t border-border" aria-labelledby="reviews">
+        <div className="container-x">
+          <SectionHeader title={<span id="reviews">What Tampa customers say</span>} lede="Real Google reviews, word for word." />
+          <ReviewWall className="mt-8" />
         </div>
       </section>
 

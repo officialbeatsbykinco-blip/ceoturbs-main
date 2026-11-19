@@ -48,7 +48,8 @@ export const organization = (): JsonLd => ({
   sameAs: SITE.sameAs,
   knowsAbout: [
     "Computer repair",
-    "Phone and tablet repair",
+    "Desktop and gaming PC repair",
+    "Phone and tablet setup",
     "Remote computer support",
     "Office setup and cable management",
     "TV mounting and digital menu screens",

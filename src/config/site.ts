@@ -8,7 +8,7 @@ export const SITE = {
   contentUpdated: "2026-11-03",
   tagline: "Tampa IT support: we fix it, set it up and keep it running, then help you get customers.",
   description:
-    "CEO Turbo is a Tampa, FL IT support and growth company. We fix computers, phones and tablets at your door or remotely, set up and organize offices, and build websites and ads that bring in customers. In person within 40 miles of Tampa.",
+    "CEO Turbo is a Tampa, FL IT support and growth company. We repair computers, laptops and desktops at your door or remotely, set up offices, phones and tablets, and build websites and ads that bring in customers. In person within 40 miles of Tampa.",
   founder: {
     name: "Christopher Robinson",
     alternateName: "StackmodeChris",
@@ -363,4 +363,45 @@ export const artistFromPrice = Math.min(...ARTIST_SHIRT.styles.map((s) => s.pric
 
 /** Real Google reviews of CEO Turbo, word for word. Add new ones at the top; the tech pages show the first one.
  *  Never add review schema (aggregateRating) for these: Google treats self-hosted reviews as self-serving. */
-export const REVIEWS = [{ name: "Dariel L.", stars: 5, text: "Most professional support for the phones", date: "2026-11-10", source: "Google" }] as const;
+/**
+ * Real Google reviews, newest first, copied word for word from the Google Business Profile.
+ * `short` is the one-line pull quote for tight spots (it never adds words the customer didn't write).
+ */
+export const REVIEWS = [
+  {
+    name: "Antony O.",
+    stars: 5,
+    text: "Christopher at CEO Turbo did an excellent job with the IT setup at our Prime 1 office in Tampa.",
+    short: "An excellent job with the IT setup at our Prime 1 office in Tampa.",
+    job: "Office IT setup",
+    date: "2026-11-17",
+    source: "Google",
+  },
+  {
+    name: "LP Trippin",
+    stars: 5,
+    text: "Chris was very informative & responded extremely quick. I plan on going through him to get any other laptops. Very appreciate.",
+    short: "Very informative & responded extremely quick.",
+    job: "Laptop",
+    date: "2026-11-13",
+    source: "Google",
+  },
+  {
+    name: "Zaid M.",
+    stars: 5,
+    text: "Great and professional service. Thank you Chris for everything.",
+    short: "Great and professional service.",
+    job: "Tech support",
+    date: "2026-11-12",
+    source: "Google",
+  },
+  {
+    name: "Dariel L.",
+    stars: 5,
+    text: "Most professional support for the phones",
+    short: "Most professional support for the phones",
+    job: "Phone setup",
+    date: "2026-11-10",
+    source: "Google",
+  },
+] as const;

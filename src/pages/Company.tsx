@@ -142,7 +142,7 @@ export function Tampa() {
           </DirectAnswer>
           <div className="mt-8 flex flex-wrap gap-3">
             <Link to="/computer-repair-tampa" className="btn-ignite">
-              Computer &amp; phone repair
+              Computer &amp; laptop repair
             </Link>
             <Link to="/office-setup-tampa" className="btn-chrome">
               Office setup

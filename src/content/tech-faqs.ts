@@ -9,11 +9,11 @@ const AREA = ALL_SETUP_CITIES;
 const ALL = `${AREA.slice(0, -1).join(", ")} and ${AREA[AREA.length - 1]}`;
 
 export const REPAIR_FAQS: FAQ[] = [
-  { q: "How much does it cost?", a: `You get the price before any work starts. Starting prices: Windows speed-up ${itPrice("it-speedup")}, remote speed-up ${itPrice("it-remote")}, virus removal ${itPrice("it-virus")}, computer repair ${itPrice("it-pc-repair")}, SSD upgrade ${itPrice("it-ssd")}, iPhone screen ${itPrice("it-iphone-screen")}, iPhone battery ${itPrice("it-iphone-battery")}. Parts are extra at cost.` },
-  { q: "Do you really come to me?", a: "Yes, within about 40 miles of Temple Terrace and Tampa. Computers, phone and tablet screens and batteries, printers, TVs and Wi-Fi are fixed at your home or business. You don't drop anything off or wait at a store." },
+  { q: "How much does it cost?", a: `You get the price before any work starts. Starting prices: Windows speed-up ${itPrice("it-speedup")}, remote speed-up ${itPrice("it-remote")}, virus removal ${itPrice("it-virus")}, computer and laptop repair ${itPrice("it-pc-repair")}, desktop repair ${itPrice("it-desktop")}, laptop screens and charging ports ${itPrice("it-laptop-screen")}, SSD upgrade ${itPrice("it-ssd")}, phone and tablet setup ${itPrice("it-phone-setup")}. Parts are extra at cost.` },
+  { q: "Do you really come to me?", a: "Yes, within about 40 miles of Temple Terrace and Tampa. Laptops, desktops, printers, TVs and Wi-Fi are fixed at your home or business, and new phones and tablets are set up there too. You don't drop anything off or wait at a store." },
   { q: "Can you fix my computer remotely?", a: `Yes, for Windows computers, anywhere in the world: speed-ups, cleanup, scam pop-ups and software or email problems, fixed over the internet while you watch, from ${itPrice("it-remote")}. Hardware problems (won't turn on, broken parts, upgrades), Macs, phones and tablets need an in-person visit around Tampa.` },
   { q: "What computer problems do you fix?", a: `Anything to do with a computer: won't turn on, crashing or blue screens, slow or freezing, viruses and pop-ups, broken laptop screens, keyboards and charging problems, SSD and memory upgrades, Windows reinstalls, data backup and transfer, printers and software. Desktops, laptops, Windows and Mac. Repairs start ${itPrice("it-pc-repair")} and you get the exact price before any work.` },
-  { q: "Do you fix phones?", a: `Yes, screens and batteries: iPhone screen replacement ${itPrice("it-iphone-screen")}, iPhone battery ${itPrice("it-iphone-battery")}, and iPad and tablet screens ${itPrice("it-tablet-screen")}, done at your door. We don't do other phone repairs.` },
+  { q: "Do you fix phones and tablets?", a: `We set them up rather than repair them. Phone and tablet setup starts ${itPrice("it-phone-setup")}: a new iPhone, Android or iPad set up with your photos, contacts, texts, email and apps moved over, and work email and accounts connected. For a cracked phone screen or a bad phone battery, we'll point you to a phone repair shop. Computers, laptops and desktops we repair.` },
   { q: "Do you sell computers?", a: "Yes. Laptops and desktops are listed in our computer shop at ceoturbo.com/computers, with photos, specs and secure checkout. We can set it up at your place in Tampa Bay and move your files over." },
   { q: "Where do you come to?", a: `Anywhere within about 40 miles of Temple Terrace and Tampa, Florida: ${ALL}. Somewhere else nearby? Text your ZIP code and we'll confirm. Remote support for Windows computers works anywhere in the world.` },
   { q: "How fast can you come?", a: "Usually the same day or the next day. Call or text for the soonest time, or pick a slot on the calendar." },
@@ -33,4 +33,11 @@ export const OFFICE_FAQS: FAQ[] = [
   { q: "Do you install restaurant menu screens?", a: "Yes. We design the menu boards, mount the TVs and set them up to show your menu, like we've done for restaurants and lounges." },
   { q: "Where do you work?", a: `Tampa and about 40 miles around it: ${ALL}. Call or text ${SITE.phone.display} to confirm your address.` },
   { q: "Can you work after hours?", a: "Yes. We regularly set up offices before opening or after closing so your team isn't interrupted." },
+];
+
+/** The homepage FAQ (and its schema): the repair questions people ask most, then office setup. */
+export const TECH_HOME_FAQS: FAQ[] = [
+  ...REPAIR_FAQS.filter((f) => ["How much does it cost?", "Do you really come to me?", "What computer problems do you fix?", "Can you fix my computer remotely?", "Do you fix phones and tablets?", "How fast can you come?"].includes(f.q)),
+  ...OFFICE_FAQS.filter((f) => ["How much does an office setup cost?", "Can you work after hours?"].includes(f.q)),
+  { q: "Do you also help businesses get more customers?", a: "Yes. Besides tech support, CEO Turbo builds websites, sets up Google Business Profiles and runs Google and Meta ads for local businesses. See ceoturbo.com/grow." },
 ];

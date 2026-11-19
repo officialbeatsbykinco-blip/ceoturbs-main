@@ -1081,7 +1081,7 @@ export const GUIDES: Guide[] = [
       },
       {
         h2: "How much does computer repair cost in Tampa?",
-        answer: "CEO Turbo publishes its prices: in-person speed-ups, remote Windows speed-ups, virus removal, SSD upgrades and iPhone screens all have a set starting price on the computer repair page, and you get the price before any work starts. If we can't fix it, you don't pay for the fix.",
+        answer: "CEO Turbo publishes its prices: in-person speed-ups, remote Windows speed-ups, virus removal, SSD upgrades, desktop repairs and phone setups all have a set starting price on the computer repair page, and you get the price before any work starts. If we can't fix it, you don't pay for the fix.",
       },
       {
         h2: "What about buying a refurbished computer instead?",
@@ -1094,7 +1094,7 @@ export const GUIDES: Guide[] = [
       { q: "How fast can you fix it?", a: "Many speed-ups and virus removals are done the same day. Parts like screens can take a little longer." },
     ],
     related: [
-      { label: "Computer & phone repair", to: "/computer-repair-tampa" },
+      { label: "Computer & laptop repair", to: "/computer-repair-tampa" },
       { label: "Computer shop", to: "/computers" },
       { label: "Office setup", to: "/office-setup-tampa" },
     ],

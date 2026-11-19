@@ -1,59 +1,66 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { ArrowRight, CalendarCheck, Check, Globe, Laptop, MapPin, Megaphone, MessageSquare, Mic2, Monitor, Music, Phone, Search, ShieldCheck, Sparkles, Star, Store, Timer, Wrench } from "lucide-react";
-import { BookButton, InstallBookButton } from "@/components/cta/Actions";
+import { ArrowRight, Building2, CalendarCheck, Check, Cpu, Gauge, HardDrive, Laptop, Mail, MapPin, Megaphone, MessageSquare, Monitor, Phone, ShieldCheck, Smartphone, Wifi, Wrench, type LucideIcon } from "lucide-react";
+import { InstallBookButton } from "@/components/cta/Actions";
 import { FAQList, SectionHeader } from "@/components/blocks/Basics";
-import { BestResults, ProofStats, AdGallery } from "@/components/blocks/Proof";
-import { MobileMore } from "@/components/blocks/MobileMore";
-import { ReviewCardStrip } from "@/components/blocks/ReviewCardBlocks";
-import { VideoRow } from "@/components/blocks/YouTubeLite";
-import { FreeCheckStrip } from "@/components/blocks/FreeCheckStrip";
-import { CHECK_PATH } from "@/lib/free-check";
-import { SiteWall } from "@/components/visuals/SiteWall";
+import { BeforeAfter, OFFICE_BEFORE_AFTER } from "@/components/visuals/BeforeAfter";
+import { ServiceAreaList } from "@/components/blocks/ServiceAreaList";
 import { CallLink } from "@/components/site/CallLink";
 import { PhoneOnly } from "@/components/booking/BookOrText";
-import { IT_BOOKING, SITE, fromPriceLabel } from "@/config/site";
-import { ADS } from "@/content/ads";
-import { AD_TOTALS, money } from "@/content/results";
-import { CLIENTS } from "@/content/clients";
-import { HOME_FAQS } from "@/content/faqs";
-import { SHIRTS_PATH } from "@/content/company-shirts";
-import { SHOP_PATH } from "@/content/review-cards";
-import { itPrice, price } from "@/content/pricing";
-import { OFFICE_SETUP_PATH } from "@/content/tech-pages";
-import { cn } from "@/lib/utils";
 import { FixMyTechLink } from "@/components/tech/FixMyTechLink";
-import { TextQuizButton } from "@/components/quiz/TextQuizButton";
-
-const HOME_TEXT = "Hi Chris, I want more customers for my business: ";
-
-/** What we do, in the order buyers care about. Each card goes to the page built to sell it. */
-const SERVICES = [
-  { icon: MapPin, t: "Google Business Profile", b: "Show up in the map pack when people search “near me”. Categories, photos, posts and reviews done right.", to: "/services/google-business-profile", cta: "Fix my Google profile" },
-  { icon: Megaphone, t: "Google & Meta ads", b: `Ads that make the phone ring, tracked to the call. ${AD_TOTALS.leads} leads for clients at ${money(AD_TOTALS.avgCpl)} each.`, to: "/grow", cta: "Get more customers" },
-  { icon: Globe, t: "Websites that get calls", b: "Fast sites built for Google, ChatGPT and AI answers (SEO, AEO and GEO), with a call button on every screen.", to: "/services/website-design", cta: "See website design" },
-  { icon: Star, t: "More Google reviews", b: `Tap-to-review cards for your counter and a simple in-person ask. From ${fromPriceLabel}.`, to: SHOP_PATH, cta: "Shop review cards" },
-];
-
-const WHO = [
-  { icon: Store, t: "Local businesses", b: "Contractors, salons, restaurants, shops and clinics that need the phone to ring.", to: "/local-business" },
-  { icon: Mic2, t: "Artists", b: "More listeners and fans: release pages, Spotify and YouTube growth, owning your name on Google.", to: "/artist" },
-  { icon: Music, t: "Producers", b: "Get heard and sell beats: a beat store that converts and ads that bring buyers.", to: "/producers" },
-  { icon: Monitor, t: "Online stores", b: "Shopify stores with visitors but no sales: fix the store, then scale the ads.", to: "/shopify" },
-];
-
-/** Hormozi value stack: dream outcome up, likelihood up, time down, effort down. */
-const STACK = [
-  { icon: Sparkles, t: "More calls, texts and bookings", b: "We measure the work by customers, not likes. Every call, form and booking is tracked so you see what each dollar brought back." },
-  { icon: ShieldCheck, t: "Proof before you pay", b: `Real dashboards: ${AD_TOTALS.leads} Meta leads at ${money(AD_TOTALS.avgCpl)}, 42 Google Ads conversions at $4.19 for Appliance King, ${CLIENTS.length} live client sites.` },
-  { icon: Timer, t: "Fast", b: "Google profile fixes in days, a new website in about two weeks, ads live as soon as tracking is tested." },
-  { icon: Check, t: "Done for you", b: "You talk to Chris, not a call center. We do the work; you answer the phone. No long-term contract, and you own every account." },
-];
+import { FounderBadge } from "@/components/tech/FounderBadge";
+import { ReviewSummary, ReviewWall } from "@/components/tech/ReviewWall";
+import { INSTALL_BOOKING, IT_BOOKING, REVIEWS, SITE } from "@/config/site";
+import { SHOP_PATH } from "@/content/review-cards";
+import { itPrice } from "@/content/pricing";
+import { OFFICE_SETUP_PATH } from "@/content/tech-pages";
+import { TECH_HOME_FAQS } from "@/content/tech-faqs";
+import { OFFICE_FROM } from "@/components/blocks/OfficePrices";
+import { cn } from "@/lib/utils";
 
 /**
- * Funnel: the free Google & AI check is the front door (it's the best lead magnet), then proof, what we do,
- * real ads and videos, who we help, the offer, and tech support / IT / computers as the extra service.
+ * The homepage is tech support first: computer and laptop repair (the most calls), office IT setups
+ * (the biggest jobs), then phone and tablet setup (setup only, no phone repairs). Phones get "text us"
+ * (the tap-question sheet) and call; computers get Book a visit and call. Marketing lives at /grow.
  */
+
+const SERVICES: { icon: LucideIcon; t: string; b: string; price: string; to: string; cta: string; tech?: boolean }[] = [
+  { icon: Laptop, t: "Laptop repair", b: "Won't turn on, cracked screen, dead charging port, broken keys, overheating or blue screens. Windows and Mac.", price: itPrice("it-pc-repair"), to: "/computer-repair-tampa", cta: "Fix my laptop", tech: true },
+  { icon: Monitor, t: "Desktop & gaming PC repair", b: "Power supplies, graphics cards, memory, fans and boot problems. Upgrades that make an old tower fast again.", price: itPrice("it-desktop"), to: "/computer-repair-tampa", cta: "Fix my desktop", tech: true },
+  { icon: Building2, t: "Office IT setup", b: "Workstations, multi-monitor desks, printers, Wi-Fi, Microsoft 365 or Google email, and cables hidden. Homes and businesses.", price: OFFICE_FROM, to: OFFICE_SETUP_PATH, cta: "Set up my office" },
+  { icon: Smartphone, t: "Phone & tablet setup", b: "New iPhone, Android or iPad set up with your photos, contacts, texts, email and apps moved over. Setup only.", price: itPrice("it-phone-setup"), to: "/computer-repair-tampa", cta: "Set up my phone", tech: true },
+];
+
+const FIXES: { icon: LucideIcon; t: string }[] = [
+  { icon: Wrench, t: "Won't turn on or won't boot" },
+  { icon: Gauge, t: "Slow, freezing or crashing" },
+  { icon: ShieldCheck, t: "Viruses and scam pop-ups" },
+  { icon: Laptop, t: "Cracked laptop screens" },
+  { icon: Cpu, t: "SSD, memory and parts upgrades" },
+  { icon: HardDrive, t: "Files and photos recovered or moved" },
+  { icon: Wifi, t: "Wi-Fi, printers and email" },
+  { icon: Monitor, t: "Desktops and gaming PCs" },
+];
+
+const PROMISES = ["Price up front, before any work", "No fix, no charge", "Usually same or next day", "Pay after it works"];
+
+const STEPS = [
+  { icon: MessageSquare, t: "Call, text or book", b: "Tell us the device and what's wrong, or how many desks you need set up." },
+  { icon: Check, t: "Price up front", b: "You get the price before any work starts. No surprise bill." },
+  { icon: Wrench, t: "Fixed at your place", b: "We come to your home or office around Tampa, fix it, test it with you, then you pay." },
+];
+
+const PRICES: [string, string][] = [
+  ["Computer & laptop repair", itPrice("it-pc-repair")],
+  ["Desktop repair & upgrades", itPrice("it-desktop")],
+  ["Windows speed-up", itPrice("it-speedup")],
+  ["Remote speed-up", itPrice("it-remote")],
+  ["Virus & pop-up removal", itPrice("it-virus")],
+  ["SSD upgrade", itPrice("it-ssd")],
+  ["Phone & tablet setup", itPrice("it-phone-setup")],
+  ["Office on-site IT", `${itPrice("it-business-hour")}/hr`],
+];
+
 export default function Home() {
   const navigate = useNavigate();
   // Old Shopping-feed and ad links pointed at /?pack=N when the store was the homepage.
@@ -66,266 +73,217 @@ export default function Home() {
       <section className="relative overflow-clip pb-6 pt-24 sm:pt-32 lg:pb-10" aria-labelledby="hero">
         <div className="pointer-events-none absolute inset-0 hero-rings" aria-hidden />
         <div className="container-x relative grid items-center gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:gap-14">
-          <div className="hero-rise">
-            <p className="chip">Free Google &amp; AI check · 60 seconds</p>
-            <h1 id="hero" className="mt-4 font-display text-[40px] font-extrabold leading-[1.02] tracking-tight sm:text-6xl lg:text-[72px]">
-              Get more customers from <span className="text-turbo-grad">Google, AI and ads.</span>
+          <div className="hero-rise min-w-0">
+            <p className="chip">
+              <MapPin className="h-3.5 w-3.5 text-turbo" aria-hidden /> Tampa Bay · we come to you
+            </p>
+            <h1 id="hero" className="mt-4 font-display text-[38px] font-extrabold leading-[1.02] tracking-tight sm:text-6xl lg:text-[68px]">
+              Computer repair &amp; office IT setup <span className="text-turbo-grad">at your door in Tampa.</span>
             </h1>
             <p className="mt-4 max-w-xl text-[17px] leading-relaxed text-muted-foreground sm:text-lg">
-              See why customers pick your competitor: we check your Google profile and reviews, your website and what ChatGPT sees, then score you out of 100. Free, in 60 seconds.
+              Laptops and desktops fixed at your home or business. Offices, phones and tablets set up and working. Price up front, no fix no charge.
             </p>
-            {/* Computers: the free check, then call. Phones: the tap-question text quiz that texts our number, then the free check. */}
+            <ReviewSummary className="mt-4" />
             <PhoneOnly
               desktop={
                 <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:items-center">
-                  <Link to={`${CHECK_PATH}?from=home-hero`} className="btn-ignite btn-shine inline-flex items-center justify-center gap-2 !rounded-2xl !px-8 !py-[18px] !text-lg font-bold shadow-xl">
-                    Start my free check <ArrowRight className="h-5 w-5" aria-hidden />
-                  </Link>
-                  <CallLink location="home hero call" className="inline-flex min-h-[48px] items-center justify-center gap-2 px-3 text-base font-semibold underline-offset-4 hover:underline">
-                    <Phone className="h-4 w-4 text-turbo" aria-hidden /> or call {SITE.phone.display}
+                  <InstallBookButton note="home-hero" booking={IT_BOOKING} title="Book your tech visit" variant="ignite" className="btn-shine inline-flex items-center justify-center gap-2 !rounded-2xl !px-8 !py-[18px] !text-lg font-bold shadow-xl">
+                    <CalendarCheck className="h-5 w-5" aria-hidden /> Book a visit
+                  </InstallBookButton>
+                  <CallLink location="home hero call" className="btn-blue inline-flex items-center justify-center gap-2 !rounded-2xl !py-[18px] !text-lg font-bold">
+                    <Phone className="h-5 w-5" aria-hidden /> Call {SITE.phone.display}
                   </CallLink>
                 </div>
               }
             >
               <div className="mt-7 flex flex-col gap-3">
-                <TextQuizButton source="home hero text quiz" fallback={HOME_TEXT} className="btn-ignite btn-shine inline-flex w-full items-center justify-center gap-2 !rounded-2xl !px-6 !py-[18px] !text-lg font-bold shadow-xl">
+                <CallLink location="home hero call" className="btn-ignite btn-shine inline-flex w-full items-center justify-center gap-2 !rounded-2xl !py-[18px] !text-lg font-bold shadow-xl">
+                  <Phone className="h-5 w-5" aria-hidden /> Call {SITE.phone.display}
+                </CallLink>
+                <FixMyTechLink source="home hero" className="btn-blue inline-flex w-full items-center justify-center gap-2 !rounded-2xl !py-4 !text-base font-bold">
                   <MessageSquare className="h-5 w-5" aria-hidden /> Text us: 3 quick taps
-                </TextQuizButton>
-                <Link to={`${CHECK_PATH}?from=home-hero`} className="btn-blue inline-flex w-full items-center justify-center gap-2 !rounded-2xl !py-4 !text-base font-bold">
-                  <Search className="h-5 w-5" aria-hidden /> Or get my free Google check
-                </Link>
-                <p className="text-center text-sm text-muted-foreground">Chris texts you back from {SITE.phone.display}</p>
+                </FixMyTechLink>
+                <p className="text-center text-sm text-muted-foreground">Chris answers or texts back from {SITE.phone.display}</p>
               </div>
             </PhoneOnly>
-            <ul className="mt-7 grid max-w-xl grid-cols-3 gap-2 sm:gap-3">
-              {[
-                [String(AD_TOTALS.leads), "leads for clients"],
-                [money(AD_TOTALS.avgCpl), "avg cost per lead"],
-                [String(CLIENTS.length), "client sites live"],
-              ].map(([n, l]) => (
-                <li key={l} className="rounded-2xl bg-white/70 px-3 py-3 text-center shadow-[0_1px_0_hsl(var(--border)),0_10px_30px_-20px_rgb(30_50_90/0.35)] ring-1 ring-border">
-                  <p className="font-display text-xl font-extrabold text-turbo sm:text-2xl">{n}</p>
-                  <p className="mt-0.5 text-[11px] font-medium leading-tight text-muted-foreground sm:text-xs">{l}</p>
+            <div className="mt-4 flex flex-wrap gap-x-5 gap-y-2 text-sm">
+              <FixMyTechLink source="home hero" className="inline-flex min-h-[44px] items-center gap-1.5 font-semibold text-turbo underline-offset-4 hover:underline">
+                <Wrench className="h-4 w-4" aria-hidden /> Computer repair
+              </FixMyTechLink>
+              <Link to={OFFICE_SETUP_PATH} className="inline-flex min-h-[44px] items-center gap-1.5 font-semibold text-turbo underline-offset-4 hover:underline">
+                <Building2 className="h-4 w-4" aria-hidden /> Office setup
+              </Link>
+              <a href={`mailto:${SITE.email}?subject=${encodeURIComponent("Tech help in Tampa")}`} data-call-location="home hero email" className="inline-flex min-h-[44px] items-center gap-1.5 font-semibold text-turbo underline-offset-4 hover:underline">
+                <Mail className="h-4 w-4" aria-hidden /> Email us
+              </a>
+            </div>
+            <ul className="mt-5 grid max-w-xl gap-x-4 gap-y-2 text-sm text-muted-foreground sm:grid-cols-2">
+              {PROMISES.map((t) => (
+                <li key={t} className="flex items-center gap-2">
+                  <Check className="h-4 w-4 shrink-0 text-turbo" aria-hidden />
+                  {t}
                 </li>
               ))}
             </ul>
           </div>
-          <ReportPreview />
+          <HeroPhoto />
         </div>
       </section>
 
-      {/* Tech support is real income and real calls, just not the headline: one compact row right under the hero. */}
-      <section className="pt-8 sm:pt-10" aria-label="Tech support">
+      <section className="section border-t border-border" aria-labelledby="services">
         <div className="container-x">
-          <div className="panel flex flex-col gap-3 p-4 sm:flex-row sm:items-center sm:justify-between sm:p-5">
-            <p className="flex items-center gap-3 text-sm">
-              <Laptop className="h-5 w-5 shrink-0 text-turbo" aria-hidden />
-              <span>
-                <span className="font-semibold">Need tech help instead?</span> <span className="text-muted-foreground">Computer &amp; phone repair, office and IT setup around Tampa, and computers for sale.</span>
-              </span>
-            </p>
-            <div className="flex flex-wrap gap-2">
-              <FixMyTechLink source="home hero" className="btn-chrome inline-flex items-center gap-1.5 !px-4 !py-2.5 !text-sm">
-                <Wrench className="h-4 w-4 text-turbo" aria-hidden /> Fix my tech
-              </FixMyTechLink>
-              <Link to={OFFICE_SETUP_PATH} className="btn-chrome inline-flex items-center gap-1.5 !px-4 !py-2.5 !text-sm">
-                Office setup
-              </Link>
-              <Link to="/computers" className="btn-chrome inline-flex items-center gap-1.5 !px-4 !py-2.5 !text-sm">
-                Computer shop
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="section" aria-labelledby="ads-proof">
-        <div className="container-x">
-          <SectionHeader kicker="Results" title={<span id="ads-proof">Real customers on small budgets.</span>} lede="Straight from our clients' ad dashboards. A few hundred dollars in ads turned into thousands in jobs." />
-          <div className="mt-8">
-            <ProofStats />
-          </div>
-          <div className="mt-8">
-            <BestResults />
-          </div>
-        </div>
-      </section>
-
-      <section className="section border-t border-border" aria-labelledby="what">
-        <div className="container-x">
-          <SectionHeader kicker="What we do" title={<span id="what">How do we get you more customers?</span>} lede="Most customers find a business on Google Maps, check its reviews, look at the website, then call. We fix every step of that path." />
+          <SectionHeader kicker="What we do" title={<span id="services">Fixed, set up and working.</span>} lede="Computers are what we repair all day. Offices, phones and tablets we set up so everything works together." />
           <ul className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {SERVICES.map((s) => (
-              <li key={s.t}>
-                <Link to={s.to} className="panel group flex h-full flex-col p-5 transition-shadow duration-300 hover:shadow-[0_0_0_1px_hsl(var(--turbo)/0.5),0_30px_60px_-30px_hsl(var(--turbo)/0.5)] sm:p-6">
-                  <s.icon className="h-8 w-8 text-turbo" aria-hidden />
-                  <h3 className="mt-3 font-display text-lg font-bold leading-tight sm:text-xl">{s.t}</h3>
+            {SERVICES.map((s) => {
+              const inner = (
+                <>
+                  <span className="grid h-12 w-12 place-items-center rounded-2xl bg-turbo/15 text-turbo">
+                    <s.icon className="h-6 w-6" aria-hidden />
+                  </span>
+                  <h3 className="mt-4 font-display text-lg font-bold leading-tight sm:text-xl">{s.t}</h3>
                   <p className="mt-2 flex-1 text-sm leading-relaxed text-muted-foreground">{s.b}</p>
-                  <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-turbo">
+                  <p className="mt-4 text-sm font-bold text-foreground">{s.price}</p>
+                  <span className="mt-2 inline-flex items-center gap-1.5 text-sm font-semibold text-turbo">
                     {s.cta} <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" aria-hidden />
                   </span>
-                </Link>
-              </li>
-            ))}
+                </>
+              );
+              const cls = "panel group flex h-full flex-col p-5 transition-shadow duration-300 hover:shadow-[0_0_0_1px_hsl(var(--turbo)/0.5),0_30px_60px_-30px_hsl(var(--turbo)/0.5)] sm:p-6";
+              return (
+                <li key={s.t}>
+                  {s.tech ? (
+                    <FixMyTechLink source={`home service ${s.t}`} to={s.to} className={cls}>
+                      {inner}
+                    </FixMyTechLink>
+                  ) : (
+                    <Link to={s.to} className={cls}>
+                      {inner}
+                    </Link>
+                  )}
+                </li>
+              );
+            })}
           </ul>
-          <FreeCheckStrip where="home what we do" className="mt-8" />
         </div>
       </section>
 
-      <section className="section border-t border-border" aria-labelledby="ads">
+      <section className="section border-t border-border" aria-labelledby="reviews">
         <div className="container-x">
-          <SectionHeader kicker="Ads" title={<span id="ads">{ADS.length} ads we designed and launched.</span>} lede="Repair shops, appliance pros, online stores and music producers. Every ad is built around one hook and one action." />
-          <MobileMore label={`See all ${ADS.length} ads`} className="mt-8">
-            <AdGallery ads={ADS} />
-          </MobileMore>
-          <BookCallStrip note="Home — after ad gallery" className="mt-10" />
+          <SectionHeader kicker="Reviews" title={<span id="reviews">Tampa customers call us back.</span>} lede="Real Google reviews, word for word." />
+          <ReviewWall className="mt-8" />
         </div>
       </section>
 
-      <section className="section border-t border-border" aria-labelledby="videos">
-        <div className="container-x">
-          <SectionHeader kicker="Watch" title={<span id="videos">How local businesses win on Google.</span>} lede="Real campaigns and real stories: why the business with more reviews gets the customers, and what a website plus ads does for the phone." />
-          <div className="mt-8">
-            <VideoRow where="home" />
+      <section className="section border-t border-border" aria-labelledby="fix">
+        <div className="container-x grid gap-10 lg:grid-cols-[1fr_1fr] lg:items-center">
+          <div>
+            <SectionHeader kicker="Computer repair" title={<span id="fix">If it's a computer, we fix it.</span>} lede="Laptops and desktops, Windows and Mac. Most slow computers don't need replacing: a cleanup and an SSD makes them feel new." />
+            <ul className="mt-6 grid gap-3 sm:grid-cols-2">
+              {FIXES.map((f) => (
+                <li key={f.t} className="flex items-center gap-3 text-[15px]">
+                  <f.icon className="h-5 w-5 shrink-0 text-turbo" aria-hidden />
+                  {f.t}
+                </li>
+              ))}
+            </ul>
+            <TechCtas where="home fix" className="mt-7" />
           </div>
-          <Link to="/watch" className="mt-6 inline-flex min-h-[44px] items-center gap-1.5 text-sm font-semibold text-turbo underline-offset-4 hover:underline">
-            See every video <ArrowRight className="h-4 w-4" aria-hidden />
-          </Link>
-        </div>
-      </section>
-
-      <section className="section border-t border-border" aria-labelledby="who">
-        <div className="container-x">
-          <SectionHeader kicker="Who we help" title={<span id="who">Businesses, artists and producers.</span>} lede="Same playbook, tuned to how your customers or fans actually find you." />
-          <ul className="mt-8 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
-            {WHO.map((w) => (
-              <li key={w.t}>
-                <Link to={w.to} className="panel group flex h-full gap-4 p-4 sm:flex-col sm:gap-0 sm:p-5">
-                  <w.icon className="h-7 w-7 shrink-0 text-turbo" aria-hidden />
-                  <span>
-                    <span className="block font-display text-base font-bold leading-tight sm:mt-2.5 sm:text-lg">{w.t}</span>
-                    <span className="mt-1 block text-sm text-muted-foreground">{w.b}</span>
-                  </span>
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </section>
-
-      <section id="work" className="scroll-mt-20 border-t border-border pt-14 sm:pt-20" aria-labelledby="work-title">
-        <div className="container-x text-center">
-          <p className="text-xs font-semibold uppercase tracking-wider text-turbo">Websites</p>
-          <h2 id="work-title" className="h-section mx-auto mt-2 max-w-3xl">{CLIENTS.length} real websites we built. All live.</h2>
-          <p className="lede mx-auto max-w-2xl">Tap any site to see it.</p>
-        </div>
-        <div className="relative mt-6">
-          <SiteWall eagerCount={0} />
-        </div>
-        <div className="container-x -mt-4 text-center">
-          <Link to="/portfolio" className="inline-flex min-h-[44px] items-center gap-1.5 text-sm font-semibold text-turbo underline-offset-4 hover:underline">
-            See every site <ArrowRight className="h-4 w-4" aria-hidden />
-          </Link>
-        </div>
-      </section>
-
-      <section className="section" aria-labelledby="offer">
-        <div className="container-x">
-          <SectionHeader kicker="Why CEO Turbo" title={<span id="offer">What do you get when you work with us?</span>} lede={`Published prices: Google profile setup ${price("gbp-setup")}, setup packages from ${price("pkg-start")}, monthly plans from ${price("care")}/mo. Ad spend goes straight to Google or Meta from your own card.`} />
-          <ul className="mt-8 grid gap-4 sm:grid-cols-2">
-            {STACK.map((s) => (
-              <li key={s.t} className="panel flex gap-4 p-5 sm:p-6">
-                <s.icon className="h-7 w-7 shrink-0 text-turbo" aria-hidden />
-                <div>
-                  <h3 className="font-display text-lg font-bold">{s.t}</h3>
-                  <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{s.b}</p>
-                </div>
-              </li>
-            ))}
-          </ul>
-          <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-            <BookButton note="Home offer" className="inline-flex items-center justify-center gap-2">
-              <CalendarCheck className="h-5 w-5" aria-hidden /> Book a free call
-            </BookButton>
-            <Link to="/pricing" className="btn-chrome inline-flex items-center justify-center gap-2">
-              See all prices <ArrowRight className="h-4 w-4" aria-hidden />
-            </Link>
-            <Link to="/grow" className="btn-chrome inline-flex items-center justify-center gap-2">
-              How we run websites &amp; ads
+          <div className="panel p-5 sm:p-6">
+            <p className="font-display text-lg font-bold">Starting prices</p>
+            <p className="mt-1 text-sm text-muted-foreground">Exact price before any work. Parts extra, at cost. Diagnosis {itPrice("it-visit")}, credited to the repair.</p>
+            <ul className="mt-4 divide-y divide-border/60">
+              {PRICES.map(([k, v]) => (
+                <li key={k} className="flex items-center justify-between gap-3 py-2.5 text-sm">
+                  <span>{k}</span>
+                  <span className="font-bold">{v}</span>
+                </li>
+              ))}
+            </ul>
+            <Link to="/computer-repair-tampa" className="mt-4 inline-flex min-h-[44px] items-center gap-1.5 text-sm font-semibold text-turbo underline-offset-4 hover:underline">
+              See every repair price <ArrowRight className="h-4 w-4" aria-hidden />
             </Link>
           </div>
         </div>
       </section>
 
-      <section className="section border-t border-border" aria-labelledby="repair">
-        <div className="container-x">
-          <div className="panel grid gap-6 p-6 sm:p-8 lg:grid-cols-[1fr_auto] lg:items-center">
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-wider text-turbo">Tech support · IT · computers</p>
-              <h2 id="repair" className="h-section mt-2">We fix tech too.</h2>
-              <p className="lede">
-                Computer and phone repair at your door within 40 miles of Tampa, Windows speed-ups remotely anywhere, office and Wi-Fi setup, and refurbished computers for sale. Price up front, no fix, no charge.
+      <section className="section border-t border-border" aria-labelledby="office">
+        <div className="container-x grid gap-10 lg:grid-cols-[1fr_1fr] lg:items-center">
+          <div className="order-2 lg:order-1">
+            <BeforeAfter {...OFFICE_BEFORE_AFTER} label="home office" />
+            <p className="mt-2 text-sm text-muted-foreground">A real desk we set up in Tampa. Drag to compare.</p>
+          </div>
+          <div className="order-1 lg:order-2">
+            <SectionHeader kicker="Office IT setup" title={<span id="office">Your office, set up right in a day.</span>} lede={`Workstations, multi-monitor desks, printers, Wi-Fi, Microsoft 365 or Google email, and every cable hidden. ${OFFICE_FROM}, price in writing first.`} />
+            {REVIEWS.find((r) => r.job === "Office IT setup") && (
+              <p className="mt-4 rounded-2xl border border-border bg-card/80 p-4 text-[15px] italic text-foreground">
+                "{REVIEWS.find((r) => r.job === "Office IT setup")!.short}"
+                <span className="mt-1 block text-sm not-italic text-muted-foreground">{REVIEWS.find((r) => r.job === "Office IT setup")!.name}, Google review</span>
               </p>
-              <div className="mt-4 flex flex-wrap gap-2 text-xs">
-                {[
-                  ["Speed-up", itPrice("it-speedup")],
-                  ["Remote speed-up", itPrice("it-remote")],
-                  ["Virus removal", itPrice("it-virus")],
-                  ["SSD upgrade", itPrice("it-ssd")],
-                  ["iPhone screen", itPrice("it-iphone-screen")],
-                ].map(([k, v]) => (
-                  <span key={k} className="rounded-full border border-border/80 bg-white/[0.03] px-3 py-1.5 text-muted-foreground">
-                    {k} <span className="font-semibold text-foreground">{v}</span>
-                  </span>
-                ))}
-              </div>
-              <p className="mt-4 flex flex-wrap gap-x-4 gap-y-2 text-sm">
-                <Link to={OFFICE_SETUP_PATH} className="font-semibold text-turbo underline-offset-4 hover:underline">Office setup</Link>
-                <Link to="/computers" className="font-semibold text-turbo underline-offset-4 hover:underline">Computer shop</Link>
-                <Link to="/security-camera-installation-tampa" className="font-semibold text-turbo underline-offset-4 hover:underline">Security cameras</Link>
-                <Link to="/wifi-installation-tampa" className="font-semibold text-turbo underline-offset-4 hover:underline">Wi-Fi</Link>
-                <Link to={SHIRTS_PATH} className="font-semibold text-turbo underline-offset-4 hover:underline">Company shirts</Link>
-              </p>
-            </div>
-            <div className="flex flex-col gap-3">
-              <FixMyTechLink source="home repair band" className="btn-ignite btn-shine inline-flex items-center justify-center gap-2">
-                <Wrench className="h-4 w-4" aria-hidden /> Get a repair price
-              </FixMyTechLink>
-              <InstallBookButton note="home-repair-band" booking={IT_BOOKING} title="Book your tech visit" variant="chrome" className="inline-flex items-center justify-center gap-2">
-                <CalendarCheck className="h-4 w-4" aria-hidden /> Book a visit
+            )}
+            <div className="mt-6 grid gap-3 sm:flex sm:flex-wrap">
+              <InstallBookButton note="home-office" booking={INSTALL_BOOKING} title="Book your office setup" variant="ignite" className="inline-flex items-center justify-center gap-2">
+                <CalendarCheck className="h-4 w-4" aria-hidden /> Book an office setup
               </InstallBookButton>
+              <Link to={OFFICE_SETUP_PATH} className="btn-chrome inline-flex items-center justify-center gap-2">
+                See office setup <ArrowRight className="h-4 w-4" aria-hidden />
+              </Link>
             </div>
           </div>
-          <ReviewCardStrip where="Home tech band" className="mt-4" line="Hand it over after the job or leave it on the counter. Customers tap and your review page opens." />
         </div>
       </section>
 
-      <FAQList faqs={HOME_FAQS} title="Questions business owners ask" />
+      <section className="section border-t border-border" aria-labelledby="how">
+        <div className="container-x">
+          <SectionHeader kicker="How it works" title={<span id="how">Three steps, no surprises.</span>} />
+          <ol className="mt-8 grid gap-4 md:grid-cols-3">
+            {STEPS.map((s, i) => (
+              <li key={s.t} className="panel p-6">
+                <div className="flex items-center gap-3">
+                  <span className="grid h-9 w-9 place-items-center rounded-full bg-turbo font-bold text-white">{i + 1}</span>
+                  <s.icon className="h-5 w-5 text-turbo" aria-hidden />
+                </div>
+                <h3 className="mt-4 font-display text-lg font-bold">{s.t}</h3>
+                <p className="mt-2 text-sm text-muted-foreground">{s.b}</p>
+              </li>
+            ))}
+          </ol>
+          <FounderBadge className="mt-8 max-w-2xl" line="I come to your door and do the work myself. Call or text and you get me, not a call center." />
+        </div>
+      </section>
+
+      <section className="section border-t border-border" aria-labelledby="area">
+        <div className="container-x">
+          <SectionHeader kicker="Service area" title={<span id="area">Where we come to you</span>} lede="About 40 miles around Temple Terrace and Tampa. Slow Windows computers can be fixed remotely from anywhere." />
+          <ServiceAreaList className="mt-8" />
+        </div>
+      </section>
+
+      <FAQList faqs={TECH_HOME_FAQS} title="Quick answers" />
+
+      <section className="section border-t border-border" aria-label="Marketing">
+        <div className="container-x">
+          <div className="panel flex flex-col gap-4 p-5 sm:flex-row sm:items-center sm:justify-between sm:p-6">
+            <p className="flex items-start gap-3 text-sm">
+              <Megaphone className="mt-0.5 h-5 w-5 shrink-0 text-turbo" aria-hidden />
+              <span>
+                <span className="font-semibold">Own a business?</span> <span className="text-muted-foreground">We also build websites, fix Google profiles and run ads that make the phone ring.</span>
+              </span>
+            </p>
+            <Link to="/grow" className="btn-chrome inline-flex shrink-0 items-center justify-center gap-1.5 !px-4 !py-2.5 !text-sm">
+              Websites &amp; ads <ArrowRight className="h-4 w-4" aria-hidden />
+            </Link>
+          </div>
+        </div>
+      </section>
 
       <section className="section border-t border-border" aria-labelledby="last-call">
         <div className="container-x">
           <div className="cta-glow rounded-3xl p-8 text-center sm:p-12">
-            <h2 id="last-call" className="h-section">See what's costing you customers. Free.</h2>
-            <p className="lede mx-auto max-w-2xl">Run the 60-second check, or call or text {SITE.phone.display} and talk to Chris.</p>
-            <div className="mt-7 grid gap-3 sm:flex sm:justify-center">
-              <Link to={`${CHECK_PATH}?from=home-final`} className="btn-ignite btn-shine inline-flex items-center justify-center gap-2">
-                <Search className="h-4 w-4" aria-hidden /> Run my free check
-              </Link>
-              <CallLink location="home final CTA" className="btn-blue inline-flex items-center justify-center gap-2">
-                <Phone className="h-4 w-4" aria-hidden /> Call {SITE.phone.display}
-              </CallLink>
-              <PhoneOnly
-                desktop={
-                  <BookButton note="Home final CTA" variant="chrome" className="inline-flex items-center justify-center gap-2">
-                    <CalendarCheck className="h-4 w-4 text-turbo" aria-hidden /> Book a free call
-                  </BookButton>
-                }
-              >
-                <TextQuizButton source="home final CTA text quiz" fallback={HOME_TEXT} className="btn-chrome inline-flex items-center justify-center gap-2">
-                  <MessageSquare className="h-4 w-4 text-turbo" aria-hidden /> Text us
-                </TextQuizButton>
-              </PhoneOnly>
-            </div>
+            <h2 id="last-call" className="h-section">Computer acting up? Get it fixed this week.</h2>
+            <p className="lede mx-auto max-w-2xl">
+              <PhoneOnly desktop={<>Call {SITE.phone.display} or pick a time. Price up front, no fix no charge.</>}>Call or text {SITE.phone.display}. Price up front, no fix no charge.</PhoneOnly>
+            </p>
+            <TechCtas where="home final" className="mt-7 sm:justify-center" />
           </div>
         </div>
       </section>
@@ -335,27 +293,34 @@ export default function Home() {
   );
 }
 
-/** One line that sends the reader who just saw the proof to the calendar or the phone. */
-function BookCallStrip({ note, className }: { note: string; className?: string }) {
+/** Phones: call first, then the tap-question text. Computers: book a visit, then call. */
+function TechCtas({ where, className }: { where: string; className?: string }) {
   return (
-    <div className={cn("panel flex flex-col items-center gap-4 p-6 text-center sm:flex-row sm:justify-between sm:text-left", className)}>
-      <div>
-        <p className="font-display text-lg font-bold sm:text-xl">Want results like these for your business?</p>
-        <p className="mt-1 text-sm text-muted-foreground">Free 30-minute call. No pressure.</p>
-      </div>
-      <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row">
-        <BookButton note={note} className="inline-flex items-center justify-center gap-2 whitespace-nowrap">
-          <CalendarCheck className="h-5 w-5" aria-hidden /> Book a free call
-        </BookButton>
-        <CallLink location={note} className="btn-chrome inline-flex items-center justify-center gap-2">
-          <Phone className="h-4 w-4 text-turbo" aria-hidden /> Call now
+    <PhoneOnly
+      desktop={
+        <div className={cn("grid gap-3 sm:flex sm:flex-wrap sm:items-center", className)}>
+          <InstallBookButton note={where.replace(/ /g, "-")} booking={IT_BOOKING} title="Book your tech visit" variant="ignite" className="btn-shine inline-flex items-center justify-center gap-2">
+            <CalendarCheck className="h-4 w-4" aria-hidden /> Book a visit
+          </InstallBookButton>
+          <CallLink location={where} icon className="btn-blue justify-center">
+            Call {SITE.phone.display}
+          </CallLink>
+        </div>
+      }
+    >
+      <div className={cn("grid gap-3 sm:flex sm:flex-wrap sm:items-center", className)}>
+        <CallLink location={where} icon className="btn-ignite justify-center !py-4 !text-lg">
+          Call {SITE.phone.display}
         </CallLink>
+        <FixMyTechLink source={where} className="btn-blue inline-flex items-center justify-center gap-2 !py-4 !text-lg">
+          <MessageSquare className="h-5 w-5" aria-hidden /> Text us
+        </FixMyTechLink>
       </div>
-    </div>
+    </PhoneOnly>
   );
 }
 
-/** Sticky bottom bar once the hero is gone: free check, call, and text (phones) or book (computers). */
+/** Sticky bottom bar once the hero is gone: book (computers) or text (phones), plus call. */
 function HomeBar() {
   const [show, setShow] = useState(false);
   useEffect(() => {
@@ -369,90 +334,54 @@ function HomeBar() {
       <PhoneOnly
         desktop={
           <div className="mx-auto flex max-w-3xl gap-2">
-            <Link to={`${CHECK_PATH}?from=home-bar`} tabIndex={show ? undefined : -1} className="btn-ignite inline-flex flex-[1.4] items-center justify-center gap-1.5 whitespace-nowrap !px-3 !py-3.5 !text-base">
-              <Search className="h-4 w-4 shrink-0" aria-hidden /> Free check
-            </Link>
+            <InstallBookButton note="home-sticky-bar" booking={IT_BOOKING} title="Book your tech visit" variant="ignite" className="inline-flex flex-[1.4] items-center justify-center gap-1.5 whitespace-nowrap !px-3 !py-3.5 !text-base">
+              <CalendarCheck className="h-4 w-4 shrink-0" aria-hidden /> Book a visit
+            </InstallBookButton>
             <CallLink location="home sticky bar" className="btn-blue inline-flex flex-1 items-center justify-center gap-1.5 whitespace-nowrap !px-3 !py-3.5 !text-base">
               <Phone className="h-4 w-4 shrink-0" aria-hidden /> Call
             </CallLink>
-            <BookButton note="Home sticky bar" variant="chrome" className="inline-flex flex-1 items-center justify-center gap-1.5 whitespace-nowrap !px-3 !py-3.5 !text-base">
-              <CalendarCheck className="h-4 w-4 shrink-0" aria-hidden /> Book a call
-            </BookButton>
           </div>
         }
       >
         <div className="mx-auto flex max-w-3xl gap-1.5">
-          <TextQuizButton source="home sticky bar text quiz" fallback={HOME_TEXT} tabIndex={show ? undefined : -1} className="btn-ignite inline-flex flex-[1.4] items-center justify-center gap-1.5 whitespace-nowrap !px-2 !py-3.5 !text-base font-bold shadow-lg">
-            <MessageSquare className="h-4 w-4 shrink-0" aria-hidden /> Text us
-          </TextQuizButton>
-          <CallLink location="home sticky bar" className="btn-blue inline-flex flex-1 items-center justify-center gap-1.5 whitespace-nowrap !px-2 !py-3.5 !text-base">
+          <CallLink location="home sticky bar" className="btn-ignite inline-flex flex-[1.2] items-center justify-center gap-1.5 whitespace-nowrap !px-2 !py-3.5 !text-base font-bold shadow-lg">
             <Phone className="h-4 w-4 shrink-0" aria-hidden /> Call
           </CallLink>
-          <Link to={`${CHECK_PATH}?from=home-bar`} tabIndex={show ? undefined : -1} className="btn-chrome inline-flex flex-1 items-center justify-center gap-1.5 whitespace-nowrap !px-2 !py-3.5 !text-base">
-            <Search className="h-4 w-4 shrink-0" aria-hidden /> Check
-          </Link>
+          <FixMyTechLink source="home sticky bar" className="btn-blue inline-flex flex-1 items-center justify-center gap-1.5 whitespace-nowrap !px-2 !py-3.5 !text-base">
+            <MessageSquare className="h-4 w-4 shrink-0" aria-hidden /> Text
+          </FixMyTechLink>
         </div>
       </PhoneOnly>
     </div>
   );
 }
 
-/**
- * The hero visual: what the free check shows, drawn in code (no stock photo). Labelled as a sample so
- * nobody mistakes it for a real client's numbers.
- */
-function ReportPreview() {
-  const rows = [
-    { n: "Google profile & reviews", v: 46 },
-    { n: "Website (SEO)", v: 71 },
-    { n: "AI answers (ChatGPT)", v: 38 },
-  ];
+/** The hero picture: a real office we set up, with the newest review and the "we come to you" badge on top. */
+function HeroPhoto() {
+  const r = REVIEWS[0];
   return (
-    <div className="hero-rise relative mx-auto w-full max-w-md lg:max-w-none" style={{ animationDelay: "0.12s" }} aria-hidden>
-      <div className="absolute -inset-6 rounded-[2.5rem] bg-gradient-to-br from-turbo/15 via-transparent to-[hsl(var(--ignite)/0.18)] blur-2xl" />
-      <div className="relative rounded-[2rem] bg-white p-5 shadow-[0_30px_80px_-30px_rgb(20_40_90/0.45)] ring-1 ring-black/5 sm:p-7">
-        <div className="flex items-center justify-between">
-          <p className="text-xs font-bold uppercase tracking-[0.14em] text-turbo">Sample report</p>
-          <span className="rounded-full bg-[#e5484d]/10 px-2.5 py-1 text-xs font-bold text-[#e5484d]">Leaking customers</span>
-        </div>
-        <div className="mt-4 flex items-center gap-5">
-          <div className="relative grid h-24 w-24 shrink-0 place-items-center rounded-full" style={{ background: "conic-gradient(hsl(var(--ignite)) 0 58%, hsl(220 20% 92%) 58% 100%)" }}>
-            <div className="grid h-[76px] w-[76px] place-items-center rounded-full bg-white">
-              <span className="font-display text-3xl font-extrabold text-foreground">58</span>
-            </div>
-          </div>
-          <div>
-            <p className="font-display text-xl font-extrabold leading-tight text-foreground">Joe's Plumbing</p>
-            <p className="mt-1 text-sm text-muted-foreground">Plumber · Tampa, FL</p>
-          </div>
-        </div>
-        <p className="mt-6 text-sm font-semibold text-foreground">Where you're losing customers</p>
-        <ul className="mt-3 space-y-3">
-          {rows.map((r) => (
-            <li key={r.n}>
-              <div className="flex items-baseline justify-between text-sm">
-                <span className="text-muted-foreground">{r.n}</span>
-                <span className="font-bold tabular-nums text-foreground">{r.v}</span>
-              </div>
-              <div className="mt-1.5 h-2.5 overflow-hidden rounded-full bg-[hsl(220_20%_94%)]">
-                <div className={cn("bar-grow h-full rounded-full", r.v < 50 ? "bg-[hsl(var(--ignite))]" : "bg-turbo/70")} style={{ width: `${r.v}%` }} />
-              </div>
-            </li>
-          ))}
-        </ul>
-        <div className="mt-6 space-y-2">
-          {["Website title never says “plumber in Tampa”", "ChatGPT can't read the site (blocked)"].map((t, i) => (
-            <p key={t} className="flex items-center gap-2.5 rounded-xl bg-[hsl(220_30%_97%)] px-3 py-2.5 text-sm text-foreground">
-              <span className="grid h-6 w-6 shrink-0 place-items-center rounded-full bg-[#e5484d]/10 text-xs font-bold text-[#e5484d]">{i + 1}</span>
-              {t}
-            </p>
-          ))}
-        </div>
+    <div className="hero-rise relative mx-auto mb-8 w-full max-w-lg lg:mb-0 lg:max-w-none" style={{ animationDelay: "0.12s" }}>
+      <div className="absolute -inset-6 rounded-[2.5rem] bg-gradient-to-br from-turbo/15 via-transparent to-[hsl(var(--ignite)/0.18)] blur-2xl" aria-hidden />
+      <div className="relative overflow-hidden rounded-[2rem] shadow-[0_30px_80px_-30px_rgb(20_40_90/0.45)] ring-1 ring-black/5">
+        <img
+          src="/img/office/after-1200.webp"
+          srcSet="/img/office/after-640.webp 640w, /img/office/after-1200.webp 1200w"
+          sizes="(min-width: 1024px) 560px, 100vw"
+          width={1200}
+          height={900}
+          {...({ fetchpriority: "high" } as Record<string, string>)}
+          alt="A three-monitor L-desk workstation with a laptop, keyboard and mouse that CEO Turbo set up in a Tampa home office"
+          className="aspect-[4/3] w-full object-cover"
+        />
+        <span className="absolute left-3 top-3 rounded-full bg-black/60 px-3 py-1 text-xs font-semibold text-white backdrop-blur">Real Tampa setup</span>
       </div>
-      <div className="absolute -bottom-5 -left-3 flex items-center gap-2 rounded-2xl bg-white px-4 py-3 shadow-[0_20px_40px_-20px_rgb(20_40_90/0.5)] ring-1 ring-black/5 sm:-left-6">
-        <Star className="h-5 w-5 fill-amber-400 text-amber-400" />
-        <span className="text-sm font-bold text-foreground">Free · 60 seconds</span>
-      </div>
+      {r && (
+        <figure className="absolute -bottom-6 -left-2 max-w-[290px] rounded-2xl bg-white p-4 shadow-[0_20px_40px_-20px_rgb(20_40_90/0.5)] ring-1 ring-black/5 sm:-left-6">
+          <ReviewSummary className="!text-xs [&_span:first-child]:!text-base" />
+          <blockquote className="mt-1.5 text-sm font-medium leading-snug text-foreground">"{r.short}"</blockquote>
+          <figcaption className="mt-1 text-xs text-muted-foreground">{r.name}</figcaption>
+        </figure>
+      )}
     </div>
   );
 }

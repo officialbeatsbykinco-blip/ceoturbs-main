@@ -134,7 +134,7 @@ const REPAIRS = [
   { icon: Cpu, title: "Won't turn on or keeps crashing", body: "Dead computers, blue screens, freezing and boot loops diagnosed and fixed.", price: itPrice("it-pc-repair") },
   { icon: Wrench, title: "Upgrades", body: "SSD, memory and parts upgrades that make an old computer fast again.", price: itPrice("it-ssd") },
   { icon: Monitor, title: "Slow, viruses & pop-ups", body: "Cleaned up, sped up and protected. At your door or remotely.", price: itPrice("it-remote") },
-  { icon: Smartphone, title: "Phone screens & batteries", body: "Cracked iPhone screens and worn-out batteries replaced at your door.", price: itPrice("it-iphone-battery") },
+  { icon: Smartphone, title: "Phone & tablet setup", body: "New iPhone, Android or iPad set up with your photos, contacts and email moved over.", price: itPrice("it-phone-setup") },
 ];
 
 export default function ComputerShop() {

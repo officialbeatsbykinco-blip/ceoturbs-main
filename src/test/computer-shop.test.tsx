@@ -127,8 +127,8 @@ describe("pages", () => {
 });
 
 describe("repairs", () => {
-  it("phones and tablets: screens and batteries only", () => {
-    expect(problemsFor("iphone").map((p) => p.id)).toEqual(["screen", "battery"]);
+  it("phones and tablets: setup only, no repairs", () => {
+    expect(problemsFor("iphone").map((p) => p.id)).toEqual(["phone-setup", "phone-transfer", "phone-email", "other"]);
     expect(problemsFor("windows").map((p) => p.id)).toContain("upgrade");
   });
 });
