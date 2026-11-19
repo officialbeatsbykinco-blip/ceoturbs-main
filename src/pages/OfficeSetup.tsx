@@ -15,6 +15,7 @@ import { BeforeAfter, OFFICE_BEFORE_AFTER } from "@/components/visuals/BeforeAft
 import { OFFICE_FROM, OfficePrices } from "@/components/blocks/OfficePrices";
 import { CustomerReview, FounderBadge } from "@/components/tech/FounderBadge";
 import { ReviewWall } from "@/components/tech/ReviewWall";
+import { OFFICE_AD } from "@/components/tech/TechAdGallery";
 import { ServiceAreaList } from "@/components/blocks/ServiceAreaList";
 import { INSTALL_BOOKING, SITE } from "@/config/site";
 import { cn } from "@/lib/utils";
@@ -117,6 +118,7 @@ export default function OfficeSetup() {
         <div className="container-x">
           <SectionHeader title={<span id="reviews">What Tampa offices say</span>} lede="Real Google reviews, word for word." />
           <ReviewWall className="mt-8" />
+          <img src={OFFICE_AD.src} srcSet={OFFICE_AD.srcSet} sizes="(min-width: 1024px) 900px, 100vw" width={OFFICE_AD.width} height={OFFICE_AD.height} loading="lazy" decoding="async" alt={OFFICE_AD.alt} className="mx-auto mt-10 w-full max-w-4xl rounded-2xl ring-1 ring-border" />
         </div>
       </section>
 

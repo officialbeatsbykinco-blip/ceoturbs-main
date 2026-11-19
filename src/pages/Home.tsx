@@ -10,6 +10,7 @@ import { PhoneOnly } from "@/components/booking/BookOrText";
 import { FixMyTechLink } from "@/components/tech/FixMyTechLink";
 import { FounderBadge } from "@/components/tech/FounderBadge";
 import { ReviewSummary, ReviewWall } from "@/components/tech/ReviewWall";
+import { OFFICE_AD, TechAdGallery } from "@/components/tech/TechAdGallery";
 import { INSTALL_BOOKING, IT_BOOKING, REVIEWS, SITE } from "@/config/site";
 import { SHOP_PATH } from "@/content/review-cards";
 import { itPrice } from "@/content/pricing";
@@ -174,6 +175,13 @@ export default function Home() {
         </div>
       </section>
 
+      <section className="section border-t border-border" aria-labelledby="why">
+        <div className="container-x">
+          <SectionHeader kicker="Why Tampa calls us" title={<span id="why">Skip the repair shop. We come to you.</span>} lede="Tap any card to get your price by text or book a visit." />
+          <TechAdGallery where="home" className="mt-8" />
+        </div>
+      </section>
+
       <section className="section border-t border-border" aria-labelledby="fix">
         <div className="container-x grid gap-10 lg:grid-cols-[1fr_1fr] lg:items-center">
           <div>
@@ -220,6 +228,7 @@ export default function Home() {
                 <span className="mt-1 block text-sm not-italic text-muted-foreground">{REVIEWS.find((r) => r.job === "Office IT setup")!.name}, Google review</span>
               </p>
             )}
+            <img src={OFFICE_AD.src} srcSet={OFFICE_AD.srcSet} sizes="(min-width: 1024px) 560px, 100vw" width={OFFICE_AD.width} height={OFFICE_AD.height} loading="lazy" decoding="async" alt={OFFICE_AD.alt} className="mt-5 w-full rounded-2xl ring-1 ring-border" />
             <div className="mt-6 grid gap-3 sm:flex sm:flex-wrap">
               <InstallBookButton note="home-office" booking={INSTALL_BOOKING} title="Book your office setup" variant="ignite" className="inline-flex items-center justify-center gap-2">
                 <CalendarCheck className="h-4 w-4" aria-hidden /> Book an office setup

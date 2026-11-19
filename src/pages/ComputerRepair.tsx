@@ -4,6 +4,7 @@
 // Contact from call/text taps, Schedule from a Cal.com booking.
 import { CustomerReview, FounderBadge } from "@/components/tech/FounderBadge";
 import { ReviewWall } from "@/components/tech/ReviewWall";
+import { TechAdGallery } from "@/components/tech/TechAdGallery";
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight, Building2, Calendar, Check, ClipboardCheck, Cpu, Gauge, Globe, Home, Laptop, MapPin, MessageSquare, Phone, ShieldCheck, ShoppingBag, Smartphone, Tv, Wrench, type LucideIcon } from "lucide-react";
@@ -199,6 +200,7 @@ export default function ComputerRepair() {
         <div className="container-x">
           <SectionHeader title={<span id="reviews">What Tampa customers say</span>} lede="Real Google reviews, word for word." />
           <ReviewWall className="mt-8" />
+          <TechAdGallery where="computer repair" className="mt-10" />
         </div>
       </section>
 
