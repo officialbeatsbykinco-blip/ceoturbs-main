@@ -10,7 +10,8 @@ import { PhoneOnly } from "@/components/booking/BookOrText";
 import { FixMyTechLink } from "@/components/tech/FixMyTechLink";
 import { FounderBadge } from "@/components/tech/FounderBadge";
 import { ReviewSummary, ReviewWall } from "@/components/tech/ReviewWall";
-import { OFFICE_AD, TechAdGallery } from "@/components/tech/TechAdGallery";
+import { JobPhotos } from "@/components/tech/JobPhotos";
+import { OFFICE_AD } from "@/components/tech/TechAdGallery";
 import { INSTALL_BOOKING, IT_BOOKING, REVIEWS, SITE } from "@/config/site";
 import { SHOP_PATH } from "@/content/review-cards";
 import { itPrice } from "@/content/pricing";
@@ -177,8 +178,8 @@ export default function Home() {
 
       <section className="section border-t border-border" aria-labelledby="why">
         <div className="container-x">
-          <SectionHeader kicker="Why Tampa calls us" title={<span id="why">Skip the repair shop. We come to you.</span>} lede="Tap any card to get your price by text or book a visit." />
-          <TechAdGallery where="home" className="mt-8" />
+          <SectionHeader kicker="Why Tampa calls us" title={<span id="why">Skip the repair shop. We come to you.</span>} lede="Real photos from our jobs: office desks set up, desktops opened up and fixed, computers reset and ready." />
+          <JobPhotos className="mt-8" />
         </div>
       </section>
 
