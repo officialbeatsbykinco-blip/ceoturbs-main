@@ -36,6 +36,12 @@ Gotcha: do not pass `svgOrigin` inside a tween on an element that already has on
 Bed + SFX: `node assets/audio/make-bed-ad9.mjs` → `ad9bed.wav`, then `ffmpeg -i ad9bed.wav -af "loudnorm=I=-14:TP=-1.5:LRA=9,volume=0.6dB,alimiter=limit=0.84" ad9.wav`.
 Build: `./stage.sh ad9-one-tap-16x9 ad9`, then `npx hyperframes render --quality high --output ../../renders/ad9-one-tap-16x9.mp4` inside `.build/ad9-one-tap-16x9`. Thumbnail: `renders/ad9-one-tap-16x9-thumb.jpg` (frame at 17.5s).
 
+## Agency ad: "More Customers" (42s, 16:9)
+
+`ad18-more-customers-16x9.html` - 1920x1080 for YouTube in-stream, Meta feeds and the /grow page. Sells the website + ads side. No narration; captions carry it, so it works muted. Hook ("You do great work. So why isn't the phone ringing?" over a phone showing 0 calls), a "plumber near me" search where three competitors show up and "Your business" sinks to page 3 (competitor names are made up), the system (Website + Ads + Reviews = MORE CUSTOMERS), a 3D wall of 8 real client sites, proof (Appliance King Google Ads: 52 conversions for $290, $5.58 each; Meta: 161 leads across 8 campaigns, $7.42 average, $4.31 best, both from `src/content/results.ts`), "Not a typical agency" checks with the leads-or-free guarantee, end card: free 30-minute call, ceoturbo.com/grow, (678) 558-4327.
+Bed + SFX: `node assets/audio/make-bed-ad18.mjs` → `ad18bed.wav`, then `ffmpeg -i ad18bed.wav -af "loudnorm=I=-14:TP=-1.5:LRA=9,volume=0.6dB,alimiter=limit=0.84" ad18.wav`.
+Build: `./stage.sh ad18-more-customers-16x9 ad18`, then `npx hyperframes render --quality high --output ../../renders/ad18-more-customers-16x9.mp4` inside `.build/ad18-more-customers-16x9`. Thumbnail: `renders/ad18-more-customers-16x9-thumb.jpg` (frame at 17.5s).
+
 ## Landscape ad: "Tampa Tech Help" (20s, 16:9)
 
 `ad19-tampa-tech-16x9.html` - 1920x1080 for YouTube, Meta landscape placements and the site. No narration; captions carry it, so it works muted. Hook ("Computer acting up?" with a laptop drowning in error pop-ups until the screen dies), six problem tiles flip from BROKEN to FIXED, "We come to you" map (pin at Temple Terrace, van drives to a home and a business, "Or remote for Windows, anywhere"), promise stamps ("We fix it. Test it with you. Then you pay." + "No fix, no charge", footnoted as applying to the repair), end card with logo, "Book a visit" and ceoturbo.com/computer-repair-tampa. No phone number on screen.
