@@ -3,11 +3,11 @@
 // IT_SERVICES in content/pricing.ts. Conversion events: ViewContent on load, Lead from the quiz (TechQuiz),
 // Contact from call/text taps, Schedule from a Cal.com booking.
 import { CustomerReview, FounderBadge } from "@/components/tech/FounderBadge";
-import { ReviewWall } from "@/components/tech/ReviewWall";
+import { ReviewSummary, ReviewWall } from "@/components/tech/ReviewWall";
 import { JobPhotos } from "@/components/tech/JobPhotos";
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
-import { ArrowRight, Building2, Calendar, Check, ClipboardCheck, Cpu, Gauge, Globe, Home, Laptop, MapPin, MessageSquare, Phone, ShieldCheck, ShoppingBag, Smartphone, Tv, Wrench, type LucideIcon } from "lucide-react";
+import { ArrowRight, BadgeCheck, Building2, Calendar, Check, ClipboardCheck, Clock, Cpu, Gauge, Globe, Home, Laptop, MapPin, MessageSquare, Phone, ShieldCheck, ShoppingBag, Smartphone, Star, Tv, Wrench, type LucideIcon } from "lucide-react";
 import { COMPUTERS_PATH } from "@/content/computer-shop";
 import { CallLink } from "@/components/site/CallLink";
 import { InstallBookButton } from "@/components/cta/Actions";
@@ -47,6 +47,14 @@ const WE_FIX = [
   "Desktops, laptops, Windows and Mac",
 ];
 
+/** The four reasons to pick us, in the first scroll. Each one is backed elsewhere on the page. */
+const TRUST: { icon: LucideIcon; title: string; body: string }[] = [
+  { icon: Star, title: "5.0 on Google", body: "Every review five stars, word for word below." },
+  { icon: Home, title: "We come to you", body: "Home or business, 40 miles around Tampa." },
+  { icon: Clock, title: "Same or next day", body: "Most computers are fixed within a day or two." },
+  { icon: BadgeCheck, title: "No fix, no charge", body: "Can't fix it? You don't pay for the repair." },
+];
+
 const PROMISES = ["Price up front, before any work", `Diagnosis ${itPrice("it-visit")}, credited to the repair`, "No fix, no charge", "Pay after it works"];
 
 /** A drop-off repair shop vs us. How it works, not price. */
@@ -58,7 +66,7 @@ const COMPARE = [
 ];
 
 const STEPS = [
-  { icon: MessageSquare, title: "Text, call or book", body: "Tell us the device and what's wrong. Three taps above does it." },
+  { icon: MessageSquare, title: "Text, call or book", body: "Tell us the device and what's wrong. A few taps on this page does it." },
   { icon: ClipboardCheck, title: "Price up front", body: "You get the price before any work starts. Say no and you only pay the diagnosis." },
   { icon: Home, title: "Fixed at your place", body: "We come to your home or business, fix it, test it with you, then you pay. A slow Windows PC can also be sped up remotely." },
 ];
@@ -105,22 +113,24 @@ export default function ComputerRepair() {
         <div className="pointer-events-none absolute -top-40 left-1/2 h-[600px] w-[1100px] -translate-x-1/2 glow-turbo" aria-hidden />
         <div className="container-x relative grid items-start gap-8 lg:grid-cols-[1fr_1fr] lg:gap-12">
           <div className="hero-rise min-w-0">
-            <p className="chip">
-              <MapPin className="h-3.5 w-3.5 text-turbo" aria-hidden /> 40 miles around Temple Terrace & Tampa · remote worldwide
-            </p>
-            <h1 id="hero" className="mt-4 text-[32px] font-bold leading-[1.05] sm:text-5xl md:text-[52px]">
-              <span className="text-chrome-grad">Laptop or desktop broken, slow or crashing?</span> <span className="text-turbo-grad">Computer repair at your door in Tampa.</span>
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+              <ReviewSummary />
+              <p className="chip">
+                <MapPin className="h-3.5 w-3.5 text-turbo" aria-hidden /> Tampa & 40 miles around
+              </p>
+            </div>
+            <h1 id="hero" className="mt-4 text-[34px] font-bold leading-[1.05] sm:text-5xl md:text-[54px]">
+              <span className="text-chrome-grad">Computer broken, slow or crashing?</span> <span className="text-turbo-grad">We fix it at your door in Tampa.</span>
             </h1>
             <p className="mt-4 max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg">
-              Laptops and desktops, Windows and Mac: won't turn on, crashing, slow, viruses, cracked laptop screens, dead charging ports or ready for an upgrade. We come to your home or business, or fix your Windows computer remotely from anywhere in the world. You get the price before we start.
+              Laptops and desktops, Windows and Mac. Usually fixed the same or next day, at your home or business. <span className="font-semibold text-foreground">You get the price before we start, and if we can't fix it, you don't pay for the repair.</span>
             </p>
             <div className="mt-5 flex flex-wrap gap-2 text-xs">
               {[
                 ["Speed-up", itPrice("it-speedup")],
-                ["Remote speed-up", itPrice("it-remote")],
                 ["Virus removal", itPrice("it-virus")],
                 ["Won't turn on", itPrice("it-pc-repair")],
-                ["Desktop repair", itPrice("it-desktop")],
+                ["Remote help", itPrice("it-remote")],
               ].map(([k, v]) => (
                 <span key={k} className="rounded-full border border-border/80 bg-white/[0.03] px-3 py-1.5 text-muted-foreground">
                   {k} <span className="font-semibold text-foreground">{v}</span>
@@ -128,9 +138,7 @@ export default function ComputerRepair() {
               ))}
             </div>
             <Ctas where="hero" className="mt-6" />
-            <FounderBadge className="mt-5 max-w-xl" line="I come to your door and fix it myself. Call or text, you get me, not a call center." />
-            <CustomerReview job="Laptop" className="mt-3 max-w-xl" />
-            <ul className="mt-6 grid max-w-xl gap-x-4 gap-y-2 text-sm text-muted-foreground sm:grid-cols-2">
+            <ul className="mt-4 grid max-w-xl grid-cols-2 gap-x-4 gap-y-2 text-sm font-medium text-foreground">
               {PROMISES.map((t) => (
                 <li key={t} className="flex items-center gap-2">
                   <Check className="h-4 w-4 shrink-0 text-turbo" aria-hidden />
@@ -138,11 +146,56 @@ export default function ComputerRepair() {
                 </li>
               ))}
             </ul>
+            <FounderBadge className="mt-6 max-w-xl" line="I come to your door and fix it myself. Call or text, you get me, not a call center." />
+            <CustomerReview job="Laptop" className="mt-3 max-w-xl" />
           </div>
           <BookOrText
             phone={<TechQuiz className="min-w-0" />}
             desktop={<CalCard title="Book your tech visit" sub="Pick a time. Price up front, no fix no charge." note="computer-repair-hero" booking={IT_BOOKING} className="min-w-0" />}
           />
+        </div>
+      </section>
+
+      <section className="border-t border-border bg-card/40 py-8 sm:py-10" aria-label="Why Tampa picks us">
+        <ul className="container-x grid grid-cols-2 gap-4 lg:grid-cols-4">
+          {TRUST.map((t) => (
+            <li key={t.title} className="flex items-start gap-3">
+              <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-turbo/15 text-turbo">
+                <t.icon className="h-5 w-5" aria-hidden />
+              </span>
+              <span className="min-w-0">
+                <span className="block font-display text-base font-bold leading-tight sm:text-lg">{t.title}</span>
+                <span className="mt-0.5 block text-xs text-muted-foreground sm:text-sm">{t.body}</span>
+              </span>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <section className="section border-t border-border" aria-labelledby="reviews">
+        <div className="container-x">
+          <SectionHeader title={<span id="reviews">What Tampa customers say</span>} lede="Real Google reviews, word for word. Tap the rating to check them on Google." />
+          <ReviewWall className="mt-8" />
+          <JobPhotos className="mt-10" />
+          <Ctas where="reviews" className="mt-8" />
+        </div>
+      </section>
+
+      <section className="section border-t border-border" aria-labelledby="how">
+        <div className="container-x">
+          <SectionHeader title={<span id="how">How it works</span>} lede="Three steps, no surprises." />
+          <ol className="mt-10 grid gap-4 md:grid-cols-3">
+            {STEPS.map((s, i) => (
+              <li key={s.title} className="panel p-6">
+                <div className="flex items-center gap-3">
+                  <span className="grid h-9 w-9 place-items-center rounded-full bg-turbo font-bold text-white">{i + 1}</span>
+                  <s.icon className="h-5 w-5 text-turbo" aria-hidden />
+                </div>
+                <h3 className="mt-4 font-display text-lg font-bold">{s.title}</h3>
+                <p className="mt-2 text-sm text-muted-foreground">{s.body}</p>
+              </li>
+            ))}
+          </ol>
         </div>
       </section>
 
@@ -196,13 +249,6 @@ export default function ComputerRepair() {
         </div>
       </section>
 
-      <section className="section border-t border-border" aria-labelledby="reviews">
-        <div className="container-x">
-          <SectionHeader title={<span id="reviews">What Tampa customers say</span>} lede="Real Google reviews, word for word." />
-          <ReviewWall className="mt-8" />
-          <JobPhotos className="mt-10" />
-        </div>
-      </section>
 
       <section className="section border-t border-border" aria-labelledby="new">
         <div className="container-x">
@@ -240,6 +286,23 @@ export default function ComputerRepair() {
         </div>
       </section>
 
+      <section className="section border-t border-border" aria-labelledby="guarantee">
+        <div className="container-x">
+          <div className="panel grid items-center gap-6 border-turbo/40 p-6 sm:p-8 md:grid-cols-[auto_1fr_auto]">
+            <span className="grid h-16 w-16 place-items-center rounded-2xl bg-turbo/15 text-turbo">
+              <ShieldCheck className="h-9 w-9" aria-hidden />
+            </span>
+            <div>
+              <h2 id="guarantee" className="font-display text-2xl font-bold sm:text-3xl">No fix, no charge. Pay after it works.</h2>
+              <p className="mt-2 text-muted-foreground">
+                The diagnosis is {itPrice("it-visit")} and it's credited to the repair. You hear the price before any work starts. Say no and that's all you pay. Say yes and you pay once it's fixed and tested in front of you.
+              </p>
+            </div>
+            <Ctas where="guarantee" className="md:flex-col md:items-stretch" />
+          </div>
+        </div>
+      </section>
+
       <section className="section border-t border-border" aria-labelledby="compare">
         <div className="container-x">
           <SectionHeader title={<span id="compare">Why drive it to a shop?</span>} lede="Repair-shop quality, at your door, with the price in writing first." />
@@ -263,23 +326,6 @@ export default function ComputerRepair() {
         </div>
       </section>
 
-      <section className="section border-t border-border" aria-labelledby="how">
-        <div className="container-x">
-          <SectionHeader title={<span id="how">How it works</span>} lede="Three steps, no surprises." />
-          <ol className="mt-10 grid gap-4 md:grid-cols-3">
-            {STEPS.map((s, i) => (
-              <li key={s.title} className="panel p-6">
-                <div className="flex items-center gap-3">
-                  <span className="grid h-9 w-9 place-items-center rounded-full bg-turbo font-bold text-white">{i + 1}</span>
-                  <s.icon className="h-5 w-5 text-turbo" aria-hidden />
-                </div>
-                <h3 className="mt-4 font-display text-lg font-bold">{s.title}</h3>
-                <p className="mt-2 text-sm text-muted-foreground">{s.body}</p>
-              </li>
-            ))}
-          </ol>
-        </div>
-      </section>
 
       <section className="section border-t border-border" aria-labelledby="who">
         <div className="container-x grid items-center gap-8 lg:grid-cols-[auto_1fr]">
@@ -307,36 +353,36 @@ export default function ComputerRepair() {
         </div>
       </section>
 
-      <section className="section border-t border-border" aria-labelledby="shop">
+
+
+      <section className="section border-t border-border" aria-labelledby="also">
         <div className="container-x">
-          <div className="panel flex flex-col gap-4 p-6 sm:flex-row sm:items-center sm:justify-between">
+          <h2 id="also" className="sr-only">More ways we help</h2>
+          <div className="grid gap-4 md:grid-cols-2">
+            <div className="panel flex flex-col justify-between gap-4 p-6">
             <div className="flex items-start gap-3">
               <ShoppingBag className="mt-0.5 h-6 w-6 shrink-0 text-turbo" aria-hidden />
               <div>
-                <h2 id="shop" className="font-display text-lg font-bold">Time for a new computer?</h2>
+                <h3 className="font-display text-lg font-bold">Time for a new computer?</h3>
                 <p className="text-sm text-muted-foreground">Laptops and desktops from our computer shop, set up at your place with your files moved over.</p>
               </div>
             </div>
-            <Link to={COMPUTERS_PATH} className="btn-chrome inline-flex items-center justify-center gap-2">
+            <Link to={COMPUTERS_PATH} className="btn-chrome inline-flex items-center justify-center gap-2 sm:self-start">
               Shop computers <ArrowRight className="h-4 w-4" aria-hidden />
             </Link>
           </div>
-        </div>
-      </section>
-
-      <section className="section border-t border-border" aria-labelledby="business">
-        <div className="container-x">
-          <div className="panel flex flex-col gap-4 p-6 sm:flex-row sm:items-center sm:justify-between">
+            <div className="panel flex flex-col justify-between gap-4 p-6">
             <div className="flex items-start gap-3">
               <Building2 className="mt-0.5 h-6 w-6 shrink-0 text-turbo" aria-hidden />
               <div>
-                <h2 id="business" className="font-display text-lg font-bold">Have a business or office?</h2>
+                <h3 className="font-display text-lg font-bold">Have a business or office?</h3>
                 <p className="text-sm text-muted-foreground">Workstations, printers, networks, multi-monitor desks, cable management and menu screens. On-site IT {itPrice("it-business-hour")}/hr.</p>
               </div>
             </div>
-            <Link to={OFFICE_SETUP_PATH} className="btn-chrome inline-flex items-center justify-center">
+            <Link to={OFFICE_SETUP_PATH} className="btn-chrome inline-flex items-center justify-center sm:self-start">
               See office setup
             </Link>
+          </div>
           </div>
         </div>
       </section>
