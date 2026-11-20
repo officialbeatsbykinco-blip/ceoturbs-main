@@ -1,7 +1,8 @@
 // /computer-repair-tampa — the Meta ads landing page for tech repair around Tampa: slow, crashing or dead
 // laptops and desktops fixed at the customer's door within 40 miles or remotely; phones and tablets set up (not repaired). Prices come from
 // IT_SERVICES in content/pricing.ts. Conversion events: ViewContent on load, Lead from the quiz (TechQuiz),
-// Contact from call/text taps, Schedule from a Cal.com booking.
+// Contact from call/text taps, Schedule from a Cal.com booking. Repair only: the business marketing and review card
+// sections stay off this page so a visitor from a repair ad sees nothing but the repair and how to reach us.
 import { CustomerReview, FounderBadge } from "@/components/tech/FounderBadge";
 import { ReviewSummary, ReviewWall } from "@/components/tech/ReviewWall";
 import { JobPhotos } from "@/components/tech/JobPhotos";
@@ -23,7 +24,6 @@ import { IT_BOOKING, SITE } from "@/config/site";
 import { smsHref } from "@/lib/sms";
 import { newEventId, serverTrack, track } from "@/lib/track";
 import { cn } from "@/lib/utils";
-import { GrowEverywhere, ReviewCardPacks } from "@/components/blocks/GrowEverywhere";
 
 
 const PRICE_GROUPS: { icon: LucideIcon; title: string; ids: string[] }[] = [
@@ -387,10 +387,6 @@ export default function ComputerRepair() {
           </div>
         </div>
       </section>
-
-      <GrowEverywhere where="repair" />
-
-      <ReviewCardPacks where="repair" />
 
       <section className="section border-t border-border" aria-labelledby="area">
         <div className="container-x">
