@@ -1,11 +1,13 @@
+import { useState, type MouseEvent } from "react";
 import { Link } from "react-router-dom";
-import { ArrowRight, Check, Globe, Megaphone, Search, ShoppingCart, Star, Truck, UserRoundCheck, type LucideIcon } from "lucide-react";
+import { ArrowRight, Check, Globe, Loader2, Phone, Megaphone, Search, ShoppingCart, Star, Truck, UserRoundCheck, type LucideIcon } from "lucide-react";
 import { BookButton } from "@/components/cta/Actions";
 import { SectionHeader } from "@/components/blocks/Basics";
-import { REVIEW_CARD, fromPriceLabel, money2, packPath } from "@/config/site";
+import { REVIEW_CARD, SITE, fromPriceLabel, money2, packPath, packSku, type ReviewPack } from "@/config/site";
+import { CallLink } from "@/components/site/CallLink";
 import { SHOP_PATH } from "@/content/review-cards";
 import { price } from "@/content/pricing";
-import { track } from "@/lib/track";
+import { serverTrack, track } from "@/lib/track";
 import { cn } from "@/lib/utils";
 
 // The digital half of CEO Turbo, for pages that lead with Tampa tech repair: websites, ads, SEO/AEO/GEO + DNS fixes
@@ -109,6 +111,9 @@ export function GrowEverywhere({ where, id = "grow", className }: { where: strin
           <BookButton note={`${where} — grow everywhere`} prefill="I want help with a website, ads, SEO or review cards for my business.">
             Book a free 30-min call
           </BookButton>
+          <CallLink location={`${where} grow call`} className="btn-blue inline-flex items-center justify-center gap-2">
+            <Phone className="h-4 w-4" aria-hidden /> Call or text {SITE.phone.display}
+          </CallLink>
           <Link to="/pricing" className="btn-chrome inline-flex items-center justify-center gap-2">
             See all plans &amp; prices <ArrowRight className="h-4 w-4" aria-hidden />
           </Link>
@@ -118,8 +123,36 @@ export function GrowEverywhere({ where, id = "grow", className }: { where: strin
   );
 }
 
-/** Google review card packs as one-tap buy buttons: each opens the store with that pack picked. */
+/**
+ * One tap from a pack to Shopify checkout (address, shipping and payment are all collected there).
+ * The link still points at the store with that pack picked, so it works without JS and is the fallback if
+ * Shopify can't be reached.
+ */
+function useQuickBuy(where: string) {
+  const [busy, setBusy] = useState<ReviewPack["id"] | null>(null);
+  const buy = async (e: MouseEvent<HTMLAnchorElement>, pack: ReviewPack) => {
+    if (e.metaKey || e.ctrlKey || e.shiftKey || busy) return;
+    e.preventDefault();
+    setBusy(pack.id);
+    const ecommerce = { currency: REVIEW_CARD.currency, value: pack.price, items: [{ item_id: packSku(pack), item_name: REVIEW_CARD.fullName, item_variant: pack.label, price: pack.price, quantity: 1 }] };
+    const server = { value: pack.price, currency: REVIEW_CARD.currency, contentName: REVIEW_CARD.fullName, contentIds: [packSku(pack)], numItems: 1 };
+    serverTrack("add_to_cart", track("add_to_cart", { pack: pack.id, source: where }, { ecommerce }), server);
+    try {
+      const { createCheckout } = await import("@/lib/shopify");
+      const { url } = await createCheckout(pack, "");
+      serverTrack("begin_checkout", track("begin_checkout", { pack: pack.id, checkout: "shopify", source: where }, { ecommerce }), server);
+      setTimeout(() => window.location.assign(url), 250);
+    } catch {
+      setBusy(null);
+      window.location.assign(packPath(pack.id));
+    }
+  };
+  return { busy, buy };
+}
+
+/** Google review card packs as one-tap buy buttons straight to checkout. */
 export function ReviewCardPacks({ where, id = "review-cards", className }: { where: string; id?: string; className?: string }) {
+  const { busy, buy } = useQuickBuy(where);
   return (
     <section className={cn("section border-t border-border", className)} aria-labelledby={id}>
       <div className="container-x grid items-center gap-10 lg:grid-cols-[0.9fr_1.1fr]">
@@ -148,7 +181,8 @@ export function ReviewCardPacks({ where, id = "review-cards", className }: { whe
               <li key={p.id}>
                 <Link
                   to={packPath(p.id)}
-                  onClick={() => track("review_card_pack_click", { source: where, content_name: p.label })}
+                  onClick={(e) => buy(e, p)}
+                  aria-busy={busy === p.id}
                   className={cn("panel flex min-h-[44px] items-center justify-between gap-3 p-4 transition-shadow hover:shadow-[0_0_0_1px_hsl(var(--turbo)/0.6)]", p.popular && "ring-1 ring-turbo/60")}
                 >
                   <span>
@@ -156,17 +190,18 @@ export function ReviewCardPacks({ where, id = "review-cards", className }: { whe
                     <span className="block text-xs text-muted-foreground">{p.popular ? "Most popular · " : ""}{p.note}</span>
                   </span>
                   <span className="btn-ignite inline-flex shrink-0 items-center gap-1.5 !px-3 !py-2 !text-sm">
-                    {money2(p.price)} <ArrowRight className="h-4 w-4" aria-hidden />
+                    {busy === p.id ? <Loader2 className="h-4 w-4 animate-spin" aria-label="Opening checkout" /> : <ShoppingCart className="h-4 w-4" aria-hidden />}
+                    Buy {money2(p.price)}
                   </span>
                 </Link>
               </li>
             ))}
           </ul>
           <p className="mt-4 flex items-center gap-2 text-sm text-muted-foreground">
-            <Truck className="h-4 w-4 shrink-0 text-turbo" aria-hidden /> {REVIEW_CARD.shipping.label} · {REVIEW_CARD.shipping.processing.toLowerCase()} · 30-day returns
+            <Truck className="h-4 w-4 shrink-0 text-turbo" aria-hidden /> {REVIEW_CARD.shipping.label} · {REVIEW_CARD.shipping.processing.toLowerCase()} · 30-day returns · secure Shopify checkout
           </p>
-          <Link to={SHOP_PATH} onClick={() => track("review_card_promo_click", { source: `${where} packs` })} className="btn-ignite btn-shine mt-6 inline-flex items-center justify-center gap-2">
-            <ShoppingCart className="h-4 w-4" aria-hidden /> Buy Google Review Cards
+          <Link to={SHOP_PATH} onClick={() => track("review_card_promo_click", { source: `${where} packs` })} className="btn-chrome mt-6 inline-flex items-center justify-center gap-2">
+            See photos, setup &amp; the counter stand <ArrowRight className="h-4 w-4" aria-hidden />
           </Link>
         </div>
       </div>

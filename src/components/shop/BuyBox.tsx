@@ -1,4 +1,6 @@
 import { useEffect, useId, useRef, useState, type FormEvent, type MouseEvent } from "react";
+import { ShippingFields } from "@/components/shop/ShippingFields";
+import { EMPTY_ADDRESS, addressError, shipTo, type ShipAddress } from "@/lib/ship-address";
 import { Link } from "react-router-dom";
 import { ArrowRight, BadgeCheck, Check, Loader2, Lock, Phone, ShieldCheck, Smartphone, Truck, Wand2, Zap, Repeat } from "lucide-react";
 import { CARD_PROGRAMMING, REVIEW_CARD, SITE, STAND_OPTIONS, money2, packSavings, packSku, type ReviewPack, type StandOption } from "@/config/site";
@@ -339,9 +341,10 @@ export function BuyBox({
   );
 }
 
-/** Fallback if Shopify checkout can't be reached: captures the order so it can be invoiced. */
+/** Fallback if Shopify checkout can't be reached: captures the order and where to ship it, so it can be invoiced. */
 function OrderDialog({ open, onOpenChange, summary, total, packId, reviewLink, business }: { open: boolean; onOpenChange: (v: boolean) => void; summary: string; total: number; packId: ReviewPack["id"]; reviewLink: string; business: string }) {
   const [f, setF] = useState({ name: "", email: "", phone: "", business: "", company_site: "" });
+  const [addr, setAddr] = useState<ShipAddress>(EMPTY_ADDRESS);
   const [state, setState] = useState<"idle" | "sending" | "done" | "error">("idle");
   const [err, setErr] = useState("");
   const opened = useRef(0);
@@ -362,6 +365,9 @@ function OrderDialog({ open, onOpenChange, summary, total, packId, reviewLink, b
     if (!/^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i.test(f.email.trim())) return setErr("Enter a valid email.");
     const digits = f.phone.replace(/\D/g, "");
     if (digits.length < 10 || digits.length > 15) return setErr("Enter a valid phone number.");
+    // The cards ship by mail, so the order isn't complete without where to send them.
+    const addrErr = addressError(addr);
+    if (addrErr) return setErr(addrErr);
     setErr("");
     setState("sending");
     try {
@@ -369,7 +375,7 @@ function OrderDialog({ open, onOpenChange, summary, total, packId, reviewLink, b
       const res = await fetch("/api/lead", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...f, eventId, visitorId: visitorId(), attribution: attribution(), type: "order-request", product: REVIEW_CARD.name, pack: summary, note: reviewLink.trim() ? `Review link: ${reviewLink.trim()}` : undefined, total: money2(total), value: total, elapsedMs: Date.now() - opened.current, page: window.location.pathname }),
+        body: JSON.stringify({ ...f, eventId, visitorId: visitorId(), attribution: attribution(), type: "order-request", product: REVIEW_CARD.name, pack: summary, note: [shipTo(addr), reviewLink.trim() && `Review link: ${reviewLink.trim()}`].filter(Boolean).join(" | "), total: money2(total), value: total, elapsedMs: Date.now() - opened.current, page: window.location.pathname }),
       });
       if (!res.ok) throw new Error(String(res.status));
       track("generate_lead", { lead_source: "order_request", value: total, currency: REVIEW_CARD.currency, pack: packId }, { eventId, user: { email: f.email, phone: f.phone, name: f.name, externalId: visitorId() } });
@@ -419,6 +425,7 @@ function OrderDialog({ open, onOpenChange, summary, total, packId, reviewLink, b
                   <input id={`${uid}-${k}`} data-clarity-mask="true" type={type} className="field" value={f[k]} onChange={(e) => setF((x) => ({ ...x, [k]: e.target.value }))} autoComplete={ac} maxLength={k === "email" ? 200 : 100} />
                 </div>
               ))}
+              <ShippingFields uid={uid} value={addr} onChange={setAddr} />
               <label className="hidden" aria-hidden>
                 Company site
                 <input tabIndex={-1} autoComplete="off" value={f.company_site} onChange={(e) => setF((x) => ({ ...x, company_site: e.target.value }))} />

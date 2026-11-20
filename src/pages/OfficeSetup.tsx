@@ -19,6 +19,7 @@ import { OFFICE_AD } from "@/components/tech/TechAdGallery";
 import { ServiceAreaList } from "@/components/blocks/ServiceAreaList";
 import { INSTALL_BOOKING, SITE } from "@/config/site";
 import { cn } from "@/lib/utils";
+import { ReviewCardStrip } from "@/components/blocks/ReviewCardBlocks";
 
 
 const WHAT: { icon: LucideIcon; title: string; body: string }[] = [
@@ -153,6 +154,12 @@ export default function OfficeSetup() {
               .
             </p>
           </div>
+        </div>
+      </section>
+
+      <section className="border-t border-border py-10 sm:py-12" aria-label="Google review cards">
+        <div className="container-x">
+          <ReviewCardStrip where="office setup" title="Own a business? Get more Google reviews" line="Hand customers a tap card and your Google review form opens on their phone. More reviews, more trust, more calls. iPhone & Android, no app." />
         </div>
       </section>
 

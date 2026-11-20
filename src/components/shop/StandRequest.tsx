@@ -5,10 +5,13 @@ import { REVIEW_STAND } from "@/config/site";
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import { rememberBusiness } from "@/lib/review-link";
 import { attribution, track, visitorId } from "@/lib/track";
+import { ShippingFields } from "@/components/shop/ShippingFields";
+import { EMPTY_ADDRESS, addressError, shipTo, type ShipAddress } from "@/lib/ship-address";
 
 /** Request form for the counter stand (no checkout yet): posts an order-request lead we reply to with a payment link. */
 export function StandRequest({ open, onOpenChange, business = "" }: { open: boolean; onOpenChange: (v: boolean) => void; business?: string }) {
   const [f, setF] = useState({ name: "", email: "", phone: "", business: "", company_site: "" });
+  const [addr, setAddr] = useState<ShipAddress>(EMPTY_ADDRESS);
   const [state, setState] = useState<"idle" | "sending" | "done" | "error">("idle");
   const [err, setErr] = useState("");
   const opened = useRef(0);
@@ -29,6 +32,8 @@ export function StandRequest({ open, onOpenChange, business = "" }: { open: bool
     if (!/^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i.test(f.email.trim())) return setErr("Enter a valid email.");
     const digits = f.phone.replace(/\D/g, "");
     if (digits.length < 10 || digits.length > 15) return setErr("Enter a valid phone number.");
+    const addrErr = addressError(addr);
+    if (addrErr) return setErr(addrErr);
     setErr("");
     setState("sending");
     try {
@@ -36,7 +41,7 @@ export function StandRequest({ open, onOpenChange, business = "" }: { open: bool
       const res = await fetch("/api/lead", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...f, eventId, visitorId: visitorId(), attribution: attribution(), type: "order-request", product: REVIEW_STAND.name, pack: "Stand", elapsedMs: Date.now() - opened.current, page: window.location.pathname }),
+        body: JSON.stringify({ ...f, eventId, visitorId: visitorId(), attribution: attribution(), type: "order-request", product: REVIEW_STAND.name, pack: "Stand", note: shipTo(addr), elapsedMs: Date.now() - opened.current, page: window.location.pathname }),
       });
       if (!res.ok) throw new Error(String(res.status));
       track("generate_lead", { lead_source: "stand_request" }, { eventId, user: { email: f.email, phone: f.phone, name: f.name, externalId: visitorId() } });
@@ -78,6 +83,7 @@ export function StandRequest({ open, onOpenChange, business = "" }: { open: bool
                   <input id={`${uid}-${k}`} data-clarity-mask="true" type={type} className="field" value={f[k]} onChange={(e) => setF((x) => ({ ...x, [k]: e.target.value }))} autoComplete={ac} maxLength={k === "email" ? 200 : 100} />
                 </div>
               ))}
+              <ShippingFields uid={uid} value={addr} onChange={setAddr} />
               <label className="hidden" aria-hidden>
                 Company site
                 <input tabIndex={-1} autoComplete="off" value={f.company_site} onChange={(e) => setF((x) => ({ ...x, company_site: e.target.value }))} />

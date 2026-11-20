@@ -16,6 +16,7 @@ import { OFFICE_FROM, OfficePrices } from "@/components/blocks/OfficePrices";
 import { BeforeAfter, OFFICE_BEFORE_AFTER } from "@/components/visuals/BeforeAfter";
 import { OFFICE_SETUP_PATH } from "@/content/tech-pages";
 import { newEventId, serverTrack, track } from "@/lib/track";
+import { ReviewCardStrip } from "@/components/blocks/ReviewCardBlocks";
 
 const STEP_ICONS = [MessageSquare, ClipboardCheck, Home];
 const PROMISES = ["Price up front, before any work", "We come to your home or business", "Tested with you before we leave", "Pay after it works"];
@@ -166,6 +167,12 @@ export default function InstallPage({ path }: { path: string }) {
             <h2 id="who" className="h-section">You deal with the person who does the work.</h2>
             <p className="lede">I'm {SITE.founder.name.split(" ")[0]}, based in Tampa. No call center: you call or text, I {business ? "send a written quote" : "tell you the price"}, I show up and do the job.</p>
           </div>
+        </div>
+      </section>
+
+      <section className="border-t border-border py-10 sm:py-12" aria-label="Google review cards">
+        <div className="container-x">
+          <ReviewCardStrip where="install page" title="Own a business? Get more Google reviews" line="Hand customers a tap card and your Google review form opens on their phone. More reviews, more trust, more calls. iPhone & Android, no app." />
         </div>
       </section>
 
