@@ -144,13 +144,27 @@ export function savedMatch(): Record<string, string> {
   const out: Record<string, string> = {};
   try {
     const saved = JSON.parse(localStorage.getItem(UM_KEY) || "{}") as Record<string, unknown>;
-    for (const k of ["em", "ph", "fn", "ln", "zp", "country"]) if (typeof saved[k] === "string" && saved[k]) out[k] = saved[k] as string;
+    for (const k of ["em", "ph", "fn", "ln", "zp", "st", "country"]) if (typeof saved[k] === "string" && saved[k]) out[k] = saved[k] as string;
   } catch {
     /* storage blocked or bad JSON: no saved data */
   }
   // US browsers only: the agency serves business owners and artists worldwide, so never label everyone "us".
   if (!out.country && typeof navigator !== "undefined" && /-US$/i.test(navigator.language || "")) out.country = "us";
   return out;
+}
+
+/** Florida ZIPs (320xx–349xx): the in-person service area is around Tampa, so a FL ZIP gives the state. */
+const floridaZip = (zip = "") => {
+  const z = Number(zip.slice(0, 3));
+  return z >= 320 && z <= 349;
+};
+
+/** savedMatch() as the server's user fields, so server copies of taps and page events match a returning lead too. */
+function savedUser(): UserData | undefined {
+  const m = savedMatch();
+  const name = [m.fn, m.ln].filter(Boolean).join(" ");
+  const u: UserData = { ...(m.em ? { email: m.em } : {}), ...(m.ph ? { phone: m.ph } : {}), ...(name ? { name } : {}), ...(m.zp ? { zip: m.zp } : {}) };
+  return Object.keys(u).length ? u : undefined;
 }
 
 export function identify(user: UserData) {
@@ -164,7 +178,7 @@ export function identify(user: UserData) {
     ...(digits ? { ph: digits.length === 10 ? `1${digits}` : digits } : {}),
     ...(first ? { fn: first.toLowerCase() } : {}),
     ...(last ? { ln: last.toLowerCase() } : {}),
-    ...(/^\d{5}$/.test(user.zip ?? "") ? { zp: user.zip, country: "us" } : {}),
+    ...(/^\d{5}$/.test(user.zip ?? "") ? { zp: user.zip, country: "us", ...(floridaZip(user.zip) ? { st: "fl" } : {}) } : {}),
     external_id: user.externalId || visitorId(),
   };
   try {
@@ -410,7 +424,7 @@ export function serverTrack(event: string, eventId: string, data: { value?: numb
         method: "POST",
         headers: { "Content-Type": "application/json" },
         keepalive: true,
-        body: JSON.stringify({ event, eventId, page, visitorId: visitorId(), attribution: attribution(), ...data }),
+        body: JSON.stringify({ event, eventId, page, visitorId: visitorId(), attribution: attribution(), ...data, user: data.user ?? savedUser() }),
       }).catch(() => {});
     } catch {
       /* ignore */

@@ -4,7 +4,7 @@
 // api/cal-webhook.js, Shopify's Facebook & Instagram app).
 import { readJson, send, clientIp, rateLimited, sameOrigin, isJson } from "./_lib/http.js";
 import { forwardLead } from "./_lib/leads.js";
-import { buildEvent, cleanAttribution, requestSignals, sendMetaEvents, withSignals } from "./_lib/meta-capi.js";
+import { buildEvent, cleanAttribution, postedUser, requestCountry, requestSignals, sendMetaEvents, withSignals } from "./_lib/meta-capi.js";
 
 const EVENTS = {
   page_view: "PageView",
@@ -88,12 +88,14 @@ export default async function handler(req, res) {
 
   const signals = requestSignals(req, res);
   const attr = withSignals(cleanAttribution(body.attribution), signals);
+  // Anonymous id + country for everyone; name/phone/email/ZIP only for someone who sent us a lead before.
+  const user = { ...postedUser(body.user), country: requestCountry(req), externalId: text(body.visitorId, 60) || undefined };
   const events = [
     buildEvent({
       eventName: p.eventName,
       eventId,
       url: sourceUrl(body.page),
-      user: { externalId: text(body.visitorId, 60) || undefined },
+      user,
       attribution: attr,
       ip: signals.ip || clientIp(req),
       userAgent: req.headers["user-agent"],
@@ -107,7 +109,7 @@ export default async function handler(req, res) {
         eventName: "Lead",
         eventId: `${eventId}_lead`,
         url: sourceUrl(body.page),
-        user: { externalId: text(body.visitorId, 60) || undefined },
+        user,
         attribution: attr,
         ip: signals.ip || clientIp(req),
         userAgent: req.headers["user-agent"],

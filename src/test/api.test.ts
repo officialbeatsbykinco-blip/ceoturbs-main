@@ -3,7 +3,7 @@ import { describe, it, expect } from "vitest";
 import { isPrivateIp, normalizeUrl, fetchPage } from "../../api/_lib/fetch-page.js";
 import { parseHtml, blockedAiBots, scoreChecks, platformFor } from "../../api/_lib/audit.js";
 import { cleanLead, isBot, scoreLead } from "../../api/_lib/leads.js";
-import { buildEvent, hashedUser, cleanAttribution, requestSignals, withSignals } from "../../api/_lib/meta-capi.js";
+import { buildEvent, hashedUser, cleanAttribution, postedUser, requestCountry, requestSignals, withSignals } from "../../api/_lib/meta-capi.js";
 import { buildTiktokEvent } from "../../api/_lib/tiktok-events.js";
 import { quizFields, devFields } from "../../api/lead.js";
 import { sourceUrl, tapRecord, trackPayload } from "../../api/track.js";
@@ -28,6 +28,22 @@ describe("Meta Conversions API payload", () => {
     expect(u.fn).toEqual([sha("jo")]);
     expect(u.ln).toEqual([sha("ann smith")]);
     expect(u.ct).toEqual([sha("atlanta")]);
+  });
+
+  it("adds Florida as the state for a Tampa-area ZIP, and the request country when there is no ZIP", () => {
+    expect(hashedUser({ zip: "33602" }).st).toEqual([sha("fl")]);
+    expect(hashedUser({ zip: "30303" }).st).toBeUndefined();
+    expect(hashedUser({ zip: "30303", country: "ca" }).country).toEqual([sha("us")]);
+    expect(hashedUser({ country: "us" }).country).toEqual([sha("us")]);
+    expect(hashedUser({ country: "usa" }).country).toBeUndefined();
+    expect(requestCountry({ headers: { "x-vercel-ip-country": "US" } })).toBe("us");
+    expect(requestCountry({ headers: {} })).toBe("");
+  });
+
+  it("accepts a returning visitor's saved details on taps, and drops junk", () => {
+    expect(postedUser({ email: "Pat@Example.com", phone: "18135550123", name: "pat lee", zip: "33602" })).toEqual({ email: "pat@example.com", phone: "18135550123", name: "pat lee", zip: "33602" });
+    expect(postedUser({ email: "nope", phone: "12", name: "<", zip: "1" })).toEqual({});
+    expect(postedUser(null)).toEqual({});
   });
 
   it("adds the tech quiz ZIP and US country as match keys, and skips a bad ZIP", () => {

@@ -2,7 +2,7 @@
 // is unreachable) and any other simple lead form.
 import { cleanLead, forwardLead, isBot, scoreLead } from "./_lib/leads.js";
 import { readJson, send, clientIp, rateLimited, sameOrigin, isJson } from "./_lib/http.js";
-import { buildEvent, cleanAttribution, requestSignals, sendMetaEvents, withSignals } from "./_lib/meta-capi.js";
+import { buildEvent, cleanAttribution, requestSignals, sendMetaEvents, withSignals, requestCountry } from "./_lib/meta-capi.js";
 import { buildTiktokEvent, sendTiktokEvents } from "./_lib/tiktok-events.js";
 
 const text = (v, max) => (typeof v === "string" ? v.replace(/[\u0000-\u001f\u007f<>]/g, " ").trim().slice(0, max) : "");
@@ -88,7 +88,7 @@ export default async function handler(req, res) {
   const value = Number(body.value) > 0 ? Math.min(Number(body.value), 100000) : 0;
   const url = `https://www.ceoturbo.com${text(body.page, 120) || "/"}`;
   const ip = signals.ip || clientIp(req);
-  const user = { email: lead.email, phone: lead.phone, name: lead.name, zip: tech?.zip || install?.zip || undefined, externalId: text(body.visitorId, 60) || quiz?.quizId || undefined };
+  const user = { email: lead.email, phone: lead.phone, name: lead.name, zip: tech?.zip || install?.zip || undefined, country: requestCountry(req), externalId: text(body.visitorId, 60) || quiz?.quizId || undefined };
 
   const testCode = body.testEventCode || attr.test_event_code;
   const capi = sendMetaEvents([

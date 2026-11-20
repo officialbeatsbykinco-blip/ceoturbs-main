@@ -33,8 +33,38 @@ export function cleanIp(v) {
   return dot > 0 && isIP(v.slice(0, dot)) && /^[A-Za-z0-9_-]{2,8}$/.test(v.slice(dot + 1)) ? v : "";
 }
 
+/** Florida ZIPs (320xx–349xx): every lead we serve in person is around Tampa, so a FL ZIP gives the state. */
+export const stateFromZip = (zip) => {
+  const z = Number(String(zip ?? "").replace(/\D/g, "").slice(0, 3));
+  return z >= 320 && z <= 349 ? "fl" : "";
+};
+
+/** The visitor's country from Vercel's edge (two letters, lowercase), or "". Only the country: IP cities are often wrong. */
+export const requestCountry = (req) => {
+  const c = String(req?.headers?.["x-vercel-ip-country"] ?? "").trim().toLowerCase();
+  return /^[a-z]{2}$/.test(c) ? c : "";
+};
+
+/**
+ * What a returning visitor already told us on an earlier lead (the browser keeps it, src/lib/track.ts savedMatch),
+ * posted with taps and page events so they match as well as the lead did. Bad values are dropped.
+ */
+export function postedUser(u) {
+  if (!u || typeof u !== "object") return {};
+  const email = clean(u.email, 120).toLowerCase();
+  const phone = clean(u.phone, 20).replace(/\D/g, "");
+  const name = clean(u.name, 80).replace(/[^\p{L}\p{M}' -]/gu, "");
+  const zip = clean(u.zip, 10).replace(/\D/g, "").slice(0, 5);
+  return {
+    ...(/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) ? { email } : {}),
+    ...(phone.length >= 10 && phone.length <= 15 ? { phone } : {}),
+    ...(name.trim().length >= 2 ? { name: name.trim() } : {}),
+    ...(zip.length === 5 ? { zip } : {}),
+  };
+}
+
 /** Meta wants lowercase, trimmed values hashed; phones as digits with country code. */
-export function hashedUser({ email, phone, name, city, zip, externalId } = {}) {
+export function hashedUser({ email, phone, name, city, zip, state, country, externalId } = {}) {
   const out = {};
   const em = clean(email).toLowerCase();
   if (em) out.em = [sha256(em)];
@@ -52,6 +82,10 @@ export function hashedUser({ email, phone, name, city, zip, externalId } = {}) {
     out.zp = [sha256(zp)];
     out.country = [sha256("us")];
   }
+  const st = clean(state).toLowerCase().replace(/[^a-z]/g, "") || stateFromZip(zp);
+  if (st.length === 2) out.st = [sha256(st)];
+  const co = clean(country).toLowerCase();
+  if (!out.country && /^[a-z]{2}$/.test(co)) out.country = [sha256(co)];
   if (externalId) out.external_id = [sha256(String(externalId))];
   return out;
 }

@@ -2,7 +2,7 @@
 import { runAudit } from "./_lib/audit.js";
 import { cleanLead, forwardLead, isBot } from "./_lib/leads.js";
 import { readJson, send, clientIp, rateLimited, sameOrigin, isJson } from "./_lib/http.js";
-import { buildEvent, cleanAttribution, requestSignals, sendMetaEvents, withSignals } from "./_lib/meta-capi.js";
+import { buildEvent, cleanAttribution, requestCountry, requestSignals, sendMetaEvents, withSignals } from "./_lib/meta-capi.js";
 
 /** What a free-check lead is worth to the ad platforms (matches FREE_CHECK_VALUE in AuditTool.tsx). */
 const FREE_CHECK_VALUE = 10;
@@ -102,7 +102,7 @@ export default async function handler(req, res) {
         eventName: "Lead",
         eventId,
         url,
-        user: { email: lead.email, phone: lead.phone, name: lead.name, city: input.city, externalId },
+        user: { email: lead.email, phone: lead.phone, name: lead.name, city: input.city, country: requestCountry(req), externalId },
         attribution: attr,
         ip,
         userAgent: req.headers["user-agent"],
