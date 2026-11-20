@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { ArrowRight, Building2, CalendarCheck, Check, Cpu, Gauge, HardDrive, Laptop, Mail, MapPin, Megaphone, MessageSquare, Monitor, Phone, ShieldCheck, Smartphone, Wifi, Wrench, type LucideIcon } from "lucide-react";
+import { ArrowRight, Building2, CalendarCheck, Check, Cpu, Gauge, Globe, HardDrive, Laptop, Mail, MapPin, MessageSquare, Monitor, Phone, ShieldCheck, Smartphone, Star, Wifi, Wrench, type LucideIcon } from "lucide-react";
 import { InstallBookButton } from "@/components/cta/Actions";
 import { FAQList, SectionHeader } from "@/components/blocks/Basics";
 import { BeforeAfter, OFFICE_BEFORE_AFTER } from "@/components/visuals/BeforeAfter";
@@ -19,11 +19,13 @@ import { OFFICE_SETUP_PATH } from "@/content/tech-pages";
 import { TECH_HOME_FAQS } from "@/content/tech-faqs";
 import { OFFICE_FROM } from "@/components/blocks/OfficePrices";
 import { cn } from "@/lib/utils";
+import { GrowEverywhere, ReviewCardPacks } from "@/components/blocks/GrowEverywhere";
 
 /**
  * The homepage is tech support first: computer and laptop repair (the most calls), office IT setups
  * (the biggest jobs), then phone and tablet setup (setup only, no phone repairs). Phones get "text us"
- * (the tap-question sheet) and call; computers get Book a visit and call. Marketing lives at /grow.
+ * (the tap-question sheet) and call; computers get Book a visit and call. Below the repair services sit the
+ * digital ones with their own buy buttons (websites, ads, SEO/DNS fixes, Google review cards); the full agency lives at /grow.
  */
 
 const SERVICES: { icon: LucideIcon; t: string; b: string; price: string; to: string; cta: string; tech?: boolean }[] = [
@@ -83,7 +85,7 @@ export default function Home() {
               Computer repair &amp; office IT setup <span className="text-turbo-grad">at your door in Tampa.</span>
             </h1>
             <p className="mt-4 max-w-xl text-[17px] leading-relaxed text-muted-foreground sm:text-lg">
-              Laptops and desktops fixed at your home or business. Offices, phones and tablets set up and working. Price up front, no fix no charge.
+              Laptops and desktops fixed at your home or business. Offices, phones and tablets set up and working. Price up front, no fix no charge. For businesses anywhere: websites, ads and Google review cards.
             </p>
             <ReviewSummary className="mt-4" />
             <PhoneOnly
@@ -114,6 +116,12 @@ export default function Home() {
               </FixMyTechLink>
               <Link to={OFFICE_SETUP_PATH} className="inline-flex min-h-[44px] items-center gap-1.5 font-semibold text-turbo underline-offset-4 hover:underline">
                 <Building2 className="h-4 w-4" aria-hidden /> Office setup
+              </Link>
+              <Link to="/grow" className="inline-flex min-h-[44px] items-center gap-1.5 font-semibold text-turbo underline-offset-4 hover:underline">
+                <Globe className="h-4 w-4" aria-hidden /> Websites &amp; ads
+              </Link>
+              <Link to={SHOP_PATH} className="inline-flex min-h-[44px] items-center gap-1.5 font-semibold text-turbo underline-offset-4 hover:underline">
+                <Star className="h-4 w-4" aria-hidden /> Google review cards
               </Link>
               <a href={`mailto:${SITE.email}?subject=${encodeURIComponent("Tech help in Tampa")}`} data-call-location="home hero email" className="inline-flex min-h-[44px] items-center gap-1.5 font-semibold text-turbo underline-offset-4 hover:underline">
                 <Mail className="h-4 w-4" aria-hidden /> Email us
@@ -169,12 +177,16 @@ export default function Home() {
         </div>
       </section>
 
+      <GrowEverywhere where="home" />
+
       <section className="section border-t border-border" aria-labelledby="reviews">
         <div className="container-x">
           <SectionHeader kicker="Reviews" title={<span id="reviews">Tampa customers call us back.</span>} lede="Real Google reviews, word for word." />
           <ReviewWall className="mt-8" />
         </div>
       </section>
+
+      <ReviewCardPacks where="home" />
 
       <section className="section border-t border-border" aria-labelledby="why">
         <div className="container-x">
@@ -269,22 +281,6 @@ export default function Home() {
       </section>
 
       <FAQList faqs={TECH_HOME_FAQS} title="Quick answers" />
-
-      <section className="section border-t border-border" aria-label="Marketing">
-        <div className="container-x">
-          <div className="panel flex flex-col gap-4 p-5 sm:flex-row sm:items-center sm:justify-between sm:p-6">
-            <p className="flex items-start gap-3 text-sm">
-              <Megaphone className="mt-0.5 h-5 w-5 shrink-0 text-turbo" aria-hidden />
-              <span>
-                <span className="font-semibold">Own a business?</span> <span className="text-muted-foreground">We also build websites, fix Google profiles and run ads that make the phone ring.</span>
-              </span>
-            </p>
-            <Link to="/grow" className="btn-chrome inline-flex shrink-0 items-center justify-center gap-1.5 !px-4 !py-2.5 !text-sm">
-              Websites &amp; ads <ArrowRight className="h-4 w-4" aria-hidden />
-            </Link>
-          </div>
-        </div>
-      </section>
 
       <section className="section border-t border-border" aria-labelledby="last-call">
         <div className="container-x">

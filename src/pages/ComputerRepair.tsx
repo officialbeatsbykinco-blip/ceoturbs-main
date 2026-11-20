@@ -23,6 +23,7 @@ import { IT_BOOKING, SITE } from "@/config/site";
 import { smsHref } from "@/lib/sms";
 import { newEventId, serverTrack, track } from "@/lib/track";
 import { cn } from "@/lib/utils";
+import { GrowEverywhere, ReviewCardPacks } from "@/components/blocks/GrowEverywhere";
 
 
 const PRICE_GROUPS: { icon: LucideIcon; title: string; ids: string[] }[] = [
@@ -386,6 +387,10 @@ export default function ComputerRepair() {
           </div>
         </div>
       </section>
+
+      <GrowEverywhere where="repair" />
+
+      <ReviewCardPacks where="repair" />
 
       <section className="section border-t border-border" aria-labelledby="area">
         <div className="container-x">
