@@ -20,7 +20,7 @@ function Stars({ n, className }: { n: number; className?: string }) {
 export function ReviewSummary({ className }: { className?: string }) {
   const avg = REVIEWS.reduce((t, r) => t + r.stars, 0) / REVIEWS.length;
   return (
-    <a href={GOOGLE_PROFILE} target="_blank" rel="noopener noreferrer" className={cn("inline-flex items-center gap-2 text-sm font-semibold text-foreground underline-offset-4 hover:underline", className)}>
+    <a href={GOOGLE_PROFILE} target="_blank" rel="noopener noreferrer" className={cn("inline-flex min-h-[44px] items-center gap-2 text-sm font-semibold text-foreground underline-offset-4 hover:underline", className)}>
       <span className="font-display text-lg font-extrabold">{avg.toFixed(1)}</span>
       <Stars n={Math.round(avg)} />
       <span className="text-muted-foreground">

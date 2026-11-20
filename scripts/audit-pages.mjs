@@ -1,4 +1,5 @@
-// Browser audit of every sitemap page at desktop (1440×900) and phone (375×812 @2x) sizes.
+// Browser audit of every sitemap page at phone (375), tablet (768 and 1024), laptop (1366), desktop (1440) and wide (1920) sizes.
+// VIEWS=mobile,laptop limits it to some sizes.
 // Flags console/page errors, broken same-site requests, sideways scroll, h1 problems, blurry images
 // (shown bigger than their pixels), low-contrast text, small tap targets on phones, CLS and LCP.
 // Run against a built site:  npm run build && npx vite preview --port 4173
@@ -18,7 +19,11 @@ if (only.length) paths = only;
 const VIEWS = [
   { name: "desktop", viewport: { width: 1440, height: 900 }, deviceScaleFactor: 1, isMobile: false },
   { name: "mobile", viewport: { width: 375, height: 812 }, deviceScaleFactor: 2, isMobile: true, hasTouch: true },
-];
+  { name: "tablet", viewport: { width: 768, height: 1024 }, deviceScaleFactor: 2, isMobile: true, hasTouch: true },
+  { name: "tablet-landscape", viewport: { width: 1024, height: 768 }, deviceScaleFactor: 2, isMobile: true, hasTouch: true },
+  { name: "laptop", viewport: { width: 1366, height: 768 }, deviceScaleFactor: 1, isMobile: false },
+  { name: "desktop-wide", viewport: { width: 1920, height: 1080 }, deviceScaleFactor: 1, isMobile: false },
+].filter((v) => !process.env.VIEWS || process.env.VIEWS.split(",").includes(v.name));
 
 // Collected in the page before any script runs.
 const VITALS = `

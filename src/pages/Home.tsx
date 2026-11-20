@@ -385,7 +385,7 @@ function HeroPhoto() {
       </div>
       {r && (
         <figure className="absolute -bottom-6 -left-2 max-w-[290px] rounded-2xl bg-white p-4 shadow-[0_20px_40px_-20px_rgb(20_40_90/0.5)] ring-1 ring-black/5 sm:-left-6">
-          <ReviewSummary className="!text-xs [&_span:first-child]:!text-base" />
+          <ReviewSummary className="!min-h-[32px] !text-xs [&_span:first-child]:!text-base" />
           <blockquote className="mt-1.5 text-sm font-medium leading-snug text-foreground">"{r.short}"</blockquote>
           <figcaption className="mt-1 text-xs text-muted-foreground">{r.name}</figcaption>
         </figure>

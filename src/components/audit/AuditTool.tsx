@@ -5,7 +5,7 @@ import { openBooking } from "@/lib/cal";
 import { track } from "@/lib/track";
 import { CATEGORY, EMPTY, FREE_CHECK_NAME, QUESTIONS, SCAN_STEPS, clearCheck, contactErrors, grade, loadCheck, saveCheck, scanRequest, unlockRequest, type Check as AuditCheck, type Form, type GoogleData, type Kind, type Place, type Report, type Status } from "@/lib/free-check";
 import { CallLink } from "@/components/site/CallLink";
-import { BOOKING, fromPriceLabel } from "@/config/site";
+import { BOOKING, SITE, fromPriceLabel } from "@/config/site";
 import { CardFace, ScoreGauge } from "@/components/visuals/ReviewVisuals";
 import { rememberBusiness } from "@/lib/review-link";
 import { cn } from "@/lib/utils";
@@ -613,6 +613,12 @@ function AuditTeaser({
           {busy ? <Loader2 className="h-4 w-4 animate-spin" aria-hidden /> : null}
           {busy ? "Unlocking…" : "Show my full report"} {!busy && <ArrowRight className="h-4 w-4" aria-hidden />}
         </button>
+        <p className="mt-3 text-center text-sm text-muted-foreground">
+          Rather talk it through?{" "}
+          <CallLink location="free check unlock" className="font-semibold text-turbo underline underline-offset-4">
+            Call or text {SITE.phone.display}
+          </CallLink>
+        </p>
         <p className="mt-3 text-[11px] leading-relaxed text-muted-foreground">
           By continuing you agree CEO Turbo may call or email you about your report (texts only if you ticked the box). No spam, no selling your info —{" "}
           <Link to="/privacy-policy" className="underline underline-offset-2 hover:text-foreground">

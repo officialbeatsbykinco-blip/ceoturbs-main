@@ -24,7 +24,7 @@ export function About() {
           <Breadcrumbs items={[{ name: "About", path: "/about" }]} />
           <SectionHeader as="h1" title="About CEO Turbo and Christopher Robinson" />
           <DirectAnswer label="In short">
-            CEO Turbo is a Tampa, Florida tech and growth company founded by Christopher Robinson, known online as StackmodeChris. It fixes computers, phones and tablets, sets up and organizes offices, builds websites, runs Meta, Google, TikTok and X ads, optimizes Google Business Profiles and social profiles, designs promotional emails, and does SEO, AEO and GEO for artists, local service businesses and Shopify stores.
+            CEO Turbo is a Tampa, Florida tech and growth company founded by Christopher Robinson, known online as StackmodeChris. It repairs laptops and desktops, sets up phones, tablets, offices, Wi-Fi, security cameras and video doorbells around Tampa, sells NFC Google review cards, builds websites, runs Meta, Google, TikTok and X ads, optimizes Google Business Profiles and social profiles, designs promotional emails, and does SEO, AEO and GEO for artists, local service businesses and Shopify stores.
           </DirectAnswer>
           <div className="mt-16">
             <Founder />

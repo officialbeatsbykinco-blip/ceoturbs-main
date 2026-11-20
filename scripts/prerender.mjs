@@ -15,7 +15,9 @@ const { render, head, pages: sitePages, guides, merchantFeed, loadComputers } = 
 // Computer shop listings from Shopify: one page each, plus the shell vercel.json serves for newer ones.
 const computers = await loadComputers();
 const pages = [...sitePages, ...computers.pages];
-const COMPUTERS_DATA = `<script>window.__COMPUTERS__=${computers.json}</script>`;
+// A data block, not a script: the Content-Security-Policy blocks inline scripts, so the old
+// <script>window.__COMPUTERS__=…</script> never ran and the shop always waited on Shopify.
+const COMPUTERS_DATA = `<script type="application/json" id="computers-data">${computers.json}</script>`;
 const assets = await readdir(path.join(DIST, "assets"));
 const fontPreloads = assets
   .filter((f) => /^(inter|space-grotesk)-latin-wght-normal-.*\.woff2$/.test(f))

@@ -106,7 +106,19 @@ declare global {
   }
 }
 
-let snapshot: Computer[] = (typeof window !== "undefined" && window.__COMPUTERS__) || [];
+/** The listings the page was prerendered with (a JSON data block the CSP allows, unlike an inline script). */
+function embeddedSnapshot(): Computer[] {
+  if (typeof document === "undefined") return [];
+  try {
+    const el = document.getElementById("computers-data");
+    const list = el?.textContent ? JSON.parse(el.textContent) : window.__COMPUTERS__;
+    return Array.isArray(list) ? list : [];
+  } catch {
+    return [];
+  }
+}
+
+let snapshot: Computer[] = embeddedSnapshot();
 let live: Promise<Computer[]> | null = null;
 
 /** Build time: the list every prerendered page renders with. */

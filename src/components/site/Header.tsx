@@ -143,7 +143,7 @@ export function Header({ focus: focusProp = false }: { focus?: boolean }) {
         <Logo className="shrink-0" onNavigate={() => setOpen(false)} />
 
         <nav aria-label="Main" className="hidden items-center gap-0.5 lg:flex">
-          <NavLink to={IT_SERVICES_PATH} className={({ isActive }) => cn("mr-1 inline-flex items-center gap-1.5 whitespace-nowrap rounded-full px-3 py-1.5 text-[13px] font-semibold ring-1 transition-colors xl:text-sm", isActive ? "bg-turbo/20 text-foreground ring-turbo/60" : "bg-turbo/10 text-turbo ring-turbo/30 hover:bg-turbo/20")}>
+          <NavLink to={IT_SERVICES_PATH} className={({ isActive }) => cn("mr-1 inline-flex min-h-[40px] items-center gap-1.5 whitespace-nowrap rounded-full px-3 py-1.5 text-[13px] font-semibold ring-1 transition-colors xl:text-sm", isActive ? "bg-turbo/20 text-foreground ring-turbo/60" : "bg-turbo/10 text-turbo ring-turbo/30 hover:bg-turbo/20")}>
             <Wrench className="h-3.5 w-3.5" aria-hidden /> Computer repair
           </NavLink>
           <NavLink to={OFFICE_SETUP_PATH} className={linkCls}>

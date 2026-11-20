@@ -156,7 +156,9 @@ export function TagPipeline({ className }: { className?: string }) {
       </svg>
       <ul className="grid grid-cols-3 gap-2 sm:grid-cols-6">
         {TAGS.map((t, i) => (
-          <li key={t.name} className="node-pop rounded-xl bg-white/[0.05] px-1.5 py-2 text-center text-[11px] font-bold leading-tight ring-1 sm:text-xs" style={{ color: t.color, boxShadow: `inset 0 0 0 1px ${t.color}55`, animationDelay: `${i * 0.25}s` }}>
+          <li key={t.name} className="node-pop rounded-xl bg-white/[0.05] px-1.5 py-2 text-center text-[11px] font-bold leading-tight text-foreground ring-1 sm:text-xs" style={{ boxShadow: `inset 0 0 0 1px ${t.color}55`, animationDelay: `${i * 0.25}s` }}>
+            {/* Brand colour as a dot; the name stays full-contrast so it's readable on every background. */}
+            <span className="mr-1 inline-block h-1.5 w-1.5 rounded-full align-middle" style={{ background: t.color }} aria-hidden />
             {t.name}
           </li>
         ))}
