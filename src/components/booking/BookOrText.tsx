@@ -19,15 +19,21 @@ export function BookOrText({ phone, desktop }: { phone: ReactNode; desktop: Reac
   return <>{useTexting() ? phone : desktop}</>;
 }
 
-/** The desktop booking card: the Cal.com calendar inline, no clicks in between. */
+/**
+ * The desktop booking card: the Cal.com calendar inline, no clicks in between. The calendar itself mounts
+ * only once we know this is a computer: the card is the SSR default, so mounting it straight away loaded
+ * Cal.com's script on every phone and fired a BookingOpen for phone visitors who never saw a calendar.
+ */
 export function CalCard({ id = "fix", title, sub, note, booking, className }: { id?: string; title: string; sub?: string; note: string; booking: CalEvent; className?: string }) {
+  const [computer, setComputer] = useState(false);
+  useEffect(() => setComputer(!canText()), []);
   return (
     <div id={id} className={cn("scroll-mt-24 rounded-3xl border border-border bg-card p-5 shadow-xl sm:p-7", className)}>
       <p className="flex items-center gap-2 font-display text-2xl font-bold leading-tight">
         <Calendar className="h-6 w-6 shrink-0 text-turbo" aria-hidden /> {title}
       </p>
       {sub && <p className="mt-1.5 text-sm text-muted-foreground">{sub}</p>}
-      <InstallCalEmbed className="mt-4" note={note} booking={booking} minHeight="560px" />
+      {computer ? <InstallCalEmbed className="mt-4" note={note} booking={booking} minHeight="560px" /> : <div className="mt-4" style={{ minHeight: "560px" }} aria-hidden />}
     </div>
   );
 }

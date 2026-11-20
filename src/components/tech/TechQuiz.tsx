@@ -36,6 +36,7 @@ export function TechQuiz({ source = "computer-repair-tampa", className, variant 
   const [errors, setErrors] = useState<{ name?: string; zip?: string; phone?: string; pick?: string }>({});
   const [honeypot, setHoneypot] = useState("");
   const startedAt = useRef(0);
+  const reachedLast = useRef(false);
   const top = useRef<HTMLDivElement>(null);
 
   useEffect(() => setTexting(canText()), []);
@@ -48,6 +49,10 @@ export function TechQuiz({ source = "computer-repair-tampa", className, variant 
     setA((prev) => ({ ...prev, ...patch }));
     setStep(next);
     track("tech_quiz_step", { source, step: next, step_number: STEPS.indexOf(next) + 1 });
+    if (next === "send" && !reachedLast.current) {
+      reachedLast.current = true;
+      track("tech_quiz_last_step", { source, content_name: "Computer repair Tampa", content_category: "tech_repair" });
+    }
     // Keep the question in view on a phone (the tiles can push it below the fold).
     if (variant === "card") top.current?.scrollIntoView({ block: "nearest", behavior: "smooth" });
   };

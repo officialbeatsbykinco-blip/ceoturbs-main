@@ -52,6 +52,10 @@ const META: Record<string, MetaTarget[]> = {
   audit_start: [{ name: "AuditStart", custom: true }],
   audit_complete: [{ name: "AuditComplete", custom: true }],
   quiz_start: [{ name: "QuizStart", custom: true }],
+  // The repair quiz (most Meta repair-ad visitors, on phones): first tap and reaching the last step, so Meta
+  // shows where people drop off and can retarget "started the quiz, never sent it".
+  tech_quiz_start: [{ name: "QuizStart", custom: true }],
+  tech_quiz_last_step: [{ name: "QuizLastStep", custom: true }],
 };
 
 /** CEO Turbo's Meta Pixel (Events Manager → Data sources). VITE_META_PIXEL_ID overrides it. */
@@ -59,7 +63,7 @@ export const DEFAULT_PIXEL_ID = "3232222473609236";
 export const PIXEL_ID = () => (import.meta.env.VITE_META_PIXEL_ID as string | undefined) || DEFAULT_PIXEL_ID;
 
 /** Conversions worth filtering session recordings by in Clarity. */
-const CLARITY_EVENTS = new Set(["generate_lead", "book_call", "booking_open", "click_to_call", "click_to_text", "add_to_cart", "begin_checkout"]);
+const CLARITY_EVENTS = new Set(["generate_lead", "book_call", "booking_open", "tech_quiz_start", "tech_quiz_last_step", "click_to_call", "click_to_text", "add_to_cart", "begin_checkout"]);
 
 export const newEventId = (prefix: string) => `${prefix}_${Date.now().toString(36)}${Math.random().toString(36).slice(2, 8)}`;
 

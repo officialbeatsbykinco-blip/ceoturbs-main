@@ -118,6 +118,15 @@ describe("booked-call tracking (browser)", () => {
     expect(open![3]).toEqual({ eventID: "bo_123" });
   });
 
+  it("repair quiz progress reaches Meta as custom funnel events, never as a Lead", async () => {
+    const { track, fbq } = await setup();
+    track("tech_quiz_start", { source: "computer-repair-tampa" });
+    track("tech_quiz_last_step", { source: "computer-repair-tampa" });
+    expect(fbq.some((a) => a[0] === "trackCustom" && a[1] === "QuizStart")).toBe(true);
+    expect(fbq.some((a) => a[0] === "trackCustom" && a[1] === "QuizLastStep")).toBe(true);
+    expect(fbq.some((a) => a[1] === "Lead")).toBe(false);
+  });
+
   it("a quiz or form submit is a Meta Lead", async () => {
     const { track, fbq } = await setup();
     track("generate_lead", { lead_source: "tech-quiz", value: 150, currency: "USD" }, { eventId: "gl_1" });
