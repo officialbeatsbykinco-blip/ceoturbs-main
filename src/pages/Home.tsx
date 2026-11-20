@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { ArrowRight, Building2, CalendarCheck, Check, Cpu, Gauge, Globe, HardDrive, Laptop, Mail, MapPin, MessageSquare, Monitor, Phone, ShieldCheck, Smartphone, Star, Wifi, Wrench, type LucideIcon } from "lucide-react";
+import { ArrowRight, Building2, CalendarCheck, Cctv, Check, Cpu, Gauge, Globe, HardDrive, Laptop, Mail, MapPin, MessageSquare, Monitor, Phone, ShieldCheck, Smartphone, Star, Wifi, Wrench, type LucideIcon } from "lucide-react";
 import { InstallBookButton } from "@/components/cta/Actions";
 import { FAQList, SectionHeader } from "@/components/blocks/Basics";
 import { BeforeAfter, OFFICE_BEFORE_AFTER } from "@/components/visuals/BeforeAfter";
@@ -14,7 +14,7 @@ import { JobPhotos } from "@/components/tech/JobPhotos";
 import { OFFICE_AD } from "@/components/tech/TechAdGallery";
 import { INSTALL_BOOKING, IT_BOOKING, REVIEWS, SITE } from "@/config/site";
 import { SHOP_PATH } from "@/content/review-cards";
-import { itPrice } from "@/content/pricing";
+import { INSTALL_PRICES, itPrice, usd } from "@/content/pricing";
 import { OFFICE_SETUP_PATH } from "@/content/tech-pages";
 import { TECH_HOME_FAQS } from "@/content/tech-faqs";
 import { OFFICE_FROM } from "@/components/blocks/OfficePrices";
@@ -32,6 +32,8 @@ const SERVICES: { icon: LucideIcon; t: string; b: string; price: string; to: str
   { icon: Laptop, t: "Laptop repair", b: "Won't turn on, cracked screen, dead charging port, broken keys, overheating or blue screens. Windows and Mac.", price: itPrice("it-pc-repair"), to: "/computer-repair-tampa", cta: "Fix my laptop", tech: true },
   { icon: Monitor, t: "Desktop & gaming PC repair", b: "Power supplies, graphics cards, memory, fans and boot problems. Upgrades that make an old tower fast again.", price: itPrice("it-desktop"), to: "/computer-repair-tampa", cta: "Fix my desktop", tech: true },
   { icon: Building2, t: "Office IT setup", b: "Workstations, multi-monitor desks, printers, Wi-Fi, Microsoft 365 or Google email, and cables hidden. Homes and businesses.", price: OFFICE_FROM, to: OFFICE_SETUP_PATH, cta: "Set up my office" },
+  { icon: Cctv, t: "Cameras & Ring doorbells", b: "Ring, Nest, Blink or Wyze doorbells and Wi-Fi cameras installed and set up on your phone. Homes and buildings.", price: `from ${usd(INSTALL_PRICES.find((p) => p.id === "cam-wifi")!.price)} per camera`, to: "/security-camera-installation-tampa", cta: "Install my cameras" },
+  { icon: Wifi, t: "Wi-Fi & internet fixes", b: "Dead spots, drops and slow speeds fixed. New routers and mesh Wi-Fi set up so every room has signal.", price: itPrice("it-wifi"), to: "/wifi-installation-tampa", cta: "Fix my Wi-Fi" },
   { icon: Smartphone, t: "Phone & tablet setup", b: "New iPhone, Android or iPad set up with your photos, contacts, texts, email and apps moved over. Setup only.", price: itPrice("it-phone-setup"), to: "/computer-repair-tampa", cta: "Set up my phone", tech: true },
 ];
 
@@ -82,10 +84,10 @@ export default function Home() {
               <MapPin className="h-3.5 w-3.5 text-turbo" aria-hidden /> Tampa Bay · we come to you
             </p>
             <h1 id="hero" className="mt-4 font-display text-[38px] font-extrabold leading-[1.02] tracking-tight sm:text-6xl lg:text-[68px]">
-              Computer repair &amp; office IT setup <span className="text-turbo-grad">at your door in Tampa.</span>
+              Computer repair, office IT &amp; cameras <span className="text-turbo-grad">at your door in Tampa.</span>
             </h1>
             <p className="mt-4 max-w-xl text-[17px] leading-relaxed text-muted-foreground sm:text-lg">
-              Laptops and desktops fixed at your home or business. Offices, phones and tablets set up and working. Price up front, no fix no charge. For businesses anywhere: websites, ads and Google review cards.
+              Laptops and desktops fixed at your home or business. Offices, Wi-Fi, security cameras and Ring doorbells set up and working. Price up front, no fix no charge. For businesses anywhere: websites, ads and Google review cards.
             </p>
             <ReviewSummary className="mt-4" />
             <PhoneOnly
@@ -142,8 +144,8 @@ export default function Home() {
 
       <section className="section border-t border-border" aria-labelledby="services">
         <div className="container-x">
-          <SectionHeader kicker="What we do" title={<span id="services">Fixed, set up and working.</span>} lede="Computers are what we repair all day. Offices, phones and tablets we set up so everything works together." />
-          <ul className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <SectionHeader kicker="What we do" title={<span id="services">Fixed, set up and working.</span>} lede="Computers are what we repair all day. Offices, cameras, doorbells, Wi-Fi, phones and tablets we set up so everything works together, in homes and buildings." />
+          <ul className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {SERVICES.map((s) => {
               const inner = (
                 <>

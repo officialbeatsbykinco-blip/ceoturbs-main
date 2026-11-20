@@ -9,7 +9,7 @@ import { HOME_FAQS, AUDIT_FAQS, BOOK_FAQS, ADS_NOT_CONVERTING_FAQS } from "@/con
 import { SHOP_FAQS, SETUP_FAQS, SHOP_PATH, SETUP_PATH } from "@/content/review-cards";
 import { SHIRT_FAQS, SHIRTS_PATH } from "@/content/company-shirts";
 import { MERCH_FAQS, ARTIST_MERCH_PATH } from "@/content/artist-merch";
-import { IT_SERVICES, PRICING_FAQS, byId, price } from "@/content/pricing";
+import { INSTALL_PRICES, IT_SERVICES, PRICING_FAQS, byId, price } from "@/content/pricing";
 import { OFFICE_FAQS, REPAIR_FAQS, TECH_HOME_FAQS } from "@/content/tech-faqs";
 import { INSTALL_PAGES } from "@/content/install-pages";
 
@@ -68,12 +68,12 @@ function build(): PageMeta[] {
 
   pages.push({
     path: "/",
-    title: "Computer Repair & Office IT Setup in Tampa | CEO Turbo",
-    description: `Laptop and desktop repair at your door, office IT setups and phone & tablet setup around Tampa. Price up front, 5.0 on Google. Call or text ${SITE.phone.display}.`,
+    title: "Computer Repair, Office IT & Cameras in Tampa | CEO Turbo",
+    description: `Computer repair, office IT, security cameras and Ring doorbells around Tampa, plus websites, ads and Google review cards. 5.0 on Google. ${SITE.phone.display}.`,
     priority: 1,
     changefreq: "weekly",
     group: "Core",
-    schema: [...base(), S.webPage("/", "CEO Turbo", SITE.description), S.localService({ path: "/", name: "Computer repair and office IT setup in Tampa Bay", serviceType: "Computer repair", description: "Laptop and desktop repair at your door, office IT and workstation setup, and phone and tablet setup within about 40 miles of Tampa, FL. Price up front, no fix no charge.", prices: IT_SERVICES }), S.faqPage(TECH_HOME_FAQS, "/")],
+    schema: [...base(), S.webPage("/", "CEO Turbo", SITE.description), S.localService({ path: "/", name: "Computer repair and office IT setup in Tampa Bay", serviceType: "Computer repair", description: "Laptop and desktop repair at your door, office IT and workstation setup, security camera and video doorbell installs, Wi-Fi fixes, and phone and tablet setup within about 40 miles of Tampa, FL. Price up front, no fix no charge.", prices: [...IT_SERVICES, ...INSTALL_PRICES.filter((p) => p.id.startsWith("cam-"))] }), S.faqPage(TECH_HOME_FAQS, "/")],
   });
 
   pages.push({

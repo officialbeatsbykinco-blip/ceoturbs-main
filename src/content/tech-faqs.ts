@@ -1,6 +1,8 @@
 // FAQs for the tech repair and office setup pages, shared by the page and its FAQPage schema so they always match.
-import { SITE } from "@/config/site";
-import { byId, itPrice, usd } from "@/content/pricing";
+import { SITE, fromPriceLabel } from "@/config/site";
+import { INSTALL_PRICES, byId, itPrice, usd } from "@/content/pricing";
+
+const camPrice = (id: string) => usd(INSTALL_PRICES.find((p) => p.id === id)!.price);
 import { ALL_SETUP_CITIES } from "@/content/service-areas";
 import type { FAQ } from "@/content/services";
 
@@ -39,5 +41,7 @@ export const OFFICE_FAQS: FAQ[] = [
 export const TECH_HOME_FAQS: FAQ[] = [
   ...REPAIR_FAQS.filter((f) => ["How much does it cost?", "Do you really come to me?", "What computer problems do you fix?", "Can you fix my computer remotely?", "Do you fix phones and tablets?", "How fast can you come?"].includes(f.q)),
   ...OFFICE_FAQS.filter((f) => ["How much does an office setup cost?", "Can you work after hours?"].includes(f.q)),
-  { q: "Do you also help businesses get more customers?", a: "Yes. Besides tech support, CEO Turbo builds websites, sets up Google Business Profiles and runs Google and Meta ads for local businesses. See ceoturbo.com/grow." },
+  { q: "Do you install security cameras and Ring doorbells?", a: `Yes. We install Ring, Nest, Blink and Wyze video doorbells and Wi-Fi cameras at homes and businesses within about 40 miles of Tampa, then set up the app and alerts on your phone. Labor is ${camPrice("cam-doorbell")} for a doorbell and ${camPrice("cam-wifi")} per camera; the gear is yours or we tell you what to buy.` },
+  { q: "Do you also help businesses get more customers?", a: "Yes. Besides tech support, CEO Turbo builds websites, runs Google, Meta and TikTok ads, optimizes social media profiles, fixes SEO, AEO, GEO and DNS problems, and sells NFC Google review cards. Those work for businesses anywhere, not just Tampa. See ceoturbo.com/grow." },
+  { q: "How do Google review cards help my business?", a: `A customer taps their phone on the card and your Google review form opens, so more happy customers actually leave a review. More recent reviews build trust with people comparing you, help you show up in Google Maps, and give Google and AI assistants like ChatGPT more reasons to recommend you. Cards start at ${fromPriceLabel} with free US shipping at ceoturbo.com/google-review-cards.` },
 ];

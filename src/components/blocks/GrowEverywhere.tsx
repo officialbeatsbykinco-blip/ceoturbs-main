@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { ArrowRight, Check, Globe, Megaphone, Search, ShoppingCart, Star, Truck, type LucideIcon } from "lucide-react";
+import { ArrowRight, Check, Globe, Megaphone, Search, ShoppingCart, Star, Truck, UserRoundCheck, type LucideIcon } from "lucide-react";
 import { BookButton } from "@/components/cta/Actions";
 import { SectionHeader } from "@/components/blocks/Basics";
 import { REVIEW_CARD, fromPriceLabel, money2, packPath } from "@/config/site";
@@ -39,6 +39,15 @@ const DIGITAL: { icon: LucideIcon; t: string; b: string; pts: string[]; price: s
     to: "/services/seo-aeo-geo",
     cta: "Fix my site",
   },
+  {
+    icon: UserRoundCheck,
+    t: "Social media optimization",
+    b: "Instagram, Facebook, TikTok and YouTube profiles that look trusted and send people to you.",
+    pts: ["Bios, links, highlights and branding", "Same name, hours and links everywhere", "Up to 3 profiles done for you"],
+    price: price("social-setup"),
+    to: "/services/social-media-optimization",
+    cta: "Optimize my socials",
+  },
 ];
 
 /** Websites, ads, SEO/DNS and Google review cards, each with its own buy button. */
@@ -49,9 +58,9 @@ export function GrowEverywhere({ where, id = "grow", className }: { where: strin
         <SectionHeader
           kicker="For businesses, anywhere"
           title={<span id={id}>Your IT company and your marketing company, in one.</span>}
-          lede="We fix the computers in Tampa. Then we get your business more customers, wherever you are: websites, ads, Google rankings and review cards, done for you."
+          lede="We fix the computers, cameras and Wi-Fi in Tampa. Then we get your business more customers, wherever you are: websites, ads, social media, Google rankings and review cards, done for you."
         />
-        <ul className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <ul className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {DIGITAL.map((s) => (
             <li key={s.t} className="panel flex flex-col p-5 sm:p-6">
               <span className="grid h-12 w-12 place-items-center rounded-2xl bg-turbo/15 text-turbo">
@@ -73,17 +82,27 @@ export function GrowEverywhere({ where, id = "grow", className }: { where: strin
               </Link>
             </li>
           ))}
-          <li className="panel flex flex-col p-5 ring-1 ring-turbo/60 sm:p-6">
-            <img src="/img/review-cards/hd/card-tap-800.webp" alt="Phone tapped on a CEO Turbo NFC Google review card with the Google review form open" width={800} height={800} loading="lazy" decoding="async" className="aspect-[4/3] w-full rounded-xl object-cover ring-1 ring-border" />
-            <h3 className="mt-4 font-display text-lg font-bold leading-tight sm:text-xl">
-              <Star className="-mt-1 mr-1 inline h-5 w-5 fill-current text-amber-400" aria-hidden />
-              Google review cards
-            </h3>
-            <p className="mt-2 text-sm text-muted-foreground">Customers tap their phone and your Google review form opens. iPhone and Android, no app, no subscription.</p>
-            <p className="mt-auto pt-4 font-display text-2xl font-bold">from {fromPriceLabel}</p>
-            <Link to={SHOP_PATH} onClick={() => track("review_card_promo_click", { source: `${where} grid` })} className="btn-ignite btn-shine mt-3 inline-flex items-center justify-center gap-2 !py-3 !text-base">
-              <ShoppingCart className="h-4 w-4" aria-hidden /> Buy review cards
-            </Link>
+          <li className="panel grid gap-5 p-5 ring-1 ring-turbo/60 sm:p-6 lg:col-span-2 lg:grid-cols-[0.8fr_1fr] lg:items-center">
+            <img src="/img/review-cards/hd/card-tap-800.webp" alt="Phone tapped on a CEO Turbo NFC Google review card with the Google review form open" width={800} height={800} loading="lazy" decoding="async" className="aspect-[4/3] w-full rounded-xl object-cover ring-1 ring-border lg:aspect-square" />
+            <div className="flex flex-col">
+              <h3 className="font-display text-lg font-bold leading-tight sm:text-xl">
+                <Star className="-mt-1 mr-1 inline h-5 w-5 fill-current text-amber-400" aria-hidden />
+                Google review cards
+              </h3>
+              <p className="mt-2 text-sm text-muted-foreground">Customers tap their phone and your Google review form opens. iPhone and Android, no app, no subscription.</p>
+              <ul className="mt-3 grid gap-1.5 text-sm">
+                {["More reviews, so more people trust you", "Recent reviews help you show up on Google Maps", "Google and AI assistants recommend businesses people review"].map((p) => (
+                  <li key={p} className="flex items-start gap-2">
+                    <Check className="mt-0.5 h-4 w-4 shrink-0 text-turbo" aria-hidden />
+                    {p}
+                  </li>
+                ))}
+              </ul>
+              <p className="mt-4 font-display text-2xl font-bold">from {fromPriceLabel} <span className="text-sm font-normal text-muted-foreground">free US shipping</span></p>
+              <Link to={SHOP_PATH} onClick={() => track("review_card_promo_click", { source: `${where} grid` })} className="btn-ignite btn-shine mt-3 inline-flex items-center justify-center gap-2 !py-3 !text-base">
+                <ShoppingCart className="h-4 w-4" aria-hidden /> Buy review cards
+              </Link>
+            </div>
           </li>
         </ul>
         <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
