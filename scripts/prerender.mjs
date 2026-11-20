@@ -4,6 +4,7 @@
 import { readFile, readdir, writeFile, mkdir, rm } from "node:fs/promises";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
+import { markdownPath, pageMarkdown } from "./markdown.mjs";
 
 const DIST = path.resolve("dist");
 const SSR = path.resolve("dist-ssr/entry-server.js");
@@ -24,6 +25,9 @@ const template = (await readFile(path.join(DIST, "index.html"), "utf8")).replace
 
 const fileFor = (route) => (route === "/" ? "index.html" : `${route.slice(1)}.html`);
 const problems = [];
+// AI copies (see scripts/markdown.mjs and middleware.js): indexable pages only, same words as the HTML.
+const PHONE = "(678) 558-4327";
+const markdown = [];
 
 for (const page of pages) {
   const appHtml = await render(page.path);
@@ -39,6 +43,14 @@ for (const page of pages) {
   const out = path.join(DIST, fileFor(page.path));
   await mkdir(path.dirname(out), { recursive: true });
   await writeFile(out, html);
+
+  if (!page.noindex && !page.canonical) {
+    const url = `${SITE}${page.path === "/" ? "/" : page.path}`;
+    const md = pageMarkdown(appHtml, { title: page.title, description: page.description, url, site: SITE, phone: PHONE, updated: TODAY });
+    if (md.length < 600) problems.push(`${page.path}: markdown copy only ${md.length} chars`);
+    await writeFile(path.join(DIST, markdownPath(page.path).slice(1)), md);
+    markdown.push({ page, url, md });
+  }
 }
 
 // 404 page (Vercel serves dist/404.html with a 404 status for unknown URLs)
@@ -108,12 +120,19 @@ Key facts:
 - Phone: (678) 558-4327 (call or text).
 - Social: Instagram https://www.instagram.com/ceoturbo_/ · Facebook https://www.facebook.com/profile.php?id=61595439263484 · YouTube https://www.youtube.com/@CEOTurbo7 · X https://x.com/CEO_Turbo · LinkedIn https://www.linkedin.com/showcase/ceoturbo · Pinterest https://www.pinterest.com/ceoturbo/
 
+Plain-text copies for AI assistants: every page below also has a Markdown version at the same URL with .md added (home: ${SITE}/index.md, for example ${SITE}/computer-repair-tampa.md). The whole site in one file: ${SITE}/llms-full.txt
+
 ${groups.map(section).filter(Boolean).join("\n")}
 ## Answers
 
 ${guides.map((g) => `- ${g.title} — ${g.summary} (${SITE}${g.path})`).join("\n")}
 `;
 await writeFile(path.join(DIST, "llms.txt"), llms);
+// llms-full.txt: every page's Markdown copy in one file, for assistants that read a whole site at once.
+await writeFile(
+  path.join(DIST, "llms-full.txt"),
+  `# CEO Turbo — full site in plain text\n\n> Every indexable page of ${SITE}, as Markdown. Each page is also at its own URL with .md added (home: ${SITE}/index.md).\n\n${markdown.map((m) => m.md).join("\n\n")}`,
+);
 
 await rm(path.resolve("dist-ssr"), { recursive: true, force: true });
 

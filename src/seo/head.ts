@@ -7,6 +7,10 @@ const esc = (s: string) => s.replace(/&/g, "&amp;").replace(/"/g, "&quot;").repl
 /** JSON for a <script> tag — escapes "<" so content can't close the tag. */
 export const safeJson = (data: unknown) => JSON.stringify(data).replace(/</g, "\\u003c");
 
+/** Indexable pages get a Markdown copy at build: "/" -> "/index.md", "/about" -> "/about.md". */
+export const hasMarkdown = (meta: Pick<PageMeta, "noindex" | "canonical">) => !meta.noindex && !meta.canonical;
+export const markdownPath = (route: string) => (route === "/" ? "/index.md" : `${route}.md`);
+
 /** Full <head> markup for a prerendered page. */
 export function renderHead(meta: PageMeta): string {
   const url = abs(meta.canonical ?? meta.path);
@@ -15,6 +19,8 @@ export function renderHead(meta: PageMeta): string {
     `<title>${esc(meta.title)}</title>`,
     `<meta name="description" content="${esc(meta.description)}" />`,
     `<link rel="canonical" href="${url}" />`,
+    // Plain Markdown copy of the page for AI assistants (scripts/markdown.mjs); same words as the page.
+    ...(hasMarkdown(meta) ? [`<link rel="alternate" type="text/markdown" href="${markdownPath(meta.path)}" title="Plain-text version for AI assistants" />`] : []),
     `<meta name="robots" content="${meta.noindex ? "noindex, follow" : "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"}" />`,
     `<meta property="og:type" content="website" />`,
     `<meta property="og:site_name" content="${SITE.name}" />`,
