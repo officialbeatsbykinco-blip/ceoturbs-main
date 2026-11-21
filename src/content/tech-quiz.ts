@@ -19,20 +19,20 @@ export const deviceGroup = (d?: string): Group => (d === "mobile" ? "mobile" : d
 const isComputer = (d: string) => deviceGroup(d) === "computer";
 
 export const PROBLEMS = [
-  { id: "slow", label: "Slow or freezing: make it faster", for: ["computer"] },
-  { id: "crash", label: "Blue screen or crashing", for: ["computer"] },
-  { id: "dead", label: "Won't turn on or won't start", for: ["computer"] },
-  { id: "virus", label: "Virus, pop-ups or scam warnings", for: ["computer"] },
-  { id: "upgrade", label: "Upgrade (SSD, memory, parts)", for: ["computer"] },
-  { id: "setup", label: "Software, printer or email help", for: ["computer"] },
-  { id: "data", label: "Move files or photos", for: ["computer"] },
-  { id: "phone-setup", label: "Set up a new phone or tablet", for: ["mobile"] },
-  { id: "phone-transfer", label: "Move photos, contacts and texts", for: ["mobile"] },
-  { id: "phone-email", label: "Email, apps and work accounts", for: ["mobile"] },
-  { id: "cam-install", label: "Install Wi-Fi cameras", for: ["camera"] },
-  { id: "cam-doorbell", label: "Install a Ring or video doorbell", for: ["camera"] },
-  { id: "cam-app", label: "Get cameras working on my phone", for: ["camera"] },
-  { id: "other", label: "Something else", for: ["computer", "mobile", "camera"] },
+  { id: "slow", label: "Slow or freezing: make it faster", short: "Slow or freezing", for: ["computer"] },
+  { id: "crash", label: "Blue screen or crashing", short: "Blue screen or crashing", for: ["computer"] },
+  { id: "dead", label: "Won't turn on or won't start", short: "Won't turn on", for: ["computer"] },
+  { id: "virus", label: "Virus, pop-ups or scam warnings", short: "Virus or pop-ups", for: ["computer"] },
+  { id: "upgrade", label: "Upgrade (SSD, memory, parts)", short: "Upgrade parts", for: ["computer"] },
+  { id: "setup", label: "Software, printer or email help", short: "Printer, email, apps", for: ["computer"] },
+  { id: "data", label: "Move files or photos", short: "Move files or photos", for: ["computer"] },
+  { id: "phone-setup", label: "Set up a new phone or tablet", short: "Set up a new phone", for: ["mobile"] },
+  { id: "phone-transfer", label: "Move photos, contacts and texts", short: "Move photos and contacts", for: ["mobile"] },
+  { id: "phone-email", label: "Email, apps and work accounts", short: "Email and apps", for: ["mobile"] },
+  { id: "cam-install", label: "Install Wi-Fi cameras", short: "Install cameras", for: ["camera"] },
+  { id: "cam-doorbell", label: "Install a Ring or video doorbell", short: "Ring or video doorbell", for: ["camera"] },
+  { id: "cam-app", label: "Get cameras working on my phone", short: "Cameras on my phone", for: ["camera"] },
+  { id: "other", label: "Something else", short: "Something else", for: ["computer", "mobile", "camera"] },
 ] as const;
 
 /** The problems offered for a device, in order. */

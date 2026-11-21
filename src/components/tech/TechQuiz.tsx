@@ -5,7 +5,7 @@
 import { useEffect, useId, useRef, useState, type FormEvent, type MouseEvent } from "react";
 import { Link } from "react-router-dom";
 import {
-  AlertTriangle, ArrowLeft, ArrowRight, BellRing, Cctv, Check, Cpu, FolderOpen, Gauge, Computer, HelpCircle, Info, Laptop, Loader2, Mail, MapPin, MessageSquare, Monitor, Power, ShieldAlert, Smartphone, type LucideIcon,
+  AlertTriangle, ArrowLeft, ArrowRight, BellRing, Cctv, Check, Cpu, FolderOpen, Gauge, Computer, HelpCircle, Info, Laptop, Loader2, Mail, MapPin, MessageSquare, Monitor, Phone, Power, ShieldAlert, Smartphone, type LucideIcon,
 } from "lucide-react";
 import { InstallCalEmbed } from "@/components/booking/InstallCalEmbed";
 import { CallLink } from "@/components/site/CallLink";
@@ -18,19 +18,19 @@ import { cn } from "@/lib/utils";
 
 const STEPS = ["device", "problem", "when", "send"] as const;
 type Step = (typeof STEPS)[number];
-const STEP_NAMES: Record<Step, string> = { device: "Computer", problem: "Problem", when: "Timing", send: "Send" };
 
 const DEVICE_ICONS: Record<DeviceId, LucideIcon> = { laptop: Laptop, desktop: Monitor, mobile: Smartphone, camera: Cctv };
 const PROBLEM_ICONS: Record<ProblemId, LucideIcon> = { slow: Gauge, crash: AlertTriangle, dead: Power, virus: ShieldAlert, upgrade: Cpu, setup: Mail, data: FolderOpen, "phone-setup": Smartphone, "phone-transfer": FolderOpen, "phone-email": Mail, "cam-install": Cctv, "cam-doorbell": BellRing, "cam-app": Smartphone, other: HelpCircle };
 
 /** The first question is one tap: a laptop, a desktop, both, a phone or tablet to set up, or cameras to install. */
 const pickOf = (id: DeviceId) => ({ id, label: DEVICES.find((d) => d.id === id)!.label, icon: DEVICE_ICONS[id], devices: [id] as DeviceId[] });
+// Short labels so all the tiles fit on one phone screen with no scrolling.
 const DEVICE_PICKS: { id: string; label: string; sub?: string; icon: LucideIcon; devices: DeviceId[] }[] = [
   { ...pickOf("laptop"), sub: "Repair or speed-up" },
-  { ...pickOf("desktop"), sub: "Repair, upgrade or speed-up" },
-  { id: "both", label: "Both, a laptop and a desktop", icon: Computer, devices: ["laptop", "desktop"] },
-  { ...pickOf("mobile"), sub: "New iPhone, Android or iPad. Setup only, no repairs" },
-  { ...pickOf("camera"), sub: "Installed and working on your phone" },
+  { ...pickOf("desktop"), label: "Windows desktop", sub: "Or gaming PC" },
+  { id: "both", label: "Laptop + desktop", sub: "Both need help", icon: Computer, devices: ["laptop", "desktop"] },
+  { ...pickOf("mobile"), label: "Phone or tablet", sub: "Setup only" },
+  { ...pickOf("camera"), label: "Cameras or doorbell", sub: "We install them" },
 ];
 
 /** What a tech lead is worth to Meta's optimizer (an average first job). */
@@ -45,6 +45,7 @@ export function TechQuiz({ source = "computer-repair-tampa", className, variant 
   const [sending, setSending] = useState(false);
   const [errors, setErrors] = useState<{ name?: string; zip?: string; phone?: string; pick?: string }>({});
   const [honeypot, setHoneypot] = useState("");
+  const [showDetails, setShowDetails] = useState(false);
   const startedAt = useRef(0);
   const reachedLast = useRef(false);
   const top = useRef<HTMLDivElement>(null);
@@ -177,32 +178,41 @@ export function TechQuiz({ source = "computer-repair-tampa", className, variant 
     );
 
   return (
-    <div id={variant === "card" ? "fix" : undefined} ref={top} className={cn("scroll-mt-24", shell)}>
-      <p className="font-display text-xl font-bold leading-tight sm:text-2xl">Get your price</p>
-      <div className="mt-3 h-2 overflow-hidden rounded-full bg-muted" role="progressbar" aria-label="Progress" aria-valuemin={1} aria-valuemax={STEPS.length} aria-valuenow={index + 1}>
+    <div id={variant === "card" ? "fix" : undefined} ref={top} className={cn("scroll-mt-32", shell)}>
+      <div className={cn("flex items-baseline justify-between gap-3", variant === "sheet" && "pr-12")}>
+        <p className="font-display text-xl font-bold leading-tight sm:text-2xl">Get your price</p>
+        <p className="shrink-0 text-xs font-bold uppercase tracking-wider text-muted-foreground" aria-live="polite">
+          Step {index + 1} of {STEPS.length}
+        </p>
+      </div>
+      <div className="mt-2.5 h-2 overflow-hidden rounded-full bg-muted" role="progressbar" aria-label="Progress" aria-valuemin={1} aria-valuemax={STEPS.length} aria-valuenow={index + 1}>
         <div className="h-full rounded-full bg-gradient-to-r from-turbo to-[hsl(var(--ignite))] transition-[width] duration-300 ease-out" style={{ width: `${((index + 1) / STEPS.length) * 100}%` }} />
       </div>
-      <p className="mt-2 text-xs font-bold uppercase tracking-wider text-muted-foreground" aria-live="polite">
-        Step {index + 1} of {STEPS.length} · {STEP_NAMES[step]}
-      </p>
-      <p className="mt-3 flex items-start gap-2 rounded-xl bg-turbo/[0.08] px-3 py-2.5 text-sm leading-snug ring-1 ring-turbo/20">
-        <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-turbo" aria-hidden />
-        <span>
-          We come to you within <b>40 miles of Tampa</b>. Slow Windows PC? We can also speed it up remotely.
-        </span>
-      </p>
+      {step === "device" && (
+        <p className="mt-3 flex items-center gap-2 rounded-xl bg-turbo/[0.08] px-3 py-2 text-sm leading-snug ring-1 ring-turbo/20">
+          <MapPin className="h-4 w-4 shrink-0 text-turbo" aria-hidden />
+          <span>
+            We come to you <b>near Tampa</b>.
+          </span>
+        </p>
+      )}
 
-      <div key={step} className="mt-4 animate-step">
+      <div key={step} className="mt-3 animate-step">
         {step === "device" && (
           <>
             <Title text="What do you need help with?" />
-            <div className="grid gap-2.5">
+            <div className="grid grid-cols-2 gap-2.5">
               {DEVICE_PICKS.map((o) => (
                 <Tile key={o.id} icon={o.icon} label={o.label} sub={o.sub} pressed={o.devices.length === a.devices.length && o.devices.every((d) => a.devices.includes(d))} onClick={() => pickDevices(o.devices)} />
               ))}
+              <CallLink location="tech quiz tile" className={cn(tile, "border-turbo/40 bg-turbo/[0.06]")}>
+                <Phone className="h-8 w-8 text-turbo" strokeWidth={1.75} aria-hidden />
+                <span className="block text-base font-bold leading-tight">Just call us</span>
+                <span className="block text-xs leading-snug text-muted-foreground">{SITE.phone.display}</span>
+              </CallLink>
             </div>
-            <p className="mt-3 flex items-start gap-2 text-sm leading-snug text-muted-foreground">
-              <Info className="mt-0.5 h-4 w-4 shrink-0" aria-hidden />
+            <p className="mt-2.5 flex items-start gap-2 text-xs leading-snug text-muted-foreground">
+              <Info className="mt-px h-3.5 w-3.5 shrink-0" aria-hidden />
               <span>{NOT_FIXED}</span>
             </p>
           </>
@@ -211,8 +221,8 @@ export function TechQuiz({ source = "computer-repair-tampa", className, variant 
         {step === "problem" && (
           <>
             <Title text={a.devices.length > 1 ? "What's wrong with each one?" : a.devices[0] === "mobile" || a.devices[0] === "camera" ? "What do you need?" : "What's wrong with it?"} />
-            <p className="-mt-2 mb-3 text-sm text-muted-foreground">Tap all that apply.</p>
-            <div className="grid gap-5">
+            <p className="-mt-2 mb-2.5 text-sm text-muted-foreground">Tap all that apply.</p>
+            <div className="grid gap-4">
               {a.devices.map((d) => (
                 <div key={d}>
                   {a.devices.length > 1 && (
@@ -224,17 +234,19 @@ export function TechQuiz({ source = "computer-repair-tampa", className, variant 
                       {DEVICES.find((o) => o.id === d)?.label}
                     </p>
                   )}
-                  <div className="grid gap-2">
+                  <div className="grid grid-cols-2 gap-2">
                     {problemsFor(d).map((o) => {
                       const Icon = PROBLEM_ICONS[o.id];
                       const on = (a.problems[d] ?? []).includes(o.id);
                       return (
-                        <button key={o.id} type="button" aria-pressed={on} onClick={() => toggle(d, o.id)} className={cn(row, on && rowOn)}>
+                        <button key={o.id} type="button" aria-pressed={on} aria-label={o.label} onClick={() => toggle(d, o.id)} className={cn(row, "relative min-h-[60px] gap-2 px-3 py-2", on && rowOn)}>
                           <Icon className="h-5 w-5 shrink-0 text-turbo" aria-hidden />
-                          <span className="min-w-0 flex-1 text-base font-semibold leading-snug">{o.label}</span>
-                          <span className={cn("grid h-6 w-6 shrink-0 place-items-center rounded-md border-2", on ? "border-turbo bg-turbo text-white" : "border-border")} aria-hidden>
-                            {on && <Check className="h-4 w-4" />}
-                          </span>
+                          <span className="min-w-0 flex-1 text-[15px] font-semibold leading-tight">{o.short}</span>
+                          {on && (
+                            <span className="absolute -right-1.5 -top-1.5 grid h-6 w-6 place-items-center rounded-full bg-turbo text-white shadow" aria-hidden>
+                              <Check className="h-4 w-4" />
+                            </span>
+                          )}
                         </button>
                       );
                     })}
@@ -244,6 +256,7 @@ export function TechQuiz({ source = "computer-repair-tampa", className, variant 
             </div>
             {errors.pick && <Err text={errors.pick} />}
             <Nav
+              sticky={variant === "sheet"}
               onBack={() => setStep("device")}
               next={() => (picked ? go("when", remoteOk(a) ? {} : { where: "home" }) : setErrors({ pick: "Tap at least one problem." }))}
               label={picked > 1 ? `Continue with ${picked} problems` : "Continue"}
@@ -254,14 +267,14 @@ export function TechQuiz({ source = "computer-repair-tampa", className, variant 
         {step === "when" && (
           <>
             <Title text="How soon?" />
-            <div className="flex flex-wrap gap-2">
+            <div className="grid grid-cols-3 gap-2">
               {WHEN.map((o) => (
                 <Chip key={o.id} label={o.label} on={a.when === o.id} onClick={() => set({ when: o.id })} />
               ))}
             </div>
             {remoteOk(a) && (
               <>
-            <p className="mb-2 mt-5 text-lg font-bold">Where should we fix it?</p>
+            <p className="mb-2 mt-4 text-lg font-bold">Where should we fix it?</p>
             <div className="grid grid-cols-2 gap-2">
               {WHERE.map((o) => (
                 <button key={o.id} type="button" aria-pressed={a.where === o.id} onClick={() => set({ where: o.id })} className={cn(row, "flex-col items-start gap-0.5 !py-3", a.where === o.id && rowOn)}>
@@ -272,11 +285,19 @@ export function TechQuiz({ source = "computer-repair-tampa", className, variant 
             </div>
               </>
             )}
-            <label htmlFor={`${uid}-details`} className="mb-1.5 mt-5 block text-sm font-semibold">
-              Tell us everything <span className="font-normal text-muted-foreground">(optional)</span>
-            </label>
-            <textarea id={`${uid}-details`} data-clarity-mask="true" rows={3} maxLength={DETAILS_MAX} className="field min-h-[88px]" value={a.details} onChange={(e) => set({ details: e.target.value })} placeholder="Every problem, models, error messages, when it started… the more the better." />
-            <Nav onBack={() => setStep("problem")} next={() => go("send")} />
+            {showDetails || a.details ? (
+              <>
+                <label htmlFor={`${uid}-details`} className="mb-1.5 mt-4 block text-sm font-semibold">
+                  Tell us more <span className="font-normal text-muted-foreground">(optional)</span>
+                </label>
+                <textarea id={`${uid}-details`} data-clarity-mask="true" rows={2} maxLength={DETAILS_MAX} className="field min-h-[64px]" value={a.details} onChange={(e) => set({ details: e.target.value })} placeholder="Model, error message, when it started…" />
+              </>
+            ) : (
+              <button type="button" onClick={() => setShowDetails(true)} className="mt-3 flex min-h-[44px] items-center gap-1.5 text-sm font-semibold text-turbo underline-offset-4 hover:underline">
+                + Add details (optional)
+              </button>
+            )}
+            <Nav sticky={variant === "sheet"} onBack={() => setStep("problem")} next={() => go("send")} />
           </>
         )}
 
@@ -317,15 +338,13 @@ export function TechQuiz({ source = "computer-repair-tampa", className, variant 
 
             {texting ? (
               <>
-                <p data-clarity-mask="true" className="whitespace-pre-line rounded-xl border-2 border-dashed border-border bg-muted/50 p-3 text-[15px] leading-relaxed">
+                <p data-clarity-mask="true" className="max-h-[5.25rem] overflow-hidden whitespace-pre-line rounded-xl border-2 border-dashed border-border bg-muted/50 px-3 py-2 text-sm leading-snug [mask-image:linear-gradient(to_bottom,black_65%,transparent)]">
                   {message}
                 </p>
                 <a href={smsHref(message)} onClick={onText} data-call-location="tech-quiz" className={cn("btn-ignite btn-shine w-full justify-center !py-4 !text-lg", !ready && "opacity-60")}>
                   <MessageSquare className="h-5 w-5" aria-hidden /> {ready ? "Text it to us" : a.where === "remote" ? "Add your name to send" : "Add your name & ZIP to send"}
                 </a>
-                <p className="text-center text-sm text-muted-foreground">
-                  {done ? "Messages should be open. Tap send and we'll text your price back." : `Opens your Messages to ${SITE.phone.display} with this filled in. Just tap send.`}
-                </p>
+                <p className="-mt-1 text-center text-xs text-muted-foreground">{done ? "Messages should be open. Tap send and we'll text your price back." : "Opens Messages with this filled in. Just tap send."}</p>
               </>
             ) : (
               <>
@@ -340,12 +359,14 @@ export function TechQuiz({ source = "computer-repair-tampa", className, variant 
                 </button>
               </>
             )}
-            <CallLink location="tech quiz call" icon className="btn-chrome w-full justify-center !py-3.5 !text-base">
-              Or call {SITE.phone.display}
-            </CallLink>
-            <button type="button" onClick={() => setStep("when")} className="flex min-h-[44px] items-center justify-center gap-1.5 text-sm font-semibold text-muted-foreground hover:text-foreground">
-              <ArrowLeft className="h-4 w-4" aria-hidden /> Edit answers
-            </button>
+            <div className="flex gap-2">
+              <button type="button" onClick={() => setStep("when")} className="btn-chrome !px-4" aria-label="Edit answers">
+                <ArrowLeft className="h-4 w-4" aria-hidden /> Back
+              </button>
+              <CallLink location="tech quiz call" icon className="btn-chrome flex-1 justify-center !py-3 !text-base">
+                Call us
+              </CallLink>
+            </div>
           </form>
         )}
       </div>
@@ -356,22 +377,22 @@ export function TechQuiz({ source = "computer-repair-tampa", className, variant 
 const row = "flex w-full min-h-[56px] items-center gap-3 rounded-2xl border-2 border-border bg-card px-4 text-left transition-[border-color,background-color,transform] duration-150 hover:border-turbo/60 active:scale-[0.98]";
 const rowOn = "border-turbo bg-turbo/10";
 
+/** A big square picture tile: two per row, so the whole first question fits on a phone screen. */
+const tile = "flex min-h-[96px] w-full flex-col items-start justify-center gap-1 rounded-2xl border-2 border-border bg-card px-3 py-2.5 text-left transition-[border-color,background-color,transform] duration-150 hover:border-turbo/60 active:scale-[0.98]";
+
 function Tile({ icon: Icon, label, sub, pressed, onClick }: { icon: LucideIcon; label: string; sub?: string; pressed: boolean; onClick: () => void }) {
   return (
-    <button type="button" aria-pressed={pressed} onClick={onClick} className={cn("flex min-h-[72px] w-full items-center gap-4 rounded-2xl border-2 border-border bg-card px-4 py-3 text-left transition-[border-color,background-color,transform] duration-150 hover:border-turbo/60 active:scale-[0.98]", pressed && "border-turbo bg-turbo/15 ring-2 ring-turbo/30")}>
-      <Icon className="h-8 w-8 shrink-0 text-turbo" strokeWidth={1.75} aria-hidden />
-      <span className="min-w-0 flex-1">
-        <span className="block text-[17px] font-bold leading-tight">{label}</span>
-        {sub && <span className="mt-0.5 block text-sm leading-snug text-muted-foreground">{sub}</span>}
-      </span>
-      <ArrowRight className="h-5 w-5 shrink-0 text-muted-foreground" aria-hidden />
+    <button type="button" aria-pressed={pressed} onClick={onClick} className={cn(tile, pressed && "border-turbo bg-turbo/15 ring-2 ring-turbo/30")}>
+      <Icon className="h-8 w-8 text-turbo" strokeWidth={1.75} aria-hidden />
+      <span className="block text-base font-bold leading-tight">{label}</span>
+      {sub && <span className="block text-xs leading-snug text-muted-foreground">{sub}</span>}
     </button>
   );
 }
 
 function Chip({ label, on, onClick }: { label: string; on: boolean; onClick: () => void }) {
   return (
-    <button type="button" aria-pressed={on} onClick={onClick} className={cn("min-h-[48px] rounded-full border-2 px-5 text-base font-semibold transition-colors", on ? "border-turbo bg-turbo text-white" : "border-border bg-card hover:border-turbo/60")}>
+    <button type="button" aria-pressed={on} onClick={onClick} className={cn("min-h-[48px] rounded-full border-2 px-3 text-base font-semibold transition-colors", on ? "border-turbo bg-turbo text-white" : "border-border bg-card hover:border-turbo/60")}>
       {label}
     </button>
   );
@@ -389,9 +410,10 @@ function Err({ text }: { text: string }) {
   );
 }
 
-function Nav({ onBack, next, label = "Continue" }: { onBack: () => void; next?: () => void; label?: string }) {
+/** Back + Continue. In the phone sheet it sticks to the bottom so Continue is always on screen. */
+function Nav({ onBack, next, label = "Continue", sticky }: { onBack: () => void; next?: () => void; label?: string; sticky?: boolean }) {
   return (
-    <div className="mt-4 flex gap-2">
+    <div className={cn("mt-4 flex gap-2", sticky && "sticky bottom-0 -mx-1 bg-background px-1 pb-1 pt-2")}>
       <button type="button" onClick={onBack} className="btn-chrome !px-4">
         <ArrowLeft className="h-4 w-4" aria-hidden /> Back
       </button>

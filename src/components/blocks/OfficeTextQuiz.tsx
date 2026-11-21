@@ -125,9 +125,23 @@ export function OfficeTextQuiz({ id = "book", className, quiz = OFFICE_QUIZ }: {
   const [err, setErr] = useState("");
   const sent = useRef(false);
   const index = STEPS.indexOf(step);
+  const top = useRef<HTMLDivElement>(null);
+  // Each new question lands fully on screen, just under the fixed header, so nobody has to scroll.
+  const show = () => {
+    const el = top.current;
+    if (!el) return;
+    const headerBottom = document.querySelector("header")?.getBoundingClientRect().bottom ?? 64;
+    const y = el.getBoundingClientRect().top - headerBottom - 8;
+    if (Math.abs(y) > 4) window.scrollBy({ top: y, behavior: "smooth" });
+  };
+  const back = (to: (typeof STEPS)[number]) => {
+    setStep(to);
+    show();
+  };
   const go = (next: (typeof STEPS)[number], patch: Partial<Answers>) => {
     setA((p) => ({ ...p, ...patch }));
     setStep(next);
+    show();
     track("office_quiz_step", { step: next, step_number: STEPS.indexOf(next) + 1 });
   };
   const message = officeMessage(a, quiz);
@@ -146,7 +160,7 @@ export function OfficeTextQuiz({ id = "book", className, quiz = OFFICE_QUIZ }: {
   };
 
   return (
-    <div id={id} className={cn("scroll-mt-24 rounded-3xl border border-border bg-card p-5 shadow-xl", className)}>
+    <div id={id} ref={top} className={cn("scroll-mt-32 rounded-3xl border border-border bg-card p-4 shadow-xl sm:p-5", className)}>
       <div className="flex items-center justify-between gap-3 text-xs text-muted-foreground">
         <span className="inline-flex items-center gap-1.5 font-medium text-turbo">
           <MessageSquare className="h-3.5 w-3.5" aria-hidden /> Get a price by text · under a minute
@@ -158,12 +172,12 @@ export function OfficeTextQuiz({ id = "book", className, quiz = OFFICE_QUIZ }: {
       <div className="mt-2.5 h-1.5 overflow-hidden rounded-full bg-muted" role="progressbar" aria-label="Progress" aria-valuemin={1} aria-valuemax={STEPS.length} aria-valuenow={index + 1}>
         <div className="h-full rounded-full bg-gradient-to-r from-turbo to-[hsl(var(--ignite))] transition-[width] duration-300" style={{ width: `${((index + 1) / STEPS.length) * 100}%` }} />
       </div>
-      <div key={step} className="mt-5 animate-step">
+      <div key={step} className="mt-3.5 animate-step">
         {step === "need" && (
           <>
             <Title text={quiz.needTitle} />
-            {!quiz.single && <p className="-mt-2 mb-3 text-sm text-muted-foreground">Tap all that apply.</p>}
-            <div className="grid gap-2.5">
+            {!quiz.single && <p className="-mt-1.5 mb-2.5 text-sm text-muted-foreground">Tap all that apply.</p>}
+            <div className="grid gap-2">
               {quiz.needs.map((o) =>
                 quiz.single ? (
                   <Opt key={o.id} label={o.label} pressed={a.needs[0] === o.id} onClick={() => go("size", { needs: [o.id] })} />
@@ -179,7 +193,7 @@ export function OfficeTextQuiz({ id = "book", className, quiz = OFFICE_QUIZ }: {
                     {err}
                   </p>
                 )}
-                <button type="button" onClick={() => (a.needs.length ? (setErr(""), go("size", {})) : setErr("Tap at least one."))} className="btn-ignite mt-3 w-full justify-center !py-4 !text-base">
+                <button type="button" onClick={() => (a.needs.length ? (setErr(""), go("size", {})) : setErr("Tap at least one."))} className="btn-ignite mt-3 w-full justify-center !py-3.5 !text-base">
                   {a.needs.length > 1 ? `Continue with ${a.needs.length}` : "Continue"} <ArrowRight className="h-5 w-5" aria-hidden />
                 </button>
               </>
@@ -189,23 +203,23 @@ export function OfficeTextQuiz({ id = "book", className, quiz = OFFICE_QUIZ }: {
         {step === "size" && (
           <>
             <Title text={quiz.sizeTitle} />
-            <div className="grid gap-2.5">
+            <div className="grid gap-2">
               {quiz.sizes.map((o) => (
                 <Opt key={o} label={o} pressed={a.size === o} onClick={() => go("when", { size: o })} />
               ))}
             </div>
-            <Back onClick={() => setStep("need")} />
+            <Back onClick={() => back("need")} />
           </>
         )}
         {step === "when" && (
           <>
             <Title text="When do you need it?" />
-            <div className="grid gap-2.5">
+            <div className="grid gap-2">
               {OFFICE_WHEN.map((o) => (
                 <Opt key={o} label={o} pressed={a.when === o} onClick={() => go("send", { when: o })} />
               ))}
             </div>
-            <Back onClick={() => setStep("size")} />
+            <Back onClick={() => back("size")} />
           </>
         )}
         {step === "send" && (
@@ -222,20 +236,19 @@ export function OfficeTextQuiz({ id = "book", className, quiz = OFFICE_QUIZ }: {
                 </p>
               )}
             </div>
-            <p data-clarity-mask="true" className="rounded-xl bg-muted/70 p-3 text-sm leading-relaxed">
+            <p data-clarity-mask="true" className="max-h-[4.5rem] overflow-hidden rounded-xl bg-muted/70 px-3 py-2 text-sm leading-snug [mask-image:linear-gradient(to_bottom,black_60%,transparent)]">
               {message}
             </p>
             <a href={smsHref(message)} onClick={onText} data-call-location="office-quiz" className="btn-ignite btn-shine w-full justify-center !py-4 !text-base">
               <MessageSquare className="h-5 w-5" aria-hidden /> Text it to us
             </a>
-            <p className="text-center text-xs text-muted-foreground">Opens Messages with this filled in. Add a photo of the space if you can.</p>
-            <p className="text-center text-sm">
-              Rather talk?{" "}
-              <CallLink location="office quiz call" className="font-semibold text-foreground underline underline-offset-2">
-                Call us
+            <p className="-mt-1 text-center text-xs text-muted-foreground">Opens Messages with this filled in. Just tap send.</p>
+            <div className="flex items-center justify-between gap-3">
+              <Back onClick={() => back("when")} />
+              <CallLink location="office quiz call" className="inline-flex min-h-[44px] items-center text-sm font-semibold text-foreground underline underline-offset-2">
+                Rather talk? Call us
               </CallLink>
-            </p>
-            <Back onClick={() => setStep("when")} />
+            </div>
           </div>
         )}
       </div>
@@ -245,8 +258,8 @@ export function OfficeTextQuiz({ id = "book", className, quiz = OFFICE_QUIZ }: {
 
 function Check1({ label, on, onClick }: { label: string; on: boolean; onClick: () => void }) {
   return (
-    <button type="button" aria-pressed={on} onClick={onClick} className="quiz-opt quiz-tap !py-3 text-left">
-      <span className="min-w-0 flex-1 text-sm font-semibold leading-snug">{label}</span>
+    <button type="button" aria-pressed={on} onClick={onClick} className="quiz-opt quiz-tap !min-h-[48px] !py-2 text-left">
+      <span className="min-w-0 flex-1 text-[15px] font-semibold leading-snug">{label}</span>
       <span className={cn("grid h-6 w-6 shrink-0 place-items-center rounded-md border-2", on ? "border-turbo bg-turbo text-white" : "border-border")} aria-hidden>
         {on && <Check className="h-4 w-4" />}
       </span>
@@ -256,15 +269,15 @@ function Check1({ label, on, onClick }: { label: string; on: boolean; onClick: (
 
 function Opt({ label, pressed, onClick }: { label: string; pressed: boolean; onClick: () => void }) {
   return (
-    <button type="button" aria-pressed={pressed} onClick={onClick} className="quiz-opt quiz-tap !py-3 text-left">
-      <span className="min-w-0 flex-1 text-sm font-semibold leading-snug">{label}</span>
+    <button type="button" aria-pressed={pressed} onClick={onClick} className="quiz-opt quiz-tap !min-h-[48px] !py-2 text-left">
+      <span className="min-w-0 flex-1 text-[15px] font-semibold leading-snug">{label}</span>
       <ArrowRight className="h-4 w-4 shrink-0 text-turbo" aria-hidden />
     </button>
   );
 }
-const Title = ({ text }: { text: string }) => <p className="mb-3 font-display text-2xl font-bold leading-tight">{text}</p>;
+const Title = ({ text }: { text: string }) => <p className="mb-2.5 font-display text-xl font-bold leading-tight">{text}</p>;
 const Back = ({ onClick }: { onClick: () => void }) => (
-  <button type="button" onClick={onClick} className="mt-1 flex min-h-[44px] items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground">
+  <button type="button" onClick={onClick} className="mt-0.5 flex min-h-[44px] items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground">
     <ArrowLeft className="h-4 w-4" aria-hidden /> Back
   </button>
 );

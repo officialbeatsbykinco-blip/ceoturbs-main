@@ -12,7 +12,7 @@ export default function TechQuizSheet({ open, setOpen, source }: { open: boolean
         <DrawerClose className="absolute right-3 top-3 z-10 grid h-11 w-11 place-items-center rounded-full bg-muted text-foreground" aria-label="Close">
           <X className="h-5 w-5" aria-hidden />
         </DrawerClose>
-        <div className="pb-safe overflow-y-auto px-4 pb-6 pt-3">{open && <TechQuiz key={source} variant="sheet" source={source} />}</div>
+        <div className="pb-safe overflow-y-auto px-4 pb-3 pt-3">{open && <TechQuiz key={source} variant="sheet" source={source} />}</div>
       </DrawerContent>
     </Drawer>
   );
