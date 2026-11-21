@@ -426,6 +426,8 @@ export const article = (g: Guide): JsonLd => ({
   publisher: { "@id": ORG_ID },
   mainEntityOfPage: abs(guidePath(g)),
   image: { "@type": "ImageObject", url: abs(guideImage(g).src), width: 1200, height: 630, caption: guideImage(g).alt },
+  ...(g.video ? { video: { "@id": `${youtubeUrl(g.video)}#video` } } : {}),
+  ...(g.sources ? { citation: g.sources.map((s) => s.url) } : {}),
   inLanguage: "en-US",
 });
 

@@ -10,6 +10,8 @@ import { BookButton, ShopCardsButton } from "@/components/cta/Actions";
 import { ReviewCard3D } from "@/components/visuals/ReviewVisuals";
 import { BookingSection, ReviewCardStrip } from "@/components/blocks/Sales";
 import { Breadcrumbs, DirectAnswer, FAQList, SectionHeader } from "@/components/blocks/Basics";
+import { YouTubeLite } from "@/components/blocks/YouTubeLite";
+import { VIDEOS } from "@/content/videos";
 import NotFound from "./NotFound";
 
 /** Mid-article offer: the animated tap card with a pitch written for this guide's topic. */
@@ -26,7 +28,7 @@ function CardOffer({ slug, className = "" }: { slug: string; className?: string 
         <p className="mt-2 text-2xl font-bold leading-snug">{o.head}</p>
         <p className="mt-2 text-sm text-muted-foreground">{o.body}</p>
         <div className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-2">
-          <ShopCardsButton className="btn-shine">{o.cta} — from {fromPriceLabel}</ShopCardsButton>
+          <ShopCardsButton className="btn-shine">{o.cta}, from {fromPriceLabel}</ShopCardsButton>
           <span className="text-xs text-muted-foreground">Free US shipping · {REVIEW_CARD.returnDays}-day returns</span>
         </div>
       </div>
@@ -103,6 +105,7 @@ function GuideArticle({ g }: { g: Guide }) {
   const path = guidePath(g);
   const audience = AUDIENCES.find((a) => a.adVertical === g.audience);
   const note = `Read guide: ${g.title}`;
+  const video = g.video ? VIDEOS.find((v) => v.id === g.video) : undefined;
   return (
     <>
       <article className="pt-28 sm:pt-32">
@@ -118,6 +121,7 @@ function GuideArticle({ g }: { g: Guide }) {
           </p>
           <DirectAnswer>{g.summary}</DirectAnswer>
           <img src={guideImage(g).src} alt={guideImage(g).alt} width={1200} height={630} {...({ fetchpriority: "high" } as Record<string, string>)} decoding="async" className="mt-8 aspect-[1200/630] w-full rounded-2xl object-cover ring-1 ring-white/10" />
+          {video && <YouTubeLite video={video} where={`guide ${g.slug}`} className="mt-8" />}
           <nav aria-label="In this guide" className="mt-8 rounded-2xl border border-border p-5">
             <p className="text-sm font-semibold">In this guide</p>
             <ol className="mt-2 grid text-sm text-muted-foreground sm:grid-cols-2">
@@ -154,12 +158,58 @@ function GuideArticle({ g }: { g: Guide }) {
                   ))}
                 </ul>
               )}
+              {s.steps && (
+                <ol className="mt-5 space-y-4">
+                  {s.steps.map((st, n) => (
+                    <li key={st.slice(0, 24)} className="flex gap-4 leading-relaxed text-foreground/85">
+                      <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-turbo/15 text-sm font-bold text-turbo" aria-hidden>
+                        {n + 1}
+                      </span>
+                      <span className="pt-0.5">{st}</span>
+                    </li>
+                  ))}
+                </ol>
+              )}
               {s.table && (
                 <CompareTable className="mt-6" head={s.table.head} rows={s.table.rows} />
+              )}
+              {s.image && (
+                <figure className="mt-7">
+                  <img src={s.image.src} alt={s.image.alt} width={s.image.width} height={s.image.height} loading="lazy" decoding="async" className={`w-full rounded-2xl object-cover ring-1 ring-white/10 ${s.image.width === s.image.height ? "mx-auto max-w-[480px]" : ""}`} />
+                  <figcaption className="mt-2.5 text-center text-sm text-muted-foreground">{s.image.caption}</figcaption>
+                </figure>
+              )}
+              {s.links && (
+                <p className="mt-5 text-sm text-muted-foreground">
+                  Read next:{" "}
+                  {s.links.map((l, n) => (
+                    <Fragment key={l.to}>
+                      {n > 0 && " · "}
+                      <Link to={l.to} className="font-semibold text-turbo underline underline-offset-4">
+                        {l.label}
+                      </Link>
+                    </Fragment>
+                  ))}
+                </p>
               )}
             </section>
             </Fragment>
           ))}
+
+          {g.sources && (
+            <section className="mt-14" aria-labelledby="sources">
+              <h2 id="sources" className="text-lg font-semibold">Sources</h2>
+              <ol className="mt-3 list-decimal space-y-2 pl-5 text-sm text-muted-foreground">
+                {g.sources.map((src) => (
+                  <li key={src.url}>
+                    <a href={src.url} target="_blank" rel="noopener" className="underline underline-offset-4 hover:text-turbo">
+                      {src.label}
+                    </a>
+                  </li>
+                ))}
+              </ol>
+            </section>
+          )}
 
           <CardCloser index={GUIDES.indexOf(g)} className="mt-16" />
 

@@ -284,7 +284,15 @@ function build(): PageMeta[] {
       priority: 0.7,
       changefreq: "monthly",
       group: "Guides",
-      schema: [...base(), S.webPage(path, g.title, g.metaDescription, "WebPage", g.updated), S.article(g), S.breadcrumbs([{ name: "Guides", path: "/guides" }, { name: g.title, path }]), S.faqPage(g.faqs, path)],
+      schema: [
+        ...base(),
+        S.webPage(path, g.title, g.metaDescription, "WebPage", g.updated),
+        S.article(g),
+        ...(g.howTo ? [S.howTo(path, g.howTo.name, g.howTo.steps)] : []),
+        ...S.youtubeVideos(VIDEOS.filter((v) => v.id === g.video)),
+        S.breadcrumbs([{ name: "Guides", path: "/guides" }, { name: g.title, path }]),
+        S.faqPage(g.faqs, path),
+      ],
     });
   }
 
