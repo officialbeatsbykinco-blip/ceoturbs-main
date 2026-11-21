@@ -33,6 +33,8 @@ export function JobPhotos({ className }: { className?: string }) {
               src={`/img/jobs/${p.slug}-full.webp`}
               srcSet={`/img/jobs/${p.slug}-800.webp ${s.small}w, /img/jobs/${p.slug}-full.webp ${p.full}w`}
               sizes={s.sizes}
+              width={p.full}
+              height={Math.round((p.full * 3) / (p.shape === "wide" ? 8 : 4))}
               loading="lazy"
               decoding="async"
               alt={p.alt}

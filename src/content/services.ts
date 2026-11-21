@@ -30,7 +30,7 @@ export const SERVICES: Service[] = [
     name: "Home office & computer setup",
     short: "Office setup",
     icon: "layout",
-    metaTitle: "Home Office & Computer Setup in Tampa, FL",
+    metaTitle: "Home Office Setup in Tampa: Desk, PC, Wi-Fi | From $99",
     metaDescription:
       "We set up your home office: desk, computer, monitors, Wi-Fi and devices, in Tampa Bay, 40 miles around. From $99. Call 678-558-4327.",
     h1: "Home office and computer setup — we build your workspace so you can get to work",
@@ -116,7 +116,7 @@ export const SERVICES: Service[] = [
     name: "Apartment & home office setup",
     short: "Apartment office setup",
     icon: "layout",
-    metaTitle: "Apartment & Home Office Setup — Tampa Bay | From $99",
+    metaTitle: "Apartment Desk Build & Monitor Mounting in Tampa | From $99",
     metaDescription: "We build your desk, mount monitors, connect everything and hide the cables. Apartments and homes in Tampa Bay. From $99. Call 678-558-4327.",
     h1: "Apartment and home office setup — desk built, monitors up, cables hidden",
     answer: "CEO Turbo comes to your apartment or home, assembles your desk and chair, mounts and aligns monitors, connects your computer, printer and Wi-Fi, and routes every cable out of sight. You supply the furniture and equipment. We do the building and wiring, usually in 2 to 4 hours, at a flat price confirmed before we start.",
@@ -580,7 +580,7 @@ export const SERVICES: Service[] = [
     name: "Conversion tracking & ad rescue",
     short: "Fix my ads",
     icon: "search",
-    metaTitle: "Ads Not Converting? Conversion Tracking Fixes",
+    metaTitle: "Conversion Tracking Setup for Ads: Meta Pixel, CAPI & GA4",
     metaDescription:
       `Find out why your ads aren't converting: GA4, Tag Manager, Clarity, Meta and Google tracking audited and fixed. One-time fix ${price("conversion-rescue")}, then ${price("tracking-watch")}/mo.`,
     h1: "Ads not converting? Fix the tracking first, then stop the wasted spend",

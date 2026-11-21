@@ -182,7 +182,7 @@ function build(): PageMeta[] {
 
   pages.push({
     path: SETUP_PATH,
-    title: "Google Review Card Setup: Find Your Review Link | CEO Turbo",
+    title: "Google Review Card Setup: Program Your NFC Card | CEO Turbo",
     description:
       "Set up your NFC Google review card in about 2 minutes from your phone: find your review link, write it to the card and test the tap.",
     ogImage: "/og/review-cards.jpg?v=2",

@@ -190,6 +190,7 @@ export const GUIDES: Guide[] = [
       { q: "Where is this data from?", a: "Meta Ads Manager performance overviews for CEO Turbo client campaigns in July–October 2026. Screenshots are on our results page." },
     ],
     related: [
+      { label: "Ads not converting? Fix the tracking", to: "/ads-not-converting" },
       { label: "See the ad dashboards", to: "/results" },
       { label: "Meta ads management", to: "/services/meta-ads" },
       { label: "Local business growth", to: "/local-business" },
@@ -605,7 +606,11 @@ export const GUIDES: Guide[] = [
           "Think about the last 60 seconds of every visit. Where is the customer standing? What's in their hand? A café customer is waiting at the counter for a drink. A salon client is at the mirror checking the result. A homeowner is walking the plumber to the door. That's your spot.",
         ],
         image: { src: "/img/guides/google-reviews/where-to-put-review-cards.webp", alt: "Six places to put a Google review card: register, every table, in your pocket, each chair, the truck and on receipts", caption: "Put a card wherever the job ends.", width: 1200, height: 675 },
-        links: [{ label: "Review cards for restaurants, salons and contractors", to: "/guides/google-review-cards-by-business" }],
+        links: [
+          { label: "Review cards for restaurants, salons and contractors", to: "/guides/google-review-cards-by-business" },
+          { label: "Salon marketing", to: "/salons" },
+          { label: "Barbershop marketing", to: "/barbershops" },
+        ],
       },
       {
         h2: "What should you say when you ask for a review?",
@@ -1046,6 +1051,8 @@ export const GUIDES: Guide[] = [
       { q: "Should I also use a QR code?", a: "Yes, on receipts, invoices and printed signs — it reaches customers after they leave and anyone with an older phone." },
     ],
     related: [
+      { label: "Marketing for hair and beauty salons", to: "/salons" },
+      { label: "Marketing for barbershops", to: "/barbershops" },
       { label: "Shop review cards (multi-packs)", to: "/google-review-cards" },
       { label: "Review scripts for every business", to: "/guides/what-to-say-to-get-google-reviews" },
       { label: "Local business marketing", to: "/local-business" },
@@ -1107,6 +1114,7 @@ export const GUIDES: Guide[] = [
       { q: "Do I need a developer for this?", a: "For Pixel plus Conversions API with deduplication, usually yes — or book a call and we'll set it up for you." },
     ],
     related: [
+      { label: "Ads not converting? Fix the tracking", to: "/ads-not-converting" },
       { label: "Book a free Brand Boost call", to: "/brand-boost" },
       { label: "Meta ads cost per lead (real data)", to: "/guides/facebook-ads-cost-per-lead" },
       { label: "Meta ads management", to: "/services/meta-ads" },
@@ -1249,6 +1257,7 @@ export const GUIDES: Guide[] = [
       { q: "How many beats should I upload?", a: "Enough to post consistently. A steady schedule, like several uploads a week, matters more than a huge catalog at once." },
     ],
     related: [
+      { label: "Marketing for painters and visual artists", to: "/visual-artists" },
       { label: "Producers: sell more beats", to: "/producers" },
       { label: "Run the free visibility check", to: "/free-audit" },
       { label: "How to get more Spotify listeners", to: "/guides/how-to-get-more-spotify-listeners" },
@@ -1289,6 +1298,8 @@ export const GUIDES: Guide[] = [
       { q: "How fast can you fix it?", a: "Many speed-ups and virus removals are done the same day. Parts like screens can take a little longer." },
     ],
     related: [
+      { label: "Tampa Bay service area", to: "/tampa" },
+      { label: "Business IT setup in Tampa", to: "/business-tech-setup-tampa" },
       { label: "Computer & laptop repair", to: "/computer-repair-tampa" },
       { label: "Computer shop", to: "/computers" },
       { label: "Office setup", to: "/office-setup-tampa" },

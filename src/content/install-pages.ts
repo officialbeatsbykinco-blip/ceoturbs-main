@@ -253,7 +253,7 @@ INSTALL_PAGES.push({
   ],
   value: 500,
   seo: {
-    title: "Office & Business Tech Setup in Tampa, FL | CEO Turbo",
+    title: "Business IT Setup in Tampa: Wi-Fi, Printers & Microsoft 365",
     description: `Workstations, multi-monitor desks, business Wi-Fi, printers and Microsoft 365 set up on-site for Tampa Bay businesses. Flat price. Call ${SITE.phone.display}.`,
   },
 });

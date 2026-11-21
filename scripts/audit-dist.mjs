@@ -30,6 +30,8 @@ const routes = new Set(files.map(routeOf));
 const sitemap = readFileSync(path.join(DIST, "sitemap.xml"), "utf8");
 const sitemapUrls = new Set([...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]));
 const titles = new Map();
+/** Every internal path some other page links to (orphan check: a sitemap page nobody links to rarely gets crawled). */
+const linkedTo = new Set();
 const descriptions = new Map();
 
 const decode = (s) => s.replace(/&amp;/g, "&").replace(/&quot;/g, '"').replace(/&#x27;|&#39;/g, "'").replace(/&lt;/g, "<").replace(/&gt;/g, ">");
@@ -100,6 +102,7 @@ for (const file of files) {
     const clean = href.split(/[?#]/)[0].replace(/\/$/, "") || "/";
     const asset = path.join(DIST, clean);
     if (!routes.has(clean) && !existsSync(asset)) err(route, `broken internal link → ${href}`);
+    if (clean !== route) linkedTo.add(clean);
   }
 
   // Same-page jump links ("Get my price" → #book) must land on a section that exists in this page's HTML.
@@ -116,6 +119,7 @@ for (const file of files) {
 for (const u of sitemapUrls) {
   const r = u.replace(ORIGIN, "").replace(/\/$/, "") || "/";
   if (!routes.has(r)) err("sitemap.xml", `lists a URL with no page: ${u}`);
+  if (r !== "/" && !linkedTo.has(r)) err(r, "orphan page: in sitemap.xml but no other page links to it");
 }
 for (const [t, rs] of titles) if (rs.length > 1) err(rs.join(", "), `duplicate title "${t}"`);
 for (const [d, rs] of descriptions) if (rs.length > 1) err(rs.join(", "), `duplicate description "${d.slice(0, 60)}…"`);
