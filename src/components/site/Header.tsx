@@ -329,7 +329,7 @@ function QuickNav({ pathname }: { pathname: string }) {
               key={q.to}
               to={q.to}
               aria-current={on ? "page" : undefined}
-              className={cn("inline-flex min-h-[40px] shrink-0 items-center whitespace-nowrap rounded-full px-3.5 text-sm font-semibold ring-1 transition-colors", on ? "bg-turbo text-white ring-turbo" : "bg-card text-foreground ring-border hover:ring-turbo/60")}
+              className={cn("inline-flex min-h-[40px] shrink-0 items-center whitespace-nowrap rounded-full px-3.5 text-sm font-semibold ring-1 transition-colors", on ? "bg-turbo text-background ring-turbo" : "bg-card text-foreground ring-border hover:ring-turbo/60")}
             >
               {q.label}
             </Link>

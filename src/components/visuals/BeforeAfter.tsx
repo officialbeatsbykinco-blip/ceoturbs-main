@@ -60,8 +60,8 @@ export function BeforeAfter({ before, after, width, height, className, label = "
 
 /** The owner's office job: a bare desk with closed laptops, then a working three-screen workstation. */
 export const OFFICE_BEFORE_AFTER = {
-  before: { src: "/img/office/before-1200.webp", srcSet: "/img/office/before-640.webp 640w, /img/office/before-1200.webp 1200w", alt: "Before: a bare desk with two closed laptops, a loose printer and tangled cables" },
-  after: { src: "/img/office/after-1200.webp", srcSet: "/img/office/after-640.webp 640w, /img/office/after-1200.webp 1200w", alt: "After: an L-desk workstation with three working monitors, keyboard, mouse and tidy cables" },
+  before: { src: "/img/office/before-1200.webp", srcSet: "/img/office/before-640.webp 640w, /img/office/before-1200.webp 1200w, /img/office/before-1600.webp 1600w", alt: "Before: a bare desk with two closed laptops, a loose printer and tangled cables" },
+  after: { src: "/img/office/after-1200.webp", srcSet: "/img/office/after-640.webp 640w, /img/office/after-1200.webp 1200w, /img/office/after-1600.webp 1600w", alt: "After: an L-desk workstation with three working monitors, keyboard, mouse and tidy cables" },
   width: 1200,
   height: 900,
 };

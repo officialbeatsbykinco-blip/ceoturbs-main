@@ -390,7 +390,7 @@ function HeroPhoto() {
       <div className="relative overflow-hidden rounded-[2rem] shadow-[0_30px_80px_-30px_rgb(20_40_90/0.45)] ring-1 ring-black/5">
         <img
           src="/img/office/after-1200.webp"
-          srcSet="/img/office/after-640.webp 640w, /img/office/after-1200.webp 1200w"
+          srcSet="/img/office/after-640.webp 640w, /img/office/after-1200.webp 1200w, /img/office/after-1600.webp 1600w"
           sizes="(min-width: 1024px) 560px, 100vw"
           width={1200}
           height={900}
