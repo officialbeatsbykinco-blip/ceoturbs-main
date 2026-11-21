@@ -742,9 +742,9 @@ export const GUIDES: Guide[] = [
   {
     slug: "nfc-google-review-cards",
     title: "NFC Google review cards: do they work, and are they worth it?",
-    metaTitle: "Do NFC Google Review Cards Work? (2026 Guide)",
+    metaTitle: "Google Review Cards: Do NFC Cards Work? (2026)",
     metaDescription:
-      "How NFC Google review cards work, which phones read them, how they compare to QR codes and stands, what they cost, and how to get the most reviews.",
+      "Do Google review cards work? How NFC tap cards open your review form, which phones read them, QR vs NFC, real costs and how to get more 5-star reviews.",
     summary:
       "An NFC Google review card stores your review link on a chip. A customer holds their phone near it and your Google review form opens — no app, no searching. They work on iPhone XS and newer and NFC Android phones, cost $15–$40 once, and get more reviews because they cut the ask to one tap.",
     audience: "local",

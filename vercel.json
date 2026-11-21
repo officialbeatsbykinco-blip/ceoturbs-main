@@ -146,7 +146,25 @@
       "source": "/guides/how-to-get-more-google-reviews",
       "destination": "/how-to-get-more-google-reviews",
       "permanent": true
-    }
+    },
+    { "source": "/meta-ads", "destination": "/services/meta-ads", "permanent": true },
+    { "source": "/google-ads", "destination": "/services/google-ads", "permanent": true },
+    { "source": "/seo-websites", "destination": "/services/seo-aeo-geo", "permanent": true },
+    { "source": "/seo", "destination": "/services/seo-aeo-geo", "permanent": true },
+    { "source": "/shirts", "destination": "/custom-company-t-shirts", "permanent": true },
+    { "source": "/shirts/:path*", "destination": "/custom-company-t-shirts", "permanent": true },
+    { "source": "/work", "destination": "/portfolio", "permanent": true },
+    { "source": "/work/:path*", "destination": "/portfolio", "permanent": true },
+    { "source": "/yard-signs", "destination": "/google-review-cards", "permanent": true },
+    { "source": "/business-cards", "destination": "/google-review-cards", "permanent": true },
+    { "source": "/accessibility", "destination": "/about", "permanent": true },
+    { "source": "/insights", "destination": "/guides", "permanent": true },
+    { "source": "/insights/custom-coded-websites-vs-builders", "destination": "/services/website-design", "permanent": true },
+    { "source": "/insights/seo-aeo-geo-for-business-owners", "destination": "/guides/seo-vs-aeo-vs-geo", "permanent": true },
+    { "source": "/insights/qr-codes-business-cards-review-cards-yard-signs", "destination": "/guides/nfc-google-review-cards", "permanent": true },
+    { "source": "/insights/:path*", "destination": "/guides", "permanent": true },
+    { "source": "/car-battery", "destination": "/", "permanent": true },
+    { "source": "/car-battery/:path*", "destination": "/", "permanent": true }
   ],
   "headers": [
     {
