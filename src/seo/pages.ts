@@ -68,12 +68,12 @@ function build(): PageMeta[] {
 
   pages.push({
     path: "/",
-    title: "Computer Repair, Office IT & Cameras in Tampa | CEO Turbo",
-    description: `Computer repair, office IT, security cameras and Ring doorbells around Tampa, plus websites, ads and Google review cards. 5.0 on Google. ${SITE.phone.display}.`,
+    title: "Windows Computer Repair at Your Door in Tampa | CEO Turbo",
+    description: `Slow PCs made fast, blue screens and no-power fixed at your door in Tampa. Plus websites, ads and Google review cards. 5.0 on Google. ${SITE.phone.display}.`,
     priority: 1,
     changefreq: "weekly",
     group: "Core",
-    schema: [...base(), S.webPage("/", "CEO Turbo", SITE.description), S.localService({ path: "/", name: "Computer repair and office IT setup in Tampa Bay", serviceType: "Computer repair", description: "Laptop and desktop repair at your door, office IT and workstation setup, security camera and video doorbell installs, Wi-Fi fixes, and phone and tablet setup within about 40 miles of Tampa, FL. Price up front, no fix no charge.", prices: [...IT_SERVICES, ...INSTALL_PRICES.filter((p) => p.id.startsWith("cam-"))] }), S.faqPage(TECH_HOME_FAQS, "/")],
+    schema: [...base(), S.webPage("/", "CEO Turbo", SITE.description), S.localService({ path: "/", name: "Computer repair and office IT setup in Tampa Bay", serviceType: "Computer repair", description: "Windows laptop and desktop repair at your door (speed-ups, blue screens, no power), office IT and workstation setup, security camera and video doorbell installs and Wi-Fi fixes within about 40 miles of Tampa, FL. Price up front, no fix no charge.", prices: [...IT_SERVICES, ...INSTALL_PRICES.filter((p) => p.id.startsWith("cam-"))] }), S.faqPage(TECH_HOME_FAQS, "/")],
   });
 
   pages.push({
@@ -292,7 +292,7 @@ function build(): PageMeta[] {
     path: "/tampa",
     title: "CEO Turbo Tampa: IT Support, Computer Repair & Office Setup",
     description:
-      "Tampa IT support: laptop and desktop repair at your door, office IT and Wi-Fi setup, and phone and tablet setup, plus websites and ads for Tampa Bay.",
+      "Tampa IT support: Windows laptop and desktop repair at your door, office IT and Wi-Fi setup, plus websites, ads and Google review cards for Tampa Bay.",
     priority: 0.7,
     changefreq: "monthly",
     group: "Company",
@@ -369,8 +369,8 @@ function build(): PageMeta[] {
     { path: "/get-more-reviews", title: "How to Get More Google Reviews (One Tap) | CEO Turbo", description: `Why reviews decide who gets the call on Google, Maps and ChatGPT — and the NFC card that turns “I'll review you later” into a review. From ${fromPriceLabel}.`, ogImage: "/og/get-more-reviews.jpg", noindex: true, priority: 0.1, changefreq: "yearly", group: "Core", schema: base() },
     // Google Search ad landing for the local-service offer; noindex so it doesn't compete with / and /services/google-ads.
     { path: "/google-ads-for-local-business", title: "Get More Calls From Google Ads | CEO Turbo", description: `Get more calls from people searching Google. Search campaigns for appliance repair, HVAC, plumbing and cleaning, every call tracked. Setup ${price("pkg-start")}.`, noindex: true, priority: 0.1, changefreq: "yearly", group: "Core", schema: base() },
-    // Meta ads landing for tech repair in Tampa (computers, phones, tablets; in-home within 40 miles or remote). Indexed for "computer repair Tampa".
-    { path: "/computer-repair-tampa", title: "Computer Repair in Tampa, FL: We Come to You | CEO Turbo", description: `Laptop or desktop slow, crashing or dead? Fixed at your door in Tampa Bay or remotely, price up front. Call or text ${SITE.phone.display}.`, ogImage: IT_OG.repair, priority: 0.9, changefreq: "monthly", group: "Core", schema: [...base(), S.webPage("/computer-repair-tampa", "Computer repair in Tampa", "In-home laptop and desktop repair within 40 miles of Tampa, FL, phone and tablet setup, and remote speed-ups for slow Windows computers."), S.breadcrumbs([{ name: "Computer repair Tampa", path: "/computer-repair-tampa" }]), S.localService({ path: "/computer-repair-tampa", name: "Computer and laptop repair in Tampa Bay", serviceType: "Computer repair", description: "In-home and on-site repair of laptops and desktops, Windows and Mac, within about 40 miles of Tampa, FL, plus phone and tablet setup and remote speed-ups for slow Windows computers. Price up front, no fix no charge.", prices: IT_SERVICES }), S.faqPage(REPAIR_FAQS, "/computer-repair-tampa")] },
+    // Meta ads landing for Windows computer repair in Tampa (laptops and desktops; in-home within 40 miles or remote). Indexed for "computer repair Tampa".
+    { path: "/computer-repair-tampa", title: "Computer Repair in Tampa, FL: We Come to You | CEO Turbo", description: `Windows laptop or desktop slow, blue screening or dead? Fixed at your door in Tampa Bay or remotely, price up front. Call or text ${SITE.phone.display}.`, ogImage: IT_OG.repair, priority: 0.9, changefreq: "monthly", group: "Core", schema: [...base(), S.webPage("/computer-repair-tampa", "Computer repair in Tampa", "In-home Windows laptop and desktop repair within 40 miles of Tampa, FL, and remote speed-ups for slow Windows computers."), S.breadcrumbs([{ name: "Computer repair Tampa", path: "/computer-repair-tampa" }]), S.localService({ path: "/computer-repair-tampa", name: "Computer and laptop repair in Tampa Bay", serviceType: "Computer repair", description: "In-home and on-site repair of Windows laptops and desktops within about 40 miles of Tampa, FL: speed-ups, blue screens, computers that won't turn on, viruses and upgrades, plus remote speed-ups for slow Windows computers. Price up front, no fix no charge.", prices: IT_SERVICES }), S.faqPage(REPAIR_FAQS, "/computer-repair-tampa")] },
     // Google & Microsoft Ads landing for office setup and cable management in Tampa.
     { path: "/office-setup-tampa", title: "Office Setup & Cable Management in Tampa, FL | CEO Turbo", ogImage: IT_OG.office, description: `Multi-monitor workstations, cable management, printers, Wi-Fi and Microsoft/Google setup for Tampa Bay homes and offices. From $99 per desk.`, priority: 0.9, changefreq: "monthly", group: "Core", schema: [...base(), S.webPage("/office-setup-tampa", "Office setup in Tampa", "Office setup, workstation and cable management services around Tampa, FL."), S.breadcrumbs([{ name: "Office setup Tampa", path: "/office-setup-tampa" }]), S.localService({ path: "/office-setup-tampa", name: "Office setup and cable management in Tampa Bay", serviceType: "Office setup", description: "Multi-monitor workstations, cable management, printers, Wi-Fi and Microsoft or Google setup for homes and businesses within about 40 miles of Tampa, FL. Flat price in writing first.", prices: OFFICE_PRICES }), S.faqPage(OFFICE_FAQS, "/office-setup-tampa")] },
     ...INSTALL_PAGES.map((p) => ({

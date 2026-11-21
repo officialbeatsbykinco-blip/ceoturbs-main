@@ -82,7 +82,7 @@ const TECH: Menu = {
   label: "Tech support",
   to: IT_SERVICES_PATH,
   items: [
-    { to: IT_SERVICES_PATH, label: "Computer & laptop repair", sub: "At your door around Tampa, or remote" },
+    { to: IT_SERVICES_PATH, label: "Windows computer repair", sub: "Speed-ups, blue screens, won't turn on" },
     { to: COMPUTERS_PATH, label: "Computer shop", sub: "Laptops & desktops, ready to use" },
     { to: OFFICE_SETUP_PATH, label: "Office setup & cables", sub: "Desks, monitors, printers, Wi-Fi" },
     { to: "/business-tech-setup-tampa", label: "Business IT setup", sub: "Workstations, network, POS" },
@@ -115,8 +115,8 @@ export function Header({ focus: focusProp = false }: { focus?: boolean }) {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const { pathname } = useLocation();
-  // Tech-repair ad pages run in focus mode on phones (no menu to wander off into) and book a tech visit
-  // instead of the agency call. Computers always keep the full nav: a missing nav reads as a broken site.
+  // Tech-repair ad pages book a tech visit instead of the agency call. Every page keeps the menu, phones too:
+  // a missing nav reads as a broken site.
   const tech = techBooking(pathname);
   const texting = useTexting();
   const focus = focusProp || !!tech;
@@ -169,12 +169,6 @@ export function Header({ focus: focusProp = false }: { focus?: boolean }) {
             <span className="sr-only">Call {SITE.name} at {SITE.phone.display}</span>
           </CallLink>
           {/* The shop pages have no bottom bar, so their Text button sits up here. */}
-          {pathname === "/" && (
-            <FixMyTechLink source="header text quiz" className="inline-flex h-10 w-10 items-center justify-center rounded-xl text-foreground ring-1 ring-white/10 hover:bg-white/5 sm:hidden">
-              <MessageSquare className="h-[18px] w-[18px]" aria-hidden />
-              <span className="sr-only">Text {SITE.name}</span>
-            </FixMyTechLink>
-          )}
           {(pathname === SHOP_PATH || pathname === SHIRTS_PATH || pathname === ARTIST_MERCH_PATH) && (
             <a href={smsHref(pathname === SHOP_PATH ? CARD_TEXT : QUICK_TECH_TEXT)} data-call-location={focus ? "ad page header text" : "header text"} className="inline-flex h-10 w-10 items-center justify-center rounded-xl text-foreground ring-1 ring-white/10 hover:bg-white/5 sm:hidden">
               <MessageSquare className="h-[18px] w-[18px]" aria-hidden />
@@ -211,50 +205,49 @@ export function Header({ focus: focusProp = false }: { focus?: boolean }) {
               Contact us
             </ContactButton>
           )}
-          {!focus && (
-            <button
-              type="button"
-              className="inline-flex h-10 w-10 items-center justify-center rounded-xl text-foreground lg:hidden"
-              aria-label={open ? "Close menu" : "Open menu"}
-              aria-expanded={open}
-              aria-controls="mobile-menu"
-              onClick={() => setOpen((v) => !v)}
-            >
-              {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-            </button>
-          )}
+          <button
+            type="button"
+            className="inline-flex h-10 w-10 items-center justify-center rounded-xl text-foreground lg:hidden"
+            aria-label={open ? "Close menu" : "Open menu"}
+            aria-expanded={open}
+            aria-controls="mobile-menu"
+            onClick={() => setOpen((v) => !v)}
+          >
+            {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </button>
         </div>
       </div>
 
-      {open && !focus && (
+      {open && (
         <div id="mobile-menu" className="container-x h-[calc(100dvh-4rem)] overflow-y-auto pb-32 pt-2 lg:hidden">
           <div className="grid gap-2">
-            <Link to={`${CHECK_PATH}?from=mobile-menu`} onClick={() => setOpen(false)} className="btn-ignite justify-between !px-4 !py-4 !text-lg">
+            <FixMyTechLink source="mobile menu" onOpen={() => setOpen(false)} className="btn-ignite justify-between !px-4 !py-4 !text-lg">
               <span className="inline-flex items-center gap-2">
-                <Search className="h-5 w-5" aria-hidden /> Run my free check
+                <Wrench className="h-5 w-5" aria-hidden /> Fix my Windows PC
               </span>
               <span aria-hidden>›</span>
-            </Link>
+            </FixMyTechLink>
             {[
               ["/grow", "Websites & ads"],
-              ["/services/google-business-profile", "Google Business Profile"],
+              ["/portfolio", "Websites we built"],
               [SHOP_PATH, `Google review cards · ${fromPriceLabel}`],
-              ["/portfolio", "Our work"],
+              [OFFICE_SETUP_PATH, "Office IT setup"],
+              [`${CHECK_PATH}?from=mobile-menu`, "Free Google & website check"],
             ].map(([to, label]) => (
-              <Link key={to} to={to} onClick={() => setOpen(false)} className="panel flex items-center justify-between px-4 py-4 text-lg font-semibold">
+              <Link key={to} to={to} onClick={() => setOpen(false)} className="panel flex min-h-[56px] items-center justify-between px-4 py-4 text-lg font-semibold">
                 {label}
                 <span className="text-turbo" aria-hidden>›</span>
               </Link>
             ))}
             <div className="grid grid-cols-2 gap-2">
-              <BookButton note="Mobile menu" variant="chrome" className="inline-flex items-center justify-center gap-2 !py-4 !text-base">
-                <Calendar className="h-5 w-5 text-turbo" aria-hidden />
-                Book a call
-              </BookButton>
-              <CallLink location="mobile menu" className="btn-chrome inline-flex items-center justify-center gap-2 !py-4 !text-base">
-                <Phone className="h-5 w-5 text-turbo" aria-hidden />
-                Call now
+              <CallLink location="mobile menu" className="btn-blue inline-flex items-center justify-center gap-2 !py-4 !text-base">
+                <Phone className="h-5 w-5" aria-hidden />
+                Call
               </CallLink>
+              <a href={smsHref(QUICK_TEXT)} data-call-location="mobile menu text" className="btn-chrome inline-flex items-center justify-center gap-2 !py-4 !text-base">
+                <MessageSquare className="h-5 w-5 text-turbo" aria-hidden />
+                Text
+              </a>
             </div>
           </div>
           <Link to="/" onClick={() => { setOpen(false); window.scrollTo({ top: 0, behavior: "smooth" }); }} className="mt-6 block px-1 py-2 text-base font-medium">
@@ -262,12 +255,12 @@ export function Header({ focus: focusProp = false }: { focus?: boolean }) {
           </Link>
           <details className="group border-t border-border py-1 [&_summary::-webkit-details-marker]:hidden">
             <summary className="flex cursor-pointer list-none items-center justify-between px-1 py-3 text-base font-medium">
-              Tech support, IT &amp; computers
+              Computer repair &amp; IT
               <ChevronDown className="h-4 w-4 text-muted-foreground transition-transform group-open:rotate-180" aria-hidden />
             </summary>
             <div className="grid gap-1 pb-3">
-              <FixMyTechLink source="mobile menu" onOpen={() => setOpen(false)} className="rounded-xl bg-white/[0.03] px-3 py-3.5 text-sm font-semibold">
-                Computer &amp; laptop repair
+              <FixMyTechLink source="mobile menu list" onOpen={() => setOpen(false)} className="rounded-xl bg-white/[0.03] px-3 py-3.5 text-sm font-semibold">
+                Windows computer repair
               </FixMyTechLink>
               {TECH.items.slice(1).concat([{ to: SHIRTS_PATH, label: "Company t-shirts" }]).map((i) => (
                 <Link key={i.to} to={i.to} onClick={() => setOpen(false)} className="rounded-xl bg-white/[0.03] px-3 py-3.5 text-sm font-medium">

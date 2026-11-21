@@ -29,7 +29,7 @@ export function openContact(source: string): boolean {
 
 type Choice = { id: string; icon: LucideIcon; title: string; sub: string };
 const CHOICES: Choice[] = [
-  { id: "repair", icon: Laptop, title: "Fix my computer or phone", sub: "Slow, broken, virus, cracked screen" },
+  { id: "repair", icon: Laptop, title: "Fix my Windows PC", sub: "Slow, blue screen, won't turn on, virus" },
   { id: "office", icon: Monitor, title: "Set up my office", sub: "Desks, monitors, cables, Wi-Fi" },
   { id: "grow", icon: Megaphone, title: "Get more customers", sub: "Websites, Google & Meta ads" },
 ];

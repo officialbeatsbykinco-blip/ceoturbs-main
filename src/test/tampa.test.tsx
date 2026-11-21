@@ -3,7 +3,7 @@
 import { describe, it, expect, beforeEach } from "vitest";
 import { readFileSync, readdirSync, statSync } from "node:fs";
 import path from "node:path";
-import { techMessage, techLabels, allProblems, EMPTY_TECH, zipOk, remoteOk, problemsFor } from "@/content/tech-quiz";
+import { techMessage, techLabels, allProblems, DEVICES, EMPTY_TECH, zipOk, remoteOk, problemsFor } from "@/content/tech-quiz";
 import { techFields } from "../../api/lead.js";
 import { trackPayload } from "../../api/track.js";
 
@@ -12,50 +12,47 @@ const w = window as Win;
 
 describe("tech repair quiz", () => {
   it("writes the whole request into the text, one answer per line", () => {
-    const msg = techMessage({ ...EMPTY_TECH, devices: ["windows"], problems: { windows: ["slow", "virus"] }, when: "asap", where: "home", zip: "33511", details: "Dell, started last week", name: "Pat Lee" });
-    expect(msg).toBe("Hi Chris! I'd like a repair price.\nWindows PC or laptop: Slow or freezing, Virus, pop-ups or scam warnings\nDetails: Dell, started last week\nWhen: ASAP\nWhere: Come to me, ZIP 33511\nName: Pat Lee");
+    const msg = techMessage({ ...EMPTY_TECH, devices: ["laptop"], problems: { laptop: ["slow", "virus"] }, when: "asap", where: "home", zip: "33511", details: "Dell, started last week", name: "Pat Lee" });
+    expect(msg).toBe("Hi Chris! I'd like a repair price.\nWindows laptop: Slow or freezing: make it faster, Virus, pop-ups or scam warnings\nDetails: Dell, started last week\nWhen: ASAP\nWhere: Come to me, ZIP 33511\nName: Pat Lee");
   });
 
-  it("takes several broken devices, each with its own problems, and loses none of them", () => {
-    const a = { ...EMPTY_TECH, devices: ["windows", "iphone", "other"] as const, problems: { windows: ["virus", "crash"], iphone: ["screen", "battery"] }, zip: "33602", name: "Ana", details: "x".repeat(900) } as unknown as Parameters<typeof techMessage>[0];
+  it("takes a laptop and a desktop, each with its own problems, and loses none of them", () => {
+    const a = { ...EMPTY_TECH, devices: ["laptop", "desktop"] as const, problems: { laptop: ["virus", "crash"], desktop: ["dead"] }, zip: "33602", name: "Ana", details: "x".repeat(900) } as unknown as Parameters<typeof techMessage>[0];
     const msg = techMessage(a);
-    expect(msg).toContain("3 devices:");
-    expect(msg).toContain("- Windows PC or laptop: Virus, pop-ups or scam warnings, Crashing or error screens");
-    expect(msg).toContain("- iPhone: Cracked or broken screen, Battery dies fast or won't charge");
-    expect(msg).toContain("- Printer, Wi-Fi or TV: not sure, will explain");
+    expect(msg).toContain("2 devices:");
+    expect(msg).toContain("- Windows laptop: Virus, pop-ups or scam warnings, Blue screen or crashing");
+    expect(msg).toContain("- Windows desktop or gaming PC: Won't turn on or won't start");
     expect(msg).toContain("x".repeat(900));
-    expect(allProblems(a)).toEqual(["virus", "crash", "screen", "battery"]);
+    expect(allProblems(a)).toEqual(["virus", "crash", "dead"]);
     const l = techLabels(a);
-    expect(l.device).toBe("Windows PC or laptop, iPhone, Printer, Wi-Fi or TV");
+    expect(l.device).toBe("Windows laptop, Windows desktop or gaming PC");
     // The lead sheet keeps every device and the full note, not a 300-character stub.
     const f = techFields({ problem: l.problem, device: l.device, details: a.details });
-    expect(f.note).toContain("iPhone: Cracked or broken screen");
-    expect(f.note).toContain("Printer, Wi-Fi or TV: not sure");
+    expect(f.note).toContain("Windows desktop or gaming PC: Won't turn on");
     expect(f.note).toContain("x".repeat(900));
   });
 
-  it("only allows remote for software problems on one Windows computer", () => {
-    expect(remoteOk({ devices: ["windows"], problems: { windows: ["slow"] } })).toBe(true);
-    expect(remoteOk({ devices: ["windows"], problems: { windows: ["slow", "virus", "setup"] } })).toBe(true);
-    expect(remoteOk({ devices: ["windows"], problems: { windows: ["slow", "dead"] } })).toBe(false);
-    expect(remoteOk({ devices: ["windows"], problems: { windows: ["upgrade"] } })).toBe(false);
-    expect(remoteOk({ devices: ["windows", "iphone"], problems: { windows: ["slow"], iphone: ["slow"] } })).toBe(false);
-    expect(remoteOk({ devices: ["mac"], problems: { mac: ["slow"] } })).toBe(false);
-    expect(remoteOk({ devices: ["iphone"], problems: { iphone: ["slow"] } })).toBe(false);
-    const remote = techMessage({ ...EMPTY_TECH, devices: ["windows"], problems: { windows: ["slow"] }, where: "remote", zip: "33602" });
+  it("only allows remote when every computer has software problems only", () => {
+    expect(remoteOk({ devices: ["laptop"], problems: { laptop: ["slow"] } })).toBe(true);
+    expect(remoteOk({ devices: ["desktop"], problems: { desktop: ["slow", "virus", "setup"] } })).toBe(true);
+    expect(remoteOk({ devices: ["laptop", "desktop"], problems: { laptop: ["slow"], desktop: ["virus"] } })).toBe(true);
+    expect(remoteOk({ devices: ["laptop"], problems: { laptop: ["slow", "dead"] } })).toBe(false);
+    expect(remoteOk({ devices: ["laptop"], problems: { laptop: ["upgrade"] } })).toBe(false);
+    expect(remoteOk({ devices: ["laptop", "desktop"], problems: { laptop: ["slow"] } })).toBe(false);
+    expect(remoteOk({ devices: [], problems: {} })).toBe(false);
+    const remote = techMessage({ ...EMPTY_TECH, devices: ["laptop"], problems: { laptop: ["slow"] }, where: "remote", zip: "33602" });
     expect(remote).toContain("Where: Remote");
     expect(remote).not.toContain("33602");
     expect(remote).not.toContain("Details");
     // A remote answer left over from earlier answers can't slip through for a visit-only job.
-    expect(techMessage({ ...EMPTY_TECH, devices: ["iphone"], problems: { iphone: ["screen"] }, where: "remote" })).toContain("Where: Come to me");
+    expect(techMessage({ ...EMPTY_TECH, devices: ["desktop"], problems: { desktop: ["dead"] }, where: "remote" })).toContain("Where: Come to me");
   });
 
-  it("shows each device only the problems it can have", () => {
-    const ids = (d: string) => problemsFor(d).map((p) => p.id);
-    expect(ids("iphone")).not.toContain("crash");
-    expect(ids("iphone")).not.toContain("virus");
-    expect(ids("other")).toEqual(["printer", "wifi", "tv", "other"]);
-    expect(ids("windows")).toContain("virus");
+  it("offers Windows computers only, and never Mac, phone, tablet or screen repairs", () => {
+    expect(DEVICES.map((d) => d.id)).toEqual(["laptop", "desktop"]);
+    const labels = [...DEVICES, ...problemsFor("laptop")].map((x) => x.label).join(" ");
+    expect(labels).not.toMatch(/\bmacs?\b|macbook|iphone|android|tablet|ipad|cracked|broken screen|battery/i);
+    expect(problemsFor("desktop").map((p) => p.id)).toEqual(expect.arrayContaining(["slow", "crash", "dead"]));
   });
 
   it("only accepts a 5-digit ZIP", () => {
@@ -66,6 +63,11 @@ describe("tech repair quiz", () => {
 
   it("files the answers as one readable sheet note", () => {
     expect(techFields({ problem: "Won't turn on", device: "Mac", where: "Come to me", zip: "33755", when: "ASAP", details: "Fell<script>" }).note).toBe("Problem: Won't turn on | Device: Mac | When: ASAP | Where: Come to me | ZIP: 33755 | Details: Fell script");
+  });
+
+  it("sends the repair quiz start and last step to the Conversions API under the Pixel's names", () => {
+    expect(trackPayload({ event: "tech_quiz_start", contentName: "Computer repair Tampa", contentCategory: "tech_repair" })).toMatchObject({ eventName: "QuizStart", customData: { content_category: "tech_repair" } });
+    expect(trackPayload({ event: "tech_quiz_last_step" })?.eventName).toBe("QuizLastStep");
   });
 
   it("passes the tech_repair category through to the server ViewContent", () => {

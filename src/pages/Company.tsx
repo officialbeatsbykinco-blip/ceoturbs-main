@@ -24,7 +24,7 @@ export function About() {
           <Breadcrumbs items={[{ name: "About", path: "/about" }]} />
           <SectionHeader as="h1" title="About CEO Turbo and Christopher Robinson" />
           <DirectAnswer label="In short">
-            CEO Turbo is a Tampa, Florida tech and growth company founded by Christopher Robinson, known online as StackmodeChris. It repairs laptops and desktops, sets up phones, tablets, offices, Wi-Fi, security cameras and video doorbells around Tampa, sells NFC Google review cards, builds websites, runs Meta, Google, TikTok and X ads, optimizes Google Business Profiles and social profiles, designs promotional emails, and does SEO, AEO and GEO for artists, local service businesses and Shopify stores.
+            CEO Turbo is a Tampa, Florida tech and growth company founded by Christopher Robinson, known online as StackmodeChris. It repairs Windows laptops and desktops, sets up offices, Wi-Fi, security cameras and video doorbells around Tampa, sells NFC Google review cards, builds websites, runs Meta, Google, TikTok and X ads, optimizes Google Business Profiles and social profiles, designs promotional emails, and does SEO, AEO and GEO for artists, local service businesses and Shopify stores.
           </DirectAnswer>
           <div className="mt-16">
             <Founder />
@@ -138,7 +138,7 @@ export function Tampa() {
           <Breadcrumbs items={[{ name: "Tampa", path: "/tampa" }]} />
           <SectionHeader as="h1" title="Tampa tech help and growth, founder-run" />
           <DirectAnswer label="CEO Turbo in Tampa">
-            CEO Turbo is based in Tampa, Florida. We fix computers, phones and tablets at your door or remotely, set up and organize offices, and build websites and ads that bring in customers. In-person work covers about 40 miles around Tampa, and {georgia.length} of the client sites below were built before our move from Georgia.
+            CEO Turbo is based in Tampa, Florida. We fix Windows laptops and desktops at your door or remotely, set up and organize offices, and build websites and ads that bring in customers. In-person work covers about 40 miles around Tampa, and {georgia.length} of the client sites below were built before our move from Georgia.
           </DirectAnswer>
           <div className="mt-8 flex flex-wrap gap-3">
             <Link to="/computer-repair-tampa" className="btn-ignite">

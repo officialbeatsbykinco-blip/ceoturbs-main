@@ -1,6 +1,6 @@
 // POST /api/track — server-side (Conversions API) copies of browser events, sent with the same event_id
 // as the Pixel so Meta de-duplicates them: PageView, ViewContent / AddToCart / InitiateCheckout (review
-// card and shirt shops), CustomizeProduct (shirt designer) and Contact (tap-to-call / tap-to-text, also filed on the lead sheet). Raises Meta's "events covered by Conversions API" rate. Leads, bookings and purchases have their own server paths (api/lead.js, api/audit.js,
+// card and shirt shops), CustomizeProduct (shirt designer), QuizStart / QuizLastStep (repair quiz) and Contact (tap-to-call / tap-to-text, also filed on the lead sheet). Raises Meta's "events covered by Conversions API" rate. Leads, bookings and purchases have their own server paths (api/lead.js, api/audit.js,
 // api/cal-webhook.js, Shopify's Facebook & Instagram app).
 import { readJson, send, clientIp, rateLimited, sameOrigin, isJson } from "./_lib/http.js";
 import { forwardLead } from "./_lib/leads.js";
@@ -14,6 +14,9 @@ const EVENTS = {
   customize_product: "CustomizeProduct",
   click_to_call: "Contact",
   click_to_text: "Contact",
+  // The repair quiz funnel (custom events, same names and ids as the Pixel), so ad blockers and iOS don't hide drop-off.
+  tech_quiz_start: "QuizStart",
+  tech_quiz_last_step: "QuizLastStep",
 };
 const text = (v, max) => (typeof v === "string" ? v.replace(/[\u0000-\u001f\u007f<>]/g, " ").trim().slice(0, max) : "");
 

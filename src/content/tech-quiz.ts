@@ -4,39 +4,26 @@
 import { ALL_SETUP_CITIES } from "@/content/service-areas";
 
 export const DEVICES = [
-  { id: "windows", label: "Windows PC or laptop", short: "Windows PC" },
-  { id: "mac", label: "Mac or MacBook", short: "Mac" },
-  { id: "iphone", label: "iPhone", short: "iPhone" },
-  { id: "android", label: "Android phone", short: "Android phone" },
-  { id: "tablet", label: "iPad or tablet", short: "Tablet" },
-  { id: "other", label: "Printer, Wi-Fi or TV", short: "Printer / Wi-Fi / TV" },
+  { id: "laptop", label: "Windows laptop", short: "Windows laptop" },
+  { id: "desktop", label: "Windows desktop or gaming PC", short: "Windows desktop" },
 ] as const;
 
-type Group = "computer" | "mobile" | "home";
-/** Which problem list a device gets: a phone never sees "blue screen", a printer never sees "cracked screen". Phones and tablets: setup only (we don't repair them). */
-export const deviceGroup = (d?: string): Group => (d === "iphone" || d === "android" || d === "tablet" ? "mobile" : d === "other" ? "home" : "computer");
+/** Windows computers only: no Macs, phones, tablets or laptop screen replacements. */
+export const NOT_FIXED = "We only fix Windows laptops and desktops. No Macs, phones, tablets or laptop screens.";
 
 export const PROBLEMS = [
-  { id: "slow", label: "Slow or freezing", for: ["computer"] },
-  { id: "crash", label: "Crashing or error screens", for: ["computer"] },
-  { id: "dead", label: "Won't turn on", for: ["computer"] },
-  { id: "virus", label: "Virus, pop-ups or scam warnings", for: ["computer"] },
-  { id: "screen", label: "Cracked or broken screen", for: ["computer"] },
-  { id: "battery", label: "Battery dies fast or won't charge", for: ["computer"] },
-  { id: "upgrade", label: "Upgrade (SSD, memory, parts)", for: ["computer"] },
-  { id: "setup", label: "Printer, software or email help", for: ["computer"] },
-  { id: "data", label: "Move files or photos", for: ["computer"] },
-  { id: "printer", label: "Printer not working", for: ["home"] },
-  { id: "wifi", label: "Wi-Fi slow or dropping", for: ["home"] },
-  { id: "tv", label: "TV mounting or setup", for: ["home"] },
-  { id: "phone-setup", label: "Set up a new phone or tablet", for: ["mobile"] },
-  { id: "phone-transfer", label: "Move photos, contacts and texts", for: ["mobile"] },
-  { id: "phone-email", label: "Email, apps and work accounts", for: ["mobile"] },
-  { id: "other", label: "Something else", for: ["computer", "home", "mobile"] },
+  { id: "slow", label: "Slow or freezing: make it faster" },
+  { id: "crash", label: "Blue screen or crashing" },
+  { id: "dead", label: "Won't turn on or won't start" },
+  { id: "virus", label: "Virus, pop-ups or scam warnings" },
+  { id: "upgrade", label: "Upgrade (SSD, memory, parts)" },
+  { id: "setup", label: "Software, printer or email help" },
+  { id: "data", label: "Move files or photos" },
+  { id: "other", label: "Something else" },
 ] as const;
 
 /** The problems offered for a device, in order. */
-export const problemsFor = (device?: string) => PROBLEMS.filter((p) => (p.for as readonly string[]).includes(deviceGroup(device)));
+export const problemsFor = (_device?: string) => PROBLEMS;
 
 export const WHEN = [
   { id: "asap", label: "ASAP" },
@@ -49,14 +36,16 @@ export const WHERE = [
   { id: "remote", label: "Fix it remotely", sub: "Over the internet" },
 ] as const;
 
-/** Problems on a Windows computer we can fix over the internet, anywhere in the world (software only, no parts). */
+/** Problems we can fix over the internet, anywhere in the world (software only, no parts). */
 export const REMOTE_PROBLEMS: readonly ProblemId[] = ["slow", "virus", "setup"];
 
-/** Remote support: one Windows computer whose problems are all software (slow, pop-ups, software/email). Anything else needs a visit. */
-export const remoteOk = (a: Pick<TechAnswers, "devices" | "problems">) => {
-  const win = a.problems.windows ?? [];
-  return a.devices.length === 1 && a.devices[0] === "windows" && win.length > 0 && win.every((p) => REMOTE_PROBLEMS.includes(p));
-};
+/** Remote support: every picked computer has only software problems (slow, pop-ups, software/email). Anything else needs a visit. */
+export const remoteOk = (a: Pick<TechAnswers, "devices" | "problems">) =>
+  a.devices.length > 0 &&
+  a.devices.every((d) => {
+    const probs = a.problems[d] ?? [];
+    return probs.length > 0 && probs.every((p) => REMOTE_PROBLEMS.includes(p));
+  });
 
 /** Longest free-text note we accept (the quiz box, the text and the lead sheet all agree). */
 export const DETAILS_MAX = 1000;
@@ -88,7 +77,7 @@ const pick = <T extends { id: string; label: string }>(list: readonly T[], id?: 
 /** Every picked problem across every device, deduplicated (for analytics). */
 export const allProblems = (a: Pick<TechAnswers, "devices" | "problems">) => [...new Set(a.devices.flatMap((d) => a.problems[d] ?? []))];
 
-/** One line per device: "iPhone: Cracked or broken screen, Battery dies fast". No pick yet reads "not sure, will explain". */
+/** One line per device: "Windows laptop: Blue screen or crashing, Slow or freezing". No pick yet reads "not sure, will explain". */
 const deviceLines = (a: TechAnswers) =>
   a.devices.map((d) => {
     const probs = (a.problems[d] ?? []).map((id) => pick(PROBLEMS, id)).filter(Boolean);

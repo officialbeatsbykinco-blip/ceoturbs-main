@@ -412,7 +412,7 @@ export function attribution(): Attribution {
 }
 
 /** Events the server also sends to the Conversions API (same event_id, so Meta de-duplicates). */
-const SERVER_COPY = new Set(["page_view", "view_item", "customize_product", "add_to_cart", "begin_checkout", "click_to_call", "click_to_text"]);
+const SERVER_COPY = new Set(["page_view", "view_item", "customize_product", "add_to_cart", "begin_checkout", "click_to_call", "click_to_text", "tech_quiz_start", "tech_quiz_last_step"]);
 
 /** Server-side copy of a browser event (api/track.js). Fire-and-forget; never throws. */
 export function serverTrack(event: string, eventId: string, data: { value?: number; currency?: string; contentName?: string; location?: string; contentCategory?: string; contentIds?: string[]; numItems?: number; user?: UserData } = {}) {

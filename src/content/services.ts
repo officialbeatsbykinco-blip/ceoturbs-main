@@ -44,7 +44,7 @@ export const SERVICES: Service[] = [
       "Internet and Wi-Fi network setup",
       "Printer and peripheral installation",
       "Software installation (Microsoft Office, security tools, business apps)",
-      "Tablet, phone, and device connection",
+      "Docks, webcams, headsets and USB devices connected",
       "Cable management and wire organization",
       "Ergonomic workspace optimization",
       "Data transfer from old devices to new",
@@ -56,7 +56,7 @@ export const SERVICES: Service[] = [
       { title: "Configuration", body: "Software is installed, devices are connected, and everything is tested." },
       { title: "Training", body: "We walk you through your new setup so you're confident using it." },
     ],
-    notFor: "Ongoing IT contracts. For a broken or slow computer, phone or tablet, see our computer repair page.",
+    notFor: "Ongoing IT contracts. For a broken or slow Windows computer, see our computer repair page.",
     audiences: ["local"],
     faqs: [
       { q: "What areas do you serve?", a: "We come to you anywhere within about 40 miles of Tampa: Tampa, St. Petersburg, Clearwater, Brandon, Riverview, Wesley Chapel, Lutz, Land O' Lakes, Largo, Palm Harbor, Plant City, Apollo Beach and the cities around them. Call or text 678-558-4327 and we'll confirm your address the same day." },
@@ -64,7 +64,7 @@ export const SERVICES: Service[] = [
       { q: "Do you provide the equipment?", a: "We can recommend and source equipment at your request, or we set up what you already have. You provide the furniture and devices, we handle the assembly, installation, and configuration." },
       { q: "How long does setup take?", a: "Most home office setups are completed in 2-4 hours. Larger business office setups or school computer labs may take a full day. We'll give you a time estimate during our consultation." },
       { q: "Do you offer ongoing support?", a: "We focus on setup and installation. For ongoing IT support, we can refer you to trusted partners or discuss a maintenance plan for your specific needs." },
-      { q: "Can you set up Mac and iPhone devices?", a: "Yes, we support Windows PCs, Mac computers, iPhones, iPads, Android devices, and most consumer technology. We'll make sure everything works together seamlessly." },
+      { q: "Do you work on Macs, phones or tablets?", a: "No. We set up and fix Windows PCs, laptops and desktops, plus the monitors, printers, docks and networks around them. We don't work on Macs, iPhones, Android phones or tablets." },
     ],
   },
   {

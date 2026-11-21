@@ -1,5 +1,5 @@
 // /computer-repair-tampa — the Meta ads landing page for tech repair around Tampa: slow, crashing or dead
-// laptops and desktops fixed at the customer's door within 40 miles or remotely; phones and tablets set up (not repaired). Prices come from
+// Windows laptops and desktops fixed at the customer's door within 40 miles or remotely (no Macs, phones, tablets or laptop screens). Prices come from
 // IT_SERVICES in content/pricing.ts. Conversion events: ViewContent on load, Lead from the quiz (TechQuiz),
 // Contact from call/text taps, Schedule from a Cal.com booking. Repair only: the business marketing and review card
 // sections stay off this page so a visitor from a repair ad sees nothing but the repair and how to reach us.
@@ -8,7 +8,7 @@ import { ReviewSummary, ReviewWall } from "@/components/tech/ReviewWall";
 import { JobPhotos } from "@/components/tech/JobPhotos";
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
-import { ArrowRight, BadgeCheck, Building2, Calendar, Check, ClipboardCheck, Clock, Cpu, Gauge, Globe, Home, Laptop, MapPin, MessageSquare, Phone, ShieldCheck, ShoppingBag, Smartphone, Star, Tv, Wrench, type LucideIcon } from "lucide-react";
+import { ArrowRight, BadgeCheck, Building2, Calendar, Check, ClipboardCheck, Clock, Cpu, Gauge, Globe, Home, Laptop, MapPin, MessageSquare, Phone, ShieldCheck, ShoppingBag, Star, Wrench, type LucideIcon } from "lucide-react";
 import { COMPUTERS_PATH } from "@/content/computer-shop";
 import { CallLink } from "@/components/site/CallLink";
 import { InstallBookButton } from "@/components/cta/Actions";
@@ -27,25 +27,25 @@ import { cn } from "@/lib/utils";
 
 
 const PRICE_GROUPS: { icon: LucideIcon; title: string; ids: string[] }[] = [
-  { icon: Laptop, title: "Laptops & desktops", ids: ["it-pc-repair", "it-desktop", "it-laptop-screen", "it-speedup", "it-remote", "it-virus", "it-ssd", "it-data"] },
-  { icon: Smartphone, title: "Setups: phones, tablets & printers", ids: ["it-phone-setup", "it-printer"] },
-  { icon: Tv, title: "TVs, Wi-Fi & business", ids: ["it-tv-mount", "it-tv-setup", "it-wifi", "it-mesh", "it-business-hour"] },
+  { icon: Wrench, title: "Repairs", ids: ["it-pc-repair", "it-desktop", "it-visit"] },
+  { icon: Gauge, title: "Make it faster", ids: ["it-speedup", "it-remote", "it-ssd", "it-virus"] },
+  { icon: Laptop, title: "Files, software & business", ids: ["it-data", "it-printer", "it-business-hour"] },
 ];
 
 /** "If it's a computer, we fix it": the problems people search for, in their words. */
 const WE_FIX = [
-  "Won't turn on or won't boot",
-  "Crashing, freezing or blue screens",
-  "Slow computer and long startups",
+  "Slow computer and long startups made fast",
+  "Blue screens and crashing",
+  "Won't turn on, no power or won't boot",
+  "Freezing and programs not responding",
   "Viruses, pop-ups and scam warnings",
   "SSD, memory and parts upgrades",
-  "Cracked laptop screens and broken keyboards",
-  "Charging and battery problems",
   "Windows reinstalls and updates gone wrong",
   "Overheating and loud fans",
   "Lost files: backup, recovery and transfer",
   "Printers, email and software",
-  "Desktops, laptops, Windows and Mac",
+  "Gaming PCs: power supplies and graphics cards",
+  "Windows laptops and desktops, any brand",
 ];
 
 /** The four reasons to pick us, in the first scroll. Each one is backed elsewhere on the page. */
@@ -67,7 +67,7 @@ const COMPARE = [
 ];
 
 const STEPS = [
-  { icon: MessageSquare, title: "Text, call or book", body: "Tell us the device and what's wrong. A few taps on this page does it." },
+  { icon: MessageSquare, title: "Text, call or book", body: "Tell us laptop or desktop and what's wrong. A few taps on this page does it." },
   { icon: ClipboardCheck, title: "Price up front", body: "You get the price before any work starts. Say no and you only pay the diagnosis." },
   { icon: Home, title: "Fixed at your place", body: "We come to your home or business, fix it, test it with you, then you pay. A slow Windows PC can also be sped up remotely." },
 ];
@@ -121,10 +121,10 @@ export default function ComputerRepair() {
               </p>
             </div>
             <h1 id="hero" className="mt-4 text-[34px] font-bold leading-[1.05] sm:text-5xl md:text-[54px]">
-              <span className="text-chrome-grad">Computer broken, slow or crashing?</span> <span className="text-turbo-grad">We fix it at your door in Tampa.</span>
+              <span className="text-chrome-grad">Windows PC slow, crashing or dead?</span> <span className="text-turbo-grad">We fix it at your door in Tampa.</span>
             </h1>
             <p className="mt-4 max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg">
-              Laptops and desktops, Windows and Mac. Usually fixed the same or next day, at your home or business. <span className="font-semibold text-foreground">You get the price before we start, and if we can't fix it, you don't pay for the repair.</span>
+              Windows laptops and desktops: slow PCs made fast, blue screens and no-power problems fixed. Usually the same or next day, at your home or business. <span className="font-semibold text-foreground">You get the price before we start, and if we can't fix it, you don't pay for the repair.</span>
             </p>
             <div className="mt-5 flex flex-wrap gap-2 text-xs">
               {[
@@ -238,7 +238,7 @@ export default function ComputerRepair() {
 
       <section className="section border-t border-border" aria-labelledby="we-fix">
         <div className="container-x">
-          <SectionHeader title={<span id="we-fix">If it's a computer, we fix it.</span>} lede="Desktops and laptops, Windows and Mac, at your door around Tampa. Phones and tablets we set up: new device, photos, contacts and email moved over." />
+          <SectionHeader title={<span id="we-fix">If it's a Windows PC, we fix it.</span>} lede="Windows desktops and laptops, any brand, at your door around Tampa. We don't work on Macs, phones or tablets, and we don't replace laptop screens." />
           <ul className="mt-8 grid gap-x-6 gap-y-3 sm:grid-cols-2 lg:grid-cols-3">
             {WE_FIX.map((t) => (
               <li key={t} className="flex items-start gap-2.5 text-[15px]">
@@ -341,7 +341,7 @@ export default function ComputerRepair() {
                 [
                   [ShieldCheck, "You only pay for repairs you approve"],
                   [Wrench, "Tested with you before I leave"],
-                  [Smartphone, "Your data is never copied without asking"],
+                  [ShieldCheck, "Your data is never copied without asking"],
                 ] as const
               ).map(([Icon, t]) => (
                 <li key={t} className="flex items-center gap-2">

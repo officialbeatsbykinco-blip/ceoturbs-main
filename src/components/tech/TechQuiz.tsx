@@ -5,23 +5,29 @@
 import { useEffect, useId, useRef, useState, type FormEvent, type MouseEvent } from "react";
 import { Link } from "react-router-dom";
 import {
-  AlertTriangle, ArrowLeft, ArrowRight, BatteryLow, Check, Cpu, FolderOpen, Gauge, HelpCircle, Laptop, Loader2, Mail, MapPin, MessageSquare, Monitor, Power, Printer, ShieldAlert, Smartphone, Tablet, Tv, Wifi, type LucideIcon,
+  AlertTriangle, ArrowLeft, ArrowRight, Check, Cpu, FolderOpen, Gauge, Computer, HelpCircle, Info, Laptop, Loader2, Mail, MapPin, MessageSquare, Monitor, Power, ShieldAlert, type LucideIcon,
 } from "lucide-react";
 import { InstallCalEmbed } from "@/components/booking/InstallCalEmbed";
 import { CallLink } from "@/components/site/CallLink";
 import { IT_BOOKING, SITE } from "@/config/site";
-import { DETAILS_MAX, DEVICES, EMPTY_TECH, WHEN, WHERE, allProblems, problemsFor, remoteOk, techLabels, techMessage, zipOk, type DeviceId, type ProblemId, type TechAnswers } from "@/content/tech-quiz";
+import { DETAILS_MAX, DEVICES, EMPTY_TECH, NOT_FIXED, WHEN, WHERE, allProblems, problemsFor, remoteOk, techLabels, techMessage, zipOk, type DeviceId, type ProblemId, type TechAnswers } from "@/content/tech-quiz";
 import { sendLead } from "@/lib/lead-outbox";
 import { canText, smsHref } from "@/lib/sms";
-import { attribution, newEventId, track, visitorId } from "@/lib/track";
+import { attribution, newEventId, serverTrack, track, visitorId } from "@/lib/track";
 import { cn } from "@/lib/utils";
 
 const STEPS = ["device", "problem", "when", "send"] as const;
 type Step = (typeof STEPS)[number];
-const STEP_NAMES: Record<Step, string> = { device: "Devices", problem: "Problems", when: "Timing", send: "Send" };
+const STEP_NAMES: Record<Step, string> = { device: "Computer", problem: "Problem", when: "Timing", send: "Send" };
 
-const DEVICE_ICONS: Record<DeviceId, LucideIcon> = { windows: Laptop, mac: Monitor, iphone: Smartphone, android: Smartphone, tablet: Tablet, other: Printer };
-const PROBLEM_ICONS: Record<ProblemId, LucideIcon> = { slow: Gauge, crash: AlertTriangle, dead: Power, virus: ShieldAlert, screen: Monitor, battery: BatteryLow, upgrade: Cpu, setup: Mail, data: FolderOpen, printer: Printer, wifi: Wifi, tv: Tv, "phone-setup": Smartphone, "phone-transfer": FolderOpen, "phone-email": Mail, other: HelpCircle };
+const DEVICE_ICONS: Record<DeviceId, LucideIcon> = { laptop: Laptop, desktop: Monitor };
+const PROBLEM_ICONS: Record<ProblemId, LucideIcon> = { slow: Gauge, crash: AlertTriangle, dead: Power, virus: ShieldAlert, upgrade: Cpu, setup: Mail, data: FolderOpen, other: HelpCircle };
+
+/** The first question is one tap: a laptop, a desktop, or both. */
+const DEVICE_PICKS: { id: string; label: string; icon: LucideIcon; devices: DeviceId[] }[] = [
+  ...DEVICES.map((d) => ({ id: d.id, label: d.label, icon: DEVICE_ICONS[d.id], devices: [d.id] as DeviceId[] })),
+  { id: "both", label: "Both, a laptop and a desktop", icon: Computer, devices: DEVICES.map((d) => d.id) },
+];
 
 /** What a tech lead is worth to Meta's optimizer (an average first job). */
 export const TECH_LEAD_VALUE = 150;
@@ -44,34 +50,31 @@ export function TechQuiz({ source = "computer-repair-tampa", className, variant 
   const go = (next: Step, patch: Partial<TechAnswers> = {}) => {
     if (!startedAt.current) {
       startedAt.current = Date.now();
-      track("tech_quiz_start", { source });
+      // Browser + Conversions API copy (same id), so Meta still sees the start when the pixel is blocked.
+      serverTrack("tech_quiz_start", track("tech_quiz_start", { source }), { contentName: "Computer repair Tampa", contentCategory: "tech_repair" });
     }
     setA((prev) => ({ ...prev, ...patch }));
     setStep(next);
     track("tech_quiz_step", { source, step: next, step_number: STEPS.indexOf(next) + 1 });
     if (next === "send" && !reachedLast.current) {
       reachedLast.current = true;
-      track("tech_quiz_last_step", { source, content_name: "Computer repair Tampa", content_category: "tech_repair" });
+      serverTrack("tech_quiz_last_step", track("tech_quiz_last_step", { source, content_name: "Computer repair Tampa", content_category: "tech_repair" }), { contentName: "Computer repair Tampa", contentCategory: "tech_repair" });
     }
-    // Keep the question in view on a phone (the tiles can push it below the fold).
+    // Keep the new question in view: on the page, scroll the card into view; in the phone sheet, back to its top
+    // (a long problem list otherwise leaves the next question scrolled out of sight).
     if (variant === "card") top.current?.scrollIntoView({ block: "nearest", behavior: "smooth" });
+    else top.current?.parentElement?.scrollTo({ top: 0, behavior: "smooth" });
   };
   const set = (patch: Partial<TechAnswers>) => {
     setA((prev) => ({ ...prev, ...patch }));
     setErrors({});
   };
 
-  // Several broken devices are normal: tap every one, then each gets its own problem list.
-  const toggleDevice = (d: DeviceId) => {
-    setA((prev) => {
-      const on = prev.devices.includes(d);
-      const problems = { ...prev.problems };
-      if (on) delete problems[d];
-      // Keep the order of the tiles, so the text reads the same way the screen does.
-      const devices = on ? prev.devices.filter((x) => x !== d) : DEVICES.map((o) => o.id).filter((id) => id === d || prev.devices.includes(id));
-      return { ...prev, devices, problems };
-    });
+  // One tap picks the computer(s) and moves on; problems picked earlier for a kept computer stay.
+  const pickDevices = (devices: DeviceId[]) => {
+    const problems = Object.fromEntries(devices.map((d) => [d, a.problems[d] ?? []]));
     setErrors({});
+    go("problem", { devices, problems });
   };
   const toggle = (d: DeviceId, id: ProblemId) => {
     setA((prev) => {
@@ -176,34 +179,29 @@ export function TechQuiz({ source = "computer-repair-tampa", className, variant 
       <p className="mt-3 flex items-start gap-2 rounded-xl bg-turbo/[0.08] px-3 py-2.5 text-sm leading-snug ring-1 ring-turbo/20">
         <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-turbo" aria-hidden />
         <span>
-          We come to you within <b>40 miles of Tampa</b>. Slow Windows PC? We can also speed it up remotely.
+          Windows laptops and desktops, fixed at your door within <b>40 miles of Tampa</b>, or sped up remotely.
         </span>
       </p>
 
       <div key={step} className="mt-4 animate-step">
         {step === "device" && (
           <>
-            <Title text="What needs fixing?" />
-            <p className="-mt-2 mb-3 text-sm text-muted-foreground">Tap every device that's giving you trouble.</p>
-            <div className="grid grid-cols-2 gap-2.5">
-              {DEVICES.map((o) => (
-                <Tile key={o.id} icon={DEVICE_ICONS[o.id]} label={o.label} pressed={a.devices.includes(o.id)} onClick={() => toggleDevice(o.id)} />
+            <Title text="What kind of computer?" />
+            <div className="grid gap-2.5">
+              {DEVICE_PICKS.map((o) => (
+                <Tile key={o.id} icon={o.icon} label={o.label} pressed={o.devices.length === a.devices.length && o.devices.every((d) => a.devices.includes(d))} onClick={() => pickDevices(o.devices)} />
               ))}
             </div>
-            {errors.pick && <Err text={errors.pick} />}
-            <button
-              type="button"
-              onClick={() => (a.devices.length ? go("problem") : setErrors({ pick: "Tap at least one device." }))}
-              className={cn("btn-ignite mt-4 w-full justify-center !py-4 !text-base", !a.devices.length && "opacity-60")}
-            >
-              {a.devices.length > 1 ? `Continue with ${a.devices.length} devices` : "Continue"} <ArrowRight className="h-4 w-4" aria-hidden />
-            </button>
+            <p className="mt-3 flex items-start gap-2 text-sm leading-snug text-muted-foreground">
+              <Info className="mt-0.5 h-4 w-4 shrink-0" aria-hidden />
+              <span>{NOT_FIXED}</span>
+            </p>
           </>
         )}
 
         {step === "problem" && (
           <>
-            <Title text={a.devices.length > 1 ? "What's wrong with each one?" : "What's going on?"} />
+            <Title text={a.devices.length > 1 ? "What's wrong with each one?" : "What's wrong with it?"} />
             <p className="-mt-2 mb-3 text-sm text-muted-foreground">Tap all that apply.</p>
             <div className="grid gap-5">
               {a.devices.map((d) => (
@@ -351,13 +349,10 @@ const rowOn = "border-turbo bg-turbo/10";
 
 function Tile({ icon: Icon, label, pressed, onClick }: { icon: LucideIcon; label: string; pressed: boolean; onClick: () => void }) {
   return (
-    <button type="button" aria-pressed={pressed} onClick={onClick} className={cn("relative flex min-h-[104px] flex-col items-center justify-center gap-2 rounded-2xl border-2 border-border bg-card px-2 py-3 text-center transition-[border-color,background-color,transform] duration-150 hover:border-turbo/60 active:scale-[0.97]", pressed && "border-turbo bg-turbo/15 ring-2 ring-turbo/30")}>
-      {/* Several can be picked, so a picked tile has to read as picked at a glance. */}
-      <span className={cn("absolute right-2 top-2 grid h-6 w-6 place-items-center rounded-full border-2", pressed ? "border-turbo bg-turbo text-white" : "border-border bg-card")} aria-hidden>
-        {pressed && <Check className="h-4 w-4" />}
-      </span>
-      <Icon className="h-8 w-8 text-turbo" strokeWidth={1.75} aria-hidden />
-      <span className="text-[15px] font-bold leading-tight">{label}</span>
+    <button type="button" aria-pressed={pressed} onClick={onClick} className={cn("flex min-h-[72px] w-full items-center gap-4 rounded-2xl border-2 border-border bg-card px-4 py-3 text-left transition-[border-color,background-color,transform] duration-150 hover:border-turbo/60 active:scale-[0.98]", pressed && "border-turbo bg-turbo/15 ring-2 ring-turbo/30")}>
+      <Icon className="h-8 w-8 shrink-0 text-turbo" strokeWidth={1.75} aria-hidden />
+      <span className="min-w-0 flex-1 text-[17px] font-bold leading-tight">{label}</span>
+      <ArrowRight className="h-5 w-5 shrink-0 text-muted-foreground" aria-hidden />
     </button>
   );
 }

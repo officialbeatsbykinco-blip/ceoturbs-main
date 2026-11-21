@@ -14,7 +14,7 @@ import { Check } from "lucide-react";
 import { FixMyTechLink } from "@/components/tech/FixMyTechLink";
 
 const FOOTER_POINTS = [
-  "Any laptop or desktop problem fixed at your door. Phone & tablet setup. Remote speed-ups worldwide",
+  "Windows laptops and desktops fixed at your door: speed-ups, blue screens, no power. Remote speed-ups worldwide",
   "Laptops and desktops for sale in our computer shop",
   "Offices set up: monitors, cables, printers, Wi-Fi",
   "Websites and ads that make the phone ring",
