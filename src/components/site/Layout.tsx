@@ -93,7 +93,8 @@ export function Layout({ children }: { children: ReactNode }) {
         <Header />
       </div>
       {/* overflow-x-clip: edge-sliding animations (the review-card phone) never make phones scroll sideways; clip keeps sticky working. */}
-      <main id="main" className={cn("overflow-x-clip", soft && "theme-soft")}>
+      {/* max-lg:pt: room for the phone nav bar under the header (Header QuickNav, 52px). */}
+      <main id="main" className={cn("overflow-x-clip max-lg:pt-[52px]", soft && "theme-soft")}>
         {children}
       </main>
       <div className={soft ? "theme-soft contents" : "contents"}>

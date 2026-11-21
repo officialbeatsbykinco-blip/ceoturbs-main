@@ -1,5 +1,5 @@
 // /computer-repair-tampa — the Meta ads landing page for tech repair around Tampa: slow, crashing or dead
-// Windows laptops and desktops fixed at the customer's door within 40 miles or remotely (no Macs, phones, tablets or laptop screens). Prices come from
+// Windows laptops and desktops fixed at the customer's door within 40 miles or remotely; phones and tablets set up, never repaired; no Macs or laptop screens. Prices come from
 // IT_SERVICES in content/pricing.ts. Conversion events: ViewContent on load, Lead from the quiz (TechQuiz),
 // Contact from call/text taps, Schedule from a Cal.com booking. Repair only: the business marketing and review card
 // sections stay off this page so a visitor from a repair ad sees nothing but the repair and how to reach us.
@@ -29,7 +29,7 @@ import { cn } from "@/lib/utils";
 const PRICE_GROUPS: { icon: LucideIcon; title: string; ids: string[] }[] = [
   { icon: Wrench, title: "Repairs", ids: ["it-pc-repair", "it-desktop", "it-visit"] },
   { icon: Gauge, title: "Make it faster", ids: ["it-speedup", "it-remote", "it-ssd", "it-virus"] },
-  { icon: Laptop, title: "Files, software & business", ids: ["it-data", "it-printer", "it-business-hour"] },
+  { icon: Laptop, title: "Setups: files, phones & printers", ids: ["it-data", "it-phone-setup", "it-printer", "it-business-hour"] },
 ];
 
 /** "If it's a computer, we fix it": the problems people search for, in their words. */
@@ -238,7 +238,7 @@ export default function ComputerRepair() {
 
       <section className="section border-t border-border" aria-labelledby="we-fix">
         <div className="container-x">
-          <SectionHeader title={<span id="we-fix">If it's a Windows PC, we fix it.</span>} lede="Windows desktops and laptops, any brand, at your door around Tampa. We don't work on Macs, phones or tablets, and we don't replace laptop screens." />
+          <SectionHeader title={<span id="we-fix">If it's a Windows PC, we fix it.</span>} lede="Windows desktops and laptops, any brand, at your door around Tampa. Phones and tablets we set up (new device, photos, contacts and email moved over) but don't repair. No Macs or laptop screens." />
           <ul className="mt-8 grid gap-x-6 gap-y-3 sm:grid-cols-2 lg:grid-cols-3">
             {WE_FIX.map((t) => (
               <li key={t} className="flex items-start gap-2.5 text-[15px]">

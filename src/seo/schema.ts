@@ -49,6 +49,8 @@ export const organization = (): JsonLd => ({
   knowsAbout: [
     "Computer repair",
     "Desktop and gaming PC repair",
+    "Phone and tablet setup",
+    "Security camera and video doorbell installation",
     "Remote computer support",
     "Office setup and cable management",
     "TV mounting and digital menu screens",

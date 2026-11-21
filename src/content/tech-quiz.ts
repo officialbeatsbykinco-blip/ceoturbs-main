@@ -6,24 +6,37 @@ import { ALL_SETUP_CITIES } from "@/content/service-areas";
 export const DEVICES = [
   { id: "laptop", label: "Windows laptop", short: "Windows laptop" },
   { id: "desktop", label: "Windows desktop or gaming PC", short: "Windows desktop" },
+  { id: "mobile", label: "Phone or tablet setup", short: "Phone or tablet" },
+  { id: "camera", label: "Cameras or Ring doorbell", short: "Cameras / doorbell" },
 ] as const;
 
-/** Windows computers only: no Macs, phones, tablets or laptop screen replacements. */
-export const NOT_FIXED = "We only fix Windows laptops and desktops. No Macs, phones, tablets or laptop screens.";
+/** Windows computers are the only thing we repair. Phones, tablets and cameras we set up; Macs and laptop screens we don't touch. */
+export const NOT_FIXED = "We repair Windows laptops and desktops only. Phones, tablets and cameras we set up, not repair. No Macs or laptop screens.";
+
+type Group = "computer" | "mobile" | "camera";
+/** Which list a device gets: a phone never sees "blue screen", a camera never sees "SSD upgrade". */
+export const deviceGroup = (d?: string): Group => (d === "mobile" ? "mobile" : d === "camera" ? "camera" : "computer");
+const isComputer = (d: string) => deviceGroup(d) === "computer";
 
 export const PROBLEMS = [
-  { id: "slow", label: "Slow or freezing: make it faster" },
-  { id: "crash", label: "Blue screen or crashing" },
-  { id: "dead", label: "Won't turn on or won't start" },
-  { id: "virus", label: "Virus, pop-ups or scam warnings" },
-  { id: "upgrade", label: "Upgrade (SSD, memory, parts)" },
-  { id: "setup", label: "Software, printer or email help" },
-  { id: "data", label: "Move files or photos" },
-  { id: "other", label: "Something else" },
+  { id: "slow", label: "Slow or freezing: make it faster", for: ["computer"] },
+  { id: "crash", label: "Blue screen or crashing", for: ["computer"] },
+  { id: "dead", label: "Won't turn on or won't start", for: ["computer"] },
+  { id: "virus", label: "Virus, pop-ups or scam warnings", for: ["computer"] },
+  { id: "upgrade", label: "Upgrade (SSD, memory, parts)", for: ["computer"] },
+  { id: "setup", label: "Software, printer or email help", for: ["computer"] },
+  { id: "data", label: "Move files or photos", for: ["computer"] },
+  { id: "phone-setup", label: "Set up a new phone or tablet", for: ["mobile"] },
+  { id: "phone-transfer", label: "Move photos, contacts and texts", for: ["mobile"] },
+  { id: "phone-email", label: "Email, apps and work accounts", for: ["mobile"] },
+  { id: "cam-install", label: "Install Wi-Fi cameras", for: ["camera"] },
+  { id: "cam-doorbell", label: "Install a Ring or video doorbell", for: ["camera"] },
+  { id: "cam-app", label: "Get cameras working on my phone", for: ["camera"] },
+  { id: "other", label: "Something else", for: ["computer", "mobile", "camera"] },
 ] as const;
 
 /** The problems offered for a device, in order. */
-export const problemsFor = (_device?: string) => PROBLEMS;
+export const problemsFor = (device?: string) => PROBLEMS.filter((p) => (p.for as readonly string[]).includes(deviceGroup(device)));
 
 export const WHEN = [
   { id: "asap", label: "ASAP" },
@@ -39,10 +52,11 @@ export const WHERE = [
 /** Problems we can fix over the internet, anywhere in the world (software only, no parts). */
 export const REMOTE_PROBLEMS: readonly ProblemId[] = ["slow", "virus", "setup"];
 
-/** Remote support: every picked computer has only software problems (slow, pop-ups, software/email). Anything else needs a visit. */
+/** Remote support: only Windows computers, each with only software problems (slow, pop-ups, software/email). Anything else needs a visit. */
 export const remoteOk = (a: Pick<TechAnswers, "devices" | "problems">) =>
   a.devices.length > 0 &&
   a.devices.every((d) => {
+    if (!isComputer(d)) return false;
     const probs = a.problems[d] ?? [];
     return probs.length > 0 && probs.every((p) => REMOTE_PROBLEMS.includes(p));
   });
@@ -100,7 +114,7 @@ export function techMessage(a: TechAnswers) {
   const where = a.where === "remote" && remoteOk(a) ? "Remote" : `Come to me${a.zip.trim() ? `, ZIP ${a.zip.trim()}` : ""}`;
   const lines = deviceLines(a);
   return [
-    "Hi Chris! I'd like a repair price.",
+    "Hi Chris! I'd like a price.",
     ...(lines.length > 1 ? [`${lines.length} devices:`, ...lines.map((x) => `- ${x}`)] : lines),
     a.details.trim() && `Details: ${a.details.trim()}`,
     l.when && `When: ${l.when}`,

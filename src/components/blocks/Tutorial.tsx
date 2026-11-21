@@ -56,7 +56,7 @@ export function useActiveStep(steps: readonly TutorialStep[], eventName: string)
 export function StepRail({ steps, active, intro }: { steps: readonly TutorialStep[]; active: number; intro: string }) {
   const step = steps[active];
   return (
-    <div className="sticky top-16 z-30 border-b border-border/70 bg-background/90 backdrop-blur-xl" aria-hidden>
+    <div className="sticky top-16 z-30 max-lg:top-[116px] border-b border-border/70 bg-background/90 backdrop-blur-xl" aria-hidden>
       <div className="container-x flex h-11 items-center gap-3">
         <p className="min-w-0 flex-1 truncate text-[13px] font-semibold sm:text-sm">
           {step ? (

@@ -13,7 +13,7 @@ const w = window as Win;
 describe("tech repair quiz", () => {
   it("writes the whole request into the text, one answer per line", () => {
     const msg = techMessage({ ...EMPTY_TECH, devices: ["laptop"], problems: { laptop: ["slow", "virus"] }, when: "asap", where: "home", zip: "33511", details: "Dell, started last week", name: "Pat Lee" });
-    expect(msg).toBe("Hi Chris! I'd like a repair price.\nWindows laptop: Slow or freezing: make it faster, Virus, pop-ups or scam warnings\nDetails: Dell, started last week\nWhen: ASAP\nWhere: Come to me, ZIP 33511\nName: Pat Lee");
+    expect(msg).toBe("Hi Chris! I'd like a price.\nWindows laptop: Slow or freezing: make it faster, Virus, pop-ups or scam warnings\nDetails: Dell, started last week\nWhen: ASAP\nWhere: Come to me, ZIP 33511\nName: Pat Lee");
   });
 
   it("takes a laptop and a desktop, each with its own problems, and loses none of them", () => {
@@ -40,6 +40,8 @@ describe("tech repair quiz", () => {
     expect(remoteOk({ devices: ["laptop"], problems: { laptop: ["upgrade"] } })).toBe(false);
     expect(remoteOk({ devices: ["laptop", "desktop"], problems: { laptop: ["slow"] } })).toBe(false);
     expect(remoteOk({ devices: [], problems: {} })).toBe(false);
+    expect(remoteOk({ devices: ["mobile"], problems: { mobile: ["phone-email"] } })).toBe(false);
+    expect(remoteOk({ devices: ["laptop", "camera"], problems: { laptop: ["slow"], camera: ["cam-app"] } })).toBe(false);
     const remote = techMessage({ ...EMPTY_TECH, devices: ["laptop"], problems: { laptop: ["slow"] }, where: "remote", zip: "33602" });
     expect(remote).toContain("Where: Remote");
     expect(remote).not.toContain("33602");
@@ -48,11 +50,14 @@ describe("tech repair quiz", () => {
     expect(techMessage({ ...EMPTY_TECH, devices: ["desktop"], problems: { desktop: ["dead"] }, where: "remote" })).toContain("Where: Come to me");
   });
 
-  it("offers Windows computers only, and never Mac, phone, tablet or screen repairs", () => {
-    expect(DEVICES.map((d) => d.id)).toEqual(["laptop", "desktop"]);
-    const labels = [...DEVICES, ...problemsFor("laptop")].map((x) => x.label).join(" ");
-    expect(labels).not.toMatch(/\bmacs?\b|macbook|iphone|android|tablet|ipad|cracked|broken screen|battery/i);
+  it("repairs Windows computers only; phones, tablets and cameras are setup, never repair; no Macs", () => {
+    expect(DEVICES.map((d) => d.id)).toEqual(["laptop", "desktop", "mobile", "camera"]);
+    const all = [...DEVICES, ...problemsFor("laptop"), ...problemsFor("mobile"), ...problemsFor("camera")].map((x) => x.label).join(" ");
+    expect(all).not.toMatch(/\bmacs?\b|macbook|cracked|broken screen|battery/i);
     expect(problemsFor("desktop").map((p) => p.id)).toEqual(expect.arrayContaining(["slow", "crash", "dead"]));
+    expect(problemsFor("mobile").map((p) => p.id)).toEqual(["phone-setup", "phone-transfer", "phone-email", "other"]);
+    expect(problemsFor("camera").map((p) => p.id)).toEqual(["cam-install", "cam-doorbell", "cam-app", "other"]);
+    expect(problemsFor("mobile").map((p) => p.id)).not.toContain("crash");
   });
 
   it("only accepts a 5-digit ZIP", () => {

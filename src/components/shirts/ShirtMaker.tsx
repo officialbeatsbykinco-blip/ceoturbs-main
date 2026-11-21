@@ -406,7 +406,7 @@ export function ShirtMaker({ product = SHIRT, copy = COMPANY_MAKER }: { product?
     <>
       <div className="grid gap-8 lg:grid-cols-[1.05fr_0.95fr] lg:gap-12">
         {/* Mockup */}
-        <div className="sticky top-14 z-20 order-2 -mx-1 bg-background/95 pb-2 pt-1 backdrop-blur lg:top-24 lg:order-none lg:self-start lg:bg-transparent lg:pb-0 lg:pt-0 lg:backdrop-blur-none [&_svg]:max-h-[40vh] lg:[&_svg]:max-h-none">
+        <div className="sticky top-[116px] z-20 order-2 -mx-1 bg-background/95 pb-2 pt-1 backdrop-blur lg:top-24 lg:order-none lg:self-start lg:bg-transparent lg:pb-0 lg:pt-0 lg:backdrop-blur-none [&_svg]:max-h-[40vh] lg:[&_svg]:max-h-none">
           <div className="relative overflow-hidden rounded-3xl bg-[radial-gradient(80%_70%_at_50%_35%,#ffffff,#e9ebef)] ring-1 ring-white/10">
             <div className={cn("px-[8%] pb-[4%] pt-[10%]", side !== "front" && "hidden")}>
               <ShirtMockup ref={frontSvg} style={style} color={color.hex} dark={color.dark} side="front" art={frontArt} placement={placement} guide={!hasDesign} onMove={hasDesign ? onMove : undefined} title={`${color.name} ${style === "long" ? "long" : "short"} sleeve ${copy.mockupNoun}, front`} className="mx-auto w-full max-w-[520px] drop-shadow-[0_24px_30px_rgba(0,0,0,0.25)]" />

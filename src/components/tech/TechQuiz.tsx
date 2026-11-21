@@ -5,7 +5,7 @@
 import { useEffect, useId, useRef, useState, type FormEvent, type MouseEvent } from "react";
 import { Link } from "react-router-dom";
 import {
-  AlertTriangle, ArrowLeft, ArrowRight, Check, Cpu, FolderOpen, Gauge, Computer, HelpCircle, Info, Laptop, Loader2, Mail, MapPin, MessageSquare, Monitor, Power, ShieldAlert, type LucideIcon,
+  AlertTriangle, ArrowLeft, ArrowRight, BellRing, Cctv, Check, Cpu, FolderOpen, Gauge, Computer, HelpCircle, Info, Laptop, Loader2, Mail, MapPin, MessageSquare, Monitor, Power, ShieldAlert, Smartphone, type LucideIcon,
 } from "lucide-react";
 import { InstallCalEmbed } from "@/components/booking/InstallCalEmbed";
 import { CallLink } from "@/components/site/CallLink";
@@ -20,13 +20,17 @@ const STEPS = ["device", "problem", "when", "send"] as const;
 type Step = (typeof STEPS)[number];
 const STEP_NAMES: Record<Step, string> = { device: "Computer", problem: "Problem", when: "Timing", send: "Send" };
 
-const DEVICE_ICONS: Record<DeviceId, LucideIcon> = { laptop: Laptop, desktop: Monitor };
-const PROBLEM_ICONS: Record<ProblemId, LucideIcon> = { slow: Gauge, crash: AlertTriangle, dead: Power, virus: ShieldAlert, upgrade: Cpu, setup: Mail, data: FolderOpen, other: HelpCircle };
+const DEVICE_ICONS: Record<DeviceId, LucideIcon> = { laptop: Laptop, desktop: Monitor, mobile: Smartphone, camera: Cctv };
+const PROBLEM_ICONS: Record<ProblemId, LucideIcon> = { slow: Gauge, crash: AlertTriangle, dead: Power, virus: ShieldAlert, upgrade: Cpu, setup: Mail, data: FolderOpen, "phone-setup": Smartphone, "phone-transfer": FolderOpen, "phone-email": Mail, "cam-install": Cctv, "cam-doorbell": BellRing, "cam-app": Smartphone, other: HelpCircle };
 
-/** The first question is one tap: a laptop, a desktop, or both. */
-const DEVICE_PICKS: { id: string; label: string; icon: LucideIcon; devices: DeviceId[] }[] = [
-  ...DEVICES.map((d) => ({ id: d.id, label: d.label, icon: DEVICE_ICONS[d.id], devices: [d.id] as DeviceId[] })),
-  { id: "both", label: "Both, a laptop and a desktop", icon: Computer, devices: DEVICES.map((d) => d.id) },
+/** The first question is one tap: a laptop, a desktop, both, a phone or tablet to set up, or cameras to install. */
+const pickOf = (id: DeviceId) => ({ id, label: DEVICES.find((d) => d.id === id)!.label, icon: DEVICE_ICONS[id], devices: [id] as DeviceId[] });
+const DEVICE_PICKS: { id: string; label: string; sub?: string; icon: LucideIcon; devices: DeviceId[] }[] = [
+  { ...pickOf("laptop"), sub: "Repair or speed-up" },
+  { ...pickOf("desktop"), sub: "Repair, upgrade or speed-up" },
+  { id: "both", label: "Both, a laptop and a desktop", icon: Computer, devices: ["laptop", "desktop"] },
+  { ...pickOf("mobile"), sub: "New iPhone, Android or iPad. Setup only, no repairs" },
+  { ...pickOf("camera"), sub: "Installed and working on your phone" },
 ];
 
 /** What a tech lead is worth to Meta's optimizer (an average first job). */
@@ -62,8 +66,13 @@ export function TechQuiz({ source = "computer-repair-tampa", className, variant 
     }
     // Keep the new question in view: on the page, scroll the card into view; in the phone sheet, back to its top
     // (a long problem list otherwise leaves the next question scrolled out of sight).
-    if (variant === "card") top.current?.scrollIntoView({ block: "nearest", behavior: "smooth" });
-    else top.current?.parentElement?.scrollTo({ top: 0, behavior: "smooth" });
+    if (variant === "card") {
+      // Bring the card's top just under the fixed header (which is taller on phones, with its nav bar).
+      const el = top.current;
+      const headerBottom = document.querySelector("header")?.getBoundingClientRect().bottom ?? 64;
+      const y = el ? el.getBoundingClientRect().top - headerBottom - 12 : 0;
+      if (el && (y < 0 || y > window.innerHeight * 0.5)) window.scrollBy({ top: y, behavior: "smooth" });
+    } else top.current?.parentElement?.scrollTo({ top: 0, behavior: "smooth" });
   };
   const set = (patch: Partial<TechAnswers>) => {
     setA((prev) => ({ ...prev, ...patch }));
@@ -169,7 +178,7 @@ export function TechQuiz({ source = "computer-repair-tampa", className, variant 
 
   return (
     <div id={variant === "card" ? "fix" : undefined} ref={top} className={cn("scroll-mt-24", shell)}>
-      <p className="font-display text-xl font-bold leading-tight sm:text-2xl">Get your repair price</p>
+      <p className="font-display text-xl font-bold leading-tight sm:text-2xl">Get your price</p>
       <div className="mt-3 h-2 overflow-hidden rounded-full bg-muted" role="progressbar" aria-label="Progress" aria-valuemin={1} aria-valuemax={STEPS.length} aria-valuenow={index + 1}>
         <div className="h-full rounded-full bg-gradient-to-r from-turbo to-[hsl(var(--ignite))] transition-[width] duration-300 ease-out" style={{ width: `${((index + 1) / STEPS.length) * 100}%` }} />
       </div>
@@ -179,17 +188,17 @@ export function TechQuiz({ source = "computer-repair-tampa", className, variant 
       <p className="mt-3 flex items-start gap-2 rounded-xl bg-turbo/[0.08] px-3 py-2.5 text-sm leading-snug ring-1 ring-turbo/20">
         <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-turbo" aria-hidden />
         <span>
-          Windows laptops and desktops, fixed at your door within <b>40 miles of Tampa</b>, or sped up remotely.
+          We come to you within <b>40 miles of Tampa</b>. Slow Windows PC? We can also speed it up remotely.
         </span>
       </p>
 
       <div key={step} className="mt-4 animate-step">
         {step === "device" && (
           <>
-            <Title text="What kind of computer?" />
+            <Title text="What do you need help with?" />
             <div className="grid gap-2.5">
               {DEVICE_PICKS.map((o) => (
-                <Tile key={o.id} icon={o.icon} label={o.label} pressed={o.devices.length === a.devices.length && o.devices.every((d) => a.devices.includes(d))} onClick={() => pickDevices(o.devices)} />
+                <Tile key={o.id} icon={o.icon} label={o.label} sub={o.sub} pressed={o.devices.length === a.devices.length && o.devices.every((d) => a.devices.includes(d))} onClick={() => pickDevices(o.devices)} />
               ))}
             </div>
             <p className="mt-3 flex items-start gap-2 text-sm leading-snug text-muted-foreground">
@@ -201,7 +210,7 @@ export function TechQuiz({ source = "computer-repair-tampa", className, variant 
 
         {step === "problem" && (
           <>
-            <Title text={a.devices.length > 1 ? "What's wrong with each one?" : "What's wrong with it?"} />
+            <Title text={a.devices.length > 1 ? "What's wrong with each one?" : a.devices[0] === "mobile" || a.devices[0] === "camera" ? "What do you need?" : "What's wrong with it?"} />
             <p className="-mt-2 mb-3 text-sm text-muted-foreground">Tap all that apply.</p>
             <div className="grid gap-5">
               {a.devices.map((d) => (
@@ -347,11 +356,14 @@ export function TechQuiz({ source = "computer-repair-tampa", className, variant 
 const row = "flex w-full min-h-[56px] items-center gap-3 rounded-2xl border-2 border-border bg-card px-4 text-left transition-[border-color,background-color,transform] duration-150 hover:border-turbo/60 active:scale-[0.98]";
 const rowOn = "border-turbo bg-turbo/10";
 
-function Tile({ icon: Icon, label, pressed, onClick }: { icon: LucideIcon; label: string; pressed: boolean; onClick: () => void }) {
+function Tile({ icon: Icon, label, sub, pressed, onClick }: { icon: LucideIcon; label: string; sub?: string; pressed: boolean; onClick: () => void }) {
   return (
     <button type="button" aria-pressed={pressed} onClick={onClick} className={cn("flex min-h-[72px] w-full items-center gap-4 rounded-2xl border-2 border-border bg-card px-4 py-3 text-left transition-[border-color,background-color,transform] duration-150 hover:border-turbo/60 active:scale-[0.98]", pressed && "border-turbo bg-turbo/15 ring-2 ring-turbo/30")}>
       <Icon className="h-8 w-8 shrink-0 text-turbo" strokeWidth={1.75} aria-hidden />
-      <span className="min-w-0 flex-1 text-[17px] font-bold leading-tight">{label}</span>
+      <span className="min-w-0 flex-1">
+        <span className="block text-[17px] font-bold leading-tight">{label}</span>
+        {sub && <span className="mt-0.5 block text-sm leading-snug text-muted-foreground">{sub}</span>}
+      </span>
       <ArrowRight className="h-5 w-5 shrink-0 text-muted-foreground" aria-hidden />
     </button>
   );

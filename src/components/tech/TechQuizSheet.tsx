@@ -7,7 +7,7 @@ export default function TechQuizSheet({ open, setOpen, source }: { open: boolean
   return (
     <Drawer open={open} onOpenChange={setOpen} shouldScaleBackground={false} repositionInputs={false}>
       <DrawerContent className="theme-soft max-h-[94dvh] rounded-t-3xl">
-        <DrawerTitle className="sr-only">Get your repair price</DrawerTitle>
+        <DrawerTitle className="sr-only">Get your price</DrawerTitle>
         <DrawerDescription className="sr-only">Answer a few taps, then send them to us by text.</DrawerDescription>
         <DrawerClose className="absolute right-3 top-3 z-10 grid h-11 w-11 place-items-center rounded-full bg-muted text-foreground" aria-label="Close">
           <X className="h-5 w-5" aria-hidden />

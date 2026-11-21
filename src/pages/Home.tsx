@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { AlertTriangle, ArrowRight, Building2, CalendarCheck, Check, Cpu, Gauge, Globe, HardDrive, Laptop, Mail, MapPin, MessageSquare, Monitor, Phone, Power, ShieldCheck, Star, Wrench, type LucideIcon } from "lucide-react";
+import { AlertTriangle, ArrowRight, Building2, CalendarCheck, Cctv, Check, Cpu, Gauge, Globe, HardDrive, Laptop, Mail, MapPin, MessageSquare, Monitor, Phone, Power, ShieldCheck, Smartphone, Star, Wrench, type LucideIcon } from "lucide-react";
 import { InstallBookButton } from "@/components/cta/Actions";
 import { FAQList, SectionHeader } from "@/components/blocks/Basics";
 import { BeforeAfter, OFFICE_BEFORE_AFTER } from "@/components/visuals/BeforeAfter";
@@ -14,7 +14,7 @@ import { JobPhotos } from "@/components/tech/JobPhotos";
 import { OFFICE_AD } from "@/components/tech/TechAdGallery";
 import { INSTALL_BOOKING, IT_BOOKING, REVIEWS, SITE } from "@/config/site";
 import { SHOP_PATH } from "@/content/review-cards";
-import { itPrice } from "@/content/pricing";
+import { INSTALL_PRICES, itPrice, usd } from "@/content/pricing";
 import { CLIENTS } from "@/content/clients";
 import { SiteWall } from "@/components/visuals/SiteWall";
 import { OFFICE_SETUP_PATH } from "@/content/tech-pages";
@@ -25,7 +25,8 @@ import { GrowEverywhere, ReviewCardPacks } from "@/components/blocks/GrowEverywh
 
 /**
  * The homepage is tech support first: Windows laptop and desktop repair (the most calls: speed-ups, blue screens,
- * won't turn on) and office IT setups (the biggest jobs). No Macs, phones, tablets or laptop screens. Phones get "text us"
+ * won't turn on), office IT setups (the biggest jobs), cameras and doorbells, and phone and tablet setup (setup only,
+ * no phone repairs). No Macs or laptop screens. Phones get "text us"
  * (the tap-question sheet) and call; computers get Book a visit and call. Below the repair services sit the
  * digital ones with their own buy buttons (websites, ads, SEO/DNS fixes, Google review cards); the full agency lives at /grow.
  */
@@ -34,7 +35,9 @@ const SERVICES: { icon: LucideIcon; t: string; b: string; price: string; to: str
   { icon: Gauge, t: "Make my PC faster", b: "Slow, freezing or full of junk: cleaned up, updated and an SSD if it needs one. At your door, or remotely anywhere.", price: itPrice("it-speedup"), to: "/computer-repair-tampa", cta: "Speed up my PC", tech: true },
   { icon: AlertTriangle, t: "Blue screens & crashes", b: "Blue screens, restarts, freezing and Windows updates gone wrong, found and fixed for good.", price: itPrice("it-pc-repair"), to: "/computer-repair-tampa", cta: "Fix my crashes", tech: true },
   { icon: Power, t: "Won't turn on", b: "No power, no lights or stuck on boot. Laptops and desktops, including gaming PCs: power supplies, memory and parts.", price: itPrice("it-desktop"), to: "/computer-repair-tampa", cta: "Fix my computer", tech: true },
-  { icon: Building2, t: "Office IT setup", b: "Workstations, multi-monitor desks, printers, Microsoft 365 or Google email, and cables hidden. Homes and businesses.", price: OFFICE_FROM, to: OFFICE_SETUP_PATH, cta: "Set up my office" },
+  { icon: Cctv, t: "Cameras & Ring doorbells", b: "Ring, Nest, Blink or Wyze doorbells and Wi-Fi cameras installed and working on your phone. Homes and businesses.", price: `from ${usd(INSTALL_PRICES.find((p) => p.id === "cam-wifi")!.price)} per camera`, to: "/security-camera-installation-tampa", cta: "Install my cameras" },
+  { icon: Smartphone, t: "Phone & tablet setup", b: "New iPhone, Android or iPad set up with your photos, contacts, texts, email and apps moved over. Setup only, no repairs.", price: itPrice("it-phone-setup"), to: "/computer-repair-tampa", cta: "Set up my phone", tech: true },
+  { icon: Building2, t: "Office IT setup", b: "Workstations, multi-monitor desks, printers, Wi-Fi, Microsoft 365 or Google email, and cables hidden. Homes and businesses.", price: OFFICE_FROM, to: OFFICE_SETUP_PATH, cta: "Set up my office" },
 ];
 
 const FIXES: { icon: LucideIcon; t: string }[] = [
@@ -63,6 +66,7 @@ const PRICES: [string, string][] = [
   ["Remote speed-up", itPrice("it-remote")],
   ["Virus & pop-up removal", itPrice("it-virus")],
   ["SSD upgrade", itPrice("it-ssd")],
+  ["Phone & tablet setup", itPrice("it-phone-setup")],
   ["Office on-site IT", `${itPrice("it-business-hour")}/hr`],
 ];
 
@@ -83,10 +87,10 @@ export default function Home() {
               <MapPin className="h-3.5 w-3.5 text-turbo" aria-hidden /> Tampa Bay · we come to you
             </p>
             <h1 id="hero" className="mt-4 font-display text-[38px] font-extrabold leading-[1.02] tracking-tight sm:text-6xl lg:text-[68px]">
-              Windows computer repair <span className="text-turbo-grad">at your door in Tampa.</span>
+              Computer repair, cameras &amp; setup <span className="text-turbo-grad">at your door in Tampa.</span>
             </h1>
             <p className="mt-4 max-w-xl text-[17px] leading-relaxed text-muted-foreground sm:text-lg">
-              Slow PCs made fast, blue screens fixed, computers that won't turn on brought back. Windows laptops and desktops, at your home or business. Price up front, no fix no charge. For businesses anywhere: websites, ads and Google review cards.
+              Slow PCs made fast, blue screens fixed, dead computers brought back. Windows laptops and desktops repaired; cameras, Ring doorbells, phones and tablets set up. Price up front, no fix no charge. For businesses anywhere: websites, ads and Google review cards.
             </p>
             <ReviewSummary className="mt-4" />
             <PhoneOnly
@@ -143,8 +147,8 @@ export default function Home() {
 
       <section className="section border-t border-border" aria-labelledby="services">
         <div className="container-x">
-          <SectionHeader kicker="What we do" title={<span id="services">Fixed, set up and working.</span>} lede="Windows laptops and desktops are what we fix all day. We don't work on Macs, phones or tablets, and we don't replace laptop screens." />
-          <ul className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <SectionHeader kicker="What we do" title={<span id="services">Fixed, set up and working.</span>} lede="Windows laptops and desktops are what we repair. Cameras, doorbells, phones, tablets and offices we set up. No Macs, no phone repairs, no laptop screens." />
+          <ul className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {SERVICES.map((s) => {
               const inner = (
                 <>

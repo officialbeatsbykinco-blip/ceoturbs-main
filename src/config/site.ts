@@ -8,7 +8,7 @@ export const SITE = {
   contentUpdated: "2026-11-03",
   tagline: "Tampa IT support: we fix it, set it up and keep it running, then help you get customers.",
   description:
-    "CEO Turbo is a Tampa, FL IT support and growth company. We repair Windows laptops and desktops at your door or remotely (speed-ups, blue screens, computers that won't turn on), set up offices, and build websites and ads that bring in customers. In person within 40 miles of Tampa.",
+    "CEO Turbo is a Tampa, FL IT support and growth company. We repair Windows laptops and desktops at your door or remotely (speed-ups, blue screens, computers that won't turn on), set up phones, tablets, cameras and offices, and build websites and ads that bring in customers. In person within 40 miles of Tampa.",
   founder: {
     name: "Christopher Robinson",
     alternateName: "StackmodeChris",

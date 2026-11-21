@@ -44,7 +44,7 @@ export const SERVICES: Service[] = [
       "Internet and Wi-Fi network setup",
       "Printer and peripheral installation",
       "Software installation (Microsoft Office, security tools, business apps)",
-      "Docks, webcams, headsets and USB devices connected",
+      "Tablet, phone, and device connection",
       "Cable management and wire organization",
       "Ergonomic workspace optimization",
       "Data transfer from old devices to new",
@@ -64,7 +64,7 @@ export const SERVICES: Service[] = [
       { q: "Do you provide the equipment?", a: "We can recommend and source equipment at your request, or we set up what you already have. You provide the furniture and devices, we handle the assembly, installation, and configuration." },
       { q: "How long does setup take?", a: "Most home office setups are completed in 2-4 hours. Larger business office setups or school computer labs may take a full day. We'll give you a time estimate during our consultation." },
       { q: "Do you offer ongoing support?", a: "We focus on setup and installation. For ongoing IT support, we can refer you to trusted partners or discuss a maintenance plan for your specific needs." },
-      { q: "Do you work on Macs, phones or tablets?", a: "No. We set up and fix Windows PCs, laptops and desktops, plus the monitors, printers, docks and networks around them. We don't work on Macs, iPhones, Android phones or tablets." },
+      { q: "Do you set up phones and tablets too?", a: "Yes. We set up Windows PCs, laptops and desktops, plus the monitors, printers, docks and networks around them, and connect iPhones, Android phones and iPads to your email and accounts. We set phones and tablets up but don't repair them, and we don't work on Macs." },
     ],
   },
   {

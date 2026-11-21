@@ -455,6 +455,7 @@ export const IT_SERVICES: PriceItem[] = [
   { id: "it-data", name: "Data backup & transfer", price: 129, billing: "once", summary: "Photos, files and email moved to a new computer or backed up.", includes: [] },
   { id: "it-printer", name: "Printer & software setup", price: 99, from: true, billing: "once", summary: "Printers, Microsoft Office, email and apps working.", includes: [] },
   { id: "it-desktop", name: "Desktop PC repair & upgrades", price: 149, from: true, billing: "once", summary: "No power, power supplies, graphics cards, memory, fans and gaming PCs.", includes: [] },
+  { id: "it-phone-setup", name: "Phone & tablet setup", price: 79, from: true, billing: "once", summary: "New iPhone, Android or iPad set up: photos, contacts, email and apps moved over. Setup only, no repairs.", includes: [] },
   { id: "it-tv-mount", name: "TV wall mount", price: 129, billing: "once", summary: "Per TV up to 65\", drywall and studs. Mount not included.", includes: [] },
   { id: "it-tv-extra", name: "Each extra TV, same visit", price: 79, billing: "once", summary: "Mount a second TV on the same trip.", includes: [] },
   { id: "it-tv-setup", name: "TV & streaming setup", price: 99, billing: "once", summary: "Apps, sound bar, remotes and accounts working.", includes: [] },

@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 import { CHECK_PATH } from "@/lib/free-check";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { Calendar, ChevronDown, Menu, MessageSquare, Phone, Search, Wrench, X } from "lucide-react";
@@ -83,6 +83,7 @@ const TECH: Menu = {
   to: IT_SERVICES_PATH,
   items: [
     { to: IT_SERVICES_PATH, label: "Windows computer repair", sub: "Speed-ups, blue screens, won't turn on" },
+    { to: `${IT_SERVICES_PATH}#prices`, label: "Phone & tablet setup", sub: "New iPhone, Android or iPad. Setup only, no repairs" },
     { to: COMPUTERS_PATH, label: "Computer shop", sub: "Laptops & desktops, ready to use" },
     { to: OFFICE_SETUP_PATH, label: "Office setup & cables", sub: "Desks, monitors, printers, Wi-Fi" },
     { to: "/business-tech-setup-tampa", label: "Business IT setup", sub: "Workstations, network, POS" },
@@ -107,6 +108,17 @@ const MORE: Menu = {
     { to: "/tampa", label: "Tampa Bay", sub: "Where we work in person" },
   ],
 };
+
+/** The phone nav bar under the logo: the main services, one tap each, always on screen. */
+const QUICK: { to: string; label: string }[] = [
+  { to: IT_SERVICES_PATH, label: "Computer repair" },
+  { to: "/security-camera-installation-tampa", label: "Cameras" },
+  { to: OFFICE_SETUP_PATH, label: "Office setup" },
+  { to: "/grow", label: "Websites & ads" },
+  { to: SHOP_PATH, label: "Review cards" },
+  { to: "/portfolio", label: "Our work" },
+  { to: COMPUTERS_PATH, label: "Shop computers" },
+];
 
 const linkCls = ({ isActive }: { isActive: boolean }) =>
   cn("whitespace-nowrap rounded-lg px-2 py-2 text-[13px] font-medium transition-colors hover:bg-white/5 hover:text-foreground xl:px-2.5 xl:text-sm", isActive ? "text-foreground" : "text-muted-foreground");
@@ -218,20 +230,25 @@ export function Header({ focus: focusProp = false }: { focus?: boolean }) {
         </div>
       </div>
 
+      {!open && <QuickNav pathname={pathname} />}
+
       {open && (
-        <div id="mobile-menu" className="container-x h-[calc(100dvh-4rem)] overflow-y-auto pb-32 pt-2 lg:hidden">
+        <div id="mobile-menu" className="container-x h-[calc(100dvh-4rem)] overflow-y-auto overscroll-contain bg-background pb-32 pt-2 lg:hidden">
           <div className="grid gap-2">
             <FixMyTechLink source="mobile menu" onOpen={() => setOpen(false)} className="btn-ignite justify-between !px-4 !py-4 !text-lg">
               <span className="inline-flex items-center gap-2">
-                <Wrench className="h-5 w-5" aria-hidden /> Fix my Windows PC
+                <Wrench className="h-5 w-5" aria-hidden /> Fix or set up my tech
               </span>
               <span aria-hidden>›</span>
             </FixMyTechLink>
             {[
+              [IT_SERVICES_PATH, "Windows computer repair"],
+              ["/security-camera-installation-tampa", "Cameras & Ring doorbells"],
+              [`${IT_SERVICES_PATH}#prices`, "Phone & tablet setup"],
+              [OFFICE_SETUP_PATH, "Office IT setup"],
               ["/grow", "Websites & ads"],
               ["/portfolio", "Websites we built"],
               [SHOP_PATH, `Google review cards · ${fromPriceLabel}`],
-              [OFFICE_SETUP_PATH, "Office IT setup"],
               [`${CHECK_PATH}?from=mobile-menu`, "Free Google & website check"],
             ].map(([to, label]) => (
               <Link key={to} to={to} onClick={() => setOpen(false)} className="panel flex min-h-[56px] items-center justify-between px-4 py-4 text-lg font-semibold">
@@ -290,6 +307,38 @@ export function Header({ focus: focusProp = false }: { focus?: boolean }) {
         </div>
       )}
     </header>
+  );
+}
+
+/** Phones and tablets: a row of service links under the logo that scrolls sideways, with the current page lit up. */
+function QuickNav({ pathname }: { pathname: string }) {
+  const row = useRef<HTMLDivElement>(null);
+  const here = pathname.replace(/\/$/, "") || "/";
+  // Bring the current page's link into view (it may sit past the right edge).
+  useEffect(() => {
+    const el = row.current?.querySelector<HTMLElement>('[aria-current="page"]');
+    if (el && row.current) row.current.scrollLeft = el.offsetLeft - 16;
+  }, [here]);
+  return (
+    <nav aria-label="Services" className="relative border-t border-border/60 lg:hidden">
+      <div ref={row} className="no-scrollbar flex h-[52px] items-center gap-1.5 overflow-x-auto px-3">
+        {QUICK.map((q) => {
+          const on = here === q.to || (q.to !== "/" && here.startsWith(`${q.to}/`));
+          return (
+            <Link
+              key={q.to}
+              to={q.to}
+              aria-current={on ? "page" : undefined}
+              className={cn("inline-flex min-h-[40px] shrink-0 items-center whitespace-nowrap rounded-full px-3.5 text-sm font-semibold ring-1 transition-colors", on ? "bg-turbo text-white ring-turbo" : "bg-card text-foreground ring-border hover:ring-turbo/60")}
+            >
+              {q.label}
+            </Link>
+          );
+        })}
+        <span className="w-2 shrink-0" aria-hidden />
+      </div>
+      <div className="pointer-events-none absolute inset-y-0 right-0 w-8 bg-gradient-to-l from-background to-transparent" aria-hidden />
+    </nav>
   );
 }
 

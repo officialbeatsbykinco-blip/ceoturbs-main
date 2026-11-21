@@ -127,7 +127,8 @@ describe("pages", () => {
 });
 
 describe("repairs", () => {
-  it("Windows computers only: no screen or battery repairs", () => {
+  it("phones and tablets: setup only, no repairs; no screen or battery repairs", () => {
+    expect(problemsFor("mobile").map((p) => p.id)).toEqual(["phone-setup", "phone-transfer", "phone-email", "other"]);
     expect(problemsFor("laptop").map((p) => p.id)).not.toContain("screen");
     expect(problemsFor("laptop").map((p) => p.id)).toContain("upgrade");
   });
