@@ -309,7 +309,7 @@ function build(): PageMeta[] {
 
   pages.push({
     path: "/about",
-    title: "About Christopher Robinson, Tampa Founder | CEO Turbo",
+    title: "About Christopher Robinson, Florida Tech Founder | CEO Turbo",
     description:
       "Christopher Robinson (StackmodeChris) founded CEO Turbo to help artists, local businesses and stores win customers with websites, ads and AI search.",
     priority: 0.6,
@@ -398,7 +398,7 @@ function build(): PageMeta[] {
       ],
     })),
     // The computer shop: listings come from Shopify; each one gets its own page (src/seo/computers.ts).
-    { path: COMPUTERS_PATH, title: "Computers for Sale in Tampa: Laptops & Desktops | CEO Turbo", description: "Laptops and desktops for sale from a Tampa computer tech. Buy online with secure checkout, get it set up at your place and repaired by the same person.", ogImage: IT_OG.repair, priority: 0.9, changefreq: "weekly", group: "Core", schema: [...base(), S.webPage(COMPUTERS_PATH, "CEO Turbo computer shop", "Laptops and desktops for sale from a Tampa computer tech, with setup and repairs.", "CollectionPage"), S.breadcrumbs([{ name: "Computers", path: COMPUTERS_PATH }]), S.faqPage(SHOP_COMPUTER_FAQS, COMPUTERS_PATH)] },
+    { path: COMPUTERS_PATH, title: "Computers for Sale: Tampa Bay & Central Florida | CEO Turbo", description: "Laptops and desktops for sale from a Florida tech. Buy online, get it set up at your place from Tampa Bay to Orlando and fixed by the same person.", ogImage: IT_OG.repair, priority: 0.9, changefreq: "weekly", group: "Core", schema: [...base(), S.webPage(COMPUTERS_PATH, "CEO Turbo computer shop", "Laptops and desktops for sale from a Tampa computer tech, with setup and repairs.", "CollectionPage"), S.breadcrumbs([{ name: "Computers", path: COMPUTERS_PATH }]), S.faqPage(SHOP_COMPUTER_FAQS, COMPUTERS_PATH)] },
     { path: "/book", title: "Book Your Free 30-Minute Call | CEO Turbo", description: "Pick a time for a free 30-minute call with Christopher Robinson: what's costing you calls and bookings, and a fixed price to fix it.", ogImage: "/og/brand-boost.jpg", noindex: true, priority: 0.1, changefreq: "yearly", group: "Core", schema: base() },
     { path: "/booked", title: "You're Booked | CEO Turbo", description: "Your Brand Boost call is booked. Here's how to get the most from it.", noindex: true, priority: 0.1, changefreq: "yearly", group: "Core", schema: base() },
     {

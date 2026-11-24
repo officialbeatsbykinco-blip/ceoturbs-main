@@ -135,10 +135,10 @@ export function Tampa() {
       <section className="relative overflow-hidden pt-28 sm:pt-32">
         <div className="pointer-events-none absolute -top-32 left-1/2 h-[520px] w-[900px] -translate-x-1/2 glow-turbo" aria-hidden />
         <div className="container-x relative">
-          <Breadcrumbs items={[{ name: "Tampa", path: "/tampa" }]} />
-          <SectionHeader as="h1" title="Tampa tech help and growth, founder-run" />
+          <Breadcrumbs items={[{ name: "Service area", path: "/tampa" }]} />
+          <SectionHeader as="h1" title="Tech help across Tampa Bay and Central Florida, founder-run" />
           <DirectAnswer label="Where CEO Turbo works">
-            CEO Turbo is based in Tampa, Florida. We fix Windows laptops and desktops at your door or remotely, set up phones, tablets and cameras, set up and organize offices, and build websites and ads that bring in customers. In-person work covers Tampa Bay and Central Florida, about 1.5 hours around Temple Terrace, and {georgia.length} of the client sites below were built before our move from Georgia.
+            CEO Turbo is based in Tampa Bay, Florida, and works in person anywhere within about 1.5 hours of Temple Terrace: Tampa, St. Pete, Clearwater, Brandon, Lakeland, Winter Haven, Sarasota and Orlando. We fix Windows laptops and desktops, phone and tablet screens and batteries, at your door or remotely, set up phones, tablets and cameras, set up and organize offices, and build websites and ads that bring in customers. In-person work covers Tampa Bay and Central Florida, about 1.5 hours around Temple Terrace, and {georgia.length} of the client sites below were built before our move from Georgia.
           </DirectAnswer>
           <div className="mt-8 flex flex-wrap gap-3">
             <Link to="/computer-repair-tampa" className="btn-ignite">
