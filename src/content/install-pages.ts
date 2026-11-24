@@ -55,6 +55,10 @@ export type InstallPage = {
   textFirst?: { sms: string };
   /** Plain-language explainer cards (why it matters), for people and AI answers. */
   facts?: { title: string; body: string }[];
+  /** Cities we drive to past the 40-mile radius, on request (listed on the page and in areaServed). */
+  farther?: { lede: string; cities: string[] };
+  /** Tap-to-check "Can you take my…?" items: yes, text a photo first, or no. */
+  accepts?: { item: string; ok: "yes" | "photo" | "no" }[];
   seo: { title: string; description: string };
 };
 
@@ -358,13 +362,31 @@ INSTALL_PAGES.push({
   name: "Tech recycling Tampa",
   service: "a free tech recycling pickup",
   category: "tech_recycling",
-  chip: "Free pickup · Tampa, St. Pete, Clearwater & all of Tampa Bay, FL",
+  chip: "Free pickup across Tampa Bay · Orlando & more of Florida on request",
   h1: ["Old computers, phones or TVs?", "We pick them up and recycle them, free."],
-  lede: "Electronics don't belong in the trash. Call, text or email us and we come to your home or business in Tampa, St. Petersburg, Clearwater, Brandon, Wesley Chapel, Lakeland or anywhere within 40 miles of Temple Terrace, Florida, wipe or destroy every hard drive, and haul your old tech away to be reused or recycled. Free pickup, no drop-off trip.",
+  lede: "Electronics don't belong in the trash. Call, text or email us and we come to your home or business in Tampa, St. Petersburg, Clearwater, Brandon, Wesley Chapel, Lakeland or anywhere within 40 miles of Temple Terrace, Florida, wipe or destroy every hard drive, and haul your old tech away to be reused or recycled. Free pickup, no drop-off trip. Farther out, like Orlando or Sarasota? We'll drive out for bigger loads.",
   promises: ["Free pickup at your door", "Hard drives wiped or destroyed", "Homes and businesses", "Kept out of the landfill"],
   pricesLede: "Pickup is free for everything on our list. Big tube TVs or a whole truckload? Text a photo and we'll confirm before we come.",
-  areaLede: "Not just Tampa: we pick up across Hillsborough, Pinellas, Pasco, Hernando, Polk and Manatee counties, every city within about 40 miles of Temple Terrace, Florida.",
-  schemaName: "Free electronics recycling pickup in Tampa Bay, Florida (Tampa, St. Petersburg, Clearwater)",
+  areaLede: "Free local pickup anywhere within about 40 miles of Temple Terrace, Florida: Hillsborough, Pinellas, Pasco, Hernando, Polk and Manatee counties. Farther out? See below.",
+  farther: {
+    lede: "For bigger loads (an office cleanout, a garage full, 10+ items) we drive out past the 40 miles. Text a photo and your city and we'll set a day.",
+    cities: ["Orlando", "Kissimmee", "Winter Haven", "Haines City", "Sarasota", "Lakewood Ranch", "Venice", "Ocala", "The Villages", "Clermont"],
+  },
+  accepts: [
+    { item: "Laptop or desktop", ok: "yes" },
+    { item: "Old iPhone or Android", ok: "yes" },
+    { item: "iPad or tablet", ok: "yes" },
+    { item: "Flat-screen TV", ok: "yes" },
+    { item: "Computer monitor", ok: "yes" },
+    { item: "Printer or scanner", ok: "yes" },
+    { item: "Game console", ok: "yes" },
+    { item: "Router, modem or server", ok: "yes" },
+    { item: "Cables, chargers, keyboards", ok: "yes" },
+    { item: "Big tube (CRT) TV", ok: "photo" },
+    { item: "A whole office", ok: "photo" },
+    { item: "Fridge, washer or AC unit", ok: "no" },
+  ],
+  schemaName: "Free electronics recycling pickup in Tampa Bay and Central Florida",
   prices: [recyclePickup, recycleWipe, recycleOffice],
   priceNote: "We take laptops, desktops, monitors, flat-screen TVs, phones, tablets, printers, game consoles, routers, keyboards, cables, chargers and servers. We don't take large appliances (fridges, washers, AC units) or leaking batteries.",
   words: {
@@ -422,12 +444,13 @@ INSTALL_PAGES.push({
     { q: "Do you pick up from businesses and offices?", a: "Yes. Offices, schools, clinics and shops: old workstations, monitors, servers and network gear, loaded up and hauled away, with every drive wiped or destroyed." },
     { q: "Do I have to bring it outside?", a: "No. We come in and carry it out, from a closet, garage, apartment or office." },
     { q: "How fast can you pick up?", a: `Usually within a few days, often the same week. Call or text ${SITE.phone.display} with what you have and we'll text you a time.` },
-    WHERE_FAQ("We pick up old tech"),
+    WHERE_FAQ("We pick up old tech for free"),
+    { q: "Do you pick up in Orlando or other parts of Florida?", a: `Yes, for bigger loads. Free local pickup covers everywhere within about 40 miles of Temple Terrace (Tampa Bay). For an office cleanout or 10+ items we also drive to Orlando, Kissimmee, Winter Haven, Sarasota, Lakewood Ranch, Ocala, Clermont and other Central Florida cities. Text a photo and your city to ${SITE.phone.display} and we'll set a day.` },
   ],
   value: 40,
   seo: {
-    title: "Free Electronics Recycling: Tampa, St. Pete & Clearwater",
-    description: `Free pickup of old computers, phones and TVs in Tampa, St. Pete, Clearwater and all of Tampa Bay, FL. Drives wiped. Call or text ${SITE.phone.display}.`,
+    title: "Free Electronics Recycling Pickup: Tampa Bay & Florida",
+    description: `Free pickup of old computers, phones and TVs in Tampa, St. Pete, Clearwater and all of Tampa Bay. Orlando on request. Call or text ${SITE.phone.display}.`,
   },
 });
 

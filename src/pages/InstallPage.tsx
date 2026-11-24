@@ -7,6 +7,7 @@ import { CallLink } from "@/components/site/CallLink";
 import { FAQList, SectionHeader } from "@/components/blocks/Basics";
 import { ServiceAreaList } from "@/components/blocks/ServiceAreaList";
 import { InstallQuiz } from "@/components/tech/InstallQuiz";
+import { AcceptsChecker } from "@/components/tech/AcceptsChecker";
 import { CustomerReview, FounderBadge } from "@/components/tech/FounderBadge";
 import { InstallCalEmbed } from "@/components/booking/InstallCalEmbed";
 import { INSTALL_BOOKING, SITE } from "@/config/site";
@@ -116,6 +117,15 @@ export default function InstallPage({ path }: { path: string }) {
         </div>
       </section>
 
+      {page.accepts && (
+        <section className="section border-t border-border" aria-labelledby="check">
+          <div className="container-x">
+            <SectionHeader title={<span id="check">Can you take my…?</span>} lede="Tap what you have and get the answer right now." />
+            <AcceptsChecker page={page} className="mt-8" />
+          </div>
+        </section>
+      )}
+
       <section className="section border-t border-border" aria-labelledby="prices">
         <div className="container-x">
           <SectionHeader title={<span id="prices">Prices</span>} lede={business ? "Three simple prices. Cameras, Wi-Fi and TV mounts are priced per item on your call." : page.pricesLede ?? "Labor, per unit, so you can add it up yourself. Equipment is yours, or we buy it at cost and show you the receipt. You get the total before we start."} />
@@ -211,6 +221,20 @@ export default function InstallPage({ path }: { path: string }) {
         <div className="container-x">
           <SectionHeader title={<span id="area">{page.remote ? "Where we work" : "Where we come to you"}</span>} lede={page.areaLede ?? "Tampa and about 40 miles around it."} />
           <ServiceAreaList className="mt-8" />
+          {page.farther && (
+            <div className="panel mt-4 p-5 sm:p-6">
+              <h3 className="flex items-center gap-2 font-display text-lg font-bold">
+                <MapPin className="h-4 w-4 shrink-0 text-turbo" aria-hidden /> Farther out in Florida
+                <span className="text-xs font-medium text-muted-foreground">· bigger loads, on request</span>
+              </h3>
+              <p className="mt-2 text-[15px] text-muted-foreground">{page.farther.lede}</p>
+              <ul className="mt-3 flex flex-wrap gap-x-3 gap-y-1.5 text-[15px]">
+                {page.farther.cities.map((c) => (
+                  <li key={c}>{c}, FL</li>
+                ))}
+              </ul>
+            </div>
+          )}
         </div>
       </section>
 

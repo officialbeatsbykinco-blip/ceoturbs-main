@@ -393,7 +393,7 @@ function build(): PageMeta[] {
         ...base(),
         S.webPage(p.path, p.name, p.lede),
         S.breadcrumbs([{ name: p.name, path: p.path }]),
-        S.localService({ path: p.path, name: p.schemaName ?? `${p.service[0].toUpperCase()}${p.service.slice(1)} in Tampa Bay`, serviceType: p.service.replace(/^an? /, ""), description: p.lede, prices: p.prices, remote: !!p.remote }),
+        S.localService({ path: p.path, name: p.schemaName ?? `${p.service[0].toUpperCase()}${p.service.slice(1)} in Tampa Bay`, serviceType: p.service.replace(/^an? /, ""), description: p.lede, prices: p.prices, remote: !!p.remote, extraCities: p.farther?.cities }),
         S.faqPage(p.faqs, p.path),
       ],
     })),

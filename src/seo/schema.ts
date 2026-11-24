@@ -178,7 +178,7 @@ export const tampaCities = () => ALL_SETUP_CITIES.map((name) => ({ "@type": "Cit
  * circle around Tampa, and its published prices. Matches what the page shows, so search and AI answers can quote it.
  */
 /** `remote`: also done over the internet anywhere in the world (adds "Worldwide" to areaServed). */
-export const localService = (o: { path: string; name: string; serviceType: string; description: string; prices: PriceItem[]; remote?: boolean }): JsonLd => ({
+export const localService = (o: { path: string; name: string; serviceType: string; description: string; prices: PriceItem[]; remote?: boolean; extraCities?: string[] }): JsonLd => ({
   "@type": "Service",
   "@id": `${abs(o.path)}#service`,
   name: o.name,
@@ -189,6 +189,7 @@ export const localService = (o: { path: string; name: string; serviceType: strin
   areaServed: [
     { "@type": "GeoCircle", geoMidpoint: { "@type": "GeoCoordinates", ...SITE.geo }, geoRadius: Math.round(SITE.serviceRadiusMiles * 1609.34) },
     ...tampaCities(),
+    ...(o.extraCities ?? []).map((name) => ({ "@type": "City", name, containedInPlace: { "@type": "State", name: "Florida" } })),
     ...(o.remote ? ["Worldwide"] : []),
   ],
   availableChannel: { "@type": "ServiceChannel", servicePhone: { "@type": "ContactPoint", telephone: SITE.phone.e164, contactType: "customer service" }, serviceUrl: abs(o.path) },
