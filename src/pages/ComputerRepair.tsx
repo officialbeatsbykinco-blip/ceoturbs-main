@@ -1,5 +1,5 @@
 // /computer-repair-tampa — the Meta ads landing page for tech repair around Tampa: slow, crashing or dead
-// Windows laptops and desktops fixed at the customer's door within 40 miles or remotely; phones and tablets set up, never repaired; no Macs or laptop screens. Prices come from
+// Windows laptops and desktops fixed at the customer's door across Tampa Bay and Central Florida or remotely; phones and tablets set up, never repaired; no Macs or laptop screens. Prices come from
 // IT_SERVICES in content/pricing.ts. Conversion events: ViewContent on load, Lead from the quiz (TechQuiz),
 // Contact from call/text taps, Schedule from a Cal.com booking. Repair only: the business marketing and review card
 // sections stay off this page so a visitor from a repair ad sees nothing but the repair and how to reach us.
@@ -51,7 +51,7 @@ const WE_FIX = [
 /** The four reasons to pick us, in the first scroll. Each one is backed elsewhere on the page. */
 const TRUST: { icon: LucideIcon; title: string; body: string }[] = [
   { icon: Star, title: "5.0 on Google", body: "Every review five stars, word for word below." },
-  { icon: Home, title: "We come to you", body: "Home or business, 40 miles around Tampa." },
+  { icon: Home, title: "We come to you", body: "Home or business, Tampa Bay to Orlando." },
   { icon: Clock, title: "Same or next day", body: "Most computers are fixed within a day or two." },
   { icon: BadgeCheck, title: "No fix, no charge", body: "Can't fix it? You don't pay for the repair." },
 ];
@@ -117,11 +117,11 @@ export default function ComputerRepair() {
             <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
               <ReviewSummary />
               <p className="chip">
-                <MapPin className="h-3.5 w-3.5 text-turbo" aria-hidden /> Tampa & 40 miles around
+                <MapPin className="h-3.5 w-3.5 text-turbo" aria-hidden /> Tampa Bay · St. Pete · Brandon · Lakeland · Orlando
               </p>
             </div>
             <h1 id="hero" className="mt-4 text-[34px] font-bold leading-[1.05] sm:text-5xl md:text-[54px]">
-              <span className="text-chrome-grad">Windows PC slow, crashing or dead?</span> <span className="text-turbo-grad">We fix it at your door in Tampa.</span>
+              <span className="text-chrome-grad">Windows PC slow, crashing or dead?</span> <span className="text-turbo-grad">We fix it at your door, anywhere in Central Florida.</span>
             </h1>
             <p className="mt-4 max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg">
               Windows laptops and desktops: slow PCs made fast, blue screens and no-power problems fixed. Usually the same or next day, at your home or business. <span className="font-semibold text-foreground">You get the price before we start, and if we can't fix it, you don't pay for the repair.</span>
@@ -157,7 +157,7 @@ export default function ComputerRepair() {
         </div>
       </section>
 
-      <section className="border-t border-border bg-card/40 py-8 sm:py-10" aria-label="Why Tampa picks us">
+      <section className="border-t border-border bg-card/40 py-8 sm:py-10" aria-label="Why Florida picks us">
         <ul className="container-x grid grid-cols-2 gap-4 lg:grid-cols-4">
           {TRUST.map((t) => (
             <li key={t.title} className="flex items-start gap-3">
@@ -175,7 +175,7 @@ export default function ComputerRepair() {
 
       <section className="section border-t border-border" aria-labelledby="reviews">
         <div className="container-x">
-          <SectionHeader title={<span id="reviews">What Tampa customers say</span>} lede="Real Google reviews, word for word. Tap the rating to check them on Google." />
+          <SectionHeader title={<span id="reviews">What our customers say</span>} lede="Real Google reviews, word for word. Tap the rating to check them on Google." />
           <ReviewWall className="mt-8" />
           <JobPhotos className="mt-10" />
           <Ctas where="reviews" className="mt-8" />
@@ -238,7 +238,7 @@ export default function ComputerRepair() {
 
       <section className="section border-t border-border" aria-labelledby="we-fix">
         <div className="container-x">
-          <SectionHeader title={<span id="we-fix">If it's a Windows PC, we fix it.</span>} lede="Windows desktops and laptops, any brand, at your door around Tampa. Phones and tablets we set up (new device, photos, contacts and email moved over) but don't repair. No Macs or laptop screens." />
+          <SectionHeader title={<span id="we-fix">If it's a Windows PC, we fix it.</span>} lede="Windows desktops and laptops, any brand, at your door anywhere from Tampa Bay to Orlando. Phones and tablets we set up (new device, photos, contacts and email moved over) but don't repair. No Macs or laptop screens." />
           <ul className="mt-8 grid gap-x-6 gap-y-3 sm:grid-cols-2 lg:grid-cols-3">
             {WE_FIX.map((t) => (
               <li key={t} className="flex items-start gap-2.5 text-[15px]">
@@ -267,7 +267,7 @@ export default function ComputerRepair() {
             <div className="flex items-start gap-3">
               <Globe className="mt-0.5 h-6 w-6 shrink-0 text-turbo" aria-hidden />
               <div>
-                <p className="font-display text-lg font-bold">Not in Tampa? Remote support, anywhere in the world.</p>
+                <p className="font-display text-lg font-bold">Too far to visit? Remote support, anywhere in the world.</p>
                 <p className="text-sm text-muted-foreground">Slow Windows computer, pop-ups or software trouble? We fix it over the internet while you watch, from {itPrice("it-remote")}.</p>
               </div>
             </div>
@@ -334,7 +334,7 @@ export default function ComputerRepair() {
           <div>
             <h2 id="who" className="h-section">You deal with the person who fixes it.</h2>
             <p className="lede">
-              I'm {SITE.founder.name.split(" ")[0]}, and I'm based in Tampa. No call center and no ticket number: you call or text, I tell you the price, I show up and fix it.
+              I'm {SITE.founder.name.split(" ")[0]}, and I'm based in Tampa Bay and drive all over Central Florida. No call center and no ticket number: you call or text, I tell you the price, I show up and fix it.
             </p>
             <ul className="mt-5 grid gap-2 text-sm text-muted-foreground sm:grid-cols-3">
               {(
@@ -390,7 +390,7 @@ export default function ComputerRepair() {
 
       <section className="section border-t border-border" aria-labelledby="area">
         <div className="container-x">
-          <SectionHeader title={<span id="area">Where we come to you</span>} lede="About 40 miles around Temple Terrace and Tampa. Remote support for Windows computers works anywhere in the world." />
+          <SectionHeader title={<span id="area">Where we come to you</span>} lede="Anywhere within about 1.5 hours of Temple Terrace: Tampa, St. Pete, Clearwater, Brandon, Lakeland, Winter Haven, Sarasota and Orlando. Remote support for Windows computers works anywhere in the world." />
           <ServiceAreaList className="mt-8" />
           <p className="mt-4 text-sm text-muted-foreground">Somewhere else nearby? Text your ZIP code and we'll tell you.</p>
         </div>

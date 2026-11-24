@@ -114,7 +114,7 @@ const joinAnd = (xs: string[]) => (xs.length < 2 ? xs.join("") : `${xs.slice(0, 
 export function officeMessage(a: Answers, quiz: SetupQuiz = OFFICE_QUIZ) {
   const need = joinAnd(quiz.needs.filter((n) => a.needs.includes(n.id)).map((n) => n.text)) || "help with a setup";
   const name = a.name.trim() ? ` – ${a.name.trim().split(/\s+/)[0]}` : "";
-  return `Hi Chris, I need ${need} in Tampa. ${quiz.sizeLabel}: ${a.size ?? "not sure"}. Timing: ${a.when ?? "not sure"}. What's the price?${name}`;
+  return `Hi Chris, I need ${need}. ${quiz.sizeLabel}: ${a.size ?? "not sure"}. Timing: ${a.when ?? "not sure"}. What's the price?${name} My city: `;
 }
 
 const STEPS = ["need", "size", "when", "send"] as const;

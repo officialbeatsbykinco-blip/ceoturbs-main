@@ -167,7 +167,7 @@ export default function InstallPage({ path }: { path: string }) {
       {page.facts && (
         <section className="section border-t border-border" aria-labelledby="why">
           <div className="container-x">
-            <SectionHeader title={<span id="why">Why old tech can't go in the trash</span>} lede="Recycling keeps Tampa Bay clean, keeps fires out of garbage trucks and keeps your data private." />
+            <SectionHeader title={<span id="why">Why old tech can't go in the trash</span>} lede="Recycling keeps Florida clean, keeps fires out of garbage trucks and keeps your data private." />
             <div className="mt-8 grid gap-4 sm:grid-cols-2">
               {page.facts.map((f) => (
                 <div key={f.title} className="panel p-6">
@@ -206,7 +206,7 @@ export default function InstallPage({ path }: { path: string }) {
           <img src={SITE.founder.image} alt={SITE.founder.name} width={160} height={160} loading="lazy" className="h-32 w-32 rounded-2xl object-cover ring-1 ring-border sm:h-40 sm:w-40" />
           <div>
             <h2 id="who" className="h-section">You deal with the person who does the work.</h2>
-            <p className="lede">I'm {SITE.founder.name.split(" ")[0]}, based in Tampa. No call center: you call or text, I {business ? "send a written quote" : "tell you the price"}, I show up and do the job.</p>
+            <p className="lede">I'm {SITE.founder.name.split(" ")[0]}, based in Tampa Bay and working all over Central Florida. No call center: you call or text, I {business ? "send a written quote" : "tell you the price"}, I show up and do the job.</p>
           </div>
         </div>
       </section>
@@ -219,7 +219,7 @@ export default function InstallPage({ path }: { path: string }) {
 
       <section className="section border-t border-border" aria-labelledby="area">
         <div className="container-x">
-          <SectionHeader title={<span id="area">{page.remote ? "Where we work" : "Where we come to you"}</span>} lede={page.areaLede ?? "Tampa and about 40 miles around it."} />
+          <SectionHeader title={<span id="area">{page.remote ? "Where we work" : "Where we come to you"}</span>} lede={page.areaLede ?? "Anywhere within about 1.5 hours of Temple Terrace: Tampa Bay, Orlando, Lakeland, Winter Haven, Sarasota and everywhere in between."} />
           <ServiceAreaList className="mt-8" />
           {page.farther && (
             <div className="panel mt-4 p-5 sm:p-6">

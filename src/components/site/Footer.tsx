@@ -18,7 +18,7 @@ const FOOTER_POINTS = [
   "Laptops and desktops for sale in our computer shop",
   "Offices set up: monitors, cables, printers, Wi-Fi",
   "Websites and ads that make the phone ring",
-  "Tampa-based, 40 miles around. Price up front",
+  "Tampa Bay to Orlando. Price up front",
 ];
 
 export function Footer({ focus = false }: { focus?: boolean }) {
@@ -72,7 +72,7 @@ export function Footer({ focus = false }: { focus?: boolean }) {
           <div className="col-span-2 md:col-span-1">
             <Logo />
             <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
-              Tampa tech repair, office setup, websites and ads. Founded by {SITE.founder.name} ({SITE.founder.alternateName}).
+              Florida tech repair and office setup from Tampa Bay to Orlando, plus websites and ads. Founded by {SITE.founder.name} ({SITE.founder.alternateName}).
             </p>
             <address className="mt-4 text-sm not-italic leading-relaxed text-muted-foreground">
               {SITE.address.addressLocality}, {SITE.address.addressRegion} · {SITE.serviceRadiusMiles} miles around and remote
@@ -84,7 +84,7 @@ export function Footer({ focus = false }: { focus?: boolean }) {
             <SocialLinks className="mt-5" />
           </div>
           <FooterCol
-            title="Tampa tech help"
+            title="Florida tech help"
             links={[
               { to: IT_SERVICES_PATH, label: "Computer & laptop repair" },
               { to: COMPUTERS_PATH, label: "Computer shop" },
@@ -96,7 +96,7 @@ export function Footer({ focus = false }: { focus?: boolean }) {
               { to: "/services/home-office-setup", label: "Home office setup" },
               { to: "/services/pos-system-setup", label: "POS installation" },
               { to: "/restaurants", label: "Restaurant TVs & menus" },
-              { to: "/tampa", label: "Tampa Bay service area" },
+              { to: "/tampa", label: "Service area: Tampa Bay & Central Florida" },
             ]}
           />
           <FooterCol

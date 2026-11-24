@@ -170,12 +170,11 @@ export const service = (s: Service): JsonLd => ({
   },
 });
 
-/** Every in-person city as a schema.org City in Florida (the 40-mile Tampa radius). */
+/** Every in-person city as a schema.org City in Florida (about 1.5 hours around Temple Terrace). */
 export const tampaCities = () => ALL_SETUP_CITIES.map((name) => ({ "@type": "City", name, containedInPlace: { "@type": "State", name: "Florida" } }));
 
 /**
- * An in-person local service (tech repair, office setup): who provides it, every city it covers, the 40-mile
- * circle around Tampa, and its published prices. Matches what the page shows, so search and AI answers can quote it.
+ * An in-person local service (tech repair, office setup): who provides it, every city it covers, the 1.5-hour * circle around Temple Terrace, and its published prices. Matches what the page shows, so search and AI answers can quote it.
  */
 /** `remote`: also done over the internet anywhere in the world (adds "Worldwide" to areaServed). */
 export const localService = (o: { path: string; name: string; serviceType: string; description: string; prices: PriceItem[]; remote?: boolean; extraCities?: string[] }): JsonLd => ({

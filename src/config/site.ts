@@ -6,9 +6,9 @@ export const SITE = {
   url: "https://www.ceoturbo.com",
   /** dateModified for page schema. Bump when page copy is refreshed (guides carry their own dates). */
   contentUpdated: "2026-11-03",
-  tagline: "Tampa IT support: we fix it, set it up and keep it running, then help you get customers.",
+  tagline: "Florida IT support from Tampa Bay to Orlando: we fix it, set it up and keep it running, then help you get customers.",
   description:
-    "CEO Turbo is a Tampa, FL IT support and growth company. We repair Windows laptops and desktops at your door or remotely (speed-ups, blue screens, computers that won't turn on), set up phones, tablets, cameras and offices, and build websites and ads that bring in customers. In person within 40 miles of Tampa.",
+    "CEO Turbo is a Florida IT support and growth company based in Tampa Bay. We repair Windows laptops and desktops at your door or remotely (speed-ups, blue screens, computers that won't turn on), set up phones, tablets, cameras and offices, and build websites and ads that bring in customers. In person across Tampa Bay and Central Florida, anywhere within about 1.5 hours of Temple Terrace: Tampa, St. Pete, Clearwater, Orlando, Lakeland, Sarasota and Ocala.",
   founder: {
     name: "Christopher Robinson",
     alternateName: "StackmodeChris",
@@ -46,10 +46,9 @@ export const SITE = {
     addressRegion: "FL",
     addressCountry: "US",
   },
-  /** Center of the in-person service area (downtown Tampa) and how far we drive. */
-  /** Temple Terrace: the center of the 40-mile in-person service area. */
+  /** Temple Terrace: the center of the in-person service area. We drive up to about 1.5 hours (roughly 90 miles). */
   geo: { latitude: 28.0353, longitude: -82.3893 },
-  serviceRadiusMiles: 40,
+  serviceRadiusMiles: 90,
   logo: "/img/brand/ceo-turbo-logo.png",
   ogImage: "/og/tampa-it-support.jpg",
   /** CEO Turbo's own profiles (Organization schema + the social icons). */
@@ -95,7 +94,7 @@ export const IT_BOOKING = {
   namespace: "it-consultation",
 } as const;
 
-/** Gaming PC FPS boost (/gaming-pc-fps-boost): a 1-hour session, remote over Google Meet or in person around Tampa. */
+/** Gaming PC FPS boost (/gaming-pc-fps-boost): a 1-hour session, remote over Google Meet or in person across Tampa Bay and Central Florida. */
 export const FPS_BOOKING = {
   calLink: "ceoturbo/ceo-turbo-fps-boost",
   url: "https://cal.com/ceoturbo/ceo-turbo-fps-boost",

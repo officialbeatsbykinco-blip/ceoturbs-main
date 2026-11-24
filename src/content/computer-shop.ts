@@ -11,7 +11,7 @@ export const COMPUTER_SHELL = "__listing";
 export const SHOP_PERKS = [
   { title: "Buy from a computer tech", body: "Ask what's inside, what it's good for and whether it fits your budget. You get a straight answer from the person who fixes computers." },
   { title: "Set up at your place", body: "In Tampa Bay? We can set it up at your home or office and move your files over from the old one." },
-  { title: "Repairs from the same person", body: "Upgrades, speed-ups and repairs later come from us, in person around Tampa or remotely from anywhere." },
+  { title: "Repairs from the same person", body: "Upgrades, speed-ups and repairs later come from us, in person across Central Florida or remotely from anywhere." },
 ];
 
 export const SHOP_FAQS: FAQ[] = [

@@ -1,4 +1,4 @@
-// Tampa installation landing pages (Google Search ads + local SEO): computer setup, security cameras and
+// Florida (Tampa Bay & Central Florida) installation landing pages (Google Search ads + local SEO): computer setup, security cameras and
 // Wi-Fi/internet. One template (pages/InstallPage.tsx), one quiz (components/tech/InstallQuiz.tsx).
 // Prices come from content/pricing.ts so the page, its schema and the ads agree. Cameras have no set price yet.
 import { FPS_BOOKING, SITE, type CalEvent } from "@/config/site";
@@ -47,7 +47,7 @@ export type InstallPage = {
   pricesLede?: string;
   /** Lede over the service-area list. */
   areaLede?: string;
-  /** Service name in the LocalService schema (default: "<service> in Tampa Bay"). */
+  /** Service name in the LocalService schema (default: "<service> in Tampa Bay & Central Florida"). */
   schemaName?: string;
   /** Quiz and button wording when the page isn't asking for a price (default: DEFAULT_WORDS). */
   words?: Partial<QuizWords>;
@@ -55,7 +55,7 @@ export type InstallPage = {
   textFirst?: { sms: string };
   /** Plain-language explainer cards (why it matters), for people and AI answers. */
   facts?: { title: string; body: string }[];
-  /** Cities we drive to past the 40-mile radius, on request (listed on the page and in areaServed). */
+  /** Cities we drive to past the normal service area, on request (listed on the page and in areaServed). */
   farther?: { lede: string; cities: string[] };
   /** Tap-to-check "Can you take my…?" items: yes, text a photo first, or no. */
   accepts?: { item: string; ok: "yes" | "photo" | "no" }[];
@@ -79,7 +79,7 @@ export const needsZip = (page: Pick<InstallPage, "remote">, a: Pick<InstallAnswe
 
 const byId = (list: PriceItem[], id: string) => list.find((p) => p.id === id)!;
 const CITY_LIST = `${ALL_SETUP_CITIES.slice(0, -1).join(", ")} and ${ALL_SETUP_CITIES[ALL_SETUP_CITIES.length - 1]}`;
-const WHERE_FAQ = (what: string): FAQ => ({ q: "Where do you come to?", a: `${what} anywhere within about 40 miles of Tampa, Florida: ${CITY_LIST}. Somewhere else nearby? Text your ZIP code and we'll confirm.` });
+const WHERE_FAQ = (what: string): FAQ => ({ q: "Where do you come to?", a: `${what} anywhere in Tampa Bay and Central Florida, within about 1.5 hours of Temple Terrace: ${CITY_LIST}. Somewhere else in Florida? Text your ZIP code and we'll confirm.` });
 const PAY_FAQ: FAQ = { q: "How do I pay?", a: "After the job is done and you've checked it works. Card, cash, Zelle or Cash App." };
 const PLACE: Question = { id: "place", label: "Is it for a home or a business?", short: "For", options: [{ id: "home", label: "Home" }, { id: "business", label: "Business" }] };
 
@@ -97,8 +97,8 @@ export const INSTALL_PAGES: InstallPage[] = [
     name: "Computer setup Tampa",
     service: "computer setup",
     category: "computer_setup",
-    chip: "Tampa Bay + 40 miles · homes & businesses",
-    h1: ["New computer or monitors?", "We set it all up in Tampa."],
+    chip: "Tampa Bay to Orlando · homes & businesses",
+    h1: ["New computer or monitors?", "We set it all up, anywhere in Central Florida."],
     lede: "New computer unboxed and ready, files moved from the old one, monitors and printer connected and every cable tidy. We come to your home or business and you get the price before we start.",
     prices: [{ ...setupBasic, name: "Computer setup (first computer)", summary: "Unboxed, updated, software and printer set up, and your files moved over. Labor only." }, ip("setup-extra"), ip("monitor-mount"), setupHome, { ...station, name: "Business workstation (per station)", summary: "Computer, monitors, cables, network and printer at one desk, labor only." }],
     jobs: [
@@ -130,8 +130,8 @@ export const INSTALL_PAGES: InstallPage[] = [
     ],
     value: 130,
     seo: {
-      title: "Computer Setup in Tampa, FL: We Come to You | CEO Turbo",
-      description: `New computer setup, file transfer, monitors and printers at your Tampa Bay home or business. From ${usd(setupBasic.price)}, price up front. Call or text ${SITE.phone.display}.`,
+      title: "Computer Setup in Tampa, Orlando & Central FL | CEO Turbo",
+      description: `New computer setup, file transfer, monitors and printers at your home or business, Tampa Bay to Orlando. From ${usd(setupBasic.price)}. Call or text ${SITE.phone.display}.`,
     },
   },
   {
@@ -140,9 +140,9 @@ export const INSTALL_PAGES: InstallPage[] = [
     name: "Doorbell & cameras Tampa",
     service: "doorbell and camera installation",
     category: "security_cameras",
-    chip: "Tampa Bay + 40 miles · homes & businesses",
-    h1: ["Video doorbells & cameras", "installed in Tampa."],
-    lede: "Ring, Nest, Blink or Wyze doorbells and Wi-Fi cameras installed, connected and set up on your phone so you can see who's there from anywhere. Homes and businesses within 40 miles of Tampa. Price up front.",
+    chip: "Tampa Bay to Orlando · homes & businesses",
+    h1: ["Video doorbells & cameras", "installed across Central Florida."],
+    lede: "Ring, Nest, Blink or Wyze doorbells and Wi-Fi cameras installed, connected and set up on your phone so you can see who's there from anywhere. Homes and businesses from Tampa Bay to Orlando, Lakeland and Sarasota. Price up front.",
     prices: [ip("cam-doorbell"), ip("cam-wifi")],
     priceNote: `Example: a video doorbell plus 2 Wi-Fi cameras is ${usd(ip("cam-doorbell").price + 2 * ip("cam-wifi").price)} in labor. We install doorbells and cameras that mount from the ground or a step stool (front door, porch, garage, indoors). No second-story, roofline or wired systems. The gear is yours, or we tell you exactly what to buy.`,
     jobs: [
@@ -174,8 +174,8 @@ export const INSTALL_PAGES: InstallPage[] = [
     ],
     value: 200,
     seo: {
-      title: "Ring Doorbell & Camera Installation in Tampa, FL | CEO Turbo",
-      description: `Ring, Nest and Blink video doorbells and Wi-Fi cameras installed at Tampa Bay homes, set up on your phone. Doorbell ${usd(ip("cam-doorbell").price)}. Call or text ${SITE.phone.display}.`,
+      title: "Ring Doorbell & Camera Installation: Tampa to Orlando, FL",
+      description: `Ring, Nest and Blink video doorbells and Wi-Fi cameras installed at homes, Tampa Bay to Orlando, on your phone. Doorbell ${usd(ip("cam-doorbell").price)}. Call or text ${SITE.phone.display}.`,
     },
   },
   {
@@ -184,9 +184,9 @@ export const INSTALL_PAGES: InstallPage[] = [
     name: "Wi-Fi & internet Tampa",
     service: "Wi-Fi and internet setup",
     category: "wifi_internet",
-    chip: "Tampa Bay + 40 miles · homes & businesses",
-    h1: ["Slow Wi-Fi or dead spots?", "Fixed at your place in Tampa."],
-    lede: "Strong Wi-Fi in every room, a new router or mesh system set up right, and your devices back online. Homes and businesses within 40 miles of Tampa. Price up front.",
+    chip: "Tampa Bay to Orlando · homes & businesses",
+    h1: ["Slow Wi-Fi or dead spots?", "Fixed at your place, Tampa to Orlando."],
+    lede: "Strong Wi-Fi in every room, a new router or mesh system set up right, and your devices back online. Homes and businesses from Tampa Bay to Orlando, Lakeland and Sarasota. Price up front.",
     prices: [wifiFix, wifiMesh],
     jobs: [
       { id: "deadspots", label: "Weak signal or dead spots" },
@@ -215,8 +215,8 @@ export const INSTALL_PAGES: InstallPage[] = [
     ],
     value: 150,
     seo: {
-      title: "Wi-Fi & Internet Installation in Tampa, FL | CEO Turbo",
-      description: `Slow Wi-Fi, dead spots or a new router? Mesh Wi-Fi and internet setup at Tampa Bay homes and businesses. From ${usd(wifiFix.price)}. Call or text ${SITE.phone.display}.`,
+      title: "Wi-Fi & Internet Installation: Tampa, Orlando & Central FL",
+      description: `Slow Wi-Fi, dead spots or a new router? Mesh Wi-Fi and internet setup at Central Florida homes and businesses. From ${usd(wifiFix.price)}. Call or text ${SITE.phone.display}.`,
     },
   },
 ];
@@ -232,8 +232,8 @@ INSTALL_PAGES.push({
   service: "business tech setup",
   category: "business_tech",
   audience: "business",
-  chip: "For Tampa Bay businesses · on-site within 40 miles",
-  h1: ["Office tech set up right.", "For Tampa Bay businesses."],
+  chip: "For Florida businesses · on-site from Tampa Bay to Orlando",
+  h1: ["Office tech set up right.", "For Central Florida businesses."],
   lede: "Workstations, multi-monitor desks, business Wi-Fi, printers, Microsoft 365, storefront doorbells and cameras, all set up on-site at your office, shop or clinic. Flat price in writing before we start.",
   prices: [
     { ...station, name: "Workstation setup (per station)", summary: "Computer, monitors, keyboard, cables, network and printer at one desk." },
@@ -266,7 +266,7 @@ INSTALL_PAGES.push({
   ],
   faqs: [
     { q: "How much does office tech setup cost?", a: `${usd(setupBasic.price)} per desk to get a computer and screen hooked up, ${usd(station.price)} for a full workstation with screens mounted and cables hidden, and whole offices from ${usd(byId(SETUP, "office-transform-basic").price)}. Wi-Fi, cameras and TV mounts are priced per item on your call. You get the total in writing first.` },
-    { q: "What kinds of businesses do you work with?", a: "Offices, shops, restaurants, clinics, salons, gyms and contractors around Tampa Bay, from one desk to a whole office move-in." },
+    { q: "What kinds of businesses do you work with?", a: "Offices, shops, restaurants, clinics, salons, gyms and contractors across Tampa Bay and Central Florida, from one desk to a whole office move-in." },
     { q: "Can you set up a new office before we move in?", a: "Yes. Workstations, Wi-Fi, printers, accounts and cables done before your first day, so your team sits down and works." },
     { q: "Do you install cameras and doorbells for storefronts?", a: "Yes, video doorbells and Wi-Fi cameras that mount at the door, counter and inside the shop, set up on the owner's phone. No roofline or wired systems." },
     { q: "Do we buy the equipment?", a: "Yes, or we tell you exactly what to buy before the visit. No markup on gear." },
@@ -275,8 +275,8 @@ INSTALL_PAGES.push({
   ],
   value: 500,
   seo: {
-    title: "Business IT Setup in Tampa: Wi-Fi, Printers & Microsoft 365",
-    description: `Workstations, multi-monitor desks, business Wi-Fi, printers and Microsoft 365 set up on-site for Tampa Bay businesses. Flat price. Call ${SITE.phone.display}.`,
+    title: "Business IT Setup in Florida: Wi-Fi, Printers & 365",
+    description: `Workstations, multi-monitor desks, Wi-Fi, printers and Microsoft 365 set up on-site for Central Florida businesses. Flat price. Call ${SITE.phone.display}.`,
   },
 });
 
@@ -284,7 +284,7 @@ const remoteSpeed = byId(IT_SERVICES, "it-remote");
 const homeSpeed = byId(IT_SERVICES, "it-speedup");
 const ssd = byId(IT_SERVICES, "it-ssd");
 
-/** Gaming PC FPS boost: consumer (Meta, organic and AI search). Remote anywhere in the world, in person around Tampa. */
+/** Gaming PC FPS boost: consumer (Meta, organic and AI search). Remote anywhere in the world, in person across Tampa Bay and Central Florida. */
 INSTALL_PAGES.push({
   slug: "fps-boost",
   path: "/gaming-pc-fps-boost",
@@ -293,16 +293,16 @@ INSTALL_PAGES.push({
   category: "gaming_fps",
   booking: FPS_BOOKING,
   remote: { question: "how", inPerson: "inperson" },
-  chip: "Remote anywhere in the world · in person around Tampa",
+  chip: "Remote anywhere in the world · in person across Central Florida",
   h1: ["Low FPS, stutter or lag?", "We tune your gaming PC for more FPS."],
-  lede: "A one-on-one tune-up of your Windows gaming PC: graphics drivers, Windows settings, background apps, temps and your in-game settings. Done live with you over the internet, or in person around Tampa. We check your FPS before and after, so you see the difference.",
-  promises: ["FPS checked before and after", "Live with you, about an hour", "Remote or in person in Tampa", "Price before we start"],
+  lede: "A one-on-one tune-up of your Windows gaming PC: graphics drivers, Windows settings, background apps, temps and your in-game settings. Done live with you over the internet, or in person anywhere from Tampa Bay to Orlando. We check your FPS before and after, so you see the difference.",
+  promises: ["FPS checked before and after", "Live with you, about an hour", "Remote, or in person in Central Florida", "Price before we start"],
   pricesLede: "Price before we start. Parts like a faster drive are extra, at cost, and only if you want them.",
-  areaLede: "Remote works anywhere in the world. In person: Tampa and about 40 miles around it.",
-  schemaName: "Gaming PC FPS boost, remote or in Tampa Bay",
+  areaLede: "Remote works anywhere in the world. In person: Tampa Bay and Central Florida, within about 1.5 hours of Temple Terrace.",
+  schemaName: "Gaming PC FPS boost, remote or in person in Central Florida",
   prices: [
     { ...remoteSpeed, name: "Remote FPS boost", summary: "Live over the internet: drivers, Windows, background apps and game settings tuned." },
-    { ...homeSpeed, name: "In-person FPS boost (Tampa area)", summary: "Same tune-up at your place, plus dust and temps checked." },
+    { ...homeSpeed, name: "In-person FPS boost (Central Florida)", summary: "Same tune-up at your place, plus dust and temps checked." },
     { ...ssd, name: "Faster drive upgrade (load times)", summary: "Games and Windows moved to a fast SSD. Drive extra, at cost." },
   ],
   jobs: [
@@ -316,7 +316,7 @@ INSTALL_PAGES.push({
     { id: "max", label: "Just want max performance" },
   ],
   questions: [
-    { id: "how", label: "How should we do it?", short: "How", options: [{ id: "remote", label: "Remote, over the internet" }, { id: "inperson", label: "In person (Tampa area)" }] },
+    { id: "how", label: "How should we do it?", short: "How", options: [{ id: "remote", label: "Remote, over the internet" }, { id: "inperson", label: "In person (Central Florida)" }] },
     { id: "pc", label: "What's your setup?", short: "PC", options: [{ id: "desktop", label: "Gaming desktop" }, { id: "laptop", label: "Gaming laptop" }] },
     { id: "game", label: "What do you play most?", short: "Plays", options: [{ id: "fortnite", label: "Fortnite" }, { id: "cod", label: "Call of Duty / Warzone" }, { id: "valorant", label: "Valorant" }, { id: "cs2", label: "CS2" }, { id: "minecraft", label: "Minecraft" }, { id: "other", label: "Something else" }] },
   ],
@@ -334,7 +334,7 @@ INSTALL_PAGES.push({
     { title: "Tuned live with you", body: "About an hour, screen share or at your place. FPS checked before and after, then you pay." },
   ],
   faqs: [
-    { q: "How much does a gaming PC FPS boost cost?", a: `${usd(remoteSpeed.price)} and up remotely, ${usd(homeSpeed.price)} and up in person within about 40 miles of Tampa. You get the exact price by text before we start, and you pay after it's done.` },
+    { q: "How much does a gaming PC FPS boost cost?", a: `${usd(remoteSpeed.price)} and up remotely, ${usd(homeSpeed.price)} and up in person anywhere within about 1.5 hours of Temple Terrace (Tampa Bay, Orlando, Lakeland, Sarasota). You get the exact price by text before we start, and you pay after it's done.` },
     { q: "Can you boost my FPS remotely?", a: "Yes. We connect over the internet while you watch, using a screen share you can end any time, and tune everything live. It works anywhere in the world on a Windows gaming PC or laptop." },
     { q: "How much more FPS will I get?", a: "It depends on your hardware. The biggest gains usually come from clean graphics drivers, the right Windows and in-game settings, and stopping background apps. We check your FPS before and after so you see the real difference. If your hardware is the limit, we tell you which upgrade gives the most FPS for the money." },
     { q: "Which games do you tune for?", a: "Any PC game, including Fortnite, Call of Duty and Warzone, Valorant, CS2, Minecraft, Apex Legends and GTA V. We tune Windows for gaming and the settings of the games you actually play." },
@@ -346,13 +346,13 @@ INSTALL_PAGES.push({
   ],
   value: 120,
   seo: {
-    title: "Gaming PC FPS Boost Service: Remote or Tampa | CEO Turbo",
-    description: `Low FPS, stutter or input lag? We tune your Windows gaming PC live, remote anywhere in the world or in person in Tampa. From ${usd(remoteSpeed.price)}. Text ${SITE.phone.display}.`,
+    title: "Gaming PC FPS Boost: Remote or In Person in Florida",
+    description: `Low FPS, stutter or input lag? We tune your Windows gaming PC live, remote worldwide or in person in Central Florida. From ${usd(remoteSpeed.price)}. Text ${SITE.phone.display}.`,
   },
 });
 
 /**
- * Tech recycling: free pickup of old electronics anywhere within 40 miles of Temple Terrace. Consumer and business
+ * Tech recycling: free pickup of old electronics anywhere within about 1.5 hours of Temple Terrace (Tampa Bay & Central Florida). Consumer and business
  * (Meta, organic and AI search). Calls and texts first, so desktop visitors get the quiz, not a calendar.
  */
 const [recyclePickup, recycleWipe, recycleOffice] = RECYCLING_PRICES;
@@ -362,16 +362,12 @@ INSTALL_PAGES.push({
   name: "Tech recycling Tampa",
   service: "a free tech recycling pickup",
   category: "tech_recycling",
-  chip: "Free pickup across Tampa Bay · Orlando & more of Florida on request",
+  chip: "Free pickup · Tampa Bay, Orlando, Lakeland, Sarasota & Central Florida",
   h1: ["Old computers, phones or TVs?", "We pick them up and recycle them, free."],
-  lede: "Electronics don't belong in the trash. Call, text or email us and we come to your home or business in Tampa, St. Petersburg, Clearwater, Brandon, Wesley Chapel, Lakeland or anywhere within 40 miles of Temple Terrace, Florida, wipe or destroy every hard drive, and haul your old tech away to be reused or recycled. Free pickup, no drop-off trip. Farther out, like Orlando or Sarasota? We'll drive out for bigger loads.",
+  lede: "Electronics don't belong in the trash. Call, text or email us and we come to your home or business in Tampa, St. Petersburg, Clearwater, Orlando, Lakeland, Sarasota, Ocala or anywhere within about 1.5 hours of Temple Terrace, Florida, wipe or destroy every hard drive, and haul your old tech away to be reused or recycled. Free pickup, no drop-off trip.",
   promises: ["Free pickup at your door", "Hard drives wiped or destroyed", "Homes and businesses", "Kept out of the landfill"],
   pricesLede: "Pickup is free for everything on our list. Big tube TVs or a whole truckload? Text a photo and we'll confirm before we come.",
-  areaLede: "Free local pickup anywhere within about 40 miles of Temple Terrace, Florida: Hillsborough, Pinellas, Pasco, Hernando, Polk and Manatee counties. Farther out? See below.",
-  farther: {
-    lede: "For bigger loads (an office cleanout, a garage full, 10+ items) we drive out past the 40 miles. Text a photo and your city and we'll set a day.",
-    cities: ["Orlando", "Kissimmee", "Winter Haven", "Haines City", "Sarasota", "Lakewood Ranch", "Venice", "Ocala", "The Villages", "Clermont"],
-  },
+  areaLede: "Free pickup anywhere within about 1.5 hours of Temple Terrace, Florida: Tampa Bay, Orlando, Lakeland, Sarasota, Ocala and the Nature Coast. Outside Tampa Bay we group pickups by area, so it may take a few extra days.",
   accepts: [
     { item: "Laptop or desktop", ok: "yes" },
     { item: "Old iPhone or Android", ok: "yes" },
@@ -386,7 +382,7 @@ INSTALL_PAGES.push({
     { item: "A whole office", ok: "photo" },
     { item: "Fridge, washer or AC unit", ok: "no" },
   ],
-  schemaName: "Free electronics recycling pickup in Tampa Bay and Central Florida",
+  schemaName: "Free electronics recycling pickup in Tampa Bay, Orlando and Central Florida",
   prices: [recyclePickup, recycleWipe, recycleOffice],
   priceNote: "We take laptops, desktops, monitors, flat-screen TVs, phones, tablets, printers, game consoles, routers, keyboards, cables, chargers and servers. We don't take large appliances (fridges, washers, AC units) or leaking batteries.",
   words: {
@@ -428,29 +424,29 @@ INSTALL_PAGES.push({
     { title: "We haul it away", body: "We carry it out, take care of the data and get it recycled. You don't lift a thing." },
   ],
   facts: [
-    { title: "Electronics can't go in the trash", body: "Computers, TVs and phones hold lead, mercury and other metals that leak out of a landfill into soil and water. Tampa Bay counties ask residents to keep them out of curbside trash." },
+    { title: "Electronics can't go in the trash", body: "Computers, TVs and phones hold lead, mercury and other metals that leak out of a landfill into soil and water. Florida counties ask residents to keep them out of curbside trash." },
     { title: "Batteries start fires", body: "Lithium batteries in laptops, phones and vapes can catch fire when a garbage truck crushes them. Recycling keeps them out of trucks and dumps." },
     { title: "Your data stays private", body: "An old computer or phone still has your photos, passwords and accounts on it. We wipe every drive or destroy it in front of you before anything leaves." },
     { title: "Old tech gets a second life", body: "Working laptops and parts get reused, and the rest is broken down so the metals and plastics can be made into new things." },
   ],
   faqs: [
-    { q: "Where can I recycle old electronics near Tampa?", a: `Call or text CEO Turbo at ${SITE.phone.display} or email ${SITE.email}. We pick up old computers, laptops, phones, tablets, monitors, TVs, printers and cables free at your home or business anywhere within about 40 miles of Temple Terrace, so you don't have to drive to a drop-off site.` },
-    { q: "Do you pick up in St. Petersburg, Clearwater and outside Tampa?", a: `Yes. We pick up all over Tampa Bay, Florida, not just Tampa: St. Petersburg, Clearwater, Largo, Pinellas Park, Dunedin, Palm Harbor, Tarpon Springs, Brandon, Riverview, Wesley Chapel, Land O' Lakes, New Port Richey, Spring Hill, Plant City, Lakeland and Bradenton, plus every town in between. Call or text ${SITE.phone.display} or email ${SITE.email}.` },
+    { q: "Where can I recycle old electronics near me in Florida?", a: `Call or text CEO Turbo at ${SITE.phone.display} or email ${SITE.email}. We pick up old computers, laptops, phones, tablets, monitors, TVs, printers and cables free at your home or business anywhere within about 1.5 hours of Temple Terrace (Tampa Bay, Orlando, Lakeland, Winter Haven, Sarasota), so you don't have to drive to a drop-off site.` },
+    { q: "Do you pick up in St. Pete, Clearwater, Brandon and Winter Haven?", a: `Yes. We pick up all over Florida within about 1.5 hours of Temple Terrace, not just Tampa: St. Petersburg, Clearwater, Largo, Dunedin, Palm Harbor, Brandon, Riverview, Valrico, Plant City, Wesley Chapel, Land O' Lakes, New Port Richey, Spring Hill, Lakeland, Winter Haven, Bartow, Haines City, Bradenton, Sarasota, Orlando, Kissimmee, Ocala and every town in between. Call or text ${SITE.phone.display} or email ${SITE.email}.` },
     { q: "How do I schedule an electronics recycling pickup?", a: `Call or text ${SITE.phone.display} (a photo of what you have is perfect), email ${SITE.email}, or tap through the form on this page. We reply with a pickup time.` },
     { q: "Is electronics pickup really free?", a: "Yes. Pickup, carrying it out and the data wipe are free for laptops, desktops, phones, tablets, monitors, flat-screen TVs, printers, consoles, networking gear and cables. Big tube TVs or a full truckload: text a photo first and we'll confirm before we come." },
-    { q: "Can I throw old electronics in the trash?", a: "You shouldn't. Electronics hold lead, mercury and lithium batteries that can leak into soil and water or start fires in garbage trucks, and Tampa Bay counties ask residents to keep them out of curbside trash. Recycling them is the safe way to get rid of them." },
+    { q: "Can I throw old electronics in the trash?", a: "You shouldn't. Electronics hold lead, mercury and lithium batteries that can leak into soil and water or start fires in garbage trucks, and Florida counties ask residents to keep them out of curbside trash. Recycling them is the safe way to get rid of them." },
     { q: "What happens to my data?", a: "Every hard drive and phone is wiped before it's reused or recycled. Want to see it done? We'll drill the hard drive in front of you at pickup, free." },
     { q: "What electronics do you take?", a: "Laptops, desktops and towers, monitors, flat-screen TVs, phones, tablets, printers and scanners, game consoles, routers, modems, servers, keyboards, mice, cables and chargers. We don't take large appliances like fridges, washers or AC units, or leaking batteries." },
     { q: "Do you pick up from businesses and offices?", a: "Yes. Offices, schools, clinics and shops: old workstations, monitors, servers and network gear, loaded up and hauled away, with every drive wiped or destroyed." },
     { q: "Do I have to bring it outside?", a: "No. We come in and carry it out, from a closet, garage, apartment or office." },
     { q: "How fast can you pick up?", a: `Usually within a few days, often the same week. Call or text ${SITE.phone.display} with what you have and we'll text you a time.` },
     WHERE_FAQ("We pick up old tech for free"),
-    { q: "Do you pick up in Orlando or other parts of Florida?", a: `Yes, for bigger loads. Free local pickup covers everywhere within about 40 miles of Temple Terrace (Tampa Bay). For an office cleanout or 10+ items we also drive to Orlando, Kissimmee, Winter Haven, Sarasota, Lakewood Ranch, Ocala, Clermont and other Central Florida cities. Text a photo and your city to ${SITE.phone.display} and we'll set a day.` },
+    { q: "Do you pick up in Orlando, Sarasota or Ocala?", a: `Yes. Orlando, Kissimmee, Clermont, Sarasota, Venice, Ocala and The Villages are all inside our 1.5-hour pickup area, and pickup is free. Outside Tampa Bay we group pickups by area, so it may take a few extra days. Text a photo and your city to ${SITE.phone.display} and we'll set a day.` },
   ],
   value: 40,
   seo: {
-    title: "Free Electronics Recycling Pickup: Tampa Bay & Florida",
-    description: `Free pickup of old computers, phones and TVs in Tampa, St. Pete, Clearwater and all of Tampa Bay. Orlando on request. Call or text ${SITE.phone.display}.`,
+    title: "Free Electronics Recycling Pickup: Tampa to Orlando, FL",
+    description: `Free pickup of old computers, phones and TVs in Tampa, St. Pete, Orlando, Lakeland, Sarasota and Central Florida. Call or text ${SITE.phone.display}.`,
   },
 });
 

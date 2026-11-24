@@ -151,7 +151,7 @@ export default function ComputerShop() {
             <span className="text-chrome-grad">Computers for sale,</span> <span className="text-turbo-grad">from a Tampa computer tech.</span>
           </h1>
           <p className="mt-4 max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg">
-            Laptops and desktops you can buy right here. Ask questions first, get it set up at your place in Tampa Bay, and get repairs and upgrades later from the same person.
+            Laptops and desktops you can buy right here. Ask questions first, get it set up at your place anywhere in Central Florida, and get repairs and upgrades later from the same person.
           </p>
           <div className="mt-6 flex flex-col gap-3 sm:flex-row">
             <a href="#shop" className="btn-ignite btn-shine inline-flex items-center justify-center gap-2 !py-4 !text-lg">
@@ -186,7 +186,7 @@ export default function ComputerShop() {
 
       <section className="section border-t border-border" aria-labelledby="repair">
         <div className="container-x">
-          <SectionHeader title={<span id="repair">Already have a computer? We fix it.</span>} lede="Anything wrong with a computer, fixed at your door within 40 miles of Temple Terrace and Tampa. Slow Windows computers sped up remotely, anywhere in the world." />
+          <SectionHeader title={<span id="repair">Already have a computer? We fix it.</span>} lede="Anything wrong with a computer, fixed at your door anywhere within about 1.5 hours of Temple Terrace (Tampa Bay to Orlando). Slow Windows computers sped up remotely, anywhere in the world." />
           <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {REPAIRS.map((r) => (
               <div key={r.title} className="panel flex flex-col p-5">

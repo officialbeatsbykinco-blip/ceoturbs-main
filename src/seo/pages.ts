@@ -68,12 +68,12 @@ function build(): PageMeta[] {
 
   pages.push({
     path: "/",
-    title: "Computer Repair, Cameras & Setup in Tampa | CEO Turbo",
-    description: `Windows PCs fixed at your door in Tampa. Cameras, doorbells, phones and tablets set up. Plus websites, ads and review cards. 5.0 on Google. ${SITE.phone.display}.`,
+    title: "Computer Repair & Setup: Tampa, Orlando & Central Florida",
+    description: `Windows PCs fixed at your door in Tampa, St. Pete, Brandon, Lakeland, Winter Haven and Orlando. Cameras and phones set up. 5.0 on Google. ${SITE.phone.display}.`,
     priority: 1,
     changefreq: "weekly",
     group: "Core",
-    schema: [...base(), S.webPage("/", "CEO Turbo", SITE.description), S.localService({ path: "/", name: "Computer repair and office IT setup in Tampa Bay", serviceType: "Computer repair", description: "Windows laptop and desktop repair at your door (speed-ups, blue screens, no power), office IT and workstation setup, security camera and video doorbell installs, Wi-Fi fixes and phone and tablet setup within about 40 miles of Tampa, FL. Price up front, no fix no charge.", prices: [...IT_SERVICES, ...INSTALL_PRICES.filter((p) => p.id.startsWith("cam-"))] }), S.faqPage(TECH_HOME_FAQS, "/")],
+    schema: [...base(), S.webPage("/", "CEO Turbo", SITE.description), S.localService({ path: "/", name: "Computer repair and office IT setup in Tampa Bay and Central Florida", serviceType: "Computer repair", description: "Windows laptop and desktop repair at your door (speed-ups, blue screens, no power), office IT and workstation setup, security camera and video doorbell installs, Wi-Fi fixes and phone and tablet setup anywhere within about 1.5 hours of Temple Terrace, FL: Tampa, St. Petersburg, Clearwater, Brandon, Lakeland, Winter Haven, Sarasota and Orlando. Price up front, no fix no charge.", prices: [...IT_SERVICES, ...INSTALL_PRICES.filter((p) => p.id.startsWith("cam-"))] }), S.faqPage(TECH_HOME_FAQS, "/")],
   });
 
   pages.push({
@@ -298,13 +298,13 @@ function build(): PageMeta[] {
 
   pages.push({
     path: "/tampa",
-    title: "CEO Turbo Tampa: IT Support, Computer Repair & Office Setup",
+    title: "CEO Turbo: IT Support in Tampa Bay & Central Florida",
     description:
-      "Tampa IT support: Windows laptop and desktop repair at your door, office IT, cameras and phone setup, plus websites, ads and review cards for Tampa Bay.",
+      "Florida IT support from Tampa Bay to Orlando: Windows computer repair at your door, office IT, cameras and phone setup, plus websites and ads.",
     priority: 0.7,
     changefreq: "monthly",
     group: "Company",
-    schema: [...base(), S.webPage("/tampa", "CEO Turbo in Tampa", "Tampa IT support and growth"), S.breadcrumbs([{ name: "Tampa", path: "/tampa" }])],
+    schema: [...base(), S.webPage("/tampa", "CEO Turbo in Tampa Bay & Central Florida", "IT support and growth across Tampa Bay and Central Florida"), S.breadcrumbs([{ name: "Service area", path: "/tampa" }])],
   });
 
   pages.push({
@@ -321,7 +321,7 @@ function build(): PageMeta[] {
   pages.push({
     path: "/contact",
     title: "Contact CEO Turbo: Call, Text, Email or Book a Call",
-    description: `Call or text ${SITE.phone.display}, email us, or book a free 30-minute Brand Boost call. Tech help, office setup and websites from CEO Turbo in Tampa, FL.`,
+    description: `Call or text ${SITE.phone.display}, email us, or book a free 30-minute Brand Boost call. Tech help, office setup and websites in Tampa Bay and Central Florida.`,
     priority: 0.5,
     changefreq: "yearly",
     group: "Company",
@@ -377,10 +377,10 @@ function build(): PageMeta[] {
     { path: "/get-more-reviews", title: "How to Get More Google Reviews (One Tap) | CEO Turbo", description: `Why reviews decide who gets the call on Google, Maps and ChatGPT — and the NFC card that turns “I'll review you later” into a review. From ${fromPriceLabel}.`, ogImage: "/og/get-more-reviews.jpg", noindex: true, priority: 0.1, changefreq: "yearly", group: "Core", schema: base() },
     // Google Search ad landing for the local-service offer; noindex so it doesn't compete with / and /services/google-ads.
     { path: "/google-ads-for-local-business", title: "Get More Calls From Google Ads | CEO Turbo", description: `Get more calls from people searching Google. Search campaigns for appliance repair, HVAC, plumbing and cleaning, every call tracked. Setup ${price("pkg-start")}.`, noindex: true, priority: 0.1, changefreq: "yearly", group: "Core", schema: base() },
-    // Meta ads landing for Windows computer repair in Tampa (laptops and desktops; in-home within 40 miles or remote). Indexed for "computer repair Tampa".
-    { path: "/computer-repair-tampa", title: "Computer Repair in Tampa, FL: We Come to You | CEO Turbo", description: `Windows laptop or desktop slow, blue screening or dead? Fixed at your door in Tampa Bay or remotely, price up front. Call or text ${SITE.phone.display}.`, ogImage: IT_OG.repair, priority: 0.9, changefreq: "monthly", group: "Core", schema: [...base(), S.webPage("/computer-repair-tampa", "Computer repair in Tampa", "In-home Windows laptop and desktop repair within 40 miles of Tampa, FL, phone and tablet setup, and remote speed-ups for slow Windows computers."), S.breadcrumbs([{ name: "Computer repair Tampa", path: "/computer-repair-tampa" }]), S.localService({ path: "/computer-repair-tampa", name: "Computer and laptop repair in Tampa Bay", serviceType: "Computer repair", description: "In-home and on-site repair of Windows laptops and desktops within about 40 miles of Tampa, FL: speed-ups, blue screens, computers that won't turn on, viruses and upgrades, plus phone and tablet setup and remote speed-ups for slow Windows computers. Price up front, no fix no charge.", prices: IT_SERVICES }), S.faqPage(REPAIR_FAQS, "/computer-repair-tampa")] },
+    // Meta ads landing for Windows computer repair in Tampa (laptops and desktops; in-home across Tampa Bay and Central Florida or remote). Indexed for "computer repair Tampa".
+    { path: "/computer-repair-tampa", title: "Computer Repair in Tampa, Orlando & Central FL | CEO Turbo", description: `Windows laptop or desktop slow, blue screening or dead? Fixed at your door, Tampa Bay to Orlando, or remotely. Price up front. Call or text ${SITE.phone.display}.`, ogImage: IT_OG.repair, priority: 0.9, changefreq: "monthly", group: "Core", schema: [...base(), S.webPage("/computer-repair-tampa", "Computer repair in Tampa Bay & Central Florida", "In-home Windows laptop and desktop repair anywhere within about 1.5 hours of Temple Terrace, FL (Tampa, St. Pete, Brandon, Lakeland, Winter Haven, Orlando), phone and tablet setup, and remote speed-ups for slow Windows computers."), S.breadcrumbs([{ name: "Computer repair Tampa", path: "/computer-repair-tampa" }]), S.localService({ path: "/computer-repair-tampa", name: "Computer and laptop repair in Tampa Bay and Central Florida", serviceType: "Computer repair", description: "In-home and on-site repair of Windows laptops and desktops anywhere within about 1.5 hours of Temple Terrace, FL (Tampa Bay, Orlando, Lakeland, Winter Haven, Sarasota): speed-ups, blue screens, computers that won't turn on, viruses and upgrades, plus phone and tablet setup and remote speed-ups for slow Windows computers. Price up front, no fix no charge.", prices: IT_SERVICES }), S.faqPage(REPAIR_FAQS, "/computer-repair-tampa")] },
     // Google & Microsoft Ads landing for office setup and cable management in Tampa.
-    { path: "/office-setup-tampa", title: "Office Setup & Cable Management in Tampa, FL | CEO Turbo", ogImage: IT_OG.office, description: `Multi-monitor workstations, cable management, printers, Wi-Fi and Microsoft/Google setup for Tampa Bay homes and offices. From $99 per desk.`, priority: 0.9, changefreq: "monthly", group: "Core", schema: [...base(), S.webPage("/office-setup-tampa", "Office setup in Tampa", "Office setup, workstation and cable management services around Tampa, FL."), S.breadcrumbs([{ name: "Office setup Tampa", path: "/office-setup-tampa" }]), S.localService({ path: "/office-setup-tampa", name: "Office setup and cable management in Tampa Bay", serviceType: "Office setup", description: "Multi-monitor workstations, cable management, printers, Wi-Fi and Microsoft or Google setup for homes and businesses within about 40 miles of Tampa, FL. Flat price in writing first.", prices: OFFICE_PRICES }), S.faqPage(OFFICE_FAQS, "/office-setup-tampa")] },
+    { path: "/office-setup-tampa", title: "Office Setup & Cable Management: Tampa Bay to Orlando, FL", ogImage: IT_OG.office, description: `Multi-monitor workstations, cable management, printers, Wi-Fi and Microsoft/Google setup for homes and offices, Tampa Bay to Orlando. From $99 per desk.`, priority: 0.9, changefreq: "monthly", group: "Core", schema: [...base(), S.webPage("/office-setup-tampa", "Office setup in Tampa Bay & Central Florida", "Office setup, workstation and cable management services across Tampa Bay and Central Florida."), S.breadcrumbs([{ name: "Office setup Tampa", path: "/office-setup-tampa" }]), S.localService({ path: "/office-setup-tampa", name: "Office setup and cable management in Tampa Bay and Central Florida", serviceType: "Office setup", description: "Multi-monitor workstations, cable management, printers, Wi-Fi and Microsoft or Google setup for homes and businesses anywhere within about 1.5 hours of Temple Terrace, FL. Flat price in writing first.", prices: OFFICE_PRICES }), S.faqPage(OFFICE_FAQS, "/office-setup-tampa")] },
     ...INSTALL_PAGES.map((p) => ({
       path: p.path,
       title: p.seo.title,
@@ -393,7 +393,7 @@ function build(): PageMeta[] {
         ...base(),
         S.webPage(p.path, p.name, p.lede),
         S.breadcrumbs([{ name: p.name, path: p.path }]),
-        S.localService({ path: p.path, name: p.schemaName ?? `${p.service[0].toUpperCase()}${p.service.slice(1)} in Tampa Bay`, serviceType: p.service.replace(/^an? /, ""), description: p.lede, prices: p.prices, remote: !!p.remote, extraCities: p.farther?.cities }),
+        S.localService({ path: p.path, name: p.schemaName ?? `${p.service[0].toUpperCase()}${p.service.slice(1)} in Tampa Bay & Central Florida`, serviceType: p.service.replace(/^an? /, ""), description: p.lede, prices: p.prices, remote: !!p.remote, extraCities: p.farther?.cities }),
         S.faqPage(p.faqs, p.path),
       ],
     })),

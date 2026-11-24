@@ -56,7 +56,7 @@ const PROMISES = ["Price up front, before any work", "No fix, no charge", "Usual
 const STEPS = [
   { icon: MessageSquare, t: "Call, text or book", b: "Tell us the device and what's wrong, or how many desks you need set up." },
   { icon: Check, t: "Price up front", b: "You get the price before any work starts. No surprise bill." },
-  { icon: Wrench, t: "Fixed at your place", b: "We come to your home or office around Tampa, fix it, test it with you, then you pay." },
+  { icon: Wrench, t: "Fixed at your place", b: "We come to your home or office anywhere from Tampa Bay to Orlando, fix it, test it with you, then you pay." },
 ];
 
 const PRICES: [string, string][] = [
@@ -84,10 +84,10 @@ export default function Home() {
         <div className="container-x relative grid items-center gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:gap-14">
           <div className="hero-rise min-w-0">
             <p className="chip">
-              <MapPin className="h-3.5 w-3.5 text-turbo" aria-hidden /> Tampa Bay · we come to you
+              <MapPin className="h-3.5 w-3.5 text-turbo" aria-hidden /> Tampa Bay & Central Florida · we come to you
             </p>
             <h1 id="hero" className="mt-4 font-display text-[38px] font-extrabold leading-[1.02] tracking-tight sm:text-6xl lg:text-[68px]">
-              Computer repair, cameras &amp; setup <span className="text-turbo-grad">at your door in Tampa.</span>
+              Computer repair, cameras &amp; setup <span className="text-turbo-grad">at your door, Tampa Bay to Orlando.</span>
             </h1>
             <p className="mt-4 max-w-xl text-[17px] leading-relaxed text-muted-foreground sm:text-lg">
               Slow PCs made fast, blue screens fixed, dead computers brought back. Windows laptops and desktops repaired; cameras, Ring doorbells, phones and tablets set up. Price up front, no fix no charge. For businesses anywhere: websites, ads and Google review cards.
@@ -128,7 +128,7 @@ export default function Home() {
               <Link to={SHOP_PATH} className="inline-flex min-h-[44px] items-center gap-1.5 font-semibold text-turbo underline-offset-4 hover:underline">
                 <Star className="h-4 w-4" aria-hidden /> Google review cards
               </Link>
-              <a href={`mailto:${SITE.email}?subject=${encodeURIComponent("Tech help in Tampa")}`} data-call-location="home hero email" className="inline-flex min-h-[44px] items-center gap-1.5 font-semibold text-turbo underline-offset-4 hover:underline">
+              <a href={`mailto:${SITE.email}?subject=${encodeURIComponent("Tech help in Florida")}`} data-call-location="home hero email" className="inline-flex min-h-[44px] items-center gap-1.5 font-semibold text-turbo underline-offset-4 hover:underline">
                 <Mail className="h-4 w-4" aria-hidden /> Email us
               </a>
             </div>
@@ -200,7 +200,7 @@ export default function Home() {
 
       <section className="section border-t border-border" aria-labelledby="reviews">
         <div className="container-x">
-          <SectionHeader kicker="Reviews" title={<span id="reviews">Tampa customers call us back.</span>} lede="Real Google reviews, word for word." />
+          <SectionHeader kicker="Reviews" title={<span id="reviews">Florida customers call us back.</span>} lede="Real Google reviews, word for word." />
           <ReviewWall className="mt-8" />
         </div>
       </section>
@@ -209,7 +209,7 @@ export default function Home() {
 
       <section className="section border-t border-border" aria-labelledby="why">
         <div className="container-x">
-          <SectionHeader kicker="Why Tampa calls us" title={<span id="why">Skip the repair shop. We come to you.</span>} lede="Real photos from our jobs: office desks set up, desktops opened up and fixed, computers reset and ready." />
+          <SectionHeader kicker="Why Florida calls us" title={<span id="why">Skip the repair shop. We come to you.</span>} lede="Real photos from our jobs: office desks set up, desktops opened up and fixed, computers reset and ready." />
           <JobPhotos className="mt-8" />
         </div>
       </section>
@@ -294,7 +294,7 @@ export default function Home() {
 
       <section className="section border-t border-border" aria-labelledby="area">
         <div className="container-x">
-          <SectionHeader kicker="Service area" title={<span id="area">Where we come to you</span>} lede="About 40 miles around Temple Terrace and Tampa. Slow Windows computers can be fixed remotely from anywhere." />
+          <SectionHeader kicker="Service area" title={<span id="area">Where we come to you</span>} lede="Anywhere within about 1.5 hours of Temple Terrace: Tampa, St. Pete, Clearwater, Brandon, Lakeland, Winter Haven, Sarasota and Orlando. Slow Windows computers can be fixed remotely from anywhere." />
           <ServiceAreaList className="mt-8" />
         </div>
       </section>

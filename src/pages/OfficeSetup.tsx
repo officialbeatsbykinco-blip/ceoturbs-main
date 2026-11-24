@@ -71,7 +71,7 @@ export default function OfficeSetup() {
         <div className="container-x relative grid items-start gap-8 lg:grid-cols-[1fr_1fr] lg:gap-12">
           <div className="hero-rise min-w-0">
             <p className="chip">
-              <MapPin className="h-3.5 w-3.5 text-turbo" aria-hidden /> Tampa Bay + 40 miles · Homes & businesses
+              <MapPin className="h-3.5 w-3.5 text-turbo" aria-hidden /> Tampa Bay to Orlando · Homes & businesses
             </p>
             <h1 id="hero" className="mt-4 text-[32px] font-bold leading-[1.05] sm:text-5xl md:text-[52px]">
               <span className="text-chrome-grad">Messy office?</span> <span className="text-turbo-grad">We set it up and make it work.</span>
@@ -117,7 +117,7 @@ export default function OfficeSetup() {
 
       <section className="section border-t border-border" aria-labelledby="reviews">
         <div className="container-x">
-          <SectionHeader title={<span id="reviews">What Tampa offices say</span>} lede="Real Google reviews, word for word." />
+          <SectionHeader title={<span id="reviews">What our office clients say</span>} lede="Real Google reviews, word for word." />
           <ReviewWall className="mt-8" />
           <img src={OFFICE_AD.src} srcSet={OFFICE_AD.srcSet} sizes="(min-width: 1024px) 900px, 100vw" width={OFFICE_AD.width} height={OFFICE_AD.height} loading="lazy" decoding="async" alt={OFFICE_AD.alt} className="mx-auto mt-10 w-full max-w-4xl rounded-2xl ring-1 ring-border" />
         </div>
@@ -147,7 +147,7 @@ export default function OfficeSetup() {
           <div>
             <h2 id="who" className="h-section">One person, start to finish.</h2>
             <p className="lede">
-              I'm {SITE.founder.name.split(" ")[0]}, based in Tampa. I plan the setup with you, do the work myself and don't leave until everything works. Need a website or ads for the business too?{" "}
+              I'm {SITE.founder.name.split(" ")[0]}, based in Tampa Bay and working all over Central Florida. I plan the setup with you, do the work myself and don't leave until everything works. Need a website or ads for the business too?{" "}
               <Link to="/grow" className="text-turbo underline underline-offset-4">
                 I do that as well
               </Link>
@@ -165,7 +165,7 @@ export default function OfficeSetup() {
 
       <section className="section border-t border-border" aria-labelledby="area">
         <div className="container-x">
-          <SectionHeader title={<span id="area">Where we work</span>} lede="Tampa and about 40 miles around it." />
+          <SectionHeader title={<span id="area">Where we work</span>} lede="Anywhere within about 1.5 hours of Temple Terrace: Tampa Bay, Orlando, Lakeland, Winter Haven and Sarasota." />
           <ServiceAreaList className="mt-8" />
         </div>
       </section>

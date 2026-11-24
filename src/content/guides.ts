@@ -1293,7 +1293,7 @@ export const GUIDES: Guide[] = [
       },
     ],
     faqs: [
-      { q: "Do you come to me?", a: "Yes, within about 40 miles of Tampa. Windows speed-ups can also be done remotely anywhere." },
+      { q: "Do you come to me?", a: "Yes, anywhere within about 1.5 hours of Temple Terrace (Tampa Bay to Orlando). Windows speed-ups can also be done remotely anywhere." },
       { q: "Will I lose my files?", a: "A repair or upgrade keeps your files. For an SSD swap we clone your drive so everything is where you left it." },
       { q: "How fast can you fix it?", a: "Many speed-ups and virus removals are done the same day. Parts like screens can take a little longer." },
     ],

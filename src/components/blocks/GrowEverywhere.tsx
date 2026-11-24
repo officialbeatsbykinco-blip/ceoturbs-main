@@ -60,7 +60,7 @@ export function GrowEverywhere({ where, id = "grow", className }: { where: strin
         <SectionHeader
           kicker="For businesses, anywhere"
           title={<span id={id}>Your IT company and your marketing company, in one.</span>}
-          lede="We fix the computers, cameras and Wi-Fi in Tampa. Then we get your business more customers, wherever you are: websites, ads, social media, Google rankings and review cards, done for you."
+          lede="We fix the computers, cameras and Wi-Fi across Tampa Bay and Central Florida. Then we get your business more customers, wherever you are: websites, ads, social media, Google rankings and review cards, done for you."
         />
         <ul className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {DIGITAL.map((s) => (

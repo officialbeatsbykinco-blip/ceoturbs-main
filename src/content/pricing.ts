@@ -479,7 +479,7 @@ export const INSTALL_PRICES: PriceItem[] = [
  * the drives and take everything to an e-waste recycler. Price 0 shows as "Free" on the page.
  */
 export const RECYCLING_PRICES: PriceItem[] = [
-  { id: "recycle-pickup", name: "Pickup at your home or business", price: 0, billing: "once", summary: "Computers, laptops, phones, tablets, printers, cables and more, picked up within 40 miles of Temple Terrace.", includes: [] },
+  { id: "recycle-pickup", name: "Pickup at your home or business", price: 0, billing: "once", summary: "Computers, laptops, phones, tablets, printers, cables and more, picked up anywhere within about 1.5 hours of Temple Terrace, FL.", includes: [] },
   { id: "recycle-wipe", name: "Data wipe or hard drive destruction", price: 0, billing: "once", summary: "Every drive wiped, or drilled in front of you if you want to watch.", includes: [] },
   { id: "recycle-office", name: "Office & business cleanouts", price: 0, billing: "once", summary: "Old workstations, servers, monitors and network gear, loaded up and hauled away.", includes: [] },
 ];

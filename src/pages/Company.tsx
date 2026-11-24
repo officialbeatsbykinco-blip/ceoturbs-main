@@ -137,8 +137,8 @@ export function Tampa() {
         <div className="container-x relative">
           <Breadcrumbs items={[{ name: "Tampa", path: "/tampa" }]} />
           <SectionHeader as="h1" title="Tampa tech help and growth, founder-run" />
-          <DirectAnswer label="CEO Turbo in Tampa">
-            CEO Turbo is based in Tampa, Florida. We fix Windows laptops and desktops at your door or remotely, set up phones, tablets and cameras, set up and organize offices, and build websites and ads that bring in customers. In-person work covers about 40 miles around Tampa, and {georgia.length} of the client sites below were built before our move from Georgia.
+          <DirectAnswer label="Where CEO Turbo works">
+            CEO Turbo is based in Tampa, Florida. We fix Windows laptops and desktops at your door or remotely, set up phones, tablets and cameras, set up and organize offices, and build websites and ads that bring in customers. In-person work covers Tampa Bay and Central Florida, about 1.5 hours around Temple Terrace, and {georgia.length} of the client sites below were built before our move from Georgia.
           </DirectAnswer>
           <div className="mt-8 flex flex-wrap gap-3">
             <Link to="/computer-repair-tampa" className="btn-ignite">

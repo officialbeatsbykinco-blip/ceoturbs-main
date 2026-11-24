@@ -167,7 +167,7 @@ export function InstallQuiz({ page, id = "book", className }: { page: InstallPag
       {step === "jobs" && (
         <p className="mt-3 flex items-center gap-2 rounded-xl bg-turbo/[0.08] px-3 py-2 text-sm leading-snug ring-1 ring-turbo/20">
           <MapPin className="h-4 w-4 shrink-0 text-turbo" aria-hidden />
-          <span>{page.remote ? <><b>Remote</b> or at your door near Tampa.</> : <>We come to you <b>anywhere in Tampa Bay</b>.</>}</span>
+          <span>{page.remote ? <><b>Remote</b> or at your door in Central Florida.</> : <>We come to you <b>anywhere in Central Florida</b>.</>}</span>
         </p>
       )}
 

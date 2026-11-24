@@ -10,7 +10,7 @@ export function FounderBadge({ line, className }: { line: string; className?: st
     <div className={cn("flex items-center gap-3 rounded-2xl border border-border bg-card/80 p-3", className)}>
       <img src={SITE.founder.image} alt={SITE.founder.name} width={56} height={56} className="h-14 w-14 shrink-0 rounded-xl object-cover ring-1 ring-border" />
       <p className="text-[15px] leading-snug text-muted-foreground">
-        <span className="font-semibold text-foreground">Hi, I'm {first}, based in Tampa.</span> {line}
+        <span className="font-semibold text-foreground">Hi, I'm {first}, based in Tampa Bay.</span> {line}
       </p>
     </div>
   );
