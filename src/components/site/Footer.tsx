@@ -93,6 +93,7 @@ export function Footer({ focus = false }: { focus?: boolean }) {
               { to: "/security-camera-installation-tampa", label: "Security camera installation" },
               { to: "/wifi-installation-tampa", label: "Wi-Fi & internet setup" },
               { to: "/electronics-recycling-tampa", label: "Electronics recycling pickup" },
+              { to: "/phone-repair-tampa", label: "Phone & tablet screen and battery repair" },
               { to: "/services/home-office-setup", label: "Home office setup" },
               { to: "/services/pos-system-setup", label: "POS installation" },
               { to: "/restaurants", label: "Restaurant TVs & menus" },

@@ -192,7 +192,7 @@ export const localService = (o: { path: string; name: string; serviceType: strin
     ...(o.remote ? ["Worldwide"] : []),
   ],
   availableChannel: { "@type": "ServiceChannel", servicePhone: { "@type": "ContactPoint", telephone: SITE.phone.e164, contactType: "customer service" }, serviceUrl: abs(o.path) },
-  offers: o.prices.map(priceOffer),
+  offers: o.prices.filter((p) => !p.quote).map(priceOffer),
 });
 
 /** A published service price as a schema.org Offer: one-time fee, or a monthly UnitPriceSpecification. */

@@ -238,7 +238,7 @@ export default function ComputerRepair() {
 
       <section className="section border-t border-border" aria-labelledby="we-fix">
         <div className="container-x">
-          <SectionHeader title={<span id="we-fix">If it's a Windows PC, we fix it.</span>} lede="Windows desktops and laptops, any brand, at your door anywhere from Tampa Bay to Orlando. Phones and tablets we set up (new device, photos, contacts and email moved over) but don't repair. No Macs or laptop screens." />
+          <SectionHeader title={<span id="we-fix">If it's a Windows PC, we fix it.</span>} lede="Windows desktops and laptops, any brand, at your door anywhere from Tampa Bay to Orlando. Phone and tablet screens and batteries too, at ceoturbo.com/phone-repair-tampa. No Macs or laptop screens." />
           <ul className="mt-8 grid gap-x-6 gap-y-3 sm:grid-cols-2 lg:grid-cols-3">
             {WE_FIX.map((t) => (
               <li key={t} className="flex items-start gap-2.5 text-[15px]">

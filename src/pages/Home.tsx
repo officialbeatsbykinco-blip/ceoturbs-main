@@ -36,7 +36,7 @@ const SERVICES: { icon: LucideIcon; t: string; b: string; price: string; to: str
   { icon: AlertTriangle, t: "Blue screens & crashes", b: "Blue screens, restarts, freezing and Windows updates gone wrong, found and fixed for good.", price: itPrice("it-pc-repair"), to: "/computer-repair-tampa", cta: "Fix my crashes", tech: true },
   { icon: Power, t: "Won't turn on", b: "No power, no lights or stuck on boot. Laptops and desktops, including gaming PCs: power supplies, memory and parts.", price: itPrice("it-desktop"), to: "/computer-repair-tampa", cta: "Fix my computer", tech: true },
   { icon: Cctv, t: "Cameras & Ring doorbells", b: "Ring, Nest, Blink or Wyze doorbells and Wi-Fi cameras installed and working on your phone. Homes and businesses.", price: `from ${usd(INSTALL_PRICES.find((p) => p.id === "cam-wifi")!.price)} per camera`, to: "/security-camera-installation-tampa", cta: "Install my cameras" },
-  { icon: Smartphone, t: "Phone & tablet setup", b: "New iPhone, Android or iPad set up with your photos, contacts, texts, email and apps moved over. Setup only, no repairs.", price: itPrice("it-phone-setup"), to: "/computer-repair-tampa", cta: "Set up my phone", tech: true },
+  { icon: Smartphone, t: "Phone & tablet repair", b: "Cracked iPhone, Samsung or iPad screens and dying batteries replaced at your door. New phones set up with everything moved over.", price: "price by text", to: "/phone-repair-tampa", cta: "Fix my phone", tech: true },
   { icon: Building2, t: "Office IT setup", b: "Workstations, multi-monitor desks, printers, Wi-Fi, Microsoft 365 or Google email, and cables hidden. Homes and businesses.", price: OFFICE_FROM, to: OFFICE_SETUP_PATH, cta: "Set up my office" },
 ];
 
@@ -147,7 +147,7 @@ export default function Home() {
 
       <section className="section border-t border-border" aria-labelledby="services">
         <div className="container-x">
-          <SectionHeader kicker="What we do" title={<span id="services">Fixed, set up and working.</span>} lede="Windows laptops and desktops are what we repair. Cameras, doorbells, phones, tablets and offices we set up. No Macs, no phone repairs, no laptop screens." />
+          <SectionHeader kicker="What we do" title={<span id="services">Fixed, set up and working.</span>} lede="Windows laptops and desktops, plus phone and tablet screens and batteries, are what we repair. Cameras, doorbells and offices we set up. No Macs or laptop screens." />
           <ul className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {SERVICES.map((s) => {
               const inner = (

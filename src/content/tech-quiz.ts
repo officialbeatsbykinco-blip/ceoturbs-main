@@ -6,12 +6,12 @@ import { ALL_SETUP_CITIES } from "@/content/service-areas";
 export const DEVICES = [
   { id: "laptop", label: "Windows laptop", short: "Windows laptop" },
   { id: "desktop", label: "Windows desktop or gaming PC", short: "Windows desktop" },
-  { id: "mobile", label: "Phone or tablet setup", short: "Phone or tablet" },
+  { id: "mobile", label: "Phone or tablet repair & setup", short: "Phone or tablet" },
   { id: "camera", label: "Cameras or Ring doorbell", short: "Cameras / doorbell" },
 ] as const;
 
-/** Windows computers are the only thing we repair. Phones, tablets and cameras we set up; Macs and laptop screens we don't touch. */
-export const NOT_FIXED = "We repair Windows laptops and desktops only. Phones, tablets and cameras we set up, not repair. No Macs or laptop screens.";
+/** What we repair: Windows computers, plus phone and tablet screens and batteries. Cameras we set up; Macs and laptop screens we don't touch. */
+export const NOT_FIXED = "We repair Windows laptops and desktops, and phone and tablet screens and batteries. Cameras we set up. No Macs or laptop screens.";
 
 type Group = "computer" | "mobile" | "camera";
 /** Which list a device gets: a phone never sees "blue screen", a camera never sees "SSD upgrade". */
@@ -26,6 +26,8 @@ export const PROBLEMS = [
   { id: "upgrade", label: "Upgrade (SSD, memory, parts)", short: "Upgrade parts", for: ["computer"] },
   { id: "setup", label: "Software, printer or email help", short: "Printer, email, apps", for: ["computer"] },
   { id: "data", label: "Move files or photos", short: "Move files or photos", for: ["computer"] },
+  { id: "phone-screen", label: "Cracked or broken phone or tablet screen", short: "Cracked screen", for: ["mobile"] },
+  { id: "phone-battery", label: "Battery dies fast or swollen", short: "Battery", for: ["mobile"] },
   { id: "phone-setup", label: "Set up a new phone or tablet", short: "Set up a new phone", for: ["mobile"] },
   { id: "phone-transfer", label: "Move photos, contacts and texts", short: "Move photos and contacts", for: ["mobile"] },
   { id: "phone-email", label: "Email, apps and work accounts", short: "Email and apps", for: ["mobile"] },

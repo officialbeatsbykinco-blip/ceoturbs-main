@@ -50,12 +50,14 @@ describe("tech repair quiz", () => {
     expect(techMessage({ ...EMPTY_TECH, devices: ["desktop"], problems: { desktop: ["dead"] }, where: "remote" })).toContain("Where: Come to me");
   });
 
-  it("repairs Windows computers only; phones, tablets and cameras are setup, never repair; no Macs", () => {
+  it("repairs Windows computers and phone/tablet screens and batteries; cameras are setup only; no Macs", () => {
     expect(DEVICES.map((d) => d.id)).toEqual(["laptop", "desktop", "mobile", "camera"]);
     const all = [...DEVICES, ...problemsFor("laptop"), ...problemsFor("mobile"), ...problemsFor("camera")].map((x) => x.label).join(" ");
-    expect(all).not.toMatch(/\bmacs?\b|macbook|cracked|broken screen|battery/i);
+    expect(all).not.toMatch(/\bmacs?\b|macbook/i);
+    // Laptop screens and computer batteries stay off the computer list; phone screens and batteries are on the phone list.
+    expect(problemsFor("laptop").map((p) => p.label).join(" ")).not.toMatch(/cracked|screen repl|battery/i);
     expect(problemsFor("desktop").map((p) => p.id)).toEqual(expect.arrayContaining(["slow", "crash", "dead"]));
-    expect(problemsFor("mobile").map((p) => p.id)).toEqual(["phone-setup", "phone-transfer", "phone-email", "other"]);
+    expect(problemsFor("mobile").map((p) => p.id)).toEqual(["phone-screen", "phone-battery", "phone-setup", "phone-transfer", "phone-email", "other"]);
     expect(problemsFor("camera").map((p) => p.id)).toEqual(["cam-install", "cam-doorbell", "cam-app", "other"]);
     expect(problemsFor("mobile").map((p) => p.id)).not.toContain("crash");
   });
@@ -165,7 +167,7 @@ describe("Tampa move", () => {
 describe("Tampa install pages", () => {
   it("has a page for computer setup, security cameras and Wi-Fi, each with per-unit prices", async () => {
     const { INSTALL_PAGES } = await import("@/content/install-pages");
-    expect(INSTALL_PAGES.map((p) => p.path)).toEqual(["/computer-setup-tampa", "/security-camera-installation-tampa", "/wifi-installation-tampa", "/business-tech-setup-tampa", "/gaming-pc-fps-boost", "/electronics-recycling-tampa"]);
+    expect(INSTALL_PAGES.map((p) => p.path)).toEqual(["/computer-setup-tampa", "/security-camera-installation-tampa", "/wifi-installation-tampa", "/business-tech-setup-tampa", "/gaming-pc-fps-boost", "/phone-repair-tampa", "/electronics-recycling-tampa"]);
     for (const p of INSTALL_PAGES) expect(p.prices.length, p.path).toBeGreaterThan(1);
     const cams = INSTALL_PAGES[1];
     expect(cams.prices.map((x) => x.id)).toEqual(["cam-doorbell", "cam-wifi"]);

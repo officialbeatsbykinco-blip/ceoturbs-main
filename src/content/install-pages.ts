@@ -3,7 +3,7 @@
 // Prices come from content/pricing.ts so the page, its schema and the ads agree. Cameras have no set price yet.
 import { FPS_BOOKING, SITE, type CalEvent } from "@/config/site";
 import { ALL_SETUP_CITIES } from "@/content/service-areas";
-import { INSTALL_PRICES, IT_SERVICES, RECYCLING_PRICES, SETUP, usd, type PriceItem } from "@/content/pricing";
+import { INSTALL_PRICES, IT_SERVICES, PHONE_REPAIR, RECYCLING_PRICES, SETUP, usd, type PriceItem } from "@/content/pricing";
 import type { FAQ } from "@/content/services";
 
 export type Choice = { id: string; label: string };
@@ -348,6 +348,68 @@ INSTALL_PAGES.push({
   seo: {
     title: "Gaming PC FPS Boost: Remote or In Person in Florida",
     description: `Low FPS, stutter or input lag? We tune your Windows gaming PC live, remote worldwide or in person in Central Florida. From ${usd(remoteSpeed.price)}. Text ${SITE.phone.display}.`,
+  },
+});
+
+/**
+ * Phone and tablet screen and battery repair: parts are ordered for the exact model, so every job is quoted by text first.
+ * Calls and texts first (consumer: Meta, organic and AI search; Google bans consumer repair ads).
+ */
+const phoneSetup = byId(IT_SERVICES, "it-phone-setup");
+INSTALL_PAGES.push({
+  slug: "phone-repair",
+  path: "/phone-repair-tampa",
+  name: "Phone & tablet repair Tampa",
+  service: "phone or tablet repair",
+  category: "phone_repair",
+  chip: "We come to you · Tampa Bay to Orlando",
+  h1: ["Cracked screen or dead battery?", "Phone & tablet repair at your door."],
+  lede: "iPhone, Samsung, Pixel and iPad screens and batteries replaced at your home or business, anywhere from Tampa, St. Pete and Clearwater to Brandon, Lakeland, Winter Haven and Orlando. Text the model and what's wrong, get the full price with the part included, and we come to you.",
+  promises: ["Full price by text first", "We come to you", "Part ordered for your exact model", "Tested with you before we leave"],
+  pricesLede: "Every phone and tablet is different, so text us the model and you get one price with the part and labor included before we order anything.",
+  prices: [...PHONE_REPAIR, phoneSetup],
+  words: {
+    cta: "Get my repair price",
+    jobs: "What's wrong with it?",
+    title: "Get your repair price",
+    ask: "Hi Chris! I need a phone or tablet repair.",
+    where: "Where do we text your price?",
+    submit: "Text me my price",
+    sent: "We'll text you the price shortly. Want to pick a time now? Choose one below.",
+  },
+  textFirst: { sms: "Hi Chris, I need a phone/tablet repair. Model and what's wrong: " },
+  jobs: [
+    { id: "screen", label: "Cracked or shattered screen" },
+    { id: "display", label: "Black screen, lines or touch not working" },
+    { id: "battery", label: "Battery dies fast or shuts off" },
+    { id: "swollen", label: "Swollen battery" },
+    { id: "tablet", label: "iPad or tablet screen" },
+    { id: "setup", label: "Set up a new phone or move my stuff" },
+  ],
+  questions: [
+    { id: "device", label: "What is it?", short: "Device", options: [{ id: "iphone", label: "iPhone" }, { id: "samsung", label: "Samsung Galaxy" }, { id: "android", label: "Other Android" }, { id: "ipad", label: "iPad" }, { id: "tablet", label: "Other tablet" }] },
+    PLACE,
+  ],
+  includes: ["Price by text with the part included", "New screen or battery for your exact model", "Replaced at your home or business", "Face ID, touch, camera and charging tested with you", "Your photos and data left alone", "Old parts taken for recycling"],
+  steps: [
+    { title: "Text the model", body: "Tell us the phone or tablet and what's wrong. A photo helps." },
+    { title: "Get one price", body: "Part and labor in one price by text. We order the part for your exact model." },
+    { title: "Fixed at your place", body: "We come to you, replace it, test it with you, then you pay." },
+  ],
+  faqs: [
+    { q: "How much does a phone screen repair cost?", a: `It depends on the exact model, because the screen is ordered for your phone. Text the model to ${SITE.phone.display} and you get one price with the part and labor included before we order anything.` },
+    { q: "Do you replace phone batteries?", a: "Yes. iPhone, Samsung, Pixel and other Android batteries that die fast, shut off or are swollen are replaced with a new battery for your model." },
+    { q: "Do you fix iPads and tablets?", a: "Yes. Cracked iPad, Samsung Galaxy Tab and other tablet screens and worn-out batteries. Text the model for the price." },
+    { q: "Do you come to me for phone repair?", a: "Yes. We come to your home or business anywhere from Tampa, St. Pete, Clearwater and Brandon to Lakeland, Winter Haven, Sarasota and Orlando. No drop-off and no waiting at a store." },
+    { q: "How long does it take?", a: "We order the part for your exact model first. Once it's in, we set a time and come to you, and you get the time and price before anything is ordered." },
+    { q: "Will I lose my photos or data?", a: "A screen or battery replacement doesn't erase your phone. We don't open your photos, messages or accounts." },
+    WHERE_FAQ("We repair phones and tablets"),
+    PAY_FAQ,
+  ],
+  value: 120,
+  seo: {
+    title: "Phone & iPad Screen and Battery Repair: Tampa to Orlando",
+    description: `Cracked iPhone, Samsung or iPad screen? Dead battery? Fixed at your door in Tampa Bay and Central Florida. Price by text first: ${SITE.phone.display}.`,
   },
 });
 

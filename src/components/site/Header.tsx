@@ -83,7 +83,7 @@ const TECH: Menu = {
   to: IT_SERVICES_PATH,
   items: [
     { to: IT_SERVICES_PATH, label: "Windows computer repair", sub: "Speed-ups, blue screens, won't turn on" },
-    { to: `${IT_SERVICES_PATH}#prices`, label: "Phone & tablet setup", sub: "New iPhone, Android or iPad. Setup only, no repairs" },
+    { to: "/phone-repair-tampa", label: "Phone & tablet repair", sub: "Cracked screens, batteries, new phone setup" },
     { to: COMPUTERS_PATH, label: "Computer shop", sub: "Laptops & desktops, ready to use" },
     { to: OFFICE_SETUP_PATH, label: "Office setup & cables", sub: "Desks, monitors, printers, Wi-Fi" },
     { to: "/business-tech-setup-tampa", label: "Business IT setup", sub: "Workstations, network, POS" },
@@ -247,7 +247,7 @@ export function Header({ focus: focusProp = false }: { focus?: boolean }) {
               [IT_SERVICES_PATH, "Windows computer repair"],
               ["/security-camera-installation-tampa", "Cameras & Ring doorbells"],
               ["/electronics-recycling-tampa", "Free tech recycling pickup · all Tampa Bay"],
-              [`${IT_SERVICES_PATH}#prices`, "Phone & tablet setup"],
+              ["/phone-repair-tampa", "Phone & iPad screen and battery repair"],
               [OFFICE_SETUP_PATH, "Office IT setup"],
               ["/grow", "Websites & ads"],
               ["/portfolio", "Websites we built"],

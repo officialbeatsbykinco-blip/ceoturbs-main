@@ -5,7 +5,7 @@
 import { useEffect, useId, useRef, useState, type FormEvent, type MouseEvent } from "react";
 import { Link } from "react-router-dom";
 import {
-  AlertTriangle, ArrowLeft, ArrowRight, BellRing, Cctv, Check, Cpu, FolderOpen, Gauge, Computer, HelpCircle, Info, Laptop, Loader2, Mail, MapPin, MessageSquare, Monitor, Phone, Power, ShieldAlert, Smartphone, type LucideIcon,
+  AlertTriangle, ArrowLeft, ArrowRight, BatteryLow, BellRing, Cctv, Check, Cpu, FolderOpen, Gauge, Computer, HelpCircle, Info, Laptop, Loader2, Mail, MapPin, MessageSquare, Monitor, Phone, Power, ShieldAlert, Smartphone, type LucideIcon,
 } from "lucide-react";
 import { InstallCalEmbed } from "@/components/booking/InstallCalEmbed";
 import { CallLink } from "@/components/site/CallLink";
@@ -20,7 +20,7 @@ const STEPS = ["device", "problem", "when", "send"] as const;
 type Step = (typeof STEPS)[number];
 
 const DEVICE_ICONS: Record<DeviceId, LucideIcon> = { laptop: Laptop, desktop: Monitor, mobile: Smartphone, camera: Cctv };
-const PROBLEM_ICONS: Record<ProblemId, LucideIcon> = { slow: Gauge, crash: AlertTriangle, dead: Power, virus: ShieldAlert, upgrade: Cpu, setup: Mail, data: FolderOpen, "phone-setup": Smartphone, "phone-transfer": FolderOpen, "phone-email": Mail, "cam-install": Cctv, "cam-doorbell": BellRing, "cam-app": Smartphone, other: HelpCircle };
+const PROBLEM_ICONS: Record<ProblemId, LucideIcon> = { slow: Gauge, crash: AlertTriangle, dead: Power, virus: ShieldAlert, upgrade: Cpu, setup: Mail, data: FolderOpen, "phone-screen": Smartphone, "phone-battery": BatteryLow, "phone-setup": Smartphone, "phone-transfer": FolderOpen, "phone-email": Mail, "cam-install": Cctv, "cam-doorbell": BellRing, "cam-app": Smartphone, other: HelpCircle };
 
 /** The first question is one tap: a laptop, a desktop, both, a phone or tablet to set up, or cameras to install. */
 const pickOf = (id: DeviceId) => ({ id, label: DEVICES.find((d) => d.id === id)!.label, icon: DEVICE_ICONS[id], devices: [id] as DeviceId[] });
@@ -29,7 +29,7 @@ const DEVICE_PICKS: { id: string; label: string; sub?: string; icon: LucideIcon;
   { ...pickOf("laptop"), sub: "Repair or speed-up" },
   { ...pickOf("desktop"), label: "Windows desktop", sub: "Or gaming PC" },
   { id: "both", label: "Laptop + desktop", sub: "Both need help", icon: Computer, devices: ["laptop", "desktop"] },
-  { ...pickOf("mobile"), label: "Phone or tablet", sub: "Setup only" },
+  { ...pickOf("mobile"), label: "Phone or tablet", sub: "Screens, batteries, setup" },
   { ...pickOf("camera"), label: "Cameras or doorbell", sub: "We install them" },
 ];
 

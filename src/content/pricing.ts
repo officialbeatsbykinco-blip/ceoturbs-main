@@ -20,6 +20,8 @@ export type PriceItem = {
   summary: string;
   includes: string[];
   popular?: boolean;
+  /** Priced per job by text (phone parts depend on the exact model): shown as "Text for price", left out of schema offers. */
+  quote?: boolean;
   /** Packages only: the à-la-carte items it replaces, so the "you save" number can never drift. */
   replaces?: string[];
 };
@@ -484,6 +486,17 @@ export const RECYCLING_PRICES: PriceItem[] = [
   { id: "recycle-office", name: "Office & business cleanouts", price: 0, billing: "once", summary: "Old workstations, servers, monitors and network gear, loaded up and hauled away.", includes: [] },
 ];
 
+/**
+ * Phone and tablet screen and battery repair (/phone-repair-tampa). The part is ordered for the exact model, so every
+ * job is quoted by text (part + labor) before anything is ordered.
+ */
+export const PHONE_REPAIR: PriceItem[] = [
+  { id: "phone-screen", name: "iPhone screen replacement", price: 0, quote: true, billing: "once", summary: "Cracked, black or glitching screen replaced with a new one for your exact model.", includes: [] },
+  { id: "phone-screen-android", name: "Samsung & Android screen replacement", price: 0, quote: true, billing: "once", summary: "Galaxy, Pixel, Motorola and more. Part ordered for your model.", includes: [] },
+  { id: "phone-battery", name: "Phone battery replacement", price: 0, quote: true, billing: "once", summary: "Battery that dies fast, shuts off or is swollen, replaced.", includes: [] },
+  { id: "tablet-screen", name: "iPad & tablet screen or battery", price: 0, quote: true, billing: "once", summary: "Cracked iPad, Samsung Tab or Fire tablet screens and worn-out batteries.", includes: [] },
+];
+
 /** "from $99" style label for an IT_SERVICES item. */
 export const itPrice = (id: string) => {
   const item = IT_SERVICES.find((p) => p.id === id);
@@ -493,7 +506,7 @@ export const itPrice = (id: string) => {
 
 export const usd = (n: number) => `$${n.toLocaleString("en-US")}`;
 /** A page price: "Free" for $0, else "from $99" or "$99". */
-export const priceTag = (p: Pick<PriceItem, "price" | "from">) => (p.price === 0 ? "Free" : `${p.from ? "from " : ""}${usd(p.price)}`);
+export const priceTag = (p: Pick<PriceItem, "price" | "from" | "quote">) => (p.quote ? "Text for price" : p.price === 0 ? "Free" : `${p.from ? "from " : ""}${usd(p.price)}`);
 export const byId = (id: string) => {
   const item = ALL_PRICES.find((p) => p.id === id);
   if (!item) throw new Error(`Unknown price id ${id}`);
