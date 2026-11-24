@@ -165,7 +165,7 @@ describe("Tampa move", () => {
 describe("Tampa install pages", () => {
   it("has a page for computer setup, security cameras and Wi-Fi, each with per-unit prices", async () => {
     const { INSTALL_PAGES } = await import("@/content/install-pages");
-    expect(INSTALL_PAGES.map((p) => p.path)).toEqual(["/computer-setup-tampa", "/security-camera-installation-tampa", "/wifi-installation-tampa", "/business-tech-setup-tampa", "/gaming-pc-fps-boost"]);
+    expect(INSTALL_PAGES.map((p) => p.path)).toEqual(["/computer-setup-tampa", "/security-camera-installation-tampa", "/wifi-installation-tampa", "/business-tech-setup-tampa", "/gaming-pc-fps-boost", "/electronics-recycling-tampa"]);
     for (const p of INSTALL_PAGES) expect(p.prices.length, p.path).toBeGreaterThan(1);
     const cams = INSTALL_PAGES[1];
     expect(cams.prices.map((x) => x.id)).toEqual(["cam-doorbell", "cam-wifi"]);
@@ -206,6 +206,21 @@ describe("Tampa install pages", () => {
     const { INSTALL_PAGES, EMPTY_INSTALL, installMessage } = await import("@/content/install-pages");
     const msg = installMessage(INSTALL_PAGES[1], { ...EMPTY_INSTALL, jobs: ["doorbell", "porch"], picks: { brand: "ring", count: "2-3", place: "home" }, zip: "33617", name: "Pat" });
     expect(msg).toBe("Hi Chris! I'd like a price for doorbell and camera installation.\nNeed: Install a video doorbell, Porch, garage or patio cameras\nBrand: Ring\nDevices: 2–3\nFor: Home\nWhen: ASAP\nZIP: 33617\nName: Pat");
+  });
+
+  it("asks for a free recycling pickup, not a price, and covers every city 40 miles around Temple Terrace", async () => {
+    const { INSTALL_PAGES, EMPTY_INSTALL, installMessage, quizWords } = await import("@/content/install-pages");
+    const { ALL_SETUP_CITIES } = await import("@/content/service-areas");
+    const { priceTag } = await import("@/content/pricing");
+    const page = INSTALL_PAGES.find((p) => p.path === "/electronics-recycling-tampa")!;
+    const msg = installMessage(page, { ...EMPTY_INSTALL, jobs: ["laptops", "screens"], picks: { load: "car", place: "home", drives: "destroy" }, zip: "33617", name: "Pat" });
+    expect(msg).toBe("Hi Chris! I have old tech for a free recycling pickup.\nNeed: Laptops, Monitors & TVs\nAmount: A carload\nFor: Home\nData: Destroy them in front of me\nWhen: ASAP\nZIP: 33617\nName: Pat");
+    expect(quizWords(page).submit).toBe("Text me a pickup time");
+    expect(page.prices.map(priceTag)).toEqual(["Free", "Free", "Free"]);
+    expect(ALL_SETUP_CITIES).toEqual(expect.arrayContaining(["Temple Terrace", "Brandon", "Clearwater", "Wesley Chapel", "Lakeland", "Spring Hill", "Bradenton"]));
+    expect(new Set(ALL_SETUP_CITIES).size).toBe(ALL_SETUP_CITIES.length);
+    // Every other page keeps its price wording.
+    expect(quizWords(INSTALL_PAGES[0]).ask).toBe("Hi Chris! I'd like a price for computer setup.");
   });
 
   it("files install leads as one readable sheet note", async () => {

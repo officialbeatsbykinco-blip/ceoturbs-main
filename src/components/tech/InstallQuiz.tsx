@@ -7,7 +7,7 @@ import { ArrowLeft, ArrowRight, Check, Loader2, MapPin, MessageSquare } from "lu
 import { InstallCalEmbed } from "@/components/booking/InstallCalEmbed";
 import { CallLink } from "@/components/site/CallLink";
 import { INSTALL_BOOKING, SITE } from "@/config/site";
-import { EMPTY_INSTALL, WHEN_OPTIONS, installLabels, installMessage, needsZip, type InstallAnswers, type InstallPage } from "@/content/install-pages";
+import { EMPTY_INSTALL, WHEN_OPTIONS, installLabels, installMessage, needsZip, quizWords, type InstallAnswers, type InstallPage } from "@/content/install-pages";
 import { zipOk } from "@/content/tech-quiz";
 import { sendLead } from "@/lib/lead-outbox";
 import { canText, smsHref } from "@/lib/sms";
@@ -31,6 +31,7 @@ export function InstallQuiz({ page, id = "book", className }: { page: InstallPag
   const [qi, setQi] = useState(0);
   const startedAt = useRef(0);
   const top = useRef<HTMLDivElement>(null);
+  const w = quizWords(page);
 
   useEffect(() => setTexting(canText()), []);
 
@@ -147,7 +148,7 @@ export function InstallQuiz({ page, id = "book", className }: { page: InstallPag
         <p className="flex items-center gap-2 font-display text-2xl font-bold">
           <Check className="h-6 w-6 shrink-0 text-turbo" aria-hidden /> Got it, {a.name.trim().split(/\s+/)[0]}.
         </p>
-        <p className="mt-2 text-base text-muted-foreground">We'll text you a price shortly. Want a set time now? Pick one below.</p>
+        <p className="mt-2 text-base text-muted-foreground">{w.sent}</p>
         <InstallCalEmbed className="mt-5" note={`${page.slug}-install-quiz`} booking={page.booking ?? INSTALL_BOOKING} minHeight="560px" />
       </div>
     );
@@ -155,7 +156,7 @@ export function InstallQuiz({ page, id = "book", className }: { page: InstallPag
   return (
     <div id={id} ref={top} className={shell}>
       <div className="flex items-baseline justify-between gap-3">
-        <p className="font-display text-xl font-bold leading-tight sm:text-2xl">Get your price</p>
+        <p className="font-display text-xl font-bold leading-tight sm:text-2xl">{w.title}</p>
         <p className="shrink-0 text-xs font-bold uppercase tracking-wider text-muted-foreground" aria-live="polite">
           Step {index + 1} of {total}
         </p>
@@ -166,14 +167,14 @@ export function InstallQuiz({ page, id = "book", className }: { page: InstallPag
       {step === "jobs" && (
         <p className="mt-3 flex items-center gap-2 rounded-xl bg-turbo/[0.08] px-3 py-2 text-sm leading-snug ring-1 ring-turbo/20">
           <MapPin className="h-4 w-4 shrink-0 text-turbo" aria-hidden />
-          <span>{page.remote ? <><b>Remote</b> or at your door near Tampa.</> : <>We come to you <b>near Tampa</b>.</>}</span>
+          <span>{page.remote ? <><b>Remote</b> or at your door near Tampa.</> : <>We come to you <b>anywhere in Tampa Bay</b>.</>}</span>
         </p>
       )}
 
       <div key={step === "details" ? `details-${qi}` : step} className="mt-3 animate-step">
         {step === "jobs" && (
           <>
-            <p className="text-lg font-bold leading-tight">What do you need?</p>
+            <p className="text-lg font-bold leading-tight">{w.jobs}</p>
             <p className="mb-2.5 mt-0.5 text-sm text-muted-foreground">Tap all that apply.</p>
             <div className="grid grid-cols-2 gap-2">
               {page.jobs.map((j) => {
@@ -258,7 +259,7 @@ export function InstallQuiz({ page, id = "book", className }: { page: InstallPag
 
         {step === "send" && (
           <form onSubmit={onSubmit} noValidate className="grid gap-3">
-            <p className="text-lg font-bold leading-tight">{texting ? "Last step: who's it from?" : "Where do we text your price?"}</p>
+            <p className="text-lg font-bold leading-tight">{texting ? "Last step: who's it from?" : w.where}</p>
             <div className={cn("grid gap-3", zipNeeded && "grid-cols-[1.4fr_1fr]")}>
               <div>
                 <label htmlFor={`${uid}-name`} className="mb-1.5 block text-sm font-semibold">
@@ -299,7 +300,7 @@ export function InstallQuiz({ page, id = "book", className }: { page: InstallPag
                 <a href={smsHref(message)} onClick={onText} data-call-location="install-quiz" className={cn("btn-ignite btn-shine w-full justify-center !py-4 !text-lg", !ready && "opacity-60")}>
                   <MessageSquare className="h-5 w-5" aria-hidden /> {ready ? "Text it to us" : zipNeeded ? "Add your name & ZIP to send" : "Add your name to send"}
                 </a>
-                <p className="-mt-1 text-center text-xs text-muted-foreground">{done ? "Messages should be open. Tap send and we'll text your price back." : "Opens Messages with this filled in. Just tap send."}</p>
+                <p className="-mt-1 text-center text-xs text-muted-foreground">{done ? "Messages should be open. Tap send and we'll text you right back." : "Opens Messages with this filled in. Just tap send."}</p>
               </>
             ) : (
               <>
@@ -310,7 +311,7 @@ export function InstallQuiz({ page, id = "book", className }: { page: InstallPag
                   </span>
                 </label>
                 <button type="submit" disabled={sending} className="btn-ignite btn-shine w-full justify-center !py-4 !text-lg">
-                  {sending ? <Loader2 className="h-5 w-5 animate-spin" aria-hidden /> : <>Text me my price <ArrowRight className="h-5 w-5" aria-hidden /></>}
+                  {sending ? <Loader2 className="h-5 w-5 animate-spin" aria-hidden /> : <>{w.submit} <ArrowRight className="h-5 w-5" aria-hidden /></>}
                 </button>
               </>
             )}

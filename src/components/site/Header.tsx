@@ -90,6 +90,7 @@ const TECH: Menu = {
     { to: "/computer-setup-tampa", label: "Computer setup", sub: "New computer moved and ready" },
     { to: "/security-camera-installation-tampa", label: "Security cameras", sub: "Installed and on your phone" },
     { to: "/wifi-installation-tampa", label: "Wi-Fi & internet", sub: "Whole-home and office coverage" },
+    { to: "/electronics-recycling-tampa", label: "Tech recycling pickup", sub: "Free pickup of old computers, phones & TVs" },
   ],
 };
 
@@ -113,6 +114,7 @@ const MORE: Menu = {
 const QUICK: { to: string; label: string }[] = [
   { to: IT_SERVICES_PATH, label: "Computer repair" },
   { to: "/security-camera-installation-tampa", label: "Cameras" },
+  { to: "/electronics-recycling-tampa", label: "Tech recycling" },
   { to: OFFICE_SETUP_PATH, label: "Office setup" },
   { to: "/grow", label: "Websites & ads" },
   { to: SHOP_PATH, label: "Review cards" },
@@ -244,6 +246,7 @@ export function Header({ focus: focusProp = false }: { focus?: boolean }) {
             {[
               [IT_SERVICES_PATH, "Windows computer repair"],
               ["/security-camera-installation-tampa", "Cameras & Ring doorbells"],
+              ["/electronics-recycling-tampa", "Free tech recycling pickup · all Tampa Bay"],
               [`${IT_SERVICES_PATH}#prices`, "Phone & tablet setup"],
               [OFFICE_SETUP_PATH, "Office IT setup"],
               ["/grow", "Websites & ads"],

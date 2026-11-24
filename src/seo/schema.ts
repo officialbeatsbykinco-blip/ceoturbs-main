@@ -52,6 +52,8 @@ export const organization = (): JsonLd => ({
     "Phone and tablet setup",
     "Security camera and video doorbell installation",
     "Remote computer support",
+    "Electronics recycling and e-waste pickup",
+    "Hard drive data destruction",
     "Office setup and cable management",
     "TV mounting and digital menu screens",
     "Search engine optimization",

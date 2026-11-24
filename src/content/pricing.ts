@@ -474,6 +474,16 @@ export const INSTALL_PRICES: PriceItem[] = [
   { id: "cam-doorbell", name: "Video doorbell installed", price: 119, billing: "once", summary: "Mounted, wired to your chime and set up in the app.", includes: [] },
 ];
 
+/**
+ * Tech recycling pickup (/electronics-recycling-tampa). Pickup is free: we come to the customer, wipe or destroy
+ * the drives and take everything to an e-waste recycler. Price 0 shows as "Free" on the page.
+ */
+export const RECYCLING_PRICES: PriceItem[] = [
+  { id: "recycle-pickup", name: "Pickup at your home or business", price: 0, billing: "once", summary: "Computers, laptops, phones, tablets, printers, cables and more, picked up within 40 miles of Temple Terrace.", includes: [] },
+  { id: "recycle-wipe", name: "Data wipe or hard drive destruction", price: 0, billing: "once", summary: "Every drive wiped, or drilled in front of you if you want to watch.", includes: [] },
+  { id: "recycle-office", name: "Office & business cleanouts", price: 0, billing: "once", summary: "Old workstations, servers, monitors and network gear, loaded up and hauled away.", includes: [] },
+];
+
 /** "from $99" style label for an IT_SERVICES item. */
 export const itPrice = (id: string) => {
   const item = IT_SERVICES.find((p) => p.id === id);
@@ -482,6 +492,8 @@ export const itPrice = (id: string) => {
 };
 
 export const usd = (n: number) => `$${n.toLocaleString("en-US")}`;
+/** A page price: "Free" for $0, else "from $99" or "$99". */
+export const priceTag = (p: Pick<PriceItem, "price" | "from">) => (p.price === 0 ? "Free" : `${p.from ? "from " : ""}${usd(p.price)}`);
 export const byId = (id: string) => {
   const item = ALL_PRICES.find((p) => p.id === id);
   if (!item) throw new Error(`Unknown price id ${id}`);

@@ -2,7 +2,7 @@
 // One focused action: the quiz (phones text us, computers leave a number then pick a time), with Call one tap away.
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Calendar, Check, ClipboardCheck, Home, MapPin, MessageSquare, Phone, Wrench } from "lucide-react";
+import { Calendar, Check, ClipboardCheck, Home, Mail, MapPin, MessageSquare, Phone, Wrench } from "lucide-react";
 import { CallLink } from "@/components/site/CallLink";
 import { FAQList, SectionHeader } from "@/components/blocks/Basics";
 import { ServiceAreaList } from "@/components/blocks/ServiceAreaList";
@@ -10,8 +10,9 @@ import { InstallQuiz } from "@/components/tech/InstallQuiz";
 import { CustomerReview, FounderBadge } from "@/components/tech/FounderBadge";
 import { InstallCalEmbed } from "@/components/booking/InstallCalEmbed";
 import { INSTALL_BOOKING, SITE } from "@/config/site";
-import { INSTALL_PAGES, installPage } from "@/content/install-pages";
-import { usd } from "@/content/pricing";
+import { INSTALL_PAGES, installPage, quizWords } from "@/content/install-pages";
+import { priceTag } from "@/content/pricing";
+import { smsHref } from "@/lib/sms";
 import { OFFICE_FROM, OfficePrices } from "@/components/blocks/OfficePrices";
 import { BeforeAfter, OFFICE_BEFORE_AFTER } from "@/components/visuals/BeforeAfter";
 import { OFFICE_SETUP_PATH } from "@/content/tech-pages";
@@ -31,6 +32,13 @@ export default function InstallPage({ path }: { path: string }) {
   }, [page]);
 
   const business = page.audience === "business";
+  const words = quizWords(page);
+  const emailHref = `mailto:${SITE.email}?subject=${encodeURIComponent(`${page.name}: pickup request`)}&body=${encodeURIComponent("Hi Chris, here's what I have and my city/ZIP: ")}`;
+  const textLink = page.textFirst && (
+    <a href={smsHref(page.textFirst.sms)} data-call-location={`${page.slug} text`} className="btn-chrome inline-flex items-center justify-center gap-2 !py-4 !text-lg sm:hidden">
+      <MessageSquare className="h-5 w-5" aria-hidden /> Text us a photo
+    </a>
+  );
   // Consumer pages cross-link each other; the business (Google Ads) page links to no consumer page.
   const others = business ? [] : INSTALL_PAGES.filter((p) => p.path !== page.path && !p.audience);
 
@@ -57,7 +65,7 @@ export default function InstallPage({ path }: { path: string }) {
               <div className="mt-5 flex flex-wrap gap-2 text-sm">
                 {page.prices.slice(0, 3).map((p) => (
                   <span key={p.id} className="rounded-full border border-border/80 bg-white/[0.03] px-3 py-1.5 text-muted-foreground">
-                    {p.name} <span className="font-semibold text-foreground">{p.from ? "from " : ""}{usd(p.price)}</span>
+                    {p.name} <span className="font-semibold text-foreground">{priceTag(p)}</span>
                   </span>
                 ))}
               </div>
@@ -66,14 +74,16 @@ export default function InstallPage({ path }: { path: string }) {
               <a href="#book" className="btn-ignite btn-shine inline-flex items-center justify-center gap-2 !py-4 !text-lg">
                 <Calendar className="hidden h-5 w-5 sm:block" aria-hidden />
                 <MessageSquare className="h-5 w-5 sm:hidden" aria-hidden />
-                <span className="sm:hidden">Get my price</span>
-                <span className="hidden sm:inline">Book a time</span>
+                <span className="sm:hidden">{words.cta}</span>
+                <span className="hidden sm:inline">{page.textFirst ? words.cta : "Book a time"}</span>
               </a>
               <CallLink location={`${page.slug} hero`} icon className="btn-blue justify-center !py-4 !text-lg">
                 Call {SITE.phone.display}
               </CallLink>
+              {textLink}
             </div>
-            <FounderBadge className="mt-5 max-w-xl" line={business ? "I do the setup myself and give you a written price first. Call and you get me." : page.remote ? "I tune your PC myself, live with you. Call and you get me, not a call center." : "I come out and do the work myself. Call and you get me, not a call center."} />
+            {page.textFirst && <p className="mt-3 text-[15px] text-muted-foreground">Call or text <span className="font-semibold text-foreground">{SITE.phone.display}</span>, or email <a href={emailHref} className="font-semibold text-foreground underline underline-offset-2">{SITE.email}</a>. A photo of the pile is all we need.</p>}
+            <FounderBadge className="mt-5 max-w-xl" line={business ? "I do the setup myself and give you a written price first. Call and you get me." : page.textFirst ? "I do the pickups myself. Call or text and you get me, not a call center." : page.remote ? "I tune your PC myself, live with you. Call and you get me, not a call center." : "I come out and do the work myself. Call and you get me, not a call center."} />
             {/* The review mentions phones: keep it off the business-only (Google Ads) page. */}
             {!business && <CustomerReview className="mt-3 max-w-xl" />}
             <ul className="mt-6 grid max-w-xl gap-x-4 gap-y-2 text-[15px] text-muted-foreground sm:grid-cols-2">
@@ -86,6 +96,10 @@ export default function InstallPage({ path }: { path: string }) {
             </ul>
           </div>
           <div id="book" className="min-w-0 scroll-mt-24">
+            {page.textFirst ? (
+              <InstallQuiz page={page} id="book-form" className="min-w-0" />
+            ) : (
+            <>
             <div className="hidden rounded-3xl border border-border bg-card p-5 shadow-xl sm:block sm:p-7">
               <p className="flex items-center gap-2 font-display text-2xl font-bold leading-tight">
                 <Calendar className="h-6 w-6 shrink-0 text-turbo" aria-hidden /> Book your time
@@ -96,6 +110,8 @@ export default function InstallPage({ path }: { path: string }) {
             <div className="sm:hidden">
               <InstallQuiz page={page} id="book-mobile" className="min-w-0" />
             </div>
+            </>
+            )}
           </div>
         </div>
       </section>
@@ -114,8 +130,7 @@ export default function InstallPage({ path }: { path: string }) {
                     <span className="block text-sm text-muted-foreground">{p.summary}</span>
                   </span>
                   <span className="shrink-0 whitespace-nowrap text-lg font-bold">
-                    {p.from ? "from " : ""}
-                    {usd(p.price)}
+                    {priceTag(p)}
                   </span>
                 </li>
               ))}
@@ -138,6 +153,22 @@ export default function InstallPage({ path }: { path: string }) {
           </ul>
         </div>
       </section>
+
+      {page.facts && (
+        <section className="section border-t border-border" aria-labelledby="why">
+          <div className="container-x">
+            <SectionHeader title={<span id="why">Why old tech can't go in the trash</span>} lede="Recycling keeps Tampa Bay clean, keeps fires out of garbage trucks and keeps your data private." />
+            <div className="mt-8 grid gap-4 sm:grid-cols-2">
+              {page.facts.map((f) => (
+                <div key={f.title} className="panel p-6">
+                  <h3 className="font-display text-lg font-bold">{f.title}</h3>
+                  <p className="mt-2 text-[15px] text-muted-foreground">{f.body}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       <section className="section border-t border-border" aria-labelledby="how">
         <div className="container-x">
@@ -206,18 +237,24 @@ export default function InstallPage({ path }: { path: string }) {
       <section className="section border-t border-border" aria-labelledby="final">
         <div className="container-x">
           <div className="panel p-6 text-center sm:p-10">
-            <h2 id="final" className="h-section">Get your price today.</h2>
-            <p className="lede mx-auto">Text or call {SITE.phone.display}. Price up front, pay after it works.</p>
+            <h2 id="final" className="h-section">{page.textFirst ? "Get your old tech picked up." : "Get your price today."}</h2>
+            <p className="lede mx-auto">{page.textFirst ? `Call or text ${SITE.phone.display}. Free pickup, drives wiped, nothing in the landfill.` : `Text or call ${SITE.phone.display}. Price up front, pay after it works.`}</p>
             <div className="mt-7 grid gap-3 sm:flex sm:justify-center">
               <a href="#book" className="btn-ignite inline-flex items-center justify-center gap-2 !py-4 !text-lg">
                 <Calendar className="hidden h-5 w-5 sm:block" aria-hidden />
                 <MessageSquare className="h-5 w-5 sm:hidden" aria-hidden />
-                <span className="sm:hidden">Get my price</span>
-                <span className="hidden sm:inline">Book a time</span>
+                <span className="sm:hidden">{words.cta}</span>
+                <span className="hidden sm:inline">{page.textFirst ? words.cta : "Book a time"}</span>
               </a>
               <CallLink location={`${page.slug} final`} className="btn-blue justify-center !py-4 !text-lg">
                 <Phone className="h-5 w-5" aria-hidden /> Call now
               </CallLink>
+              {textLink}
+              {page.textFirst && (
+                <a href={emailHref} className="btn-chrome inline-flex items-center justify-center gap-2 !py-4 !text-lg">
+                  <Mail className="h-5 w-5" aria-hidden /> Email us
+                </a>
+              )}
             </div>
           </div>
         </div>

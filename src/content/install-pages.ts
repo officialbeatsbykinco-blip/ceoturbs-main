@@ -3,7 +3,7 @@
 // Prices come from content/pricing.ts so the page, its schema and the ads agree. Cameras have no set price yet.
 import { FPS_BOOKING, SITE, type CalEvent } from "@/config/site";
 import { ALL_SETUP_CITIES } from "@/content/service-areas";
-import { INSTALL_PRICES, IT_SERVICES, SETUP, usd, type PriceItem } from "@/content/pricing";
+import { INSTALL_PRICES, IT_SERVICES, RECYCLING_PRICES, SETUP, usd, type PriceItem } from "@/content/pricing";
 import type { FAQ } from "@/content/services";
 
 export type Choice = { id: string; label: string };
@@ -49,8 +49,26 @@ export type InstallPage = {
   areaLede?: string;
   /** Service name in the LocalService schema (default: "<service> in Tampa Bay"). */
   schemaName?: string;
+  /** Quiz and button wording when the page isn't asking for a price (default: DEFAULT_WORDS). */
+  words?: Partial<QuizWords>;
+  /** Calls and texts first: desktop gets the quiz (we text back) instead of the calendar, phones get a Text button. */
+  textFirst?: { sms: string };
+  /** Plain-language explainer cards (why it matters), for people and AI answers. */
+  facts?: { title: string; body: string }[];
   seo: { title: string; description: string };
 };
+
+export type QuizWords = { cta: string; jobs: string; title: string; ask: string; where: string; submit: string; sent: string };
+export const DEFAULT_WORDS: QuizWords = {
+  cta: "Get my price",
+  jobs: "What do you need?",
+  title: "Get your price",
+  ask: "", // filled per page: "Hi Chris! I'd like a price for <service>."
+  where: "Where do we text your price?",
+  submit: "Text me my price",
+  sent: "We'll text you a price shortly. Want a set time now? Pick one below.",
+};
+export const quizWords = (page: InstallPage): QuizWords => ({ ...DEFAULT_WORDS, ask: `Hi Chris! I'd like a price for ${page.service}.`, ...page.words });
 
 /** True when the quiz needs a ZIP: every in-person job, and remote-capable pages only when they pick in person. */
 export const needsZip = (page: Pick<InstallPage, "remote">, a: Pick<InstallAnswers, "picks">) => !page.remote || a.picks[page.remote.question] === page.remote.inPerson;
@@ -329,6 +347,90 @@ INSTALL_PAGES.push({
   },
 });
 
+/**
+ * Tech recycling: free pickup of old electronics anywhere within 40 miles of Temple Terrace. Consumer and business
+ * (Meta, organic and AI search). Calls and texts first, so desktop visitors get the quiz, not a calendar.
+ */
+const [recyclePickup, recycleWipe, recycleOffice] = RECYCLING_PRICES;
+INSTALL_PAGES.push({
+  slug: "tech-recycling",
+  path: "/electronics-recycling-tampa",
+  name: "Tech recycling Tampa",
+  service: "a free tech recycling pickup",
+  category: "tech_recycling",
+  chip: "Free pickup · Tampa, St. Pete, Clearwater & all of Tampa Bay, FL",
+  h1: ["Old computers, phones or TVs?", "We pick them up and recycle them, free."],
+  lede: "Electronics don't belong in the trash. Call, text or email us and we come to your home or business in Tampa, St. Petersburg, Clearwater, Brandon, Wesley Chapel, Lakeland or anywhere within 40 miles of Temple Terrace, Florida, wipe or destroy every hard drive, and haul your old tech away to be reused or recycled. Free pickup, no drop-off trip.",
+  promises: ["Free pickup at your door", "Hard drives wiped or destroyed", "Homes and businesses", "Kept out of the landfill"],
+  pricesLede: "Pickup is free for everything on our list. Big tube TVs or a whole truckload? Text a photo and we'll confirm before we come.",
+  areaLede: "Not just Tampa: we pick up across Hillsborough, Pinellas, Pasco, Hernando, Polk and Manatee counties, every city within about 40 miles of Temple Terrace, Florida.",
+  schemaName: "Free electronics recycling pickup in Tampa Bay, Florida (Tampa, St. Petersburg, Clearwater)",
+  prices: [recyclePickup, recycleWipe, recycleOffice],
+  priceNote: "We take laptops, desktops, monitors, flat-screen TVs, phones, tablets, printers, game consoles, routers, keyboards, cables, chargers and servers. We don't take large appliances (fridges, washers, AC units) or leaking batteries.",
+  words: {
+    cta: "Schedule free pickup",
+    jobs: "What do you have to recycle?",
+    title: "Schedule a free pickup",
+    ask: "Hi Chris! I have old tech for a free recycling pickup.",
+    where: "Where do we text your pickup time?",
+    submit: "Text me a pickup time",
+    sent: "We'll text you a pickup time shortly. Want to lock one in now? Pick a time below.",
+  },
+  textFirst: { sms: "Hi Chris, I have old tech to recycle. Here's a photo / what I have: " },
+  jobs: [
+    { id: "laptops", label: "Laptops" },
+    { id: "desktops", label: "Desktops & towers" },
+    { id: "phones", label: "Phones & tablets" },
+    { id: "screens", label: "Monitors & TVs" },
+    { id: "printers", label: "Printers & scanners" },
+    { id: "consoles", label: "Game consoles" },
+    { id: "network", label: "Routers, modems & servers" },
+    { id: "cables", label: "Cables, chargers & keyboards" },
+  ],
+  questions: [
+    { id: "load", label: "How much is there?", short: "Amount", options: [{ id: "few", label: "A few items" }, { id: "car", label: "A carload" }, { id: "office", label: "A whole office" }] },
+    PLACE,
+    { id: "drives", label: "What about the data?", short: "Data", options: [{ id: "wipe", label: "Wipe the drives" }, { id: "destroy", label: "Destroy them in front of me" }, { id: "none", label: "No data on it" }] },
+  ],
+  includes: [
+    "Free pickup at your home, apartment or office",
+    "We carry it out for you, no lifting",
+    "Hard drives wiped, or drilled in front of you",
+    "Working devices get a second life",
+    "Everything else goes to electronics recycling, not the landfill",
+    "Business cleanouts of whole offices",
+  ],
+  steps: [
+    { title: "Call or text what you have", body: "A photo or a quick list: laptops, TVs, a closet full of cables. Or tap through the form." },
+    { title: "Pick a pickup time", body: "We text back a time that works. Pickup is free." },
+    { title: "We haul it away", body: "We carry it out, take care of the data and get it recycled. You don't lift a thing." },
+  ],
+  facts: [
+    { title: "Electronics can't go in the trash", body: "Computers, TVs and phones hold lead, mercury and other metals that leak out of a landfill into soil and water. Tampa Bay counties ask residents to keep them out of curbside trash." },
+    { title: "Batteries start fires", body: "Lithium batteries in laptops, phones and vapes can catch fire when a garbage truck crushes them. Recycling keeps them out of trucks and dumps." },
+    { title: "Your data stays private", body: "An old computer or phone still has your photos, passwords and accounts on it. We wipe every drive or destroy it in front of you before anything leaves." },
+    { title: "Old tech gets a second life", body: "Working laptops and parts get reused, and the rest is broken down so the metals and plastics can be made into new things." },
+  ],
+  faqs: [
+    { q: "Where can I recycle old electronics near Tampa?", a: `Call or text CEO Turbo at ${SITE.phone.display} or email ${SITE.email}. We pick up old computers, laptops, phones, tablets, monitors, TVs, printers and cables free at your home or business anywhere within about 40 miles of Temple Terrace, so you don't have to drive to a drop-off site.` },
+    { q: "Do you pick up in St. Petersburg, Clearwater and outside Tampa?", a: `Yes. We pick up all over Tampa Bay, Florida, not just Tampa: St. Petersburg, Clearwater, Largo, Pinellas Park, Dunedin, Palm Harbor, Tarpon Springs, Brandon, Riverview, Wesley Chapel, Land O' Lakes, New Port Richey, Spring Hill, Plant City, Lakeland and Bradenton, plus every town in between. Call or text ${SITE.phone.display} or email ${SITE.email}.` },
+    { q: "How do I schedule an electronics recycling pickup?", a: `Call or text ${SITE.phone.display} (a photo of what you have is perfect), email ${SITE.email}, or tap through the form on this page. We reply with a pickup time.` },
+    { q: "Is electronics pickup really free?", a: "Yes. Pickup, carrying it out and the data wipe are free for laptops, desktops, phones, tablets, monitors, flat-screen TVs, printers, consoles, networking gear and cables. Big tube TVs or a full truckload: text a photo first and we'll confirm before we come." },
+    { q: "Can I throw old electronics in the trash?", a: "You shouldn't. Electronics hold lead, mercury and lithium batteries that can leak into soil and water or start fires in garbage trucks, and Tampa Bay counties ask residents to keep them out of curbside trash. Recycling them is the safe way to get rid of them." },
+    { q: "What happens to my data?", a: "Every hard drive and phone is wiped before it's reused or recycled. Want to see it done? We'll drill the hard drive in front of you at pickup, free." },
+    { q: "What electronics do you take?", a: "Laptops, desktops and towers, monitors, flat-screen TVs, phones, tablets, printers and scanners, game consoles, routers, modems, servers, keyboards, mice, cables and chargers. We don't take large appliances like fridges, washers or AC units, or leaking batteries." },
+    { q: "Do you pick up from businesses and offices?", a: "Yes. Offices, schools, clinics and shops: old workstations, monitors, servers and network gear, loaded up and hauled away, with every drive wiped or destroyed." },
+    { q: "Do I have to bring it outside?", a: "No. We come in and carry it out, from a closet, garage, apartment or office." },
+    { q: "How fast can you pick up?", a: `Usually within a few days, often the same week. Call or text ${SITE.phone.display} with what you have and we'll text you a time.` },
+    WHERE_FAQ("We pick up old tech"),
+  ],
+  value: 40,
+  seo: {
+    title: "Free Electronics Recycling: Tampa, St. Pete & Clearwater",
+    description: `Free pickup of old computers, phones and TVs in Tampa, St. Pete, Clearwater and all of Tampa Bay, FL. Drives wiped. Call or text ${SITE.phone.display}.`,
+  },
+});
+
 export const INSTALL_PATHS = INSTALL_PAGES.map((p) => p.path);
 export const installPage = (path: string) => INSTALL_PAGES.find((p) => p.path === path.replace(/\/$/, ""));
 
@@ -356,7 +458,7 @@ export function installLabels(page: InstallPage, a: InstallAnswers) {
 export function installMessage(page: InstallPage, a: InstallAnswers) {
   const l = installLabels(page, a);
   return [
-    `Hi Chris! I'd like a price for ${page.service}.`,
+    quizWords(page).ask,
     l.jobs && `Need: ${l.jobs}`,
     ...l.answers,
     a.details.trim() && `Details: ${a.details.trim()}`,
