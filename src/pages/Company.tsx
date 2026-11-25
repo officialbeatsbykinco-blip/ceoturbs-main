@@ -8,6 +8,8 @@ import { BookingSection, Founder, PathPicker, ServiceGrid } from "@/components/b
 import { ProofStats, WorkGrid, GSCProof } from "@/components/blocks/Proof";
 import { CallLink } from "@/components/site/CallLink";
 import { SocialLinks } from "@/components/site/SocialLinks";
+import { ServiceAreaList } from "@/components/blocks/ServiceAreaList";
+import { smsHref } from "@/lib/sms";
 import { Breadcrumbs, DirectAnswer, SectionHeader } from "@/components/blocks/Basics";
 
 export function About() {
@@ -80,7 +82,19 @@ export function Contact() {
       <section className="pt-28 sm:pt-32">
         <div className="container-x">
           <Breadcrumbs items={[{ name: "Contact", path: "/contact" }]} />
-          <SectionHeader as="h1" title="Contact CEO Turbo" lede="The fastest way to reach us is to book a free Brand Boost call — you'll talk to Christopher directly." />
+          <SectionHeader as="h1" title="Contact CEO Turbo" lede="Call or text for tech help anywhere from Tampa, St. Pete, Clearwater and Brandon to Lakeland, Winter Haven, Sarasota and Orlando. You talk to Christopher directly." />
+          <div className="panel mt-10 p-6 sm:p-8">
+            <h2 className="text-xl font-semibold">Tech help at your door</h2>
+            <p className="mt-2 text-[15px] leading-relaxed text-muted-foreground">Computer and laptop repair, phone and iPad screens and batteries, office setup, cameras, Wi-Fi and free electronics recycling pickup, anywhere within about 1.5 hours of Temple Terrace. Price before any work starts.</p>
+            <div className="mt-5 grid gap-3 sm:flex">
+              <CallLink location="contact tech" icon className="btn-ignite justify-center !py-3.5 !text-base">
+                Call {SITE.phone.display}
+              </CallLink>
+              <a href={smsHref("Hi Chris, I need tech help. My city and what's wrong: ")} data-call-location="contact tech text" className="btn-blue inline-flex items-center justify-center gap-2 !py-3.5 !text-base">
+                Text us
+              </a>
+            </div>
+          </div>
           <div className="mt-12 grid gap-5 md:grid-cols-3">
             <div className="panel flex flex-col p-6">
               <h2 className="text-xl font-semibold">Grow your business</h2>
@@ -144,11 +158,25 @@ export function Tampa() {
             <Link to="/computer-repair-tampa" className="btn-ignite">
               Computer &amp; laptop repair
             </Link>
+            <Link to="/phone-repair-tampa" className="btn-chrome">
+              Phone &amp; iPad repair
+            </Link>
             <Link to="/office-setup-tampa" className="btn-chrome">
               Office setup
             </Link>
-            <BookButton note="Tampa page">Websites &amp; ads call</BookButton>
+            <Link to="/electronics-recycling-tampa" className="btn-chrome">
+              Free tech recycling pickup
+            </Link>
+            <CallLink location="service area hero" icon className="btn-blue justify-center">
+              Call {SITE.phone.display}
+            </CallLink>
           </div>
+        </div>
+      </section>
+      <section className="section border-t border-border" aria-labelledby="cities">
+        <div className="container-x">
+          <SectionHeader title={<span id="cities">Every city we come to</span>} lede="Not just Tampa. We drive anywhere within about 1.5 hours of Temple Terrace, Florida. Don't see your town? Text your ZIP code and we'll confirm." />
+          <ServiceAreaList className="mt-8" />
         </div>
       </section>
       <section className="section" aria-labelledby="ga-work">
@@ -161,7 +189,7 @@ export function Tampa() {
       </section>
       <section className="section border-t border-border">
         <div className="container-x">
-          <SectionHeader title="What we do for Tampa Bay businesses" />
+          <SectionHeader title="What we do for Florida businesses" />
           <div className="mt-10">
             <ServiceGrid slugs={["google-business-profile", "website-design", "meta-ads", "google-ads", "seo-aeo-geo"]} />
           </div>
