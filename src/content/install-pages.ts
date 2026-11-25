@@ -521,8 +521,8 @@ export const WHEN_OPTIONS: Choice[] = [
   { id: "flexible", label: "No rush" },
 ];
 
-export type InstallAnswers = { jobs: string[]; picks: Record<string, string>; when: string; details: string; zip: string; name: string; phone: string; smsOptIn: boolean };
-export const EMPTY_INSTALL: InstallAnswers = { jobs: [], picks: {}, when: "asap", details: "", zip: "", name: "", phone: "", smsOptIn: false };
+export type InstallAnswers = { jobs: string[]; picks: Record<string, string>; when: string; details: string; zip: string; name: string; phone: string; email: string; smsOptIn: boolean };
+export const EMPTY_INSTALL: InstallAnswers = { jobs: [], picks: {}, when: "asap", details: "", zip: "", name: "", phone: "", email: "", smsOptIn: false };
 
 /** "Jobs: …" and each question's answer as readable labels. */
 export function installLabels(page: InstallPage, a: InstallAnswers) {

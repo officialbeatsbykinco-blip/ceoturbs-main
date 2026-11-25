@@ -10,6 +10,7 @@
 const SECRET = "REPLACE_WITH_LEADS_WEBHOOK_SECRET"; // same value as LEADS_WEBHOOK_SECRET in Vercel (copy in docs/leads-apps-script.local.js, gitignored)
 const SHEET_ID = "1sToqSfGp6eDAowaqvmtKxDPUHqDGNUruWsnIUzkr1GI"; // FREE Lead Magnet Leads (works even if this script is not attached to the sheet)
 const ORDER_EMAIL = "stackmodenetwork@gmail.com"; // gets an email for every paid shirt order ("" = off)
+const LEAD_EMAIL = "ceoturbo@proton.me"; // gets an email for every lead, booking and order with all its answers ("" = off)
 
 // header label shown in the sheet  ->  field name sent by the website
 const ATTR = {
@@ -474,8 +475,30 @@ function doPost(e) {
     sheet.getRange(next, 1, 1, row.length).setValues([row]);
     if (name === "Booked Calls") markQuizBooked(book, data);
     if (name === "Shirt Designs") sheet.setRowHeight(next, 110);
-    // Optional: email yourself every lead
-    // MailApp.sendEmail("you@example.com", "New lead: " + data.name, JSON.stringify(data, null, 2));
+    // Every lead, booking and order: email it with every answer, so desktop form leads never sit unseen in the sheet.
+    if (LEAD_EMAIL && name !== "Shirt Designs") {
+      try {
+        const lines = [];
+        headers.forEach(function (h, i) {
+          const v = row[i];
+          if (v !== "" && v !== null && v !== undefined && h !== "Status") lines.push(h + ": " + v);
+        });
+        const what = data.contentName || data.service || data.type || "lead";
+        const phone = String(data.phone || "").replace(/[^\d+]/g, "");
+        MailApp.sendEmail(
+          LEAD_EMAIL,
+          "New " + name.replace(/s$/, "") + ": " + (data.name || "no name") + " - " + what,
+          [
+            phone ? "Call or text them: " + data.phone : "No phone number given.",
+            data.email ? "Email: " + data.email : "",
+            "",
+            lines.join("\n"),
+            "",
+            "Sheet: https://docs.google.com/spreadsheets/d/" + SHEET_ID + " (tab: " + name + ")",
+          ].filter(function (l, i) { return l !== "" || i === 2 || i === 4; }).join("\n")
+        );
+      } catch (e) {}
+    }
     // A new paid shirt order: email yourself so it goes to the print partner the same day.
     if (name === "Shirt Orders" && ORDER_EMAIL) {
       try {

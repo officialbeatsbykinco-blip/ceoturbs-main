@@ -77,7 +77,7 @@ export default async function handler(req, res) {
   const officeQuiz = !!tech && (text(body.service, 80) === "office-quiz" || text(body.service, 80).startsWith("setup-quiz:"));
   const install = type === "install" ? installFields(body) : null;
   const smsSend = (textQuiz || !!tech || !!install) && body.channel === "sms";
-  const { lead, error } = cleanLead(body, { phoneOptional: !!dev || type === "shirt-exit-intent" || smsSend, emailOptional: type === "battery" || textQuiz || !!tech || !!install });
+  const { lead, error } = cleanLead(body, { phoneOptional: !!dev || type === "shirt-exit-intent" || smsSend || (!!install && !!text(body.email, 200)), emailOptional: type === "battery" || textQuiz || !!tech || !!install });
   if (error) return send(res, 400, { error });
 
   const battery = type === "battery" ? batteryFields(body) : null;

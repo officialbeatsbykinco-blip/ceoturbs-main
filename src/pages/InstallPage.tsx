@@ -75,8 +75,14 @@ export default function InstallPage({ path }: { path: string }) {
               <a href="#book" className="btn-ignite btn-shine inline-flex items-center justify-center gap-2 !py-4 !text-lg">
                 <Calendar className="hidden h-5 w-5 sm:block" aria-hidden />
                 <MessageSquare className="h-5 w-5 sm:hidden" aria-hidden />
+                {page.textFirst ? (
+                <span>{words.cta}</span>
+                ) : (
+                <>
                 <span className="sm:hidden">{words.cta}</span>
-                <span className="hidden sm:inline">{page.textFirst ? words.cta : "Book a time"}</span>
+                <span className="hidden sm:inline">Book a time</span>
+                </>
+                )}
               </a>
               <CallLink location={`${page.slug} hero`} icon className="btn-blue justify-center !py-4 !text-lg">
                 Call {SITE.phone.display}
@@ -267,8 +273,14 @@ export default function InstallPage({ path }: { path: string }) {
               <a href="#book" className="btn-ignite inline-flex items-center justify-center gap-2 !py-4 !text-lg">
                 <Calendar className="hidden h-5 w-5 sm:block" aria-hidden />
                 <MessageSquare className="h-5 w-5 sm:hidden" aria-hidden />
+                {page.textFirst ? (
+                <span>{words.cta}</span>
+                ) : (
+                <>
                 <span className="sm:hidden">{words.cta}</span>
-                <span className="hidden sm:inline">{page.textFirst ? words.cta : "Book a time"}</span>
+                <span className="hidden sm:inline">Book a time</span>
+                </>
+                )}
               </a>
               <CallLink location={`${page.slug} final`} className="btn-blue justify-center !py-4 !text-lg">
                 <Phone className="h-5 w-5" aria-hidden /> Call now

@@ -368,6 +368,15 @@ export const artistFromPrice = Math.min(...ARTIST_SHIRT.styles.map((s) => s.pric
  */
 export const REVIEWS = [
   {
+    name: "Patricia S.",
+    stars: 5,
+    text: "I highly recommend CEO turbo computer repair. Christopher was very prompt and knowledgeable. He had my computer up and running in no time. The price of the repair was very reasonable too. Thank you Christopher.",
+    short: "He had my computer up and running in no time. The price of the repair was very reasonable too.",
+    job: "Computer repair",
+    date: "2026-11-21",
+    source: "Google",
+  },
+  {
     name: "Antony O.",
     stars: 5,
     text: "Christopher at CEO Turbo did an excellent job with the IT setup at our Prime 1 office in Tampa.",

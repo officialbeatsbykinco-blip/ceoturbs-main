@@ -24,7 +24,7 @@ export function InstallQuiz({ page, id = "book", className }: { page: InstallPag
   const [texting, setTexting] = useState(true);
   const [done, setDone] = useState(false);
   const [sending, setSending] = useState(false);
-  const [errors, setErrors] = useState<{ name?: string; zip?: string; phone?: string; pick?: string }>({});
+  const [errors, setErrors] = useState<{ name?: string; zip?: string; phone?: string; email?: string; pick?: string }>({});
   const [honeypot, setHoneypot] = useState("");
   const [showDetails, setShowDetails] = useState(false);
   // The details step shows one question per screen (then "How soon?"); a tap moves on by itself.
@@ -78,7 +78,7 @@ export function InstallQuiz({ page, id = "book", className }: { page: InstallPag
 
   const lead = (channel: "sms" | "form") => {
     const l = installLabels(page, a);
-    const user = { name: a.name.trim(), phone: a.phone.trim() || undefined, zip: (zipNeeded && a.zip.trim()) || undefined, externalId: visitorId() };
+    const user = { name: a.name.trim(), phone: a.phone.trim() || undefined, email: a.email.trim() || undefined, zip: (zipNeeded && a.zip.trim()) || undefined, externalId: visitorId() };
     const eventId = track(
       "generate_lead",
       { lead_source: "install-quiz", source: page.slug, channel, value: page.value, currency: "USD", content_name: page.name, content_category: page.category, jobs: a.jobs.join(","), when: a.when },
@@ -94,6 +94,7 @@ export function InstallQuiz({ page, id = "book", className }: { page: InstallPag
       quizId: newEventId("i"),
       name: user.name,
       phone: a.phone.trim(),
+      email: a.email.trim(),
       smsOptIn: a.smsOptIn,
       contentName: page.name,
       category: page.category,
@@ -132,7 +133,11 @@ export function InstallQuiz({ page, id = "book", className }: { page: InstallPag
     if (texting) return;
     const errs = check();
     const digits = a.phone.replace(/\D/g, "");
-    if (digits.length < 10 || digits.length > 15) errs.phone = "Enter a valid mobile number.";
+    const email = a.email.trim();
+    const emailGood = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    if (digits && (digits.length < 10 || digits.length > 15)) errs.phone = "Enter a valid mobile number.";
+    if (email && !emailGood) errs.email = "Enter a valid email.";
+    if (!digits && !email) errs.phone = "Add a mobile number or an email so we can reach you.";
     if (Object.keys(errs).length) return setErrors(errs);
     setSending(true);
     await lead("form");
@@ -148,7 +153,7 @@ export function InstallQuiz({ page, id = "book", className }: { page: InstallPag
         <p className="flex items-center gap-2 font-display text-2xl font-bold">
           <Check className="h-6 w-6 shrink-0 text-turbo" aria-hidden /> Got it, {a.name.trim().split(/\s+/)[0]}.
         </p>
-        <p className="mt-2 text-base text-muted-foreground">{w.sent}</p>
+        <p className="mt-2 text-base text-muted-foreground">{a.phone.trim() ? w.sent : "We'll email you shortly. Want a set time now? Pick one below."}</p>
         <InstallCalEmbed className="mt-5" note={`${page.slug}-install-quiz`} booking={page.booking ?? INSTALL_BOOKING} minHeight="560px" />
       </div>
     );
@@ -259,7 +264,7 @@ export function InstallQuiz({ page, id = "book", className }: { page: InstallPag
 
         {step === "send" && (
           <form onSubmit={onSubmit} noValidate className="grid gap-3">
-            <p className="text-lg font-bold leading-tight">{texting ? "Last step: who's it from?" : w.where}</p>
+            <p className="text-lg font-bold leading-tight">{texting ? "Last step: who's it from?" : "How should we reach you?"}</p>
             <div className={cn("grid gap-3", zipNeeded && "grid-cols-[1.4fr_1fr]")}>
               <div>
                 <label htmlFor={`${uid}-name`} className="mb-1.5 block text-sm font-semibold">
@@ -281,10 +286,19 @@ export function InstallQuiz({ page, id = "book", className }: { page: InstallPag
             {!texting && (
               <div>
                 <label htmlFor={`${uid}-phone`} className="mb-1.5 block text-sm font-semibold">
-                  Mobile number <span className="text-[#c2410c]">*</span>
+                  Mobile number
                 </label>
                 <input id={`${uid}-phone`} data-clarity-mask="true" type="tel" className="field" value={a.phone} onChange={(e) => set({ phone: e.target.value })} autoComplete="tel" inputMode="tel" maxLength={30} placeholder="(813) 555-0123" aria-invalid={!!errors.phone} />
                 {errors.phone && <Err text={errors.phone} />}
+              </div>
+            )}
+            {!texting && (
+              <div>
+                <label htmlFor={`${uid}-email`} className="mb-1.5 block text-sm font-semibold">
+                  Email <span className="font-normal text-muted-foreground">(or just the phone number)</span>
+                </label>
+                <input id={`${uid}-email`} data-clarity-mask="true" type="email" className="field" value={a.email} onChange={(e) => set({ email: e.target.value })} autoComplete="email" inputMode="email" maxLength={200} placeholder="you@example.com" aria-invalid={!!errors.email} />
+                {errors.email && <Err text={errors.email} />}
               </div>
             )}
             <label className="hidden" aria-hidden>
@@ -311,7 +325,7 @@ export function InstallQuiz({ page, id = "book", className }: { page: InstallPag
                   </span>
                 </label>
                 <button type="submit" disabled={sending} className="btn-ignite btn-shine w-full justify-center !py-4 !text-lg">
-                  {sending ? <Loader2 className="h-5 w-5 animate-spin" aria-hidden /> : <>{w.submit} <ArrowRight className="h-5 w-5" aria-hidden /></>}
+                  {sending ? <Loader2 className="h-5 w-5 animate-spin" aria-hidden /> : <>Send my request <ArrowRight className="h-5 w-5" aria-hidden /></>}
                 </button>
               </>
             )}
