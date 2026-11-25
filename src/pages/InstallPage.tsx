@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { Calendar, Check, ClipboardCheck, Home, Mail, MapPin, MessageSquare, Phone, Wrench } from "lucide-react";
 import { CallLink } from "@/components/site/CallLink";
 import { FAQList, SectionHeader } from "@/components/blocks/Basics";
+import { GuideLinks } from "@/components/blocks/GuideLinks";
 import { ServiceAreaList } from "@/components/blocks/ServiceAreaList";
 import { InstallQuiz } from "@/components/tech/InstallQuiz";
 import { AcceptsChecker } from "@/components/tech/AcceptsChecker";
@@ -19,6 +20,13 @@ import { BeforeAfter, OFFICE_BEFORE_AFTER } from "@/components/visuals/BeforeAft
 import { OFFICE_SETUP_PATH } from "@/content/tech-pages";
 import { newEventId, serverTrack, track } from "@/lib/track";
 import { ReviewCardStrip } from "@/components/blocks/ReviewCardBlocks";
+
+/** Articles that answer the same questions as each page. */
+const GUIDES_FOR: Record<string, string[]> = {
+  "phone-repair": ["cracked-phone-screen-repair-or-replace", "phone-battery-draining-fast"],
+  "tech-recycling": ["where-to-recycle-electronics-tampa-bay", "how-to-wipe-computer-before-recycling"],
+  "computer-setup": ["how-to-wipe-computer-before-recycling", "computer-repair-vs-replace"],
+};
 
 const STEP_ICONS = [MessageSquare, ClipboardCheck, Home];
 const PROMISES = ["Price up front, before any work", "We come to your home or business", "Tested with you before we leave", "Pay after it works"];
@@ -245,6 +253,7 @@ export default function InstallPage({ path }: { path: string }) {
       </section>
 
       <FAQList faqs={page.faqs} title="Quick answers" />
+      {GUIDES_FOR[page.slug] && <GuideLinks slugs={GUIDES_FOR[page.slug]} />}
 
       {!business && (
       <section className="section border-t border-border" aria-labelledby="more">

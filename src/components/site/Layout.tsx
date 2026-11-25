@@ -22,6 +22,7 @@ import { startUet } from "@/lib/uet";
 import { startTiktok, tiktokPageView } from "@/lib/tiktok";
 import { startReddit, redditPageView } from "@/lib/reddit";
 import { startClarity } from "@/lib/clarity";
+import { isTechGuide } from "@/content/guides";
 
 /** Tags still load for a visitor who never scrolls or taps, once this long has passed. */
 const TAG_FALLBACK_MS = 8000;
@@ -85,7 +86,7 @@ export function Layout({ children }: { children: ReactNode }) {
   // Warm up the booking embed on the first interaction, so the first "Book" tap opens fast.
   useEffect(() => onEngaged(() => void loadCal()), []);
 
-  const soft = SOFT.test(pathname);
+  const soft = SOFT.test(pathname) || isTechGuide(pathname);
   return (
     <>
       {/* display: contents keeps the fixed header's layout; the light colors still inherit down. */}

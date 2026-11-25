@@ -1,4 +1,19 @@
 import type { FAQ } from "./services";
+import { itPrice } from "./pricing";
+
+/** Repair & recycling guides (Nov 25, 2026): consumer searches that lead to a call or text. */
+/** Repair and recycling articles: they get the tech pages' light look and Fix my tech / Call / Text bar, not the marketing one. */
+export const TECH_GUIDE_SLUGS = ["computer-repair-vs-replace", "why-is-my-laptop-so-slow", "computer-wont-turn-on", "cracked-phone-screen-repair-or-replace", "phone-battery-draining-fast", "how-to-wipe-computer-before-recycling", "where-to-recycle-electronics-tampa-bay"];
+export const isTechGuide = (p: string) => TECH_GUIDE_SLUGS.some((s) => p.replace(/\/$/, "") === `/guides/${s}`);
+const TECH_DATE = "2026-11-25";
+const CITIES = "Tampa, St. Pete, Clearwater, Brandon, Lakeland, Winter Haven and Orlando";
+const TECH_RELATED = [
+  { label: "Computer & laptop repair at your door", to: "/computer-repair-tampa" },
+  { label: "Phone & iPad screen and battery repair", to: "/phone-repair-tampa" },
+  { label: "Free electronics recycling pickup", to: "/electronics-recycling-tampa" },
+  { label: "Every city we come to", to: "/tampa" },
+  { label: "Repair or replace your computer?", to: "/guides/computer-repair-vs-replace" },
+];
 
 export type GuideSection = {
   h2: string;
@@ -1265,7 +1280,7 @@ export const GUIDES: Guide[] = [
   },
   {
     slug: "computer-repair-vs-replace",
-    title: "Repair or replace your computer? A cost guide (Tampa)",
+    title: "Repair or replace your computer? A cost guide (Florida)",
     metaTitle: "Computer Repair vs Replace: Florida Cost Guide",
     metaDescription: "Should you repair or replace a slow or broken computer? Real repair prices, when an SSD upgrade beats a new PC, and when replacing is the smarter buy.",
     summary: "Repair when the fix costs well under half the price of a comparable new computer and the machine is still supported: speed-ups, virus removal, SSD upgrades and screen or battery swaps usually qualify. Replace when the motherboard has failed, the computer can't run a supported operating system, or repairs would cost close to a new one.",
@@ -1304,6 +1319,456 @@ export const GUIDES: Guide[] = [
       { label: "Computer shop", to: "/computers" },
       { label: "Office setup", to: "/office-setup-tampa" },
     ],
+  },
+  {
+    slug: "why-is-my-laptop-so-slow",
+    title: "Why is my laptop so slow? 9 real causes and how to fix them",
+    metaTitle: "Why Is My Laptop So Slow? 9 Causes and Fixes",
+    metaDescription: "A slow Windows laptop is usually an old hard drive, startup clutter, low storage or malware. Nine causes, the free fixes, and when a tech is worth it.",
+    summary:
+      "Most slow Windows laptops are slowed by an old spinning hard drive, too many programs starting with Windows, a nearly full drive, pending updates or malware, not by a weak processor. Free fixes handle the clutter; an SSD upgrade fixes the drive and usually makes a 5- to 10-year-old laptop feel new.",
+    audience: "local",
+    published: TECH_DATE,
+    updated: TECH_DATE,
+    readMinutes: 7,
+    sources: [
+      { label: "Microsoft: Windows 10 end of support", url: "https://www.microsoft.com/en-us/windows/end-of-support" },
+      { label: "NIST SP 800-88: media sanitization guidelines", url: "https://csrc.nist.gov/pubs/sp/800/88/r1/final" },
+    ],
+    sections: [
+      {
+        h2: "Why is my laptop so slow all of a sudden?",
+        answer:
+          "A laptop that turns slow overnight is usually doing something in the background: a large Windows update, an antivirus scan, a sync app like OneDrive copying files, or malware. Open Task Manager (Ctrl + Shift + Esc), sort by CPU and Disk, and see which program is at the top. That program is your answer.",
+        bullets: ["Windows Update installing in the background", "OneDrive, Dropbox or Google Drive syncing a big folder", "A scheduled antivirus scan", "A browser with dozens of tabs open", "Malware or a fake 'cleaner' program"],
+      },
+      {
+        h2: "Is an old hard drive making my laptop slow?",
+        answer:
+          "Very often, yes. Laptops sold before about 2018, and many cheap ones since, came with a spinning hard drive. Those drives take a minute or more to boot and freeze when Windows updates. Moving everything to a solid-state drive (SSD) is the single biggest speed-up for an older laptop, and your files and programs stay as they were.",
+        body: [
+          "How to check: open Task Manager, click Performance, and look at Disk 0. If it says HDD, or the disk sits at 100% while you do nothing, the drive is the bottleneck.",
+          `In our visits around ${CITIES}, an SSD swap is the fix we recommend most for laptops that are otherwise fine. SSD upgrade labor starts at ${itPrice("it-ssd")}, and we clone the old drive so nothing is lost.`,
+        ],
+        links: [{ label: "Computer & laptop repair prices", to: "/computer-repair-tampa#prices" }],
+      },
+      {
+        h2: "What are the 9 most common causes of a slow laptop?",
+        answer:
+          "In order of how often we see them: an old spinning hard drive, too many startup programs, a nearly full drive, pending Windows updates, malware or adware, too little memory, overheating from dust, a failing battery forcing power-saving mode, and an unsupported version of Windows.",
+        table: {
+          head: ["Cause", "How to tell", "Fix"],
+          rows: [
+            ["Old hard drive (HDD)", "Task Manager says HDD, disk at 100%", "SSD upgrade"],
+            ["Startup programs", "Long wait after the desktop appears", "Disable in Task Manager → Startup"],
+            ["Drive almost full", "Less than 10–15% free space", "Storage Sense, delete or move files"],
+            ["Pending updates", "Restart prompts, slow shutdowns", "Run Windows Update and restart"],
+            ["Malware or adware", "Pop-ups, new toolbars, fake warnings", "Scan and remove, reset browser"],
+            ["Not enough RAM", "Memory above 85% with a few tabs", "Close apps or add memory"],
+            ["Overheating", "Fan loud, slows after a few minutes", "Clean vents, check fan"],
+            ["Weak battery", "Fast only when plugged in", "Battery replacement"],
+            ["Unsupported Windows", "Windows 10 or older", "Upgrade or replace the computer"],
+          ],
+        },
+      },
+      {
+        h2: "How do I speed up my laptop for free?",
+        answer:
+          "Restart it fully, install all Windows updates, turn off startup programs you don't need, free up space until at least 15% of the drive is empty, uninstall programs you don't recognize, and run a full Microsoft Defender scan. Those six steps fix most slow laptops that don't have a hardware problem.",
+        steps: [
+          "Restart (not just close the lid) and let Windows Update finish.",
+          "Press Ctrl + Shift + Esc, open Startup apps and disable anything you don't need at boot.",
+          "Open Settings → System → Storage and turn on Storage Sense; empty Downloads and the Recycle Bin.",
+          "Settings → Apps: uninstall programs you didn't install on purpose, especially 'PC cleaner' or 'driver updater' apps.",
+          "Windows Security → Virus & threat protection → Scan options → Full scan.",
+          "Restart once more and check Task Manager to see if Disk and CPU now sit low when idle.",
+        ],
+      },
+      {
+        h2: "What makes a laptop slow that I can't fix myself?",
+        answer:
+          "Hardware: a failing or spinning hard drive, too little memory soldered to the board, a fan clogged with dust, or a worn battery. Software you can fix at home; hardware usually needs a tech with the right parts. If the free steps didn't help, the drive is the first thing to test.",
+      },
+      {
+        h2: "Is it worth fixing a slow laptop or should I buy a new one?",
+        answer:
+          "Fix it if the laptop runs Windows 11, the screen and keyboard are fine, and the problem is speed. A cleanup or SSD usually costs a fraction of a new laptop. Replace it if it can't run a supported version of Windows, since Windows 10 stopped getting security updates in October 2025.",
+        links: [{ label: "Repair or replace: the full cost guide", to: "/guides/computer-repair-vs-replace" }],
+      },
+      {
+        h2: "Can someone fix my slow laptop at my house?",
+        answer: `Yes. CEO Turbo fixes slow Windows laptops at your home or business in ${CITIES}, usually the same or next day. In-person speed-ups start at ${itPrice("it-speedup")}, remote speed-ups at ${itPrice("it-remote")}, and you get the price before any work starts.`,
+        links: [{ label: "Book a speed-up at your door", to: "/computer-repair-tampa" }],
+      },
+    ],
+    faqs: [
+      { q: "Why is my laptop so slow even though it's new?", a: "New laptops often ship with trial software, a cheap spinning drive or 4 GB of memory, and run a long first round of Windows updates. Let updates finish, uninstall the trial apps, and check Task Manager. If the drive is an HDD or memory is maxed out, the hardware is the limit." },
+      { q: "Does more RAM make a laptop faster?", a: "Only if you're running out. If Task Manager shows memory above about 85% with your normal apps open, more RAM helps. If memory sits at 50%, adding more does nothing and an SSD is the better upgrade." },
+      { q: "Will an SSD really make my old laptop faster?", a: "For a laptop with a spinning hard drive, yes, dramatically. Boot times usually drop from minutes to under 30 seconds and programs open almost instantly. Your files and programs are cloned to the new drive." },
+      { q: "Can a virus make my laptop slow?", a: "Yes. Adware, crypto-miners and fake cleaner programs run in the background and eat CPU and memory. Pop-ups, a changed browser homepage or warnings asking you to call a number are signs. Never call a number from a pop-up." },
+      { q: "How long does a laptop speed-up take?", a: "A software cleanup usually takes about an hour. An SSD upgrade with cloning takes one to two hours. Both are done at your place." },
+      { q: "Do you fix MacBooks?", a: "No. We repair Windows laptops and desktops, and phone and tablet screens and batteries. For a MacBook, Apple or an Apple-authorized shop is the right call." },
+      { q: "Do you come to Brandon, St. Pete and Winter Haven?", a: `Yes. We come to homes and businesses in ${CITIES} and every town within about 1.5 hours of Temple Terrace.` },
+      { q: "How much does it cost to speed up a laptop?", a: `In-person speed-ups start at ${itPrice("it-speedup")}, remote at ${itPrice("it-remote")}, SSD upgrade labor at ${itPrice("it-ssd")}. You get the price first, and if we can't fix it you don't pay for the repair.` },
+    ],
+    related: TECH_RELATED,
+  },
+  {
+    slug: "computer-wont-turn-on",
+    title: "Computer won't turn on? 7 checks before you pay for a repair",
+    metaTitle: "Computer Won't Turn On? 7 Checks Before Paying for Repair",
+    metaDescription: "Laptop or desktop won't turn on? Check power, the battery, a hard reset, the display and beep codes first. What each sign means and when it needs a tech.",
+    summary:
+      "If a Windows computer won't turn on, check the outlet and charger, do a hard reset (hold the power button 30 seconds with the charger unplugged), try an external monitor, and listen for fans or beeps. No lights at all usually means power; lights but a black screen usually means display, memory or a failed update.",
+    audience: "local",
+    published: TECH_DATE,
+    updated: TECH_DATE,
+    readMinutes: 6,
+    sections: [
+      {
+        h2: "What should I check first when my computer won't turn on?",
+        answer:
+          "Start with power. Plug the charger or power cord straight into a wall outlet you know works, not a power strip, and look for a light on the charger, the laptop or the back of the desktop. A dead outlet, a loose cord or a switched-off power strip is the most common 'dead computer' we find.",
+        steps: [
+          "Plug straight into a working wall outlet.",
+          "Check the charger light, or try another compatible charger.",
+          "Desktop: check the switch on the back of the power supply is set to on (|).",
+          "Laptop: let it charge for 30 minutes before trying again; a fully drained battery may not respond at first.",
+        ],
+      },
+      {
+        h2: "How do I hard reset a laptop that won't turn on?",
+        answer:
+          "Unplug the charger, remove the battery if it comes out, then hold the power button for 30 seconds. Plug the charger back in and press power once. This drains leftover charge that can lock up the power circuit, and it brings back a surprising number of 'dead' laptops.",
+      },
+      {
+        h2: "What does it mean if lights and fans come on but the screen is black?",
+        answer:
+          "The computer has power but isn't showing a picture. The cause is usually the screen or its cable, loose or failed memory (RAM), a graphics problem, or Windows stuck after an update. Connect an external monitor or TV with HDMI: if a picture appears there, the laptop screen or its cable is the problem.",
+        table: {
+          head: ["What you see", "Most likely cause", "Next step"],
+          rows: [
+            ["No lights, no fan", "Power: outlet, charger, power supply, board", "Try another outlet and charger"],
+            ["Lights and fan, black screen", "Screen, memory or graphics", "Try an external monitor"],
+            ["Beeps or a flashing light pattern", "Hardware error code (often memory)", "Look up the pattern for your brand"],
+            ["Logo, then restarts or blue screen", "Windows or the drive", "Boot into recovery, then repair"],
+            ["Turns on, then off after seconds", "Overheating or power supply", "Clean vents, test the power supply"],
+          ],
+        },
+      },
+      {
+        h2: "Why does my computer turn on and then immediately turn off?",
+        answer:
+          "Usually overheating, a failing power supply, or a short. A desktop that shuts off seconds after starting often has a bad power supply or a loose graphics card. A laptop that does it may be overheating from a clogged fan, or have a battery or charging fault.",
+      },
+      {
+        h2: "What if it starts but Windows won't load?",
+        answer:
+          "If you see the logo and then a blue screen, a spinning circle forever, or 'Preparing Automatic Repair', the hardware works and Windows or the drive is the problem. Try Startup Repair from the recovery menu. If the drive is failing, back up your files before anything else; a tech can often recover them.",
+      },
+      {
+        h2: "When is a computer that won't turn on worth repairing?",
+        answer:
+          "Power supplies, chargers, memory, drives and screens are usually worth replacing. A failed motherboard on an older laptop, or liquid damage, can cost close to a refurbished computer. A diagnosis tells you which before you spend money on parts.",
+        links: [{ label: "Repair or replace: the cost guide", to: "/guides/computer-repair-vs-replace" }],
+      },
+      {
+        h2: "Can someone fix a computer that won't turn on at my house?",
+        answer: `Yes. CEO Turbo diagnoses and repairs Windows laptops and desktops that won't turn on at your home or business in ${CITIES}. Diagnosis is ${itPrice("it-visit")} and credited to the repair, repairs start at ${itPrice("it-pc-repair")}, and if we can't fix it you don't pay for the repair.`,
+        links: [{ label: "Get it fixed at your door", to: "/computer-repair-tampa" }],
+      },
+    ],
+    faqs: [
+      { q: "Can a dead battery stop a laptop from turning on even when plugged in?", a: "Yes, on some laptops a fully dead or failed battery stops the laptop from starting even on the charger. Let it charge 30 minutes, then try a hard reset. If it only works with the battery removed, the battery needs replacing." },
+      { q: "Will I lose my files if my computer won't turn on?", a: "Usually not. Your files live on the drive, and in most power, screen or memory failures the drive is fine. We can move your files to a new drive or computer if the old one can't be saved." },
+      { q: "My desktop beeps but won't start. What does it mean?", a: "Beep codes are the motherboard reporting a hardware error, most often memory that's loose or failed. The pattern differs by brand. Reseating the memory sticks fixes it surprisingly often." },
+      { q: "Is it the screen or the computer?", a: "Plug in an external monitor or TV with HDMI. If the picture shows up there, the laptop's screen or screen cable is the problem, not the computer itself." },
+      { q: "How much does it cost to fix a computer that won't turn on?", a: `Diagnosis is ${itPrice("it-visit")}, credited toward the repair. Repairs start at ${itPrice("it-pc-repair")} and desktop repairs at ${itPrice("it-desktop")}. Parts like power supplies or drives are extra, at cost, and you get the price first.` },
+      { q: "Do you come to me?", a: `Yes. We come to homes and businesses in ${CITIES} and everywhere within about 1.5 hours of Temple Terrace, usually the same or next day.` },
+    ],
+    related: TECH_RELATED,
+  },
+  {
+    slug: "cracked-phone-screen-repair-or-replace",
+    title: "Cracked phone screen: repair it or replace the phone?",
+    metaTitle: "Cracked Phone Screen: Repair It or Replace the Phone?",
+    metaDescription: "Cracked iPhone or Samsung screen? When a screen repair is worth it, what it costs depends on, what to do with your data, and how to get it fixed at home.",
+    summary:
+      "Repair the screen if the phone is less than about four years old, still gets software updates and otherwise works. Replace the phone if it no longer gets security updates, the battery is also worn out, or the repair would cost near the price of a newer used phone. Back up first either way.",
+    audience: "local",
+    published: TECH_DATE,
+    updated: TECH_DATE,
+    readMinutes: 6,
+    sources: [
+      { label: "Apple: iPhone repair and service", url: "https://support.apple.com/iphone/repair" },
+    ],
+    sections: [
+      {
+        h2: "Is it worth fixing a cracked phone screen?",
+        answer:
+          "Usually yes, if the phone is a few years old or newer, still gets updates and the rest of it works. A new screen makes it like new again for far less than a replacement phone. It's not worth it on a phone that no longer gets security updates or has other failing parts.",
+        bullets: ["Worth it: phone still updated, battery fine, only the glass or display is damaged", "Maybe: the phone also needs a battery (do both in one visit)", "Not worth it: no more security updates, water damage, or several failures"],
+      },
+      {
+        h2: "Can I keep using a phone with a cracked screen?",
+        answer:
+          "For a little while, but cracks spread, glass splinters can cut fingers, and moisture and dust get in through the gaps. A crack over the display can also stop touch from working in that area. A screen protector over the crack is a temporary fix only. Get it repaired before the display itself fails.",
+      },
+      {
+        h2: "What does a phone screen repair cost depend on?",
+        answer:
+          "The exact model, because the screen is a model-specific part. OLED screens on newer iPhones and Samsung Galaxy phones cost more than the LCD screens on older and budget models. Labor is similar across models. The fair way to quote is per model, with the part included, before anything is ordered.",
+        table: {
+          head: ["Factor", "Raises the price", "Lowers the price"],
+          rows: [
+            ["Display type", "OLED (most newer iPhones and Galaxy phones)", "LCD (older and budget models)"],
+            ["Model age", "Newest models", "Models a few years old"],
+            ["Damage", "Display damaged (black, lines, no touch)", "Glass only cracked"],
+            ["Extra parts", "Frame bent, camera glass broken", "Nothing else damaged"],
+          ],
+        },
+      },
+      {
+        h2: "Will I lose my data getting my screen fixed?",
+        answer:
+          "No. A screen replacement doesn't erase the phone. Still, back up first: on iPhone turn on iCloud Backup in Settings, on Android use Google One backup. If touch no longer works, a tech can often reach the backup settings with an adapter and mouse.",
+      },
+      {
+        h2: "Should I fix the battery at the same time?",
+        answer:
+          "If the phone is more than two or three years old, often yes. The phone is already open, so replacing a worn battery at the same visit saves a second repair later. On iPhone, Settings → Battery → Battery Health shows the capacity; below about 80% is worth replacing.",
+        links: [{ label: "Phone battery draining fast? When to replace it", to: "/guides/phone-battery-draining-fast" }],
+      },
+      {
+        h2: "How does a phone screen repair at your door work?",
+        answer: `Text the model and what's wrong. You get one price with the part included, we order the screen for your exact model, then we come to your home or business in ${CITIES}, replace it, and test touch, Face ID, cameras and charging with you before you pay.`,
+        steps: ["Text the phone model and a photo of the damage", "Get one price, part and labor included", "We order the screen for your exact model", "We replace it at your place and test it with you", "You pay after it works"],
+        links: [{ label: "Get your repair price by text", to: "/phone-repair-tampa" }],
+      },
+    ],
+    faqs: [
+      { q: "How long does a phone screen replacement take?", a: "Once the part is in, most screen replacements take about an hour. We order the screen for your exact model first, then set a time to come to you." },
+      { q: "Do you fix Samsung and Google Pixel screens too?", a: "Yes. iPhone, Samsung Galaxy, Google Pixel and other Android phones, plus iPad and other tablet screens. Text the model for the price." },
+      { q: "Will Face ID still work after a screen repair?", a: "Face ID lives in the top of the phone, not the screen, so a careful screen replacement keeps it working. We test Face ID or the fingerprint sensor with you before we leave." },
+      { q: "Is a cracked back glass the same repair?", a: "No, the back glass is a different repair. Text a photo and we'll tell you what's needed." },
+      { q: "Can you fix my screen today?", a: "The part is ordered for your exact model, so it depends on when it arrives. Text the model and we'll tell you the soonest time." },
+      { q: "Do you come to St. Pete, Clearwater and Brandon?", a: `Yes. We repair phones at homes and businesses in ${CITIES} and everywhere within about 1.5 hours of Temple Terrace.` },
+    ],
+    related: TECH_RELATED,
+  },
+  {
+    slug: "phone-battery-draining-fast",
+    title: "Phone battery draining fast? What to check and when to replace it",
+    metaTitle: "Phone Battery Draining Fast? When to Replace It",
+    metaDescription: "iPhone or Android battery dying fast? Check battery health, the apps using power and a few settings first. When a battery replacement is the real fix.",
+    summary:
+      "Check which apps use the most battery, turn down screen brightness and background refresh, and look at battery health. On iPhone, a battery below about 80% capacity in Settings → Battery → Battery Health is worn out and worth replacing. A swollen battery should be replaced right away.",
+    audience: "local",
+    published: TECH_DATE,
+    updated: TECH_DATE,
+    readMinutes: 5,
+    sources: [
+      { label: "Apple: batteries and performance", url: "https://www.apple.com/batteries/" },
+    ],
+    sections: [
+      {
+        h2: "Why is my phone battery draining so fast?",
+        answer:
+          "Usually one of three things: an app working hard in the background, settings like a bright screen or constant location use, or a battery that has simply worn out with age. Phones that are two or three years old often have batteries that hold far less charge than when new.",
+      },
+      {
+        h2: "How do I check my phone's battery health?",
+        answer:
+          "On iPhone, go to Settings → Battery → Battery Health (or Battery Health & Charging). The Maximum Capacity number shows how much the battery holds compared with new. Below about 80% is considered worn. On Samsung, the Samsung Members app has a battery check under Support → Phone diagnostics.",
+        steps: ["iPhone: Settings → Battery → Battery Health", "Samsung: Samsung Members → Support → Phone diagnostics → Battery status", "Pixel: Settings → Battery → Battery health (on supported models)"],
+      },
+      {
+        h2: "What settings drain a phone battery the most?",
+        answer:
+          "Screen brightness and screen-on time use the most power, followed by apps refreshing in the background, constant location tracking, weak cell signal, and 5G in weak-coverage areas. Check Settings → Battery to see which apps used the most power in the last 24 hours.",
+        bullets: ["Turn on auto-brightness", "Limit background app refresh for apps you don't need updating", "Set location to 'While using' instead of 'Always'", "Close nothing manually: force-closing apps usually uses more battery, not less"],
+      },
+      {
+        h2: "When should I replace my phone battery?",
+        answer:
+          "Replace it when battery health is below about 80%, when the phone shuts off at 20% or 30%, when it slows down under load, or when it won't last a normal day after the setting fixes above. Replace it immediately if the battery is swollen, the screen is lifting, or the phone gets hot while idle.",
+        table: {
+          head: ["Sign", "What it means", "Do this"],
+          rows: [
+            ["Health below ~80%", "Battery worn out", "Replace the battery"],
+            ["Shuts off at 20–30%", "Battery can't deliver peak power", "Replace the battery"],
+            ["Screen lifting, phone bulging", "Swollen battery", "Stop charging it and replace now"],
+            ["One app at the top of battery use", "App problem, not the battery", "Update or remove the app"],
+          ],
+        },
+      },
+      {
+        h2: "Is a swollen phone battery dangerous?",
+        answer:
+          "It can be. A swollen lithium battery is damaged and can overheat or, rarely, catch fire, and it can crack the screen from the inside. Stop charging it, keep it away from heat, don't press on it, and get the battery replaced. Never throw an old lithium battery in the trash.",
+        links: [{ label: "Free pickup for old phones and batteries", to: "/electronics-recycling-tampa" }],
+      },
+      {
+        h2: "Can someone replace my phone battery at my house?",
+        answer: `Yes. Text the model, get one price with the battery included, and we replace it at your home or business in ${CITIES}, then check charging and battery health with you before you pay.`,
+        links: [{ label: "Get your battery price by text", to: "/phone-repair-tampa" }],
+      },
+    ],
+    faqs: [
+      { q: "How long should a phone battery last?", a: "Most phone batteries hold up well for about two to three years of daily charging, then lose noticeable capacity. Heat, like a phone left in a hot car in Florida, wears batteries out faster." },
+      { q: "Does charging overnight ruin the battery?", a: "Modern iPhones and Android phones manage overnight charging with optimized or adaptive charging, so it's fine. Heat is the bigger enemy: don't charge under a pillow or in direct sun." },
+      { q: "Is it cheaper to replace the battery or the phone?", a: "A battery replacement costs a small fraction of a new phone. If the phone still gets updates and works otherwise, a new battery is the better deal." },
+      { q: "Will I lose my data when the battery is replaced?", a: "No. A battery replacement doesn't erase your phone. Back it up anyway before any repair." },
+      { q: "Do you replace iPad and tablet batteries?", a: "Yes, iPads and other tablets too. Text the model for the price." },
+      { q: "Do you come to Winter Haven and Lakeland?", a: `Yes. We come to ${CITIES} and everywhere within about 1.5 hours of Temple Terrace.` },
+    ],
+    related: TECH_RELATED,
+  },
+  {
+    slug: "how-to-wipe-computer-before-recycling",
+    title: "How to wipe a computer or phone before you recycle, sell or donate it",
+    metaTitle: "How to Wipe a Computer or Phone Before Recycling It",
+    metaDescription: "Step-by-step: back up, sign out and wipe a Windows PC, Mac, iPhone or Android before recycling or selling it, and when to destroy the hard drive instead.",
+    summary:
+      "Back up your files, sign out of your accounts (Microsoft, Apple ID, Google), then reset the device with the option that erases everything: on Windows choose Reset this PC → Remove everything with drive cleaning; on iPhone use Erase All Content and Settings; on Android use Factory data reset. For a drive that won't work or held sensitive data, physical destruction is the safest choice.",
+    audience: "local",
+    published: TECH_DATE,
+    updated: TECH_DATE,
+    readMinutes: 7,
+    sources: [
+      { label: "NIST SP 800-88: Guidelines for media sanitization", url: "https://csrc.nist.gov/pubs/sp/800/88/r1/final" },
+      { label: "EPA: electronics donation and recycling", url: "https://www.epa.gov/recycle/electronics-donation-and-recycling" },
+    ],
+    howTo: {
+      name: "Wipe a Windows computer before recycling it",
+      steps: [
+        ["Back up your files", "Copy documents, photos and anything else you want to keep to an external drive or cloud storage."],
+        ["Sign out of your accounts", "Sign out of Microsoft, Google, iCloud and any app that stores a login, and deactivate software licenses you want to reuse."],
+        ["Open Reset this PC", "Go to Settings → System → Recovery → Reset PC."],
+        ["Choose Remove everything", "Pick Remove everything, then turn on Clean data (drive cleaning) so the files can't be recovered."],
+        ["Let it finish", "Leave the computer plugged in until the reset completes and the setup screen appears."],
+      ],
+    },
+    sections: [
+      {
+        h2: "Why do I need to wipe a computer before recycling it?",
+        answer:
+          "Deleting files or emptying the Recycle Bin doesn't erase them; the data stays on the drive until it's overwritten and can be recovered with free tools. Old computers and phones hold saved passwords, banking logins, photos, tax documents and email. A proper wipe or drive destruction is what actually protects you.",
+      },
+      {
+        h2: "How do I wipe a Windows computer?",
+        answer:
+          "Back up, sign out of your Microsoft account and apps, then go to Settings → System → Recovery → Reset PC, choose Remove everything, and turn on the option to clean the drive. That overwrites the data so it can't be easily recovered. It can take an hour or more.",
+        steps: [
+          "Back up files to an external drive or OneDrive.",
+          "Sign out of browsers, email, Microsoft 365 and any saved logins.",
+          "Settings → System → Recovery → Reset PC.",
+          "Choose Remove everything, then Change settings → Clean data: On.",
+          "Keep it plugged in until setup appears, then turn it off.",
+        ],
+      },
+      {
+        h2: "How do I wipe an iPhone or Android phone?",
+        answer:
+          "On iPhone, back up to iCloud, sign out of your Apple ID (this turns off Activation Lock), then Settings → General → Transfer or Reset iPhone → Erase All Content and Settings. On Android, back up to Google, remove your Google account, then Settings → System → Reset options → Erase all data (factory reset).",
+        bullets: ["Remove your SIM and memory card", "Unpair your watch and earbuds", "Remove the phone from your Apple ID or Google account device list online afterward"],
+      },
+      {
+        h2: "What if the computer doesn't turn on anymore?",
+        answer:
+          "Then software can't wipe it, but the data is still on the drive. Take the drive out and either connect it to another computer to wipe it, or destroy it physically. Drilling through a hard drive's platters, or breaking an SSD's memory chips, makes the data unrecoverable for home and small-business use.",
+      },
+      {
+        h2: "Wipe or destroy: which is safer?",
+        answer:
+          "For most people, a full wipe with drive cleaning is enough to reuse or donate a computer. Physical destruction is safer for a drive that held business, medical or financial records, for a drive that's failing, and for any drive you won't reuse. NIST's media-sanitization guidelines describe both clearing and destroying as valid, depending on the risk.",
+        table: {
+          head: ["Situation", "Best option"],
+          rows: [
+            ["Donating or selling a working computer", "Reset with drive cleaning"],
+            ["Recycling a working computer", "Reset with drive cleaning, or destroy the drive"],
+            ["Computer won't turn on", "Remove and destroy the drive"],
+            ["Business, medical or financial data", "Destroy the drive"],
+          ],
+        },
+      },
+      {
+        h2: "Can someone wipe and recycle my old tech for me?",
+        answer: `Yes. CEO Turbo picks up old computers, laptops, phones and tablets free at your home or business in ${CITIES}, wipes every drive or drills it in front of you, and takes everything to be reused or recycled.`,
+        links: [{ label: "Schedule a free recycling pickup", to: "/electronics-recycling-tampa" }],
+      },
+    ],
+    faqs: [
+      { q: "Is a factory reset enough to wipe a computer?", a: "On Windows, only if you choose Remove everything with drive cleaning turned on. A quick reset without cleaning can leave data recoverable." },
+      { q: "Does deleting files erase them?", a: "No. Deleting and emptying the Recycle Bin only marks the space as free; the files stay on the drive until overwritten and can often be recovered." },
+      { q: "How do I destroy a hard drive at home?", a: "Remove the drive, then drill several holes through it so the platters inside are broken. Wear eye protection. For SSDs, the memory chips on the board need to be broken. Or let us do it in front of you at pickup." },
+      { q: "Do I need to remove my Apple ID before recycling an iPhone?", a: "Yes. Signing out of your Apple ID turns off Activation Lock. Without that, the next person can't use the phone and it may not be reusable." },
+      { q: "Can I recycle a computer without wiping it?", a: "You can, but you're trusting the recycler with your data. We wipe or destroy every drive before anything leaves your home." },
+      { q: "Do you pick up in Clearwater and Orlando?", a: `Yes. Free pickup covers ${CITIES} and everywhere within about 1.5 hours of Temple Terrace.` },
+    ],
+    related: TECH_RELATED,
+  },
+  {
+    slug: "where-to-recycle-electronics-tampa-bay",
+    title: "Where to recycle old electronics in Tampa Bay (free pickup and drop-off)",
+    metaTitle: "Where to Recycle Electronics in Tampa Bay: Free Options",
+    metaDescription: "Get rid of old computers, TVs and phones in Tampa, St. Pete, Brandon and Clearwater: free pickup, county drop-off, store take-back, and what to wipe first.",
+    summary:
+      "In Tampa Bay you can recycle old electronics through free at-home pickup, your county's drop-off or household hazardous waste sites, or retailer take-back programs. Don't put them in the curbside trash: electronics hold lead and mercury, and lithium batteries can start fires in garbage trucks. Wipe or destroy drives first.",
+    audience: "local",
+    published: TECH_DATE,
+    updated: TECH_DATE,
+    readMinutes: 6,
+    sources: [
+      { label: "EPA: electronics donation and recycling", url: "https://www.epa.gov/recycle/electronics-donation-and-recycling" },
+    ],
+    sections: [
+      {
+        h2: "Can I throw old electronics in the trash in Florida?",
+        answer:
+          "You shouldn't. Computers, TVs and phones contain lead, mercury and other metals, and lithium batteries can catch fire when a garbage truck crushes them. Tampa Bay counties ask residents to keep electronics out of curbside trash and use a drop-off or recycling option instead.",
+      },
+      {
+        h2: "What are my options for recycling electronics in Tampa Bay?",
+        answer:
+          "Three main ones: free at-home pickup from a local recycler, your county's drop-off sites for electronics and household hazardous waste, and take-back programs at some electronics retailers. Pickup is easiest for heavy items, several items, or anyone without a truck.",
+        table: {
+          head: ["Option", "Best for", "Watch out for"],
+          rows: [
+            ["Free at-home pickup", "Heavy TVs, several items, offices, no truck", "Make sure drives are wiped or destroyed"],
+            ["County drop-off sites", "A few small items, if you can drive them", "Hours, limits and ID rules vary by county"],
+            ["Retailer take-back", "Small items like cables and phones", "Not every store takes TVs or big items"],
+            ["Donate or sell", "Working computers and phones", "Wipe everything first"],
+          ],
+        },
+      },
+      {
+        h2: "Which electronics can be recycled?",
+        answer:
+          "Almost all of them: laptops, desktops, monitors, flat-screen TVs, phones, tablets, printers, game consoles, routers, keyboards, cables and chargers. Old tube (CRT) TVs and monitors are heavier and handled differently, so call ahead. Large appliances like fridges and washers go to a different recycling stream.",
+      },
+      {
+        h2: "What should I do before I recycle a computer or phone?",
+        answer:
+          "Back up what you want to keep, sign out of your accounts, and wipe the device with a full reset, or have the drive destroyed. Remove SIM and memory cards from phones. Deleting files isn't enough: they can be recovered unless the drive is wiped.",
+        links: [{ label: "Step by step: how to wipe a computer or phone", to: "/guides/how-to-wipe-computer-before-recycling" }],
+      },
+      {
+        h2: "Is there free electronics pickup near me?",
+        answer: `Yes. CEO Turbo picks up old electronics free at homes and businesses in ${CITIES} and every city within about 1.5 hours of Temple Terrace. We carry it out, wipe or drill every hard drive, and get it reused or recycled.`,
+        steps: ["Text a photo of what you have and your city", "Pick a pickup time", "We carry it out and handle the data", "Working parts get reused; the rest is recycled"],
+        links: [{ label: "Schedule a free pickup", to: "/electronics-recycling-tampa" }],
+      },
+    ],
+    faqs: [
+      { q: "Is electronics recycling free in Tampa Bay?", a: "Often, yes. CEO Turbo's pickup is free for computers, phones, tablets, monitors, flat-screen TVs, printers and cables. County drop-off programs are generally free for residents, though rules vary." },
+      { q: "Do you pick up old TVs?", a: "Yes, flat-screen TVs. For big old tube (CRT) TVs, text a photo first so we can confirm." },
+      { q: "Do you take electronics from businesses?", a: "Yes. Office cleanouts of workstations, monitors, servers and network gear, with every drive wiped or destroyed." },
+      { q: "Where do the electronics go?", a: "Working devices and parts get reused, and the rest is taken for recycling so the metals and plastics can be recovered instead of going to a landfill." },
+      { q: "What about old batteries?", a: "Lithium batteries should never go in the trash. Devices with batteries inside are fine to include in a pickup. Leaking or swollen loose batteries need special handling." },
+      { q: "Do you pick up in St. Pete, Brandon and Winter Haven?", a: `Yes: ${CITIES} and everywhere within about 1.5 hours of Temple Terrace.` },
+    ],
+    related: TECH_RELATED,
   },
 ];
 

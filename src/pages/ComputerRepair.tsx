@@ -13,6 +13,7 @@ import { COMPUTERS_PATH } from "@/content/computer-shop";
 import { CallLink } from "@/components/site/CallLink";
 import { InstallBookButton } from "@/components/cta/Actions";
 import { FAQList, SectionHeader } from "@/components/blocks/Basics";
+import { GuideLinks } from "@/components/blocks/GuideLinks";
 import { REPAIR_FAQS } from "@/content/tech-faqs";
 import { TechQuiz } from "@/components/tech/TechQuiz";
 import { BookOrText, CalCard, PhoneOnly, useTexting } from "@/components/booking/BookOrText";
@@ -397,6 +398,7 @@ export default function ComputerRepair() {
       </section>
 
       <FAQList faqs={REPAIR_FAQS} title="Quick answers" />
+      <GuideLinks slugs={["why-is-my-laptop-so-slow", "computer-wont-turn-on", "computer-repair-vs-replace", "how-to-wipe-computer-before-recycling"]} />
 
       <section className="section border-t border-border" aria-labelledby="final">
         <div className="container-x">

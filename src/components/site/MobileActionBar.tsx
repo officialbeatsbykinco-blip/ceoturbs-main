@@ -11,13 +11,14 @@ import { CallLink } from "./CallLink";
 import { REVIEWS_AD_PATH, SETUP_PATH, SHOP_PATH } from "@/content/review-cards";
 import { SHIRTS_PATH } from "@/content/company-shirts";
 import { ARTIST_MERCH_PATH } from "@/content/artist-merch";
+import { isTechGuide } from "@/content/guides";
 import { CARD_TEXT, QUICK_TECH_TEXT, QUICK_TEXT, smsHref } from "@/lib/sms";
 
 /** Growth pages: the free Google & AI check is the first tap, not tech repair. */
 const MARKETING_SLUGS = ["seo-aeo-geo", "website-design", "meta-ads", "google-ads", "tiktok-ads", "x-ads", "google-business-profile", "social-media-optimization", "email-marketing", "conversion-tracking"];
 const MARKETING_PAGES = ["/grow", "/results", "/local-business", "/artist", "/producers", "/visual-artists", "/shopify", "/salons", "/barbershops", "/how-to-get-more-customers", "/watch", "/about", "/services"];
 export const isMarketingPage = (p: string) =>
-  MARKETING_PAGES.includes(p) || MARKETING_SLUGS.some((s) => p === `/services/${s}`) || p.startsWith("/guides") || p.startsWith("/portfolio") || p === "/how-to-get-more-google-reviews";
+  MARKETING_PAGES.includes(p) || MARKETING_SLUGS.some((s) => p === `/services/${s}`) || (p.startsWith("/guides") && !isTechGuide(p)) || p.startsWith("/portfolio") || p === "/how-to-get-more-google-reviews";
 
 /** Sticky bottom bar on phones: the money actions are always one tap away. The shop pages have their own buy bars. */
 export function MobileActionBar() {
