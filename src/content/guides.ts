@@ -1266,7 +1266,7 @@ export const GUIDES: Guide[] = [
   {
     slug: "computer-repair-vs-replace",
     title: "Repair or replace your computer? A cost guide (Tampa)",
-    metaTitle: "Computer Repair vs Replace: Cost Guide (Tampa)",
+    metaTitle: "Computer Repair vs Replace: Florida Cost Guide",
     metaDescription: "Should you repair or replace a slow or broken computer? Real repair prices, when an SSD upgrade beats a new PC, and when replacing is the smarter buy.",
     summary: "Repair when the fix costs well under half the price of a comparable new computer and the machine is still supported: speed-ups, virus removal, SSD upgrades and screen or battery swaps usually qualify. Replace when the motherboard has failed, the computer can't run a supported operating system, or repairs would cost close to a new one.",
     audience: "local",

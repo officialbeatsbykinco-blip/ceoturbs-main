@@ -32,7 +32,7 @@ export const SERVICES: Service[] = [
     icon: "layout",
     metaTitle: "Home Office Setup in Tampa Bay & Central FL | From $99",
     metaDescription:
-      "We set up your home office: desk, computer, monitors, Wi-Fi and devices, across Tampa Bay and Central Florida. From $99. Call 678-558-4327.",
+      "Home office setup in Tampa, St. Pete, Clearwater, Brandon, Lakeland and Orlando: desk, computer, monitors and Wi-Fi. From $99. Call 678-558-4327.",
     h1: "Home office and computer setup — we build your workspace so you can get to work",
     answer:
       "CEO Turbo provides complete home office and computer setup services for homes and businesses in Tampa Bay. We assemble desks and chairs, set up monitors and computers, configure internet and networks, install software, connect tablets and devices, and organize your entire workspace. Built for new home offices, business setups, school computer labs, and anyone who needs a professional tech workspace without the hassle.",
@@ -74,7 +74,7 @@ export const SERVICES: Service[] = [
     icon: "layout",
     metaTitle: "Office Setup & Build-Out Labor: Tampa Bay & Central FL",
     metaDescription:
-      "Office build-out, network and POS system install from $1,599. Framing, cameras, computers, cleanup. Tampa Bay. Call 678-558-4327.",
+      "Office build-out, network and POS install from $1,599 in Tampa, St. Pete, Clearwater, Brandon, Lakeland and Orlando. Framing, cameras, computers, cleanup.",
     h1: "Office transformation — we build your entire workspace from frame to finish",
     answer:
       "We turn empty offices into ready-to-work spaces. We do the work: build walls, install cameras, install your network and POS system, set up internet, build computers, and clean up. You pay once for our labor. No monthly fees. You buy the materials, or pay us up front and we buy them for you. We serve Tampa Bay and Central Florida, from St. Pete and Brandon to Lakeland, Winter Haven and Orlando.",
@@ -117,7 +117,7 @@ export const SERVICES: Service[] = [
     short: "Apartment office setup",
     icon: "layout",
     metaTitle: "Apartment Desk Build & Monitor Mounting | Tampa to Orlando",
-    metaDescription: "We build your desk, mount monitors, connect everything and hide the cables. Apartments and homes in Tampa Bay. From $99. Call 678-558-4327.",
+    metaDescription: "Desk built, monitors mounted and cables hidden in apartments and homes in Tampa, St. Pete, Clearwater, Brandon and Orlando. From $99. Call 678-558-4327.",
     h1: "Apartment and home office setup — desk built, monitors up, cables hidden",
     answer: "CEO Turbo comes to your apartment or home, assembles your desk and chair, mounts and aligns monitors, connects your computer, printer and Wi-Fi, and routes every cable out of sight. You supply the furniture and equipment. We do the building and wiring, usually in 2 to 4 hours, at a flat price confirmed before we start.",
     outcome: "A clean, working desk setup finished in one visit, with nothing left in boxes.",
@@ -144,7 +144,7 @@ export const SERVICES: Service[] = [
     short: "Computer room setup",
     icon: "layout",
     metaTitle: "School & Computer Room Setup: Central Florida | From $329",
-    metaDescription: "Computer labs, classrooms and training rooms: furniture assembly, workstation setup, networking and cable management. From $329. Call 678-558-4327.",
+    metaDescription: "Computer labs and classrooms set up in Tampa, St. Pete, Clearwater, Brandon, Lakeland and Orlando: furniture, workstations, networking. From $329.",
     h1: "School and computer room setup — every station built, connected and organized",
     answer: "CEO Turbo sets up computer rooms for schools, churches, nonprofits, tutoring centers and offices. We assemble tables and chairs, place and connect each workstation, configure the network and shared printers, and organize cables so the room is easy to run and easy to clean. You supply the equipment; we do the installation labor at a flat quoted price.",
     outcome: "A computer room that is ready for the first class, with every station working.",
@@ -170,7 +170,7 @@ export const SERVICES: Service[] = [
     short: "DJ & studio setup",
     icon: "layout",
     metaTitle: "DJ & Home Studio Setup in Central Florida | 678-558-4327",
-    metaDescription: "We set up DJ rigs, producer desks and home studios: gear placement, monitors, cabling and software. Tampa Bay. Call 678-558-4327.",
+    metaDescription: "DJ rigs, producer desks and home studios set up in Tampa, St. Pete, Clearwater, Brandon and Orlando: gear, monitors, cabling and software. 678-558-4327.",
     h1: "DJ and home studio setup — gear placed, wired clean and ready to play",
     answer: "CEO Turbo builds DJ booths, producer desks and home studio rooms. We assemble tables and stands, position studio monitors, connect controllers, interfaces and speakers, route and label every cable, and install your software so the rig works the first time you sit down. You supply the gear; we do the setup labor at a flat quoted price.",
     outcome: "A rig that is wired cleanly, sounds right in the room and is ready to perform or record.",
@@ -196,7 +196,7 @@ export const SERVICES: Service[] = [
     short: "Computer build",
     icon: "layout",
     metaTitle: "Custom PC Build & Setup in Central Florida | 678-558-4327",
-    metaDescription: "We assemble your PC from the parts you choose, install Windows and drivers, and get it ready to use. Labor only, Tampa Bay. Call 678-558-4327.",
+    metaDescription: "Custom PCs built from the parts you choose, with Windows and drivers installed, in Tampa, St. Pete, Clearwater, Brandon and Orlando. Call 678-558-4327.",
     h1: "Custom computer build — we assemble it, install it and hand it over ready to use",
     answer: "CEO Turbo assembles custom desktop computers for homes, offices, studios and gaming setups in Tampa Bay. You choose the parts, or fund an order up front and we purchase them with receipts. We assemble the machine, route the cables, install the operating system and drivers, test it under load, and set up your monitors and peripherals. You pay a flat labor price confirmed in writing before we begin.",
     outcome: "A tested, quiet, clean-built computer that is ready to use the day we hand it over.",
@@ -224,7 +224,7 @@ export const SERVICES: Service[] = [
     icon: "layout",
     metaTitle: "POS Install in Tampa Bay & Orlando: Square, Toast, Clover",
     metaDescription:
-      "We install Square, Toast, Clover, Stripe, DoorDash & UberEats POS systems, terminals, kitchen printers and cash drawers. From $149. Call 678-558-4327.",
+      "Square, Toast and Clover POS systems, terminals and kitchen printers installed in Tampa, St. Pete, Clearwater, Brandon and Orlando. From $149.",
     h1: "POS system installation — terminals wired, printers connected, orders flowing",
     answer:
       "CEO Turbo installs and configures complete Point of Sale (POS) systems for restaurants, food trucks, retail stores, and salons across Tampa Bay. We mount card readers, wire cash drawers and receipt printers, configure network switches, integrate DoorDash and UberEats delivery tablets, and test credit card processing on Square, Toast, Clover, and Stripe. You supply the hardware; we do the installation and cabling at a transparent flat price.",

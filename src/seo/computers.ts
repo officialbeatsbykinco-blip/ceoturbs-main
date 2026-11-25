@@ -56,7 +56,7 @@ export function computerMeta(c: Computer): PageMeta {
   return {
     path,
     title: fit(c.title),
-    description: clip(`${lead} ${c.description || "Buy online from a Tampa computer tech, with setup and repairs from the same person."}`),
+    description: clip(`${lead} ${c.description || "Buy online from a Florida computer tech, with setup and repairs from the same person."}`),
     ogImage: c.images[0]?.url,
     priority: 0.7,
     changefreq: "weekly",
@@ -69,7 +69,7 @@ export function computerMeta(c: Computer): PageMeta {
 export const computerShellMeta = (handle = COMPUTER_SHELL): PageMeta => ({
   path: computerPath(handle),
   title: "Computer for Sale | CEO Turbo Computer Shop",
-  description: "A computer for sale from CEO Turbo, a Tampa computer tech: photos, specs and secure checkout, with setup and repairs from the same person.",
+  description: "A computer for sale from CEO Turbo, a Florida computer tech: photos, specs and secure checkout, with setup and repairs from the same person.",
   noindex: true,
   priority: 0.1,
   changefreq: "weekly",

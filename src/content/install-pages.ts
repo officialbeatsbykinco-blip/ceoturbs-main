@@ -130,8 +130,8 @@ export const INSTALL_PAGES: InstallPage[] = [
     ],
     value: 130,
     seo: {
-      title: "Computer Setup in Tampa, Orlando & Central FL | CEO Turbo",
-      description: `New computer setup, file transfer, monitors and printers at your home or business, Tampa Bay to Orlando. From ${usd(setupBasic.price)}. Call or text ${SITE.phone.display}.`,
+      title: "Computer Setup: Tampa, St. Pete, Clearwater, Brandon & More",
+      description: `New computer set up, files moved, monitors and printers at your door in Tampa, St. Pete, Clearwater, Brandon, Lakeland and Orlando. From ${usd(setupBasic.price)}.`,
     },
   },
   {
@@ -174,8 +174,8 @@ export const INSTALL_PAGES: InstallPage[] = [
     ],
     value: 200,
     seo: {
-      title: "Ring Doorbell & Camera Installation: Tampa to Orlando, FL",
-      description: `Ring, Nest and Blink video doorbells and Wi-Fi cameras installed at homes, Tampa Bay to Orlando, on your phone. Doorbell ${usd(ip("cam-doorbell").price)}. Call or text ${SITE.phone.display}.`,
+      title: "Ring & Camera Installation: Tampa, St. Pete, Brandon & More",
+      description: `Ring, Nest and Blink doorbells and cameras installed in Tampa, St. Pete, Clearwater, Brandon, Lakeland and Orlando, set up on your phone. Doorbell ${usd(ip("cam-doorbell").price)}.`,
     },
   },
   {
@@ -215,8 +215,8 @@ export const INSTALL_PAGES: InstallPage[] = [
     ],
     value: 150,
     seo: {
-      title: "Wi-Fi & Internet Installation: Tampa, Orlando & Central FL",
-      description: `Slow Wi-Fi, dead spots or a new router? Mesh Wi-Fi and internet setup at Central Florida homes and businesses. From ${usd(wifiFix.price)}. Call or text ${SITE.phone.display}.`,
+      title: "Wi-Fi Installation: Tampa, St. Pete, Clearwater & Orlando",
+      description: `Slow Wi-Fi or dead spots? Mesh Wi-Fi and router setup at homes and offices in Tampa, St. Pete, Clearwater, Brandon, Lakeland and Orlando. From ${usd(wifiFix.price)}.`,
     },
   },
 ];
@@ -275,8 +275,8 @@ INSTALL_PAGES.push({
   ],
   value: 500,
   seo: {
-    title: "Business IT Setup in Florida: Wi-Fi, Printers & 365",
-    description: `Workstations, multi-monitor desks, Wi-Fi, printers and Microsoft 365 set up on-site for Central Florida businesses. Flat price. Call ${SITE.phone.display}.`,
+    title: "Business IT Setup: Tampa, St. Pete, Clearwater & Orlando",
+    description: `Workstations, Wi-Fi, printers and Microsoft 365 set up on-site for businesses in Tampa, St. Pete, Clearwater, Brandon and Orlando. Call ${SITE.phone.display}.`,
   },
 });
 
@@ -347,7 +347,7 @@ INSTALL_PAGES.push({
   value: 120,
   seo: {
     title: "Gaming PC FPS Boost: Remote or In Person in Florida",
-    description: `Low FPS, stutter or input lag? We tune your Windows gaming PC live, remote worldwide or in person in Central Florida. From ${usd(remoteSpeed.price)}. Text ${SITE.phone.display}.`,
+    description: `Low FPS or stutter? We tune your Windows gaming PC live, remote worldwide or in person in Tampa, St. Pete, Brandon and Orlando. From ${usd(remoteSpeed.price)}.`,
   },
 });
 
@@ -408,8 +408,8 @@ INSTALL_PAGES.push({
   ],
   value: 120,
   seo: {
-    title: "Phone & iPad Screen and Battery Repair: Tampa to Orlando",
-    description: `Cracked iPhone, Samsung or iPad screen? Dead battery? Fixed at your door in Tampa Bay and Central Florida. Price by text first: ${SITE.phone.display}.`,
+    title: "Phone & iPad Repair: Tampa, St. Pete, Brandon & Winter Haven",
+    description: `Cracked iPhone, Samsung or iPad screen or dead battery? Fixed at your door in Tampa, St. Pete, Brandon, Winter Haven and Orlando. Text ${SITE.phone.display}.`,
   },
 });
 
@@ -507,8 +507,8 @@ INSTALL_PAGES.push({
   ],
   value: 40,
   seo: {
-    title: "Free Electronics Recycling Pickup: Tampa to Orlando, FL",
-    description: `Free pickup of old computers, phones and TVs in Tampa, St. Pete, Orlando, Lakeland, Sarasota and Central Florida. Call or text ${SITE.phone.display}.`,
+    title: "Free Electronics Recycling Pickup: Tampa, St. Pete & More",
+    description: `Free pickup of old computers, phones and TVs in Tampa, St. Pete, Clearwater, Brandon, Winter Haven, Lakeland and Orlando. Call or text ${SITE.phone.display}.`,
   },
 });
 
