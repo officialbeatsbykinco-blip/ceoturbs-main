@@ -1,12 +1,14 @@
 import { Link } from "react-router-dom";
-import { ArrowRight, Building2, Check, Globe, Recycle, ShieldCheck, Smartphone, Star, Truck, Wrench } from "lucide-react";
+import { ArrowRight, Building2, Check, Globe, MessageSquare, Recycle, ShieldCheck, Smartphone, Star, Truck, Wrench } from "lucide-react";
 import { FAQList, SectionHeader } from "@/components/blocks/Basics";
 import { CallLink } from "@/components/site/CallLink";
 import { FixMyTechLink } from "@/components/tech/FixMyTechLink";
 import { REVIEWS, SITE } from "@/config/site";
 import { SHOP_FAQS, SHOP_PERKS, COMPUTERS_PATH } from "@/content/computer-shop";
 import { OFFICE_SETUP_PATH } from "@/content/tech-pages";
-import { HelpChoose, Listings } from "./ComputerShop";
+import { CategoryTiles, HelpChoose, Listings } from "./ComputerShop";
+import { PhoneOnly } from "@/components/booking/BookOrText";
+import { QUICK_TECH_TEXT, smsHref } from "@/lib/sms";
 
 /**
  * The homepage is the computer shop: laptops and desktops from Shopify, shipped anywhere in the US. Selling computers
@@ -17,7 +19,7 @@ import { HelpChoose, Listings } from "./ComputerShop";
 
 const TRUST = [
   { icon: ShieldCheck, t: "Secure checkout by Shopify" },
-  { icon: Truck, t: "Ships anywhere in the US" },
+  { icon: Truck, t: "Free shipping on laptops, monitors & accessories" },
   { icon: Star, t: `5.0 on Google · ${REVIEWS.length} reviews` },
 ];
 
@@ -41,7 +43,7 @@ export default function Home() {
             <span className="text-chrome-grad">Computers for sale,</span> <span className="text-turbo-grad">ready to use and checked by a real tech.</span>
           </h1>
           <p className="mt-4 max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg">
-            Laptops, Chromebooks, desktops and gaming PCs with real photos, full specs and a clear price. Buy online, and call or text the tech who sold it with any question, before or after you buy.
+            Laptops, Chromebooks, desktops, gaming PCs, monitors and accessories with real photos, full specs and a clear price. Buy online, and call or text the tech who sold it with any question, before or after you buy.
           </p>
           <div className="mt-6 flex flex-col gap-3 sm:flex-row">
             <a href="#shop" className="btn-ignite btn-shine inline-flex items-center justify-center gap-2 !py-4 !text-lg">
@@ -57,12 +59,13 @@ export default function Home() {
               </li>
             ))}
           </ul>
+          <CategoryTiles />
         </div>
       </section>
 
-      <section id="shop" className="section scroll-mt-20" aria-labelledby="shop-title">
+      <section id="shop" className="section scroll-mt-32" aria-labelledby="shop-title">
         <div className="container-x">
-          <SectionHeader title={<span id="shop-title">Computers in stock</span>} lede="Photos, specs and price on every listing. Checkout is secure through Shopify, and the total with shipping shows before you pay." />
+          <SectionHeader title={<span id="shop-title">In stock now</span>} lede="Photos, specs and price on every listing. Checkout is secure through Shopify, and the total with shipping shows before you pay." />
           <Listings />
           <p className="mt-6 text-[15px] text-muted-foreground">
             Looking for something specific? Tell us your budget and what you'll use it for, and we'll find it.{" "}
@@ -90,7 +93,24 @@ export default function Home() {
 
       <section className="section border-t border-border" aria-labelledby="more">
         <div className="container-x">
-          <SectionHeader title={<span id="more">We also fix and set up tech</span>} lede="Repairs, phone screens, recycling and office setups in person near us, and websites for businesses anywhere." />
+          <p className="text-sm font-bold uppercase tracking-wider text-turbo">Tech services</p>
+          <SectionHeader title={<span id="more">Need it fixed or set up? Our techs come to you.</span>} lede="Computer and phone repair, cameras, Wi-Fi and office setups at your door around Tampa Bay, remote fixes anywhere, and websites for businesses." />
+          <div className="mt-6 grid gap-3 sm:flex">
+            <PhoneOnly
+              desktop={
+                <CallLink location="home tech services" icon className="btn-blue justify-center !py-4">
+                  Call a tech: {SITE.phone.display}
+                </CallLink>
+              }
+            >
+              <a href={smsHref(QUICK_TECH_TEXT)} data-call-location="home tech services text" className="btn-blue inline-flex items-center justify-center gap-2 !py-4">
+                <MessageSquare className="h-5 w-5" aria-hidden /> Text a tech
+              </a>
+            </PhoneOnly>
+            <FixMyTechLink source="home tech services" className="btn-ignite justify-center !py-4">
+              <Wrench className="h-5 w-5" aria-hidden /> Get a repair price
+            </FixMyTechLink>
+          </div>
           <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
             <FixMyTechLink source="home hero" className="panel flex flex-col p-5 text-left hover:border-turbo/60">
               <Wrench className="h-6 w-6 text-turbo" aria-hidden />

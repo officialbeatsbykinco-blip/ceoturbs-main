@@ -1,7 +1,7 @@
 import { Fragment, useEffect, useRef, useState } from "react";
 import { CHECK_PATH } from "@/lib/free-check";
-import { Link, NavLink, useLocation } from "react-router-dom";
-import { Calendar, ChevronDown, Laptop, Menu, MessageSquare, Phone, Search, Wrench, X } from "lucide-react";
+import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
+import { ChevronDown, Laptop, Menu, MessageSquare, Phone, Search, Truck, Wrench, X } from "lucide-react";
 import { Logo } from "./Logo";
 import { BookButton, InstallBookButton } from "@/components/cta/Actions";
 import { IT_SERVICES_PATH, OFFICE_SETUP_PATH, techBooking } from "@/content/tech-pages";
@@ -77,9 +77,27 @@ const MENUS: Menu[] = [
   },
 ];
 
-/** Tech support, IT and computers: the main business, first in the nav. */
+const cat = (c: string) => `${COMPUTERS_PATH}?cat=${encodeURIComponent(c)}#shop`;
+
+/** The store: first in the category row, like Best Buy's "Shop". */
+const SHOP_MENU: Menu = {
+  label: "Shop",
+  to: COMPUTERS_PATH,
+  items: [
+    { to: `${COMPUTERS_PATH}#shop`, label: "Shop everything", sub: "Every computer and accessory in stock" },
+    { to: cat("Laptops"), label: "Laptops & Chromebooks", sub: "Ready to use, ships free" },
+    { to: cat("Desktops"), label: "Desktop computers", sub: "Towers and small form factor PCs" },
+    { to: cat("Gaming"), label: "Gaming PCs & gear", sub: "Gaming desktops, mice and keyboards" },
+    { to: cat("Monitors & TVs"), label: "Monitors & TVs", sub: "Second screens and small TVs, ships free" },
+    { to: cat("Accessories"), label: "Keyboards & mice", sub: "Ships free" },
+    { to: cat("Smart home"), label: "Cameras & doorbells", sub: "Blink, Ring and more, ships free" },
+    { to: "/electronics-recycling-tampa", label: "Recycle your old tech", sub: "Free pickup, drives wiped" },
+  ],
+};
+
+/** Tech services (our Geek Squad): repairs, setup and installs, its own menu next to the shop. */
 const TECH: Menu = {
-  label: "Tech support",
+  label: "Tech services",
   to: IT_SERVICES_PATH,
   items: [
     { to: IT_SERVICES_PATH, label: "Windows computer repair", sub: "Speed-ups, blue screens, won't turn on" },
@@ -123,7 +141,41 @@ const QUICK: { to: string; label: string }[] = [
 ];
 
 const linkCls = ({ isActive }: { isActive: boolean }) =>
-  cn("whitespace-nowrap rounded-lg px-2 py-2 text-[13px] font-medium transition-colors hover:bg-white/5 hover:text-foreground xl:px-2.5 xl:text-sm", isActive ? "text-foreground" : "text-muted-foreground");
+  cn("flex min-h-[36px] items-center whitespace-nowrap rounded-lg px-2.5 py-1.5 text-sm font-semibold transition-colors hover:bg-white/5 hover:text-foreground", isActive ? "text-foreground" : "text-muted-foreground");
+
+/** Product search: a plain GET form to the shop (works without JavaScript), routed client-side when it can be. */
+function SiteSearch({ className, onDone }: { className?: string; onDone?: () => void }) {
+  const navigate = useNavigate();
+  return (
+    <form
+      role="search"
+      action={COMPUTERS_PATH}
+      method="get"
+      className={cn("relative items-center", className)}
+      onSubmit={(e) => {
+        e.preventDefault();
+        const q = new FormData(e.currentTarget).get("q")?.toString().trim();
+        navigate(q ? `${COMPUTERS_PATH}?q=${encodeURIComponent(q)}#shop` : `${COMPUTERS_PATH}#shop`);
+        onDone?.();
+      }}
+    >
+      <label htmlFor={onDone ? "site-search-mobile" : "site-search"} className="sr-only">
+        Search laptops, desktops, monitors and more
+      </label>
+      <input
+        id={onDone ? "site-search-mobile" : "site-search"}
+        name="q"
+        type="search"
+        enterKeyHint="search"
+        placeholder="Search laptops, desktops, monitors…"
+        className="field h-11 w-full rounded-full pl-4 pr-12 text-[15px]"
+      />
+      <button type="submit" className="absolute right-1 inline-flex h-9 w-9 items-center justify-center rounded-full bg-turbo text-white" aria-label="Search">
+        <Search className="h-4 w-4" aria-hidden />
+      </button>
+    </form>
+  );
+}
 
 export function Header({ focus: focusProp = false }: { focus?: boolean }) {
   const [open, setOpen] = useState(false);
@@ -157,31 +209,8 @@ export function Header({ focus: focusProp = false }: { focus?: boolean }) {
       <div className="header-bar container-x flex h-16 items-center justify-between gap-3 sm:gap-4">
         <Logo className="shrink-0" onNavigate={() => setOpen(false)} />
 
-        <nav aria-label="Main" className="hidden min-w-0 items-center gap-0.5 lg:flex">
-          {/* On the shop pages the orange button on the right is the shop link, so the pill would be a duplicate. */}
-          {!shopPage && (
-            <NavLink to={COMPUTERS_PATH} className={({ isActive }) => cn("mr-1 inline-flex min-h-[40px] items-center gap-1.5 whitespace-nowrap rounded-full px-3 py-1.5 text-[13px] font-semibold ring-1 transition-colors xl:text-sm", isActive ? "bg-turbo/20 text-foreground ring-turbo/60" : "bg-turbo/10 text-turbo ring-turbo/30 hover:bg-turbo/20")}>
-              <Laptop className="h-3.5 w-3.5" aria-hidden /> Shop computers
-            </NavLink>
-          )}
-          <NavLink to={IT_SERVICES_PATH} className={linkCls}>
-            <span className="inline-flex items-center gap-1"><Wrench className="h-3.5 w-3.5" aria-hidden /> Repair</span>
-          </NavLink>
-          <NavLink to={OFFICE_SETUP_PATH} className={linkCls}>
-            Office setup
-          </NavLink>
-          <Dropdown menu={TECH} active={TECH.items.some((i) => i.to === pathname)} />
-          <NavLink to="/grow" className={linkCls}>
-            Websites &amp; ads
-          </NavLink>
-          <NavLink to={SHOP_PATH} className={({ isActive }) => cn(linkCls({ isActive }), "hidden xl:block")}>
-            Review cards
-          </NavLink>
-          <NavLink to={`${CHECK_PATH}?from=nav`} className={({ isActive }) => cn(linkCls({ isActive }), "hidden xl:block")}>
-            Free check
-          </NavLink>
-          <Dropdown menu={MORE} active={MORE.items.some((i) => i.to === pathname)} align="right" />
-        </nav>
+        {/* Like Best Buy: a wide search box in the top row; the categories sit in their own row underneath. */}
+        <SiteSearch className="mx-2 hidden max-w-xl flex-1 lg:flex" />
 
         <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
           <CallLink location={focus ? "ad page header" : "header"} icon className="hidden min-h-[44px] whitespace-nowrap px-2 text-base font-bold text-foreground transition-colors hover:text-turbo xl:inline-flex" />
@@ -245,11 +274,36 @@ export function Header({ focus: focusProp = false }: { focus?: boolean }) {
         </div>
       </div>
 
+      {/* Desktop: the category row (Shop · Tech services · …), in its own row so nothing can crowd the phone number or buttons. */}
+      <nav aria-label="Main" className="hidden border-t border-border/60 lg:block">
+        <div className="container-x flex h-11 items-center gap-0.5">
+          <Dropdown menu={SHOP_MENU} active={pathname === "/" || pathname.startsWith(COMPUTERS_PATH)} accent />
+          <Dropdown menu={TECH} active={TECH.items.some((i) => i.to === pathname)} />
+          <NavLink to={OFFICE_SETUP_PATH} className={linkCls}>
+            Office setup
+          </NavLink>
+          <NavLink to="/grow" className={linkCls}>
+            Websites &amp; ads
+          </NavLink>
+          <NavLink to={SHOP_PATH} className={linkCls}>
+            Review cards
+          </NavLink>
+          <NavLink to={`${CHECK_PATH}?from=nav`} className={linkCls}>
+            Free check
+          </NavLink>
+          <Dropdown menu={MORE} active={MORE.items.some((i) => i.to === pathname)} align="right" />
+          <p className="ml-auto hidden items-center gap-1.5 whitespace-nowrap text-[13px] font-semibold text-muted-foreground xl:inline-flex">
+            <Truck className="h-4 w-4 text-turbo" aria-hidden /> Free shipping on laptops, monitors &amp; accessories
+          </p>
+        </div>
+      </nav>
+
       {!open && <QuickNav pathname={pathname} />}
 
       {open && (
         <div id="mobile-menu" className="container-x h-[calc(100dvh-4rem)] overflow-y-auto overscroll-contain bg-background pb-32 pt-2 lg:hidden">
           <div className="grid gap-2">
+            <SiteSearch className="mb-2 flex" onDone={() => setOpen(false)} />
             <FixMyTechLink source="mobile menu" onOpen={() => setOpen(false)} className="btn-ignite justify-between !px-4 !py-4 !text-lg">
               <span className="inline-flex items-center gap-2">
                 <Wrench className="h-5 w-5" aria-hidden /> Fix or set up my tech
@@ -358,13 +412,13 @@ function QuickNav({ pathname }: { pathname: string }) {
   );
 }
 
-function Dropdown({ menu, active, align = "center" }: { menu: Menu; active: boolean; align?: "center" | "right" }) {
+function Dropdown({ menu, active, align = "left", accent }: { menu: Menu; active: boolean; align?: "left" | "right"; accent?: boolean }) {
   return (
     <div className="group relative">
-      <Link to={menu.to} className={cn("flex items-center gap-1 whitespace-nowrap rounded-lg px-2 py-2 text-[13px] font-medium transition-colors hover:bg-white/5 hover:text-foreground xl:px-2.5 xl:text-sm", active ? "text-foreground" : "text-muted-foreground")}>
+      <Link to={menu.to} className={cn("flex min-h-[36px] items-center gap-1 whitespace-nowrap rounded-lg px-2.5 py-1.5 text-sm font-semibold transition-colors hover:bg-white/5 hover:text-foreground", accent ? "bg-turbo/10 text-turbo ring-1 ring-turbo/30 hover:bg-turbo/20 hover:text-turbo" : active ? "text-foreground" : "text-muted-foreground")}>
         {menu.label} <ChevronDown className="h-3.5 w-3.5 transition-transform group-hover:rotate-180" aria-hidden />
       </Link>
-      <div className={cn("invisible absolute top-full pt-2", align === "right" ? "right-0" : "left-1/2 -translate-x-1/2", " opacity-0 transition-all duration-150 group-focus-within:visible group-focus-within:opacity-100 group-hover:visible group-hover:opacity-100", menu.wide ? "w-[560px] max-w-[calc(100vw-2rem)]" : "w-[300px]")}>
+      <div className={cn("invisible absolute top-full pt-2", align === "right" ? "right-0" : "left-0", " opacity-0 transition-all duration-150 group-focus-within:visible group-focus-within:opacity-100 group-hover:visible group-hover:opacity-100", menu.wide ? "w-[560px] max-w-[calc(100vw-2rem)]" : "w-[300px]")}>
         <div className={cn("grid max-h-[75vh] gap-1 overflow-y-auto rounded-2xl border border-white/10 bg-[hsl(218_33%_7%)] p-2 shadow-[0_24px_60px_-12px_rgba(0,0,0,0.8)]", menu.wide && "dropdown-scroll grid-cols-2")}>
           {menu.items.map((i, idx) => (
             <Fragment key={i.to + i.label}>

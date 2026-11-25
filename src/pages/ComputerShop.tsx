@@ -1,8 +1,8 @@
 // /computers — the computer shop. Listings come from Shopify (src/lib/computers.ts); checkout is Shopify's.
 // /computers/:handle renders one listing (ComputerProduct).
-import { useMemo, useState } from "react";
-import { Link } from "react-router-dom";
-import { ArrowRight, Check, Cpu, Globe, HardDrive, Laptop, MapPin, MessageSquare, Monitor, Smartphone, Wrench } from "lucide-react";
+import { useMemo } from "react";
+import { Link, useSearchParams } from "react-router-dom";
+import { ArrowRight, Camera, Check, Cpu, Gamepad2, Globe, HardDrive, Keyboard, Laptop, MapPin, MessageSquare, Monitor, PcCase, Smartphone, Truck, Wrench, X } from "lucide-react";
 import { FAQList, SectionHeader } from "@/components/blocks/Basics";
 import { CallLink } from "@/components/site/CallLink";
 import { PhoneOnly } from "@/components/booking/BookOrText";
@@ -11,7 +11,7 @@ import { SITE } from "@/config/site";
 import { SHOP_FAQS, SHOP_PERKS, computerPath } from "@/content/computer-shop";
 import { itPrice } from "@/content/pricing";
 import { IT_SERVICES_PATH } from "@/content/tech-pages";
-import { KINDS, conditionOf, kindsOf, money, sized, useComputers, type Computer, type ComputerKind } from "@/lib/computers";
+import { KINDS, conditionOf, kindsOf, matchesQuery, money, shipsFree, sized, useComputers, type Computer, type ComputerKind } from "@/lib/computers";
 import { smsHref } from "@/lib/sms";
 import { cn } from "@/lib/utils";
 
@@ -38,55 +38,122 @@ function Card({ c, eager }: { c: Computer; eager?: boolean }) {
   const condition = conditionOf(c);
   return (
     <Link to={computerPath(c.handle)} className="panel group flex flex-col overflow-hidden transition-shadow hover:shadow-xl focus-visible:ring-2 focus-visible:ring-turbo">
-      <div className="relative aspect-[4/3] overflow-hidden bg-white">
+      <div className="relative aspect-square overflow-hidden bg-white sm:aspect-[4/3]">
         {img ? (
           <img
             src={sized(img.url, 640)}
             srcSet={`${sized(img.url, 400)} 400w, ${sized(img.url, 640)} 640w, ${sized(img.url, 960)} 960w`}
-            sizes="(min-width: 1024px) 30vw, (min-width: 640px) 45vw, 100vw"
+            sizes="(min-width: 1024px) 30vw, 50vw"
             alt={img.alt}
             width={img.width}
             height={img.height}
             loading={eager ? "eager" : "lazy"}
             decoding="async"
-            className="h-full w-full object-contain p-3 transition-transform duration-500 group-hover:scale-[1.03]"
+            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
           />
         ) : (
           <div className="grid h-full place-items-center text-[#0a1730]/30">
             <Laptop className="h-16 w-16" aria-hidden />
           </div>
         )}
-        {condition && <span className="absolute left-3 top-3 rounded-full bg-black/75 px-3 py-1 text-xs font-semibold text-white">{condition}</span>}
-        {!c.available && <span className="absolute right-3 top-3 rounded-full bg-white px-3 py-1 text-xs font-bold text-[#0a1730] ring-1 ring-black/10">Sold</span>}
+        {condition && <span className="absolute left-2 top-2 rounded-full bg-black/75 px-2.5 py-0.5 text-[11px] font-semibold text-white sm:left-3 sm:top-3 sm:px-3 sm:py-1 sm:text-xs">{condition}</span>}
+        {!c.available && <span className="absolute right-2 top-2 rounded-full bg-white px-2.5 py-0.5 text-[11px] font-bold text-[#0a1730] ring-1 ring-black/10 sm:right-3 sm:top-3 sm:text-xs">Sold</span>}
       </div>
-      <div className="flex flex-1 flex-col p-4 sm:p-5">
-        <h3 className="font-display text-lg font-bold leading-snug">{c.title}</h3>
-        {c.description && <p className="mt-1 line-clamp-2 text-sm text-muted-foreground">{c.description}</p>}
-        <div className="mt-auto flex items-end justify-between gap-3 pt-4">
-          <p>
-            <span className="font-display text-2xl font-bold">{money(c.price)}</span>
-            {c.compareAt && <span className="ml-2 text-sm text-muted-foreground line-through">{money(c.compareAt)}</span>}
-          </p>
-          <span className="inline-flex items-center gap-1 text-sm font-semibold text-turbo">
-            {c.available ? "View" : "See it"} <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" aria-hidden />
-          </span>
+      <div className="flex flex-1 flex-col p-3 sm:p-5">
+        <h3 className="line-clamp-3 font-display text-[15px] font-bold leading-snug sm:line-clamp-none sm:text-lg">{c.title}</h3>
+        {c.description && <p className="mt-1 hidden text-sm text-muted-foreground sm:line-clamp-2">{c.description}</p>}
+        <div className="mt-auto pt-3 sm:pt-4">
+          <div className="flex items-end justify-between gap-2">
+            <p>
+              <span className="font-display text-xl font-bold sm:text-2xl">{money(c.price)}</span>
+              {c.compareAt && <span className="ml-2 text-sm text-muted-foreground line-through">{money(c.compareAt)}</span>}
+            </p>
+            <span className="hidden items-center gap-1 text-sm font-semibold text-turbo sm:inline-flex">
+              {c.available ? "View" : "See it"} <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" aria-hidden />
+            </span>
+          </div>
+          {c.available && shipsFree(c) && (
+            <p className="mt-1 inline-flex items-center gap-1 text-xs font-semibold text-emerald-700 sm:text-sm">
+              <Truck className="h-3.5 w-3.5" aria-hidden /> Free shipping
+            </p>
+          )}
         </div>
       </div>
     </Link>
   );
 }
 
+const KIND_ICON: Record<ComputerKind, typeof Laptop> = {
+  Laptops: Laptop,
+  Desktops: PcCase,
+  Gaming: Gamepad2,
+  Macs: Laptop,
+  "Monitors & TVs": Monitor,
+  Accessories: Keyboard,
+  "Smart home": Camera,
+};
+
+/** Best Buy-style "Shop by category" row: one tile per category that has something in stock. */
+export function CategoryTiles() {
+  const { list } = useComputers();
+  const kinds = KINDS.filter((k) => list.some((c) => kindsOf(c).includes(k)));
+  if (!kinds.length) return null;
+  return (
+    <nav aria-label="Shop by category" className="mt-8">
+      <h2 className="font-display text-lg font-bold">Shop by category</h2>
+      <ul className="mt-3 grid grid-cols-3 gap-2 sm:grid-cols-4 lg:grid-cols-7">
+        {kinds.map((k) => {
+          const I = KIND_ICON[k];
+          return (
+            <li key={k}>
+              <Link to={`/computers?cat=${encodeURIComponent(k)}#shop`} className="panel flex h-full min-h-[88px] flex-col items-center justify-center gap-2 p-3 text-center text-[13px] font-semibold leading-tight transition-colors hover:border-turbo/60 sm:text-sm">
+                <I className="h-6 w-6 text-turbo" aria-hidden />
+                {k}
+              </Link>
+            </li>
+          );
+        })}
+      </ul>
+    </nav>
+  );
+}
+
+const rank = (c: Computer) => (kindsOf(c).some((k) => k === "Laptops" || k === "Desktops") ? 0 : 1);
+
 export function Listings() {
   const { list, state } = useComputers();
-  const [kind, setKind] = useState<ComputerKind | "All">("All");
+  const [params, setParams] = useSearchParams();
+  const q = (params.get("q") || "").trim();
+  const cat = params.get("cat");
+  const kind: ComputerKind | "All" = KINDS.includes(cat as ComputerKind) ? (cat as ComputerKind) : "All";
+  const setKind = (k: ComputerKind | "All") =>
+    setParams(
+      (p) => {
+        if (k === "All") p.delete("cat");
+        else p.set("cat", k);
+        return p;
+      },
+      { replace: true, preventScrollReset: true },
+    );
+  const clearSearch = () =>
+    setParams(
+      (p) => {
+        p.delete("q");
+        return p;
+      },
+      { replace: true, preventScrollReset: true },
+    );
   const kinds = useMemo(() => KINDS.filter((k) => list.some((c) => kindsOf(c).includes(k))), [list]);
-  const shown = (kind === "All" ? list : list.filter((c) => kindsOf(c).includes(kind))).slice().sort((a, b) => Number(b.available) - Number(a.available));
+  const shown = list
+    .filter((c) => (kind === "All" || kindsOf(c).includes(kind)) && (!q || matchesQuery(c, q)))
+    // In stock first, then computers (laptops and desktops) before monitors and accessories.
+    .sort((a, b) => Number(b.available) - Number(a.available) || rank(a) - rank(b));
 
   if (state === "loading")
     return (
-      <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3" aria-busy="true" aria-label="Loading computers">
+      <div className="mt-8 grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-3" aria-busy="true" aria-label="Loading products">
         {[0, 1, 2].map((i) => (
-          <div key={i} className="panel h-[360px] animate-pulse" />
+          <div key={i} className="panel h-[300px] animate-pulse sm:h-[360px]" />
         ))}
       </div>
     );
@@ -106,26 +173,43 @@ export function Listings() {
 
   return (
     <>
+      {q && (
+        <p className="mt-6 flex flex-wrap items-center gap-2 text-[15px]">
+          <span>
+            {shown.length} result{shown.length === 1 ? "" : "s"} for <strong>&ldquo;{q}&rdquo;</strong>
+          </span>
+          <button type="button" onClick={clearSearch} className="inline-flex min-h-[36px] items-center gap-1 rounded-full px-3 text-sm font-semibold text-turbo ring-1 ring-border hover:bg-white/5">
+            <X className="h-3.5 w-3.5" aria-hidden /> Clear search
+          </button>
+        </p>
+      )}
       {kinds.length > 1 && (
-        <div className="mt-6 flex flex-wrap gap-2" role="group" aria-label="Filter computers">
+        <div className="no-scrollbar -mx-4 mt-6 flex gap-2 overflow-x-auto px-4 sm:mx-0 sm:flex-wrap sm:px-0" role="group" aria-label="Filter by category">
           {(["All", ...kinds] as const).map((k) => (
             <button
               key={k}
               type="button"
               aria-pressed={kind === k}
               onClick={() => setKind(k)}
-              className={cn("min-h-[44px] rounded-full px-4 text-sm font-semibold ring-1 transition-colors", kind === k ? "bg-turbo text-white ring-turbo" : "ring-border hover:bg-white/5")}
+              className={cn("min-h-[44px] shrink-0 whitespace-nowrap rounded-full px-4 text-sm font-semibold ring-1 transition-colors", kind === k ? "bg-turbo text-white ring-turbo" : "ring-border hover:bg-white/5")}
             >
               {k}
             </button>
           ))}
         </div>
       )}
-      <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {shown.map((c, i) => (
-          <Card key={c.handle} c={c} eager={i < 3} />
-        ))}
-      </div>
+      {shown.length ? (
+        <div className="mt-6 grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-3">
+          {shown.map((c, i) => (
+            <Card key={c.handle} c={c} eager={i < 4} />
+          ))}
+        </div>
+      ) : (
+        <div className="panel mt-6 flex flex-col items-start gap-4 p-6 sm:flex-row sm:items-center sm:justify-between">
+          <p className="font-display text-lg font-bold">Nothing matches that yet. Tell us what you need and we'll find it.</p>
+          <HelpChoose where="no results" className="shrink-0" />
+        </div>
+      )}
     </>
   );
 }
@@ -145,7 +229,7 @@ export default function ComputerShop() {
         <div className="pointer-events-none absolute -top-40 left-1/2 h-[600px] w-[1100px] -translate-x-1/2 glow-turbo" aria-hidden />
         <div className="container-x relative">
           <p className="chip">
-            <MapPin className="h-3.5 w-3.5 text-turbo" aria-hidden /> Ships anywhere in the US · buy online
+            <Truck className="h-3.5 w-3.5 text-turbo" aria-hidden /> Free shipping on laptops, monitors &amp; accessories
           </p>
           <h1 id="hero" className="mt-4 max-w-3xl text-[32px] font-bold leading-[1.05] sm:text-5xl">
             <span className="text-chrome-grad">Laptops &amp; desktops for sale,</span> <span className="text-turbo-grad">from a real computer tech.</span>
@@ -159,12 +243,13 @@ export default function ComputerShop() {
             </a>
             <HelpChoose where="hero" className="!py-4 !text-lg" />
           </div>
+          <CategoryTiles />
         </div>
       </section>
 
-      <section id="shop" className="section scroll-mt-20" aria-labelledby="shop-title">
+      <section id="shop" className="section scroll-mt-32" aria-labelledby="shop-title">
         <div className="container-x">
-          <SectionHeader title={<span id="shop-title">Computers in stock</span>} lede="Photos, specs and price on every listing. Checkout is secure through Shopify." />
+          <SectionHeader title={<span id="shop-title">In stock now</span>} lede="Photos, specs and price on every listing. Checkout is secure through Shopify." />
           <Listings />
         </div>
       </section>

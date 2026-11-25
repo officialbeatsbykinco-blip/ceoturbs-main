@@ -2,7 +2,7 @@
 // so these pages are built from the build-time snapshot (scripts/prerender.mjs) or, client-side, from the live list.
 import { SITE } from "@/config/site";
 import { COMPUTERS_PATH, COMPUTER_SHELL, computerPath } from "@/content/computer-shop";
-import { conditionOf, findComputer, type Computer } from "@/lib/computers";
+import { conditionOf, findComputer, kindsOf, type Computer } from "@/lib/computers";
 import type { PageMeta } from "./pages";
 import * as S from "./schema";
 
@@ -15,6 +15,17 @@ const CONDITION: Record<string, string> = {
   Used: "https://schema.org/UsedCondition",
   "Open box": "https://schema.org/UsedCondition",
 };
+
+/** Google product category path for the listing. */
+function categoryOf(c: Computer) {
+  const k = kindsOf(c);
+  if (k.includes("Laptops")) return "Electronics > Computers > Laptops";
+  if (k.includes("Desktops")) return "Electronics > Computers > Desktop Computers";
+  if (k.includes("Monitors & TVs")) return /\btv\b/i.test(c.title) ? "Electronics > Video > Televisions" : "Electronics > Video > Computer Monitors";
+  if (k.includes("Smart home")) return "Electronics > Video > Video Surveillance";
+  if (k.includes("Accessories")) return "Electronics > Electronics Accessories > Computer Components > Input Devices";
+  return "Electronics > Computers";
+}
 
 export function computerProduct(c: Computer) {
   const url = `${SITE.url}${computerPath(c.handle)}`;
@@ -39,7 +50,7 @@ export function computerProduct(c: Computer) {
     image: c.images.map((i) => i.url),
     sku: c.handle,
     ...(c.vendor && c.vendor !== SITE.name ? { brand: { "@type": "Brand", name: c.vendor } } : {}),
-    category: "Electronics > Computers",
+    category: categoryOf(c),
     offers:
       c.variants.length > 1
         ? { "@type": "AggregateOffer", priceCurrency: "USD", lowPrice: Math.min(...prices).toFixed(2), highPrice: Math.max(...prices).toFixed(2), offerCount: c.variants.length, availability: c.available ? "https://schema.org/InStock" : "https://schema.org/SoldOut", url }

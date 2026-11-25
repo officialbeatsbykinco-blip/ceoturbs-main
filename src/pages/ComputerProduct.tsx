@@ -8,7 +8,7 @@ import { FixMyTechLink } from "@/components/tech/FixMyTechLink";
 import { SITE } from "@/config/site";
 import { COMPUTERS_PATH } from "@/content/computer-shop";
 import { itPrice } from "@/content/pricing";
-import { conditionOf, findComputer, money, parseDescription, sized, useComputers, type Computer } from "@/lib/computers";
+import { conditionOf, findComputer, money, parseDescription, shipsFree, sized, useComputers, type Computer } from "@/lib/computers";
 import { createComputerCheckout } from "@/lib/shopify";
 import { newEventId, serverTrack, track } from "@/lib/track";
 import { cn } from "@/lib/utils";
@@ -93,7 +93,7 @@ function BuyBox({ c }: { c: Computer }) {
       <ul className="mt-5 grid gap-2 text-sm text-muted-foreground">
         {[
           [ShieldCheck, "Secure checkout by Shopify. You see shipping or pickup and the total before you pay."],
-          [MapPin, "Ships anywhere in the US. Live near us? Ask about setup at your place."],
+          [MapPin, shipsFree(c) ? "Free shipping anywhere in the US. Live near us? Ask about setup at your place." : "Ships anywhere in the US at a flat rate shown at checkout. Live near us? Ask about setup at your place."],
           [Wrench, "Repairs and upgrades later from the same tech."],
         ].map(([Icon, t]) => {
           const I = Icon as typeof ShieldCheck;

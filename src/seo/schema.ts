@@ -107,6 +107,12 @@ export const website = (): JsonLd => ({
   name: SITE.name,
   publisher: { "@id": ORG_ID },
   inLanguage: "en-US",
+  // The header search box: lets Google and AI assistants search the shop directly.
+  potentialAction: {
+    "@type": "SearchAction",
+    target: { "@type": "EntryPoint", urlTemplate: `${SITE.url}/computers?q={search_term_string}` },
+    "query-input": "required name=search_term_string",
+  },
 });
 
 export const webPage = (path: string, name: string, description: string, type = "WebPage", modified: string = SITE.contentUpdated): JsonLd => ({

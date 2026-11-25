@@ -29,7 +29,9 @@ export type Computer = {
   updatedAt: string;
 };
 
-export const COMPUTER_QUERY = "product_type:Computer OR product_type:Computers OR product_type:Laptop OR product_type:Laptops OR product_type:Desktop OR product_type:Desktops OR tag:computer OR tag:computers";
+// Accessories, monitors, TVs and smart-home gear from eBay are tagged "ebay" / "accessory" and sell in the same shop.
+export const COMPUTER_QUERY =
+  "product_type:Computer OR product_type:Computers OR product_type:Laptop OR product_type:Laptops OR product_type:Desktop OR product_type:Desktops OR tag:computer OR tag:computers OR tag:accessory OR tag:ebay";
 
 const QUERY = `query Computers($q: String!) {
   products(first: 100, query: $q, sortKey: CREATED_AT, reverse: true) {
@@ -179,15 +181,31 @@ const has = (c: Computer, ...words: string[]) => {
   return words.some((w) => hay.includes(` ${w.replace(/[^a-z0-9]+/g, " ")} `));
 };
 
-export type ComputerKind = "Laptops" | "Desktops" | "Gaming" | "Macs";
-export const KINDS: ComputerKind[] = ["Laptops", "Desktops", "Gaming", "Macs"];
+export type ComputerKind = "Laptops" | "Desktops" | "Gaming" | "Macs" | "Monitors & TVs" | "Accessories" | "Smart home";
+export const KINDS: ComputerKind[] = ["Laptops", "Desktops", "Gaming", "Macs", "Monitors & TVs", "Accessories", "Smart home"];
 export function kindsOf(c: Computer): ComputerKind[] {
   const k: ComputerKind[] = [];
   if (has(c, "laptop", "laptops", "notebook", "chromebook", "macbook", "macbook air", "macbook pro")) k.push("Laptops");
   if (has(c, "desktop", "desktops", "tower", "all in one", "imac", "mini pc", "mac mini")) k.push("Desktops");
   if (has(c, "gaming", "rtx", "radeon rx")) k.push("Gaming");
   if (has(c, "mac", "macbook", "imac", "apple")) k.push("Macs");
+  if (has(c, "monitor", "monitors", "tv", "television", "display")) k.push("Monitors & TVs");
+  if (has(c, "keyboard", "mouse", "accessory", "headset", "webcam", "charger", "speaker")) k.push("Accessories");
+  if (has(c, "security camera", "camera", "doorbell", "video doorbell", "smart home")) k.push("Smart home");
   return k;
+}
+
+/** Only desktops pay for shipping; everything else ships free (matches the Shopify shipping profiles and eBay). */
+export const shipsFree = (c: Computer) => !kindsOf(c).includes("Desktops");
+
+/** Search box match: every word must appear in the title, type, brand or tags. */
+export function matchesQuery(c: Computer, q: string) {
+  const hay = [c.title, c.productType, c.vendor, ...c.tags].join(" ").toLowerCase();
+  return q
+    .toLowerCase()
+    .split(/\s+/)
+    .filter(Boolean)
+    .every((w) => hay.includes(w));
 }
 
 /** New / Refurbished / Used / Open box, from the tags (or the title). */
