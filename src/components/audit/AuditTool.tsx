@@ -605,7 +605,7 @@ function AuditTeaser({
             <input tabIndex={-1} autoComplete="off" value={f.company_site} onChange={(e) => set("company_site", e.target.value)} />
           </label>
           <label className="flex cursor-pointer items-start gap-3 text-xs leading-relaxed text-muted-foreground sm:col-span-2">
-            <input type="checkbox" className="mt-0.5 h-4 w-4 shrink-0 accent-[hsl(var(--turbo))]" checked={f.smsOptIn} onChange={(e) => set("smsOptIn", e.target.checked)} />
+            <input type="checkbox" className="mt-0.5 h-5 w-5 shrink-0 accent-[hsl(var(--turbo))]" checked={f.smsOptIn} onChange={(e) => set("smsOptIn", e.target.checked)} />
             <span>I agree to receive text messages from CEO Turbo about my audit report and follow-up. Message frequency varies. Msg &amp; data rates may apply. Reply STOP to opt out, HELP for help. Consent is not a condition of purchase. <Link to="/terms" className="underline underline-offset-2 hover:text-foreground">Terms</Link> &amp; <Link to="/privacy-policy" className="underline underline-offset-2 hover:text-foreground">Privacy</Link>.</span>
           </label>
         </div>

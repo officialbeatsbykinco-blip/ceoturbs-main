@@ -534,7 +534,7 @@ export function ShirtMaker({ product = SHIRT, copy = COMPANY_MAKER }: { product?
             )}
             {logo?.white && (
               <label className="mt-3 flex items-center gap-2 text-sm">
-                <input type="checkbox" checked={useClean} onChange={(e) => setUseClean(e.target.checked)} className="h-4 w-4 accent-[hsl(var(--turbo))]" />
+                <input type="checkbox" checked={useClean} onChange={(e) => setUseClean(e.target.checked)} className="h-5 w-5 accent-[hsl(var(--turbo))]" />
                 Remove white background
               </label>
             )}
@@ -670,7 +670,7 @@ export function ShirtMaker({ product = SHIRT, copy = COMPANY_MAKER }: { product?
                 )}
                 {logo && !backArtFile && (
                   <label className="mt-3 flex items-center gap-2 text-sm">
-                    <input type="checkbox" checked={backLogo} onChange={(e) => setBackLogo(e.target.checked)} className="h-4 w-4 accent-[hsl(var(--turbo))]" />
+                    <input type="checkbox" checked={backLogo} onChange={(e) => setBackLogo(e.target.checked)} className="h-5 w-5 accent-[hsl(var(--turbo))]" />
                     Put my {copy.artNoun} on the back too
                   </label>
                 )}

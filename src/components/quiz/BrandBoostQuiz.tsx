@@ -336,7 +336,7 @@ export function BrandBoostQuiz({
                   <input tabIndex={-1} autoComplete="off" value={honeypot} onChange={(e) => setHoneypot(e.target.value)} />
                 </label>
                 <label className="flex cursor-pointer items-start gap-3 text-xs leading-relaxed text-muted-foreground">
-                  <input type="checkbox" className="mt-0.5 h-4 w-4 shrink-0 accent-[hsl(var(--turbo))]" checked={answers.smsOptIn} onChange={(e) => set("smsOptIn", e.target.checked)} />
+                  <input type="checkbox" className="mt-0.5 h-5 w-5 shrink-0 accent-[hsl(var(--turbo))]" checked={answers.smsOptIn} onChange={(e) => set("smsOptIn", e.target.checked)} />
                   I agree to receive text messages from CEO Turbo about my call (reminders and follow-up). Message frequency varies. Message &amp; data rates may apply. Reply STOP to opt out, HELP for help. Consent is not a condition of purchase. <Link to="/terms" className="underline underline-offset-2">Terms</Link> &amp; <Link to="/privacy-policy" className="underline underline-offset-2">Privacy</Link>.
                 </label>
                 <button type="submit" disabled={sending} className="btn-ignite btn-shine w-full !py-4 !text-base">

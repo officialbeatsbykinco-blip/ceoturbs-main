@@ -33,7 +33,7 @@ const markdown = [];
 
 for (const page of pages) {
   const appHtml = await render(page.path);
-  const data = page.path === "/computers" || page.path.startsWith("/computers/") ? COMPUTERS_DATA : "";
+  const data = page.path === "/" || page.path === "/computers" || page.path.startsWith("/computers/") ? COMPUTERS_DATA : "";
   // Function replacers: listing text from Shopify can contain "$&" or "$'", which a string replacement would expand.
   const html = template.replace("<!--head-->", () => head(page.path) + data).replace("<!--app-->", () => appHtml);
 

@@ -276,7 +276,7 @@ export function TextQuiz({ source, audience, variant = "inline", className }: { 
             ) : (
               <>
                 <label className="flex cursor-pointer items-start gap-3 text-xs leading-relaxed text-muted-foreground">
-                  <input type="checkbox" className="mt-0.5 h-4 w-4 shrink-0 accent-[hsl(var(--turbo))]" checked={answers.smsOptIn} onChange={(e) => set({ smsOptIn: e.target.checked })} />
+                  <input type="checkbox" className="mt-0.5 h-5 w-5 shrink-0 accent-[hsl(var(--turbo))]" checked={answers.smsOptIn} onChange={(e) => set({ smsOptIn: e.target.checked })} />
                   <span>
                     I agree to receive text messages from CEO Turbo about my request (replies and follow-up). Message frequency varies. Message &amp; data rates may apply. Reply STOP to opt out, HELP for help. Consent is not a condition of purchase. <Link to="/terms" className="underline underline-offset-2">Terms</Link> &amp; <Link to="/privacy-policy" className="underline underline-offset-2">Privacy</Link>.
                   </span>
