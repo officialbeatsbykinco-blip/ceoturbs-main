@@ -16,6 +16,8 @@ const HIDDEN = new Set(["", SETUP_PATH, "/book", "/booked", "/google-ads-for-loc
 export function FloatingBookButton() {
   const { pathname } = useLocation();
   if (HIDDEN.has(pathname.replace(/\/$/, ""))) return null;
+  // The shop: the agency call is the wrong ask there, and the button covered the product photo thumbnails.
+  if (pathname.startsWith("/computers")) return null;
   // Tech-repair ad pages book a tech visit; their hero already has call and text.
   const tech = techBooking(pathname);
   if (tech)
