@@ -149,7 +149,7 @@ function build(): PageMeta[] {
 
   pages.push({
     path: SHOP_PATH,
-    title: "Google Review Cards: Tap to Review, No App | CEO Turbo",
+    title: "NFC Google Review Cards: Tap to Review, No App Needed",
     description: `Customers tap their phone and your Google review form opens. iPhone & Android, no app, no subscription. From ${fromPriceLabel}, free US shipping.`,
     ogImage: "/og/review-cards.jpg?v=2",
     priority: 0.9,

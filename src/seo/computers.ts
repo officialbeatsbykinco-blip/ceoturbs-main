@@ -2,7 +2,7 @@
 // so these pages are built from the build-time snapshot (scripts/prerender.mjs) or, client-side, from the live list.
 import { SITE } from "@/config/site";
 import { COMPUTERS_PATH, COMPUTER_SHELL, computerPath } from "@/content/computer-shop";
-import { conditionOf, findComputer, kindsOf, type Computer } from "@/lib/computers";
+import { conditionOf, findComputer, kindsOf, shipsFree, type Computer } from "@/lib/computers";
 import type { PageMeta } from "./pages";
 import * as S from "./schema";
 
@@ -15,6 +15,19 @@ const CONDITION: Record<string, string> = {
   Used: "https://schema.org/UsedCondition",
   "Open box": "https://schema.org/UsedCondition",
 };
+
+/** Desktops ship at the Shopify "Desktops" flat rate; everything else ships free (USPS Ground Advantage, 1-day handling). */
+export const DESKTOP_SHIPPING = 34.99;
+const shipping = (c: Computer) => ({
+  "@type": "OfferShippingDetails",
+  shippingRate: { "@type": "MonetaryAmount", value: shipsFree(c) ? 0 : DESKTOP_SHIPPING, currency: "USD" },
+  shippingDestination: { "@type": "DefinedRegion", addressCountry: "US" },
+  deliveryTime: {
+    "@type": "ShippingDeliveryTime",
+    handlingTime: { "@type": "QuantitativeValue", minValue: 0, maxValue: 1, unitCode: "DAY" },
+    transitTime: { "@type": "QuantitativeValue", minValue: 2, maxValue: 5, unitCode: "DAY" },
+  },
+});
 
 /** Google product category path for the listing. */
 function categoryOf(c: Computer) {
@@ -39,6 +52,7 @@ export function computerProduct(c: Computer) {
     ...(condition ? { itemCondition: CONDITION[condition] } : {}),
     ...(sku ? { sku } : {}),
     seller: { "@id": S.ORG_ID },
+    shippingDetails: shipping(c),
   });
   const prices = c.variants.map((v) => v.price);
   return {

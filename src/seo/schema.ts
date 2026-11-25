@@ -313,11 +313,14 @@ const shirtGroup = ({ product: P, path, description, images, front, long }: Shir
   category: "Apparel & Accessories > Clothing > Shirts & Tops",
   material: "Cotton",
   url: abs(path),
-  variesBy: ["https://schema.org/color", "https://schema.org/size", "https://schema.org/pattern"],
+  // Variants differ by sleeve style and print placement, which Google's merchant listings read as "pattern"
+  // (each variant comes in every color and size, so those aren't variant axes).
+  variesBy: ["https://schema.org/pattern"],
   hasVariant: P.styles.flatMap((s) =>
     [false, true].map((back) => ({
       "@type": "Product",
       sku: shirtSku(s.id, back, P),
+      pattern: `${s.label}, ${back ? "front + back print" : "front print"}`,
       name: `${P.name} – ${s.label}${back ? " – Front + back print" : ""}`,
       description,
       image: abs(s.id === "long" ? long : front),

@@ -8,6 +8,7 @@ import { SHOP_FAQS, SHOP_PERKS, COMPUTERS_PATH } from "@/content/computer-shop";
 import { OFFICE_SETUP_PATH } from "@/content/tech-pages";
 import { CategoryTiles, HelpChoose, Listings } from "./ComputerShop";
 import { PhoneOnly } from "@/components/booking/BookOrText";
+import { ReviewSummary, ReviewWall } from "@/components/tech/ReviewWall";
 import { QUICK_TECH_TEXT, smsHref } from "@/lib/sms";
 
 /**
@@ -21,6 +22,13 @@ const TRUST = [
   { icon: ShieldCheck, t: "Secure checkout by Shopify" },
   { icon: Truck, t: "Free shipping on laptops, monitors & accessories" },
   { icon: Star, t: `5.0 on Google · ${REVIEWS.length} reviews` },
+];
+
+/** How buying works, in three steps (numbers, not adjectives). */
+const STEPS = [
+  { t: "Pick it", b: "Real photos, full specs and the condition on every listing. Text or call the tech with any question first." },
+  { t: "Pay securely", b: "Checkout runs on Shopify: pay by card or an express option like Shop Pay. The total with shipping shows before you pay." },
+  { t: "It ships in 1 to 2 business days", b: "Packed with padding and tracked to your door anywhere in the US. Laptops, monitors and accessories ship free." },
 ];
 
 const MORE: { icon: typeof Wrench; t: string; b: string; to: string }[] = [
@@ -73,6 +81,31 @@ export default function Home() {
               See the full computer shop
             </Link>
           </p>
+        </div>
+      </section>
+
+      <section className="section border-t border-border" aria-labelledby="how">
+        <div className="container-x">
+          <SectionHeader title={<span id="how">How buying a computer from us works</span>} />
+          <ol className="mt-8 grid gap-4 md:grid-cols-3">
+            {STEPS.map((st, i) => (
+              <li key={st.t} className="panel p-6">
+                <span className="grid h-9 w-9 place-items-center rounded-full bg-turbo font-display text-base font-bold text-white" aria-hidden>
+                  {i + 1}
+                </span>
+                <h3 className="mt-3 font-display text-lg font-bold">{st.t}</h3>
+                <p className="mt-2 text-sm text-muted-foreground">{st.b}</p>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </section>
+
+      <section className="section border-t border-border" aria-labelledby="reviews">
+        <div className="container-x">
+          <SectionHeader title={<span id="reviews">What customers say</span>} lede="Real Google reviews from people we've helped." />
+          <ReviewSummary className="mt-2" />
+          <ReviewWall className="mt-6" />
         </div>
       </section>
 
