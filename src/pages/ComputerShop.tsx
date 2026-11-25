@@ -145,13 +145,13 @@ export default function ComputerShop() {
         <div className="pointer-events-none absolute -top-40 left-1/2 h-[600px] w-[1100px] -translate-x-1/2 glow-turbo" aria-hidden />
         <div className="container-x relative">
           <p className="chip">
-            <MapPin className="h-3.5 w-3.5 text-turbo" aria-hidden /> Tampa Bay computer shop · buy online
+            <MapPin className="h-3.5 w-3.5 text-turbo" aria-hidden /> Ships anywhere in the US · buy online
           </p>
           <h1 id="hero" className="mt-4 max-w-3xl text-[32px] font-bold leading-[1.05] sm:text-5xl">
-            <span className="text-chrome-grad">Computers for sale,</span> <span className="text-turbo-grad">from a Tampa computer tech.</span>
+            <span className="text-chrome-grad">Computers for sale,</span> <span className="text-turbo-grad">from a real computer tech.</span>
           </h1>
           <p className="mt-4 max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg">
-            Laptops and desktops you can buy right here. Ask questions first, get it set up at your place anywhere in Central Florida, and get repairs and upgrades later from the same person.
+            Laptops and desktops you can buy right here, shipped anywhere in the US. Ask questions first, and get help and upgrades later from the same person.
           </p>
           <div className="mt-6 flex flex-col gap-3 sm:flex-row">
             <a href="#shop" className="btn-ignite btn-shine inline-flex items-center justify-center gap-2 !py-4 !text-lg">
@@ -186,7 +186,7 @@ export default function ComputerShop() {
 
       <section className="section border-t border-border" aria-labelledby="repair">
         <div className="container-x">
-          <SectionHeader title={<span id="repair">Already have a computer? We fix it.</span>} lede="Anything wrong with a computer, fixed at your door anywhere within about 1.5 hours of Temple Terrace (Tampa Bay to Orlando). Slow Windows computers sped up remotely, anywhere in the world." />
+          <SectionHeader title={<span id="repair">Already have a computer? We fix it.</span>} lede="Slow Windows computers sped up remotely, anywhere. Live near us? Hardware repairs at your door too." />
           <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {REPAIRS.map((r) => (
               <div key={r.title} className="panel flex flex-col p-5">

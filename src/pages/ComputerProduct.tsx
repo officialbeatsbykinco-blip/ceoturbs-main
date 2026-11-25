@@ -93,7 +93,7 @@ function BuyBox({ c }: { c: Computer }) {
       <ul className="mt-5 grid gap-2 text-sm text-muted-foreground">
         {[
           [ShieldCheck, "Secure checkout by Shopify. You see shipping or pickup and the total before you pay."],
-          [MapPin, "In Tampa Bay? Ask about setup at your place and moving your files over."],
+          [MapPin, "Ships anywhere in the US. Live near us? Ask about setup at your place."],
           [Wrench, "Repairs and upgrades later from the same tech."],
         ].map(([Icon, t]) => {
           const I = Icon as typeof ShieldCheck;
@@ -202,7 +202,7 @@ function Listing({ c }: { c: Computer }) {
                   Want your old computer fixed or upgraded instead?
                 </h2>
                 <p className="text-sm text-muted-foreground">
-                  Won't turn on, crashing, slow or full of pop-ups: fixed at your door anywhere from Tampa Bay to Orlando. Repairs {itPrice("it-pc-repair")}, remote speed-ups {itPrice("it-remote")} anywhere in the world.
+                  Won't turn on, crashing, slow or full of pop-ups: fixed at your door if you're near us. Repairs {itPrice("it-pc-repair")}, remote speed-ups {itPrice("it-remote")} anywhere in the world.
                 </p>
               </div>
             </div>
