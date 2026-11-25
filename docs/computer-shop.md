@@ -26,6 +26,7 @@ The shop at ceoturbo.com/computers shows your Shopify products automatically. Yo
    - **Vendor**: the brand (Dell, HP, Apple, Lenovo…).
    - **Tags**: the condition (`New`, `Refurbished`, `Used` or `Open box`) and, if it fits, `Gaming`. Tags add the badge and the filters.
 9. **Publishing / Sales channels**: keep it published to **Buy Button**, the same channel the review cards use. Without it the site can't see the product.
+   **Shipping**: in Settings → Shipping and delivery, add the computer to the **Computers** profile ($14.99 standard shipping anywhere in the US). Otherwise it falls into the General profile, which ships free.
 10. Save. The listing shows on ceoturbo.com/computers right away.
 
 ## When it shows in Google
