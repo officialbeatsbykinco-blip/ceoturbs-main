@@ -46,12 +46,14 @@ export function MobileActionBar() {
       </div>
     );
   // Home is the computer shop: Shop first, then Call and a Text that asks for help choosing.
-  if (pathname === "/" || pathname === "/computers")
+  // A computer's own page: Buy jumps to its buy box.
+  const listing = pathname.startsWith("/computers/");
+  if (pathname === "/" || pathname === "/computers" || listing)
     return (
       <div className="pb-safe fixed inset-x-0 bottom-0 z-40 border-t border-border/80 bg-background/90 px-3 pt-3 backdrop-blur-xl sm:hidden">
         <div className="flex gap-2">
-          <a href="#shop" className="btn-ignite flex flex-1 items-center justify-center gap-1.5 whitespace-nowrap !px-2 !py-3.5 !text-base font-bold">
-            <Laptop className="h-4 w-4 shrink-0" aria-hidden /> Shop
+          <a href={listing ? "#buy" : "#shop"} className="btn-ignite flex flex-1 items-center justify-center gap-1.5 whitespace-nowrap !px-2 !py-3.5 !text-base font-bold">
+            <Laptop className="h-4 w-4 shrink-0" aria-hidden /> {listing ? "Buy" : "Shop"}
           </a>
           <CallLink location="shop mobile bar" icon className="btn-blue flex flex-1 items-center justify-center whitespace-nowrap !px-2 !py-3.5 !text-base font-bold">
             Call

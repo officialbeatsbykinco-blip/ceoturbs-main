@@ -148,10 +148,10 @@ export default function ComputerShop() {
             <MapPin className="h-3.5 w-3.5 text-turbo" aria-hidden /> Ships anywhere in the US · buy online
           </p>
           <h1 id="hero" className="mt-4 max-w-3xl text-[32px] font-bold leading-[1.05] sm:text-5xl">
-            <span className="text-chrome-grad">Computers for sale,</span> <span className="text-turbo-grad">from a real computer tech.</span>
+            <span className="text-chrome-grad">Laptops &amp; desktops for sale,</span> <span className="text-turbo-grad">from a real computer tech.</span>
           </h1>
           <p className="mt-4 max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg">
-            Laptops and desktops you can buy right here, shipped anywhere in the US. Ask questions first, and get help and upgrades later from the same person.
+            Laptops, desktop computers and gaming PCs you can buy right here, shipped anywhere in the US. Ask questions first, and get help and upgrades later from the same person.
           </p>
           <div className="mt-6 flex flex-col gap-3 sm:flex-row">
             <a href="#shop" className="btn-ignite btn-shine inline-flex items-center justify-center gap-2 !py-4 !text-lg">

@@ -38,10 +38,10 @@ export default function Home() {
             <Truck className="h-3.5 w-3.5 text-turbo" aria-hidden /> Laptops & desktops · ships anywhere in the US
           </p>
           <h1 id="hero" className="mt-4 max-w-3xl text-[34px] font-bold leading-[1.05] sm:text-5xl md:text-[56px]">
-            <span className="text-chrome-grad">Computers that are ready to use,</span> <span className="text-turbo-grad">sold by a real computer tech.</span>
+            <span className="text-chrome-grad">Computers for sale,</span> <span className="text-turbo-grad">ready to use and checked by a real tech.</span>
           </h1>
           <p className="mt-4 max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg">
-            Laptops, Chromebooks and desktops with real photos, full specs and a clear price. Buy online, and call or text the tech who sold it with any question, before or after you buy.
+            Laptops, Chromebooks, desktops and gaming PCs with real photos, full specs and a clear price. Buy online, and call or text the tech who sold it with any question, before or after you buy.
           </p>
           <div className="mt-6 flex flex-col gap-3 sm:flex-row">
             <a href="#shop" className="btn-ignite btn-shine inline-flex items-center justify-center gap-2 !py-4 !text-lg">

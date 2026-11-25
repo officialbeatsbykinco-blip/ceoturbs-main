@@ -134,6 +134,7 @@ export function Header({ focus: focusProp = false }: { focus?: boolean }) {
   const tech = techBooking(pathname);
   const texting = useTexting();
   const focus = focusProp || !!tech;
+  const shopPage = pathname === "/" || pathname.startsWith(COMPUTERS_PATH);
 
   useEffect(() => setOpen(false), [pathname]);
 
@@ -153,13 +154,16 @@ export function Header({ focus: focusProp = false }: { focus?: boolean }) {
       <a href="#main" className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-3 focus:z-50 focus:rounded-lg focus:bg-card focus:px-4 focus:py-2">
         Skip to content
       </a>
-      <div className="container-x flex h-16 items-center justify-between gap-4">
+      <div className="header-bar container-x flex h-16 items-center justify-between gap-3 sm:gap-4">
         <Logo className="shrink-0" onNavigate={() => setOpen(false)} />
 
-        <nav aria-label="Main" className="hidden items-center gap-0.5 lg:flex">
-          <NavLink to={COMPUTERS_PATH} className={({ isActive }) => cn("mr-1 inline-flex min-h-[40px] items-center gap-1.5 whitespace-nowrap rounded-full px-3 py-1.5 text-[13px] font-semibold ring-1 transition-colors xl:text-sm", isActive ? "bg-turbo/20 text-foreground ring-turbo/60" : "bg-turbo/10 text-turbo ring-turbo/30 hover:bg-turbo/20")}>
-            <Laptop className="h-3.5 w-3.5" aria-hidden /> Shop computers
-          </NavLink>
+        <nav aria-label="Main" className="hidden min-w-0 items-center gap-0.5 lg:flex">
+          {/* On the shop pages the orange button on the right is the shop link, so the pill would be a duplicate. */}
+          {!shopPage && (
+            <NavLink to={COMPUTERS_PATH} className={({ isActive }) => cn("mr-1 inline-flex min-h-[40px] items-center gap-1.5 whitespace-nowrap rounded-full px-3 py-1.5 text-[13px] font-semibold ring-1 transition-colors xl:text-sm", isActive ? "bg-turbo/20 text-foreground ring-turbo/60" : "bg-turbo/10 text-turbo ring-turbo/30 hover:bg-turbo/20")}>
+              <Laptop className="h-3.5 w-3.5" aria-hidden /> Shop computers
+            </NavLink>
+          )}
           <NavLink to={IT_SERVICES_PATH} className={linkCls}>
             <span className="inline-flex items-center gap-1"><Wrench className="h-3.5 w-3.5" aria-hidden /> Repair</span>
           </NavLink>
@@ -179,7 +183,7 @@ export function Header({ focus: focusProp = false }: { focus?: boolean }) {
           <Dropdown menu={MORE} active={MORE.items.some((i) => i.to === pathname)} align="right" />
         </nav>
 
-        <div className="flex items-center gap-2">
+        <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
           <CallLink location={focus ? "ad page header" : "header"} icon className="hidden min-h-[44px] whitespace-nowrap px-2 text-base font-bold text-foreground transition-colors hover:text-turbo xl:inline-flex" />
           <CallLink location={focus ? "ad page header icon" : "header icon"} className="inline-flex h-10 w-10 items-center justify-center rounded-xl text-foreground ring-1 ring-white/10 hover:bg-white/5 xl:hidden">
             <Phone className="h-[18px] w-[18px]" aria-hidden />
@@ -192,9 +196,11 @@ export function Header({ focus: focusProp = false }: { focus?: boolean }) {
               <span className="sr-only">Text {SITE.name}</span>
             </a>
           )}
-          {pathname === "/" || pathname.startsWith(COMPUTERS_PATH) ? (
-            <a href={pathname === "/" || pathname === COMPUTERS_PATH ? "#shop" : `${COMPUTERS_PATH}#shop`} className="btn-ignite whitespace-nowrap !px-3 !py-2.5 !text-[13px] sm:!px-4 sm:!text-sm">
-              Shop computers
+          {shopPage ? (
+            <a href={pathname === "/" || pathname === COMPUTERS_PATH ? "#shop" : `${COMPUTERS_PATH}#shop`} className="btn-ignite whitespace-nowrap">
+              <Laptop className="h-4 w-4" aria-hidden />
+              <span className="min-[400px]:hidden">Shop</span>
+              <span className="hidden min-[400px]:inline">Shop computers</span>
             </a>
           ) : tech && texting ? (
             // Phones get the tap-question text flow, never the calendar.

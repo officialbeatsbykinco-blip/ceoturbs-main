@@ -68,8 +68,8 @@ function build(): PageMeta[] {
 
   pages.push({
     path: "/",
-    title: "Laptops & Desktops for Sale, Shipped Anywhere in the US",
-    description: `Laptops, Chromebooks and desktops with real photos, full specs and a clear price, sold by a computer tech. Secure checkout, ships anywhere in the US.`,
+    title: "Computers for Sale: Laptops, Desktops & Gaming PCs",
+    description: `Computers for sale from a real tech: laptops, Chromebooks, desktops and gaming PCs with real photos, full specs and clear prices. Ships anywhere in the US.`,
     priority: 1,
     changefreq: "weekly",
     group: "Core",
@@ -398,7 +398,7 @@ function build(): PageMeta[] {
       ],
     })),
     // The computer shop: listings come from Shopify; each one gets its own page (src/seo/computers.ts).
-    { path: COMPUTERS_PATH, title: "Computers for Sale: Laptops & Desktops Shipped Nationwide", description: "Laptops and desktops for sale from a real computer tech, shipped anywhere in the US. Secure Shopify checkout and help from the person who sold it.", ogImage: IT_OG.repair, priority: 0.9, changefreq: "weekly", group: "Core", schema: [...base(), S.webPage(COMPUTERS_PATH, "CEO Turbo computer shop", "Laptops and desktops for sale from a Tampa computer tech, with setup and repairs.", "CollectionPage"), S.breadcrumbs([{ name: "Computers", path: COMPUTERS_PATH }]), S.faqPage(SHOP_COMPUTER_FAQS, COMPUTERS_PATH)] },
+    { path: COMPUTERS_PATH, title: "Laptops & Desktop Computers for Sale, Shipped US-Wide", description: "Laptops, desktop computers and gaming PCs for sale from a real computer tech, shipped anywhere in the US. Secure Shopify checkout and help after you buy.", ogImage: IT_OG.repair, priority: 0.9, changefreq: "weekly", group: "Core", schema: [...base(), S.webPage(COMPUTERS_PATH, "CEO Turbo computer shop", "Laptops, desktops and gaming PCs for sale from a computer tech, shipped anywhere in the US.", "CollectionPage"), S.breadcrumbs([{ name: "Computers", path: COMPUTERS_PATH }]), S.faqPage(SHOP_COMPUTER_FAQS, COMPUTERS_PATH)] },
     { path: "/book", title: "Book Your Free 30-Minute Call | CEO Turbo", description: "Pick a time for a free 30-minute call with Christopher Robinson: what's costing you calls and bookings, and a fixed price to fix it.", ogImage: "/og/brand-boost.jpg", noindex: true, priority: 0.1, changefreq: "yearly", group: "Core", schema: base() },
     { path: "/booked", title: "You're Booked | CEO Turbo", description: "Your Brand Boost call is booked. Here's how to get the most from it.", noindex: true, priority: 0.1, changefreq: "yearly", group: "Core", schema: base() },
     {
