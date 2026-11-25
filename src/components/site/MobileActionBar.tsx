@@ -2,7 +2,7 @@ import { Link, useLocation } from "react-router-dom";
 import { CHECK_PATH } from "@/lib/free-check";
 import { BookButton } from "@/components/cta/Actions";
 import { CALL_FIRST_SLUGS } from "@/content/services";
-import { MessageSquare, Phone, Search, Wrench } from "lucide-react";
+import { Laptop, MessageSquare, Phone, Search, Wrench } from "lucide-react";
 import { SITE, fromPriceLabel } from "@/config/site";
 import { IT_SERVICES_PATH, techBooking } from "@/content/tech-pages";
 import { FixMyTechLink } from "@/components/tech/FixMyTechLink";
@@ -45,7 +45,24 @@ export function MobileActionBar() {
         </div>
       </div>
     );
-  if (pathname === "/" || pathname === SHOP_PATH || pathname === SHIRTS_PATH || pathname === ARTIST_MERCH_PATH) return null;
+  // Home is the computer shop: Shop first, then Call and a Text that asks for help choosing.
+  if (pathname === "/" || pathname === "/computers")
+    return (
+      <div className="pb-safe fixed inset-x-0 bottom-0 z-40 border-t border-border/80 bg-background/90 px-3 pt-3 backdrop-blur-xl sm:hidden">
+        <div className="flex gap-2">
+          <a href="#shop" className="btn-ignite flex flex-1 items-center justify-center gap-1.5 whitespace-nowrap !px-2 !py-3.5 !text-base font-bold">
+            <Laptop className="h-4 w-4 shrink-0" aria-hidden /> Shop
+          </a>
+          <CallLink location="shop mobile bar" icon className="btn-blue flex flex-1 items-center justify-center whitespace-nowrap !px-2 !py-3.5 !text-base font-bold">
+            Call
+          </CallLink>
+          <a href={smsHref("Hi Chris, I'm looking for a computer. Budget and what I'll use it for: ")} data-call-location="shop mobile bar text" className="btn-chrome flex flex-1 items-center justify-center gap-1.5 whitespace-nowrap !px-2 !py-3.5 !text-base font-bold">
+            <MessageSquare className="h-4 w-4 shrink-0" aria-hidden /> Text
+          </a>
+        </div>
+      </div>
+    );
+  if (pathname === SHOP_PATH || pathname === SHIRTS_PATH || pathname === ARTIST_MERCH_PATH) return null;
   if (pathname === REVIEWS_AD_PATH)
     return (
       <div className="pb-safe fixed inset-x-0 bottom-0 z-40 border-t border-border/80 bg-background/90 px-3 pt-3 backdrop-blur-xl sm:hidden">

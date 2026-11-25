@@ -213,7 +213,11 @@ describe("conversion buttons", () => {
     expect(screen.queryByRole("link", { name: /Buy Google Review Cards/ })).toBeNull();
     expect(screen.getByRole("link", { name: /^Call/ })).toHaveAttribute("href", "tel:+16785584327");
     generic.unmount();
-    const store = at("/");
+    // Home is the computer shop: Shop first, then Call and Text.
+    const home = at("/");
+    expect(screen.getByRole("link", { name: /Shop/ })).toHaveAttribute("href", "#shop");
+    home.unmount();
+    const store = at(SHOP_PATH);
     expect(store.container).toBeEmptyDOMElement();
     store.unmount();
     at(SETUP_PATH);
@@ -317,7 +321,7 @@ describe("hero booking", () => {
     const homePage = read("../pages/Home.tsx");
     expect(homePage).not.toContain("<BuyBox");
     // Repair: phones open the tap-question text sheet, computers go to the repair page (FixMyTechLink's default).
-    for (const to of ['<FixMyTechLink source="home hero"', "to={OFFICE_SETUP_PATH}", 'to="/grow"']) expect(homePage).toContain(to);
+    for (const to of ['<FixMyTechLink source="home hero"', "to: OFFICE_SETUP_PATH", 'to: "/grow"', "<Listings />"]) expect(homePage).toContain(to);
     expect(read("../components/tech/FixMyTechLink.tsx")).toContain("to = IT_SERVICES_PATH");
     expect(read("../App.tsx")).toContain('path="/grow"');
     const home = read("../pages/Agency.tsx");

@@ -76,7 +76,7 @@ function Card({ c, eager }: { c: Computer; eager?: boolean }) {
   );
 }
 
-function Listings() {
+export function Listings() {
   const { list, state } = useComputers();
   const [kind, setKind] = useState<ComputerKind | "All">("All");
   const kinds = useMemo(() => KINDS.filter((k) => list.some((c) => kindsOf(c).includes(k))), [list]);

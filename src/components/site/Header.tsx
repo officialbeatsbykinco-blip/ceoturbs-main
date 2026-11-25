@@ -1,7 +1,7 @@
 import { Fragment, useEffect, useRef, useState } from "react";
 import { CHECK_PATH } from "@/lib/free-check";
 import { Link, NavLink, useLocation } from "react-router-dom";
-import { Calendar, ChevronDown, Menu, MessageSquare, Phone, Search, Wrench, X } from "lucide-react";
+import { Calendar, ChevronDown, Laptop, Menu, MessageSquare, Phone, Search, Wrench, X } from "lucide-react";
 import { Logo } from "./Logo";
 import { BookButton, InstallBookButton } from "@/components/cta/Actions";
 import { IT_SERVICES_PATH, OFFICE_SETUP_PATH, techBooking } from "@/content/tech-pages";
@@ -112,6 +112,7 @@ const MORE: Menu = {
 
 /** The phone nav bar under the logo: the main services, one tap each, always on screen. */
 const QUICK: { to: string; label: string }[] = [
+  { to: COMPUTERS_PATH, label: "Shop computers" },
   { to: IT_SERVICES_PATH, label: "Computer repair" },
   { to: "/security-camera-installation-tampa", label: "Cameras" },
   { to: "/electronics-recycling-tampa", label: "Tech recycling" },
@@ -119,7 +120,6 @@ const QUICK: { to: string; label: string }[] = [
   { to: "/grow", label: "Websites & ads" },
   { to: SHOP_PATH, label: "Review cards" },
   { to: "/portfolio", label: "Our work" },
-  { to: COMPUTERS_PATH, label: "Shop computers" },
 ];
 
 const linkCls = ({ isActive }: { isActive: boolean }) =>
@@ -157,8 +157,11 @@ export function Header({ focus: focusProp = false }: { focus?: boolean }) {
         <Logo className="shrink-0" onNavigate={() => setOpen(false)} />
 
         <nav aria-label="Main" className="hidden items-center gap-0.5 lg:flex">
-          <NavLink to={IT_SERVICES_PATH} className={({ isActive }) => cn("mr-1 inline-flex min-h-[40px] items-center gap-1.5 whitespace-nowrap rounded-full px-3 py-1.5 text-[13px] font-semibold ring-1 transition-colors xl:text-sm", isActive ? "bg-turbo/20 text-foreground ring-turbo/60" : "bg-turbo/10 text-turbo ring-turbo/30 hover:bg-turbo/20")}>
-            <Wrench className="h-3.5 w-3.5" aria-hidden /> Computer repair
+          <NavLink to={COMPUTERS_PATH} className={({ isActive }) => cn("mr-1 inline-flex min-h-[40px] items-center gap-1.5 whitespace-nowrap rounded-full px-3 py-1.5 text-[13px] font-semibold ring-1 transition-colors xl:text-sm", isActive ? "bg-turbo/20 text-foreground ring-turbo/60" : "bg-turbo/10 text-turbo ring-turbo/30 hover:bg-turbo/20")}>
+            <Laptop className="h-3.5 w-3.5" aria-hidden /> Shop computers
+          </NavLink>
+          <NavLink to={IT_SERVICES_PATH} className={linkCls}>
+            <span className="inline-flex items-center gap-1"><Wrench className="h-3.5 w-3.5" aria-hidden /> Repair</span>
           </NavLink>
           <NavLink to={OFFICE_SETUP_PATH} className={linkCls}>
             Office setup
@@ -189,9 +192,13 @@ export function Header({ focus: focusProp = false }: { focus?: boolean }) {
               <span className="sr-only">Text {SITE.name}</span>
             </a>
           )}
-          {tech && texting ? (
+          {pathname === "/" || pathname.startsWith(COMPUTERS_PATH) ? (
+            <a href={pathname === "/" || pathname === COMPUTERS_PATH ? "#shop" : `${COMPUTERS_PATH}#shop`} className="btn-ignite whitespace-nowrap !px-3 !py-2.5 !text-[13px] sm:!px-4 sm:!text-sm">
+              Shop computers
+            </a>
+          ) : tech && texting ? (
             // Phones get the tap-question text flow, never the calendar.
-            pathname.replace(/\/$/, "") === IT_SERVICES_PATH || pathname === "/" ? (
+            pathname.replace(/\/$/, "") === IT_SERVICES_PATH ? (
               <FixMyTechLink source="tech page header" to={`${IT_SERVICES_PATH}#fix`} className="btn-ignite whitespace-nowrap !px-3 !py-2.5 !text-sm">
                 Get my price
               </FixMyTechLink>

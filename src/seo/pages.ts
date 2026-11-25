@@ -10,7 +10,7 @@ import { SHOP_FAQS, SETUP_FAQS, SHOP_PATH, SETUP_PATH } from "@/content/review-c
 import { SHIRT_FAQS, SHIRTS_PATH } from "@/content/company-shirts";
 import { MERCH_FAQS, ARTIST_MERCH_PATH } from "@/content/artist-merch";
 import { INSTALL_PRICES, IT_SERVICES, PRICING_FAQS, byId, price } from "@/content/pricing";
-import { OFFICE_FAQS, REPAIR_FAQS, TECH_HOME_FAQS } from "@/content/tech-faqs";
+import { OFFICE_FAQS, REPAIR_FAQS } from "@/content/tech-faqs";
 import { INSTALL_PAGES } from "@/content/install-pages";
 
 // The same three prices the office pages show (src/components/blocks/OfficePrices.tsx).
@@ -68,12 +68,12 @@ function build(): PageMeta[] {
 
   pages.push({
     path: "/",
-    title: "Computer Repair & Setup: Tampa, Orlando & Central Florida",
-    description: `Windows PCs fixed at your door in Tampa, St. Pete, Brandon, Lakeland, Winter Haven and Orlando. Cameras and phones set up. 5.0 on Google. ${SITE.phone.display}.`,
+    title: "Laptops & Desktops for Sale, Shipped Anywhere in the US",
+    description: `Laptops, Chromebooks and desktops with real photos, full specs and a clear price, sold by a computer tech. Secure checkout, ships anywhere in the US.`,
     priority: 1,
     changefreq: "weekly",
     group: "Core",
-    schema: [...base(), S.webPage("/", "CEO Turbo", SITE.description), S.localService({ path: "/", name: "Computer repair and office IT setup in Tampa Bay and Central Florida", serviceType: "Computer repair", description: "Windows laptop and desktop repair at your door (speed-ups, blue screens, no power), office IT and workstation setup, security camera and video doorbell installs, Wi-Fi fixes and phone and tablet setup anywhere within about 1.5 hours of Temple Terrace, FL: Tampa, St. Petersburg, Clearwater, Brandon, Lakeland, Winter Haven, Sarasota and Orlando. Price up front, no fix no charge.", prices: [...IT_SERVICES, ...INSTALL_PRICES.filter((p) => p.id.startsWith("cam-"))] }), S.faqPage(TECH_HOME_FAQS, "/")],
+    schema: [...base(), S.webPage("/", "CEO Turbo: computers for sale", "Laptops, Chromebooks and desktops sold by a computer tech and shipped anywhere in the US, plus in-person repairs, phone repair and office setup near us."), S.faqPage(SHOP_COMPUTER_FAQS, "/")],
   });
 
   pages.push({

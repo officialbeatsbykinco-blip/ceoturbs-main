@@ -13,7 +13,6 @@ import InstallPage from "@/pages/InstallPage";
 import { OFFICE_TIERS } from "@/components/blocks/OfficePrices";
 
 const PAGES: [string, ReactElement][] = [
-  ["/", <Home />],
   ["/office-setup-tampa", <OfficeSetup />],
   ["/computer-repair-tampa", <ComputerRepair />],
   ["/services/home-office-setup", <ServicePage />],
@@ -43,6 +42,13 @@ afterEach(() => {
 });
 
 describe("desktop CTAs", () => {
+  it("home (the computer shop) shows no text link on a computer, but Call", () => {
+    setDevice(false);
+    const { container } = renderAt("/", <Home />);
+    expect(container.querySelectorAll('a[href^="sms:"]').length).toBe(0);
+    expect(container.querySelector('a[href^="tel:"]')).not.toBeNull();
+  });
+
   it.each(PAGES)("%s shows no text link on a computer, but Book and Call", (route, el) => {
     setDevice(false);
     const { container } = renderAt(route, el);
