@@ -1,6 +1,7 @@
 // The tech-repair and office-setup ad pages. Their header, floating and mobile buttons book a tech visit, not the agency call.
 import { INSTALL_BOOKING, IT_BOOKING, type CalEvent } from "@/config/site";
 import { installPage } from "@/content/install-pages";
+import { repairCity } from "@/content/city-repair";
 
 export const IT_SERVICES_PATH = "/computer-repair-tampa";
 /** Office setup ad page (Google & Microsoft Ads). */
@@ -13,6 +14,8 @@ export function techBooking(pathname: string): { booking: CalEvent; title?: stri
   const p = pathname.replace(/\/$/, "");
   if (p === IT_SERVICES_PATH) return { booking: IT_BOOKING, title: "Book your tech visit", sms: "Hi Chris, I need tech help. My city, device and problem: " };
   if (p === OFFICE_SETUP_PATH) return { booking: INSTALL_BOOKING, title: "Book your office setup", sms: "Hi Chris, I'd like a quote for an office setup. My city, number of desks and what I need: " };
+  const city = repairCity(p);
+  if (city) return { booking: IT_BOOKING, title: `Book your ${city.city} tech visit`, sms: `Hi Chris, I'm in ${city.city}. My device and what's wrong: ` };
   const install = installPage(p);
   if (install) return { booking: install.booking ?? INSTALL_BOOKING, title: `Book ${install.remote ? install.service : `your ${install.service}`}`, sms: `Hi Chris, I'd like a price for ${install.service}. What I need: ` };
   return undefined;

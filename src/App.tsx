@@ -1,5 +1,6 @@
 import { lazy, Suspense } from "react";
 import { Routes, Route } from "react-router-dom";
+import { REPAIR_CITIES, cityRepairPath } from "@/content/city-repair";
 import { Layout } from "@/components/site/Layout";
 import Home from "./pages/Home";
 import { INSTALL_PATHS } from "@/content/install-pages";
@@ -29,6 +30,7 @@ const GetMoreReviews = lazy(() => import("./pages/GetMoreReviews"));
 const AdsNotConverting = lazy(() => import("./pages/AdsNotConverting"));
 const GoogleAdsLocal = lazy(() => import("./pages/GoogleAdsLocal"));
 const ComputerRepair = lazy(() => import("./pages/ComputerRepair"));
+const CityRepair = lazy(() => import("./pages/CityRepair"));
 const ComputerShop = lazy(() => import("./pages/ComputerShop"));
 const ComputerProduct = lazy(() => import("./pages/ComputerProduct"));
 const OfficeSetup = lazy(() => import("./pages/OfficeSetup"));
@@ -72,6 +74,9 @@ export default function App() {
           <Route path="/ads-not-converting" element={<AdsNotConverting />} />
           <Route path="/google-ads-for-local-business" element={<GoogleAdsLocal />} />
           <Route path="/computer-repair-tampa" element={<ComputerRepair />} />
+          {REPAIR_CITIES.map((c) => (
+            <Route key={c.slug} path={cityRepairPath(c)} element={<CityRepair c={c} />} />
+          ))}
           <Route path="/computers" element={<ComputerShop />} />
           <Route path="/computers/:handle" element={<ComputerProduct />} />
           <Route path="/office-setup-tampa" element={<OfficeSetup />} />

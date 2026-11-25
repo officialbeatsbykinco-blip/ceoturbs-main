@@ -19,6 +19,7 @@ import { TechQuiz } from "@/components/tech/TechQuiz";
 import { BookOrText, CalCard, PhoneOnly, useTexting } from "@/components/booking/BookOrText";
 import { IT_SERVICES, itPrice } from "@/content/pricing";
 import { ServiceAreaList } from "@/components/blocks/ServiceAreaList";
+import { RepairCityLinks } from "@/components/tech/RepairCityLinks";
 import { IT_SERVICES_PATH, OFFICE_SETUP_PATH } from "@/content/tech-pages";
 import { FixMyTechLink } from "@/components/tech/FixMyTechLink";
 import { IT_BOOKING, SITE } from "@/config/site";
@@ -392,6 +393,7 @@ export default function ComputerRepair() {
       <section className="section border-t border-border" aria-labelledby="area">
         <div className="container-x">
           <SectionHeader title={<span id="area">Where we come to you</span>} lede="Anywhere within about 1.5 hours of Temple Terrace: Tampa, St. Pete, Clearwater, Brandon, Lakeland, Winter Haven, Sarasota and Orlando. Remote support for Windows computers works anywhere in the world." />
+          <RepairCityLinks className="mt-8" />
           <ServiceAreaList className="mt-8" />
           <p className="mt-4 text-sm text-muted-foreground">Somewhere else nearby? Text your ZIP code and we'll tell you.</p>
         </div>

@@ -9,7 +9,7 @@ import { HOME_FAQS, AUDIT_FAQS, BOOK_FAQS, ADS_NOT_CONVERTING_FAQS } from "@/con
 import { SHOP_FAQS, SETUP_FAQS, SHOP_PATH, SETUP_PATH } from "@/content/review-cards";
 import { SHIRT_FAQS, SHIRTS_PATH } from "@/content/company-shirts";
 import { MERCH_FAQS, ARTIST_MERCH_PATH } from "@/content/artist-merch";
-import { INSTALL_PRICES, IT_SERVICES, PRICING_FAQS, byId, price } from "@/content/pricing";
+import { INSTALL_PRICES, IT_SERVICES, PHONE_REPAIR, PRICING_FAQS, byId, price } from "@/content/pricing";
 import { OFFICE_FAQS, REPAIR_FAQS } from "@/content/tech-faqs";
 import { INSTALL_PAGES } from "@/content/install-pages";
 
@@ -21,6 +21,7 @@ import * as S from "./schema";
 import { VIDEOS } from "@/content/videos";
 import { computerPageFor } from "./computers";
 import { COMPUTERS_PATH, SHOP_FAQS as SHOP_COMPUTER_FAQS } from "@/content/computer-shop";
+import { REPAIR_CITIES, cityRepairPath } from "@/content/city-repair";
 
 export type PageMeta = {
   path: string;
@@ -447,6 +448,37 @@ function build(): PageMeta[] {
     { path: "/app-marketing", title: "Software & App Marketing for Developers — CEO Turbo", description: "You built the code. We engineer the distribution. High-converting landing pages, Reddit & Meta ads, telemetry and ASO for software developers.", noindex: true, priority: 0.1, changefreq: "monthly", group: "Core", schema: [...base(), S.webPage("/app-marketing", "Software & app marketing for developers", "Landing pages, ASO, Reddit ads, telemetry and launch strategy for software developers.")] },
     { path: "/promptshop", title: "Prompt Shop — Coming Soon | CEO Turbo", description: "AI prompts, scanners and templates from CEO Turbo — coming soon.", noindex: true, priority: 0.1, changefreq: "yearly", group: "Company", schema: base() },
   );
+
+  // One page per city for in-home computer and phone repair (content/city-repair.ts).
+  for (const c of REPAIR_CITIES) {
+    const path = cityRepairPath(c);
+    pages.push({
+      path,
+      title: `Computer & Phone Repair in ${c.city}, FL | At Your Door`,
+      description: `In-home computer and phone repair in ${c.city}, FL: slow or dead Windows PCs, cracked iPhone and iPad screens. Price up front. Call ${SITE.phone.display}.`,
+      ogImage: IT_OG.repair,
+      priority: 0.8,
+      changefreq: "monthly",
+      group: "Services",
+      schema: [
+        ...base(),
+        S.webPage(path, `Computer and phone repair in ${c.city}, FL`, `In-home Windows computer repair and phone and tablet screen and battery repair at homes and businesses in ${c.city}, ${c.county}, Florida.`),
+        S.breadcrumbs([
+          { name: "Computer repair", path: "/computer-repair-tampa" },
+          { name: `${c.city}, FL`, path },
+        ]),
+        S.localService({
+          path,
+          name: `Computer and phone repair in ${c.city}, FL`,
+          serviceType: "Computer repair",
+          description: `In-home and on-site repair of Windows laptops and desktops, and phone and tablet screen and battery replacement, at homes and businesses in ${c.city} and nearby (${c.nearby.join(", ")}). Price up front, no fix no charge.`,
+          prices: [...IT_SERVICES, ...PHONE_REPAIR],
+          extraCities: [c.city, ...c.nearby.filter((n) => !/ (Pete|St\.)|Downtown|Old |South |Seven|Meadow|Wiregrass|Kenwood|Bloomingdale|FishHawk|Highland/.test(n))],
+        }),
+        S.faqPage(c.faqs, path),
+      ],
+    });
+  }
 
   // Tell search engines which picture belongs to each page (the same one shared on social).
   for (const p of pages) {
