@@ -13,14 +13,13 @@ import { CallLink } from "@/components/site/CallLink";
 import { FounderBadge } from "@/components/tech/FounderBadge";
 import { ReviewSummary, ReviewWall } from "@/components/tech/ReviewWall";
 import { IT_BOOKING, SITE } from "@/config/site";
-import { REPAIR_CITIES, cityRepairPath, type RepairCity } from "@/content/city-repair";
+import { REPAIR_CITIES, cityRepairPath, phoneRepairPath, type RepairCity } from "@/content/city-repair";
+import { CallNowCard } from "@/components/tech/CallNowCard";
 import { itPrice } from "@/content/pricing";
 import { IT_SERVICES_PATH } from "@/content/tech-pages";
 import { smsHref } from "@/lib/sms";
 import { newEventId, serverTrack, track } from "@/lib/track";
 import { cn } from "@/lib/utils";
-
-const PHONE_REPAIR_PATH = "/phone-repair-tampa";
 
 function Ctas({ c, where, className }: { c: RepairCity; where: string; className?: string }) {
   const texting = useTexting();
@@ -87,7 +86,8 @@ export default function CityRepair({ c }: { c: RepairCity }) {
                 </span>
               ))}
             </div>
-            <Ctas c={c} where="hero" className="mt-6" />
+            <CallNowCard where={`city repair ${c.slug}`} headline={`Computer or phone broken in ${c.city}? Call now for your price.`} className="mt-5 max-w-xl" />
+            <Ctas c={c} where="hero" className="mt-4" />
             <FounderBadge className="mt-6 max-w-xl" line={`I drive to ${c.city} and fix it myself. Call or text, you get me, not a call center.`} />
           </div>
           <div id="book" className="min-w-0 scroll-mt-36">
@@ -124,7 +124,7 @@ export default function CityRepair({ c }: { c: RepairCity }) {
             {(
               [
                 { icon: Laptop, title: "Computer repair", to: IT_SERVICES_PATH, link: "Computer repair prices", list: COMPUTER_FIXES, from: `From ${itPrice("it-speedup")}` },
-                { icon: Smartphone, title: "Phone & tablet repair", to: PHONE_REPAIR_PATH, link: "Phone repair details", list: PHONE_FIXES, from: "Price by text, part included" },
+                { icon: Smartphone, title: "Phone & tablet repair", to: phoneRepairPath(c), link: `Phone repair in ${c.city}`, list: PHONE_FIXES, from: "Price by text, part included" },
               ] as const
             ).map((s) => (
               <div key={s.title} className="panel flex flex-col p-6">
@@ -216,6 +216,12 @@ export default function CityRepair({ c }: { c: RepairCity }) {
 
       <section className="section border-t border-border" aria-labelledby="cities">
         <div className="container-x">
+          <p className="mb-6 text-base">
+            Just a phone or iPad?{" "}
+            <Link to={phoneRepairPath(c)} className="font-semibold text-turbo hover:underline">
+              Phone &amp; tablet repair in {c.city} <ArrowRight className="inline h-4 w-4" aria-hidden />
+            </Link>
+          </p>
           <h2 id="cities" className="font-display text-xl font-bold">Computer &amp; phone repair near {c.city}</h2>
           <ul className="mt-4 flex flex-wrap gap-2">
             <li>

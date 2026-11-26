@@ -20,6 +20,7 @@ import { BookOrText, CalCard, PhoneOnly, useTexting } from "@/components/booking
 import { IT_SERVICES, itPrice } from "@/content/pricing";
 import { ServiceAreaList } from "@/components/blocks/ServiceAreaList";
 import { RepairCityLinks } from "@/components/tech/RepairCityLinks";
+import { CallNowCard } from "@/components/tech/CallNowCard";
 import { IT_SERVICES_PATH, OFFICE_SETUP_PATH } from "@/content/tech-pages";
 import { FixMyTechLink } from "@/components/tech/FixMyTechLink";
 import { IT_BOOKING, SITE } from "@/config/site";
@@ -140,7 +141,8 @@ export default function ComputerRepair() {
                 </span>
               ))}
             </div>
-            <Ctas where="hero" className="mt-6" />
+            <CallNowCard where="computer repair" headline="Computer slow, dead or full of pop-ups? Call now for your price." className="mt-5 max-w-xl" />
+            <Ctas where="hero" className="mt-4" />
             <ul className="mt-4 grid max-w-xl grid-cols-2 gap-x-4 gap-y-2 text-sm font-medium text-foreground">
               {PROMISES.map((t) => (
                 <li key={t} className="flex items-center gap-2">

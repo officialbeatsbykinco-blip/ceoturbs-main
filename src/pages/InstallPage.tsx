@@ -8,6 +8,7 @@ import { FAQList, SectionHeader } from "@/components/blocks/Basics";
 import { GuideLinks } from "@/components/blocks/GuideLinks";
 import { ServiceAreaList } from "@/components/blocks/ServiceAreaList";
 import { RepairCityLinks } from "@/components/tech/RepairCityLinks";
+import { CallNowCard } from "@/components/tech/CallNowCard";
 import { InstallQuiz } from "@/components/tech/InstallQuiz";
 import { AcceptsChecker } from "@/components/tech/AcceptsChecker";
 import { CustomerReview, FounderBadge } from "@/components/tech/FounderBadge";
@@ -65,6 +66,7 @@ export default function InstallPage({ path }: { path: string }) {
               <span className="text-chrome-grad">{page.h1[0]}</span> <span className="text-turbo-grad">{page.h1[1]}</span>
             </h1>
             <p className="mt-4 max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg">{page.lede}</p>
+            {page.slug === "phone-repair" && <CallNowCard where="phone-repair" headline="Cracked screen or dead battery? Call now for your price." className="mt-5 max-w-xl" />}
             {business && (
               <>
                 <BeforeAfter {...OFFICE_BEFORE_AFTER} label="business hero" priority className="mt-6" />
@@ -235,7 +237,7 @@ export default function InstallPage({ path }: { path: string }) {
       <section className="section border-t border-border" aria-labelledby="area">
         <div className="container-x">
           <SectionHeader title={<span id="area">{page.remote ? "Where we work" : "Where we come to you"}</span>} lede={page.areaLede ?? "Anywhere within about 1.5 hours of Temple Terrace: Tampa Bay, Orlando, Lakeland, Winter Haven, Sarasota and everywhere in between."} />
-          {page.slug === "phone-repair" && <RepairCityLinks className="mt-8" />}
+          {page.slug === "phone-repair" && <RepairCityLinks first="phone" className="mt-8" />}
           <ServiceAreaList className="mt-8" />
           {page.farther && (
             <div className="panel mt-4 p-5 sm:p-6">

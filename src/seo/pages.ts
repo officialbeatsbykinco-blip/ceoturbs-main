@@ -21,7 +21,7 @@ import * as S from "./schema";
 import { VIDEOS } from "@/content/videos";
 import { computerPageFor } from "./computers";
 import { COMPUTERS_PATH, SHOP_FAQS as SHOP_COMPUTER_FAQS } from "@/content/computer-shop";
-import { REPAIR_CITIES, cityRepairPath } from "@/content/city-repair";
+import { PHONE_REPAIR_TAMPA, REPAIR_CITIES, cityRepairPath, phoneFaqs, phoneRepairPath } from "@/content/city-repair";
 
 export type PageMeta = {
   path: string;
@@ -476,6 +476,37 @@ function build(): PageMeta[] {
           extraCities: [c.city, ...c.nearby.filter((n) => !/ (Pete|St\.)|Downtown|Old |South |Seven|Meadow|Wiregrass|Kenwood|Bloomingdale|FishHawk|Highland/.test(n))],
         }),
         S.faqPage(c.faqs, path),
+      ],
+    });
+  }
+
+  // One page per city for phone and tablet screen and battery repair. No phone number in the title or description.
+  for (const c of REPAIR_CITIES) {
+    const path = phoneRepairPath(c);
+    pages.push({
+      path,
+      title: `Phone & iPad Screen Repair ${c.city}, FL | ${c.city.length > 12 ? "At Your Door" : "We Come to You"}`,
+      description: `Cracked iPhone, Samsung or iPad screen or dying battery in ${c.city}, FL? Fixed at your home or work. One price, part included, before we order.`,
+      ogImage: IT_OG.repair,
+      priority: 0.8,
+      changefreq: "monthly",
+      group: "Services",
+      schema: [
+        ...base(),
+        S.webPage(path, `Phone and tablet repair in ${c.city}, FL`, `iPhone, Samsung, Pixel and iPad screen and battery replacement at homes and businesses in ${c.city}, ${c.county}, Florida.`),
+        S.breadcrumbs([
+          { name: "Phone repair", path: PHONE_REPAIR_TAMPA },
+          { name: `${c.city}, FL`, path },
+        ]),
+        S.localService({
+          path,
+          name: `Phone and tablet repair in ${c.city}, FL`,
+          serviceType: "Mobile phone repair",
+          description: `Phone and tablet screen and battery replacement for iPhone, Samsung Galaxy, Google Pixel and iPad, at homes and businesses in ${c.city} and nearby (${c.nearby.join(", ")}). Priced by model with the part included.`,
+          prices: PHONE_REPAIR,
+          extraCities: [c.city, ...c.nearby.filter((n) => !/ (Pete|St\.)|Downtown|Old |South |Seven|Meadow|Wiregrass|Kenwood|Bloomingdale|FishHawk|Highland/.test(n))],
+        }),
+        S.faqPage(phoneFaqs(c), path),
       ],
     });
   }

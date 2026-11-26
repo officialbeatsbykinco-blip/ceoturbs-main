@@ -12,6 +12,7 @@ import { REVIEWS_AD_PATH, SETUP_PATH, SHOP_PATH } from "@/content/review-cards";
 import { SHIRTS_PATH } from "@/content/company-shirts";
 import { ARTIST_MERCH_PATH } from "@/content/artist-merch";
 import { isTechGuide } from "@/content/guides";
+import { isRepairPage } from "@/content/city-repair";
 import { CARD_TEXT, QUICK_TECH_TEXT, QUICK_TEXT, smsHref } from "@/lib/sms";
 
 /** Growth pages: the free Google & AI check is the first tap, not tech repair. */
@@ -111,6 +112,34 @@ export function MobileActionBar() {
   // Tech-repair and office ad pages: phones never get the calendar. The orange button opens the tap-question text
   // flow (repair: the sheet; office: the quiz on the page), then a blue Call and a Text.
   const tech = techBooking(pathname);
+  // Repair pages (Tampa computer and phone repair and every city page): the call is the big orange button with the
+  // number on it, then the tap-question price flow and a Text. Repair calls book jobs faster than anything else.
+  if (tech && isRepairPage(pathname)) {
+    const where = pathname.split("/").pop();
+    const computer = pathname.replace(/\/$/, "") === IT_SERVICES_PATH;
+    const second = "btn-blue flex flex-1 items-center justify-center gap-1.5 whitespace-nowrap !py-4 !px-2 !text-base font-bold";
+    return (
+      <div className="pb-safe fixed inset-x-0 bottom-0 z-40 border-t border-border/80 bg-background/95 px-2.5 pt-2.5 backdrop-blur-xl sm:hidden">
+        <div className="flex items-center gap-1.5">
+          <CallLink location={`${where}-sticky-mobile`} className="btn-ignite flex flex-[2.2] items-center justify-center gap-1.5 whitespace-nowrap !py-4 !px-2 !text-[17px] font-bold shadow-lg">
+            <Phone className="h-5 w-5 shrink-0" aria-hidden />
+            <span>Call {SITE.phone.display}</span>
+          </CallLink>
+          {computer ? (
+            <FixMyTechLink source={`${where}-sticky-mobile`} className={second}>
+              <Wrench className="h-4 w-4 shrink-0" aria-hidden />
+              <span>Price</span>
+            </FixMyTechLink>
+          ) : (
+            <a href={smsHref(tech.sms)} data-call-location={`${where}-sticky-mobile-sms`} className={second}>
+              <MessageSquare className="h-4 w-4 shrink-0" aria-hidden />
+              <span>Text</span>
+            </a>
+          )}
+        </div>
+      </div>
+    );
+  }
   if (tech) {
     const where = pathname.split("/").pop();
     const repair = pathname.replace(/\/$/, "") === IT_SERVICES_PATH;
