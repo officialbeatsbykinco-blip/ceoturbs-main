@@ -19,6 +19,7 @@ import { TechQuiz } from "@/components/tech/TechQuiz";
 import { BookOrText, CalCard, PhoneOnly, useTexting } from "@/components/booking/BookOrText";
 import { IT_SERVICES, itPrice } from "@/content/pricing";
 import { ServiceAreaList } from "@/components/blocks/ServiceAreaList";
+import { ProblemLinks } from "@/components/tech/ProblemLinks";
 import { RepairCityLinks } from "@/components/tech/RepairCityLinks";
 import { CallNowCard } from "@/components/tech/CallNowCard";
 import { IT_SERVICES_PATH, OFFICE_SETUP_PATH } from "@/content/tech-pages";
@@ -188,7 +189,7 @@ export default function ComputerRepair() {
 
       <section className="section border-t border-border" aria-labelledby="how">
         <div className="container-x">
-          <SectionHeader title={<span id="how">How it works</span>} lede="Three steps, no surprises." />
+          <SectionHeader title={<span id="how">How computer repair works</span>} lede="Three steps, no surprises." />
           <ol className="mt-10 grid gap-4 md:grid-cols-3">
             {STEPS.map((s, i) => (
               <li key={s.title} className="panel p-6">
@@ -206,7 +207,7 @@ export default function ComputerRepair() {
 
       <section className="section border-t border-border" aria-labelledby="prices">
         <div className="container-x">
-          <SectionHeader title={<span id="prices">Starting prices</span>} lede="Flat starting prices for in-home and on-site service. You get your exact price before any work. Parts extra." />
+          <SectionHeader title={<span id="prices">Computer repair prices in Tampa Bay</span>} lede="Flat starting prices for in-home and on-site service. You get your exact price before any work. Parts extra." />
           <div className="mt-10 grid gap-4 lg:grid-cols-3">
             {PRICE_GROUPS.map((g) => (
               <div key={g.title} className="panel p-5 sm:p-6">
@@ -251,6 +252,7 @@ export default function ComputerRepair() {
               </li>
             ))}
           </ul>
+          <ProblemLinks className="mt-10" />
         </div>
       </section>
 

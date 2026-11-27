@@ -1,7 +1,7 @@
 // Florida (Tampa Bay & Central Florida) installation landing pages (Google Search ads + local SEO): computer setup, security cameras and
 // Wi-Fi/internet. One template (pages/InstallPage.tsx), one quiz (components/tech/InstallQuiz.tsx).
 // Prices come from content/pricing.ts so the page, its schema and the ads agree. Cameras have no set price yet.
-import { FPS_BOOKING, SITE, type CalEvent } from "@/config/site";
+import { FPS_BOOKING, IT_BOOKING, SITE, type CalEvent } from "@/config/site";
 import { ALL_SETUP_CITIES } from "@/content/service-areas";
 import { INSTALL_PRICES, IT_SERVICES, PHONE_REPAIR, RECYCLING_PRICES, SETUP, usd, type PriceItem } from "@/content/pricing";
 import type { FAQ } from "@/content/services";
@@ -59,6 +59,25 @@ export type InstallPage = {
   farther?: { lede: string; cities: string[] };
   /** Tap-to-check "Can you take my…?" items: yes, text a photo first, or no. */
   accepts?: { item: string; ok: "yes" | "photo" | "no" }[];
+  /** Final call-to-action H2 and line (default: "Get your price today."). */
+  final?: { title: string; line: string };
+  /** Founder badge line in the hero. */
+  founderLine?: string;
+  /** Email subject and body for the hero and final email links. */
+  email?: { subject: string; body: string };
+  /** Line under the hero buttons on call-and-text-first pages. */
+  textNote?: string;
+  /** Heading and lede over the `facts` cards. */
+  factsTitle?: string;
+  factsLede?: string;
+  /** Which city list goes first in the service area (default: none shown). */
+  cityLinks?: "computer" | "phone" | "recycle";
+  /** Articles that answer the same questions. */
+  guides?: string[];
+  /** Keyword for the H2s ("Blue screen repair" → "Blue screen repair prices in Tampa Bay"). Default: name without "Tampa". */
+  topic?: string;
+  /** A "Call now" card in the hero with this headline. */
+  callCard?: string;
   seo: { title: string; description: string };
 };
 
@@ -129,6 +148,7 @@ export const INSTALL_PAGES: InstallPage[] = [
       PAY_FAQ,
     ],
     value: 130,
+    guides: ["how-to-wipe-computer-before-recycling", "computer-repair-vs-replace"],
     seo: {
       title: "Computer Setup: Tampa, St. Pete, Clearwater, Brandon & More",
       description: `New computer set up, files moved, monitors and printers at your door in Tampa, St. Pete, Clearwater, Brandon, Lakeland and Orlando. From ${usd(setupBasic.price)}.`,
@@ -138,6 +158,7 @@ export const INSTALL_PAGES: InstallPage[] = [
     slug: "security-camera-installation",
     path: "/security-camera-installation-tampa",
     name: "Doorbell & cameras Tampa",
+    topic: "Doorbell and camera installation",
     service: "doorbell and camera installation",
     category: "security_cameras",
     chip: "Tampa Bay to Orlando · homes & businesses",
@@ -182,6 +203,7 @@ export const INSTALL_PAGES: InstallPage[] = [
     slug: "wifi-installation",
     path: "/wifi-installation-tampa",
     name: "Wi-Fi & internet Tampa",
+    topic: "Wi-Fi installation",
     service: "Wi-Fi and internet setup",
     category: "wifi_internet",
     chip: "Tampa Bay to Orlando · homes & businesses",
@@ -378,6 +400,12 @@ INSTALL_PAGES.push({
     sent: "We'll text you the price shortly. Want to pick a time now? Choose one below.",
   },
   textFirst: { sms: "Hi Chris, I need a phone/tablet repair. Model and what's wrong: " },
+  callCard: "Cracked screen or dead battery? Call now for your price.",
+  cityLinks: "phone",
+  guides: ["cracked-phone-screen-repair-or-replace", "phone-battery-draining-fast"],
+  textNote: "Tell us the model and what's wrong. A photo of the damage helps.",
+  email: { subject: "Phone or tablet repair: price request", body: "Hi Chris, my phone/tablet model, what's wrong and my city/ZIP: " },
+  final: { title: "Get your phone or tablet fixed.", line: `Call or text ${SITE.phone.display} with the model. One price with the part included, fixed at your door.` },
   jobs: [
     { id: "screen", label: "Cracked or shattered screen" },
     { id: "display", label: "Black screen, lines or touch not working" },
@@ -422,6 +450,7 @@ INSTALL_PAGES.push({
   slug: "tech-recycling",
   path: "/electronics-recycling-tampa",
   name: "Tech recycling Tampa",
+    topic: "Electronics recycling",
   service: "a free tech recycling pickup",
   category: "tech_recycling",
   chip: "Free pickup · Tampa Bay, Orlando, Lakeland, Sarasota & Central Florida",
@@ -457,6 +486,14 @@ INSTALL_PAGES.push({
     sent: "We'll text you a pickup time shortly. Want to lock one in now? Pick a time below.",
   },
   textFirst: { sms: "Hi Chris, I have old tech to recycle. Here's a photo / what I have: " },
+  cityLinks: "recycle",
+  guides: ["where-to-recycle-electronics-tampa-bay", "how-to-wipe-computer-before-recycling"],
+  founderLine: "I do the pickups myself. Call or text and you get me, not a call center.",
+  textNote: "A photo of the pile is all we need.",
+  email: { subject: "Tech recycling Tampa: pickup request", body: "Hi Chris, here's what I have and my city/ZIP: " },
+  factsTitle: "Why old tech can't go in the trash",
+  factsLede: "Recycling keeps Florida clean, keeps fires out of garbage trucks and keeps your data private.",
+  final: { title: "Get your old tech picked up.", line: `Call or text ${SITE.phone.display}. Free pickup, drives wiped, nothing in the landfill.` },
   jobs: [
     { id: "laptops", label: "Laptops" },
     { id: "desktops", label: "Desktops & towers" },
@@ -511,6 +548,331 @@ INSTALL_PAGES.push({
     description: `Free pickup of old computers, phones and TVs in Tampa, St. Pete, Clearwater, Brandon, Winter Haven, Lakeland and Orlando. Call or text ${SITE.phone.display}.`,
   },
 });
+
+/**
+ * Computer problem pages (organic and AI search: "blue screen repair Tampa", "hard drive failing", "virus removal near me").
+ * Calls and texts first: Google bans consumer repair ads, so these are found through search, Maps, Bing and AI answers.
+ * Every price comes from IT_SERVICES; parts like a new drive are extra, at cost, and quoted before they're ordered.
+ */
+const pcRepair = byId(IT_SERVICES, "it-pc-repair");
+const diagnosis = byId(IT_SERVICES, "it-visit");
+const dataMove = byId(IT_SERVICES, "it-data");
+const virus = byId(IT_SERVICES, "it-virus");
+const desktopRepair = byId(IT_SERVICES, "it-desktop");
+const DEVICE: Question = { id: "device", label: "What is it?", short: "Device", options: [{ id: "laptop", label: "Windows laptop" }, { id: "desktop", label: "Windows desktop" }, { id: "gaming", label: "Gaming PC" }, { id: "other", label: "Not sure" }] };
+const REMOTE_OR_HOME: Question = { id: "how", label: "How should we fix it?", short: "How", options: [{ id: "inperson", label: "Come to me" }, { id: "remote", label: "Remote, over the internet" }] };
+const REPAIR_WORDS: Partial<QuizWords> = {
+  cta: "Get my repair price",
+  jobs: "What's it doing?",
+  title: "Get your repair price",
+  where: "Where do we text your price?",
+  submit: "Text me my price",
+  sent: "We'll text you the price shortly. Want to pick a time now? Choose one below.",
+};
+const REPAIR_PROMISES = ["Price by text before any work", "We come to your home or business", "Your files left alone", "Pay after it works"];
+const REPAIR_FINAL = (fix: string) => ({ title: `Get your ${fix} fixed today.`, line: `Call or text ${SITE.phone.display}. Price up front, at your door from Tampa to Orlando, pay after it works.` });
+const repairEmail = (what: string) => ({ subject: `${what}: repair price`, body: "Hi Chris, my computer, what it's doing and my city/ZIP: " });
+const REPAIR_NOTE = "A photo of the screen or the error message is all we need.";
+const NO_FIX_FAQ: FAQ = { q: "What if you can't fix it?", a: `The ${usd(diagnosis.price)} diagnosis is credited toward the repair, so it's free when we fix it. If it can't be fixed for a fair price, we tell you straight and help you pick a replacement, or recycle the old one free with the drive wiped.` };
+const MAC_FAQ: FAQ = { q: "Do you work on Macs?", a: "No. We repair Windows laptops, desktops and gaming PCs only, and we don't replace laptop screens. Phones and iPads get screen and battery repair." };
+
+INSTALL_PAGES.push(
+  {
+    slug: "blue-screen-repair",
+    path: "/blue-screen-repair-tampa",
+    name: "Blue screen repair Tampa",
+    service: "blue screen repair",
+    category: "pc_repair",
+    booking: IT_BOOKING,
+    chip: "Windows laptops & desktops · Tampa Bay to Orlando",
+    h1: ["Blue screen of death?", "Blue screen repair in Tampa Bay, at your door."],
+    lede: "Windows keeps crashing to a blue (or, on newer Windows 11, black) screen with a stop code? We find the cause, whether it's a bad driver, a failing hard drive, memory or overheating, and fix it at your home or business from Tampa, St. Pete and Brandon to Lakeland and Orlando. Price by text before we start.",
+    promises: REPAIR_PROMISES,
+    pricesLede: "You get the exact price by text before any work. A new drive or memory is extra, at today's cost, and only if you say yes.",
+    prices: [pcRepair, diagnosis, ssd, dataMove],
+    words: { ...REPAIR_WORDS, ask: "Hi Chris! My computer keeps getting a blue screen." },
+    textFirst: { sms: "Hi Chris, my computer keeps getting a blue screen. The stop code / what it says: " },
+    callCard: "Blue screen or crash loop? Call now for your price.",
+    cityLinks: "computer",
+    guides: ["computer-wont-turn-on", "computer-repair-vs-replace"],
+    textNote: REPAIR_NOTE,
+    email: repairEmail("Blue screen"),
+    final: REPAIR_FINAL("blue screen"),
+    jobs: [
+      { id: "random", label: "Blue screen at random" },
+      { id: "loop", label: "Stuck restarting (crash loop)" },
+      { id: "startup", label: "Blue screen at startup" },
+      { id: "games", label: "Crashes in games or heavy apps" },
+      { id: "update", label: "Started after a Windows update" },
+      { id: "files", label: "I need my files saved" },
+    ],
+    questions: [DEVICE, PLACE],
+    includes: ["Stop code and crash logs read", "Hard drive and memory tested", "Drivers and Windows updates repaired", "Temps and fans checked for overheating", "Your files backed up before big changes", "Tested with you before we leave"],
+    steps: [
+      { title: "Text the stop code", body: "A photo of the blue screen, or tell us what it's doing. A call works too." },
+      { title: "Price by text", body: "You get the price before we come. Parts only if you say yes, at today's cost." },
+      { title: "Fixed at your place", body: "We find the cause, fix it, test it with you, then you pay." },
+    ],
+    factsTitle: "What causes a blue screen?",
+    factsLede: "A blue screen is Windows stopping itself to protect your files. The stop code tells us where to look.",
+    facts: [
+      { title: "Bad or old drivers", body: "A graphics, Wi-Fi or storage driver that crashes takes Windows down with it. Codes like DRIVER_IRQL_NOT_LESS_OR_EQUAL usually point here." },
+      { title: "A failing hard drive", body: "When Windows can't read its own files, you get codes like KERNEL_DATA_INPAGE_ERROR or INACCESSIBLE_BOOT_DEVICE. Back up your files first; the drive may be dying." },
+      { title: "Memory (RAM) problems", body: "MEMORY_MANAGEMENT and random crashes under load often mean a bad or loose memory stick. We test it instead of guessing." },
+      { title: "Heat and hardware", body: "Dust-clogged fans and a dying power supply cause crashes in games and heavy apps. WHEA_UNCORRECTABLE_ERROR means the hardware itself reported a fault." },
+    ],
+    faqs: [
+      { q: "How much does blue screen repair cost?", a: `Most blue screen repairs are ${usd(pcRepair.price)} and up, at your door anywhere within about 1.5 hours of Temple Terrace. If the cause is a failing drive or bad memory, the part is extra at today's cost and you approve it first. Text the stop code to ${SITE.phone.display} for your price.` },
+      { q: "What does a blue screen of death mean?", a: "Windows hit an error it couldn't recover from and stopped to protect your files. The stop code on the screen (like CRITICAL_PROCESS_DIED or MEMORY_MANAGEMENT) tells a tech where to look: drivers, the hard drive, memory, overheating or a bad Windows update." },
+      { q: "Will I lose my files?", a: "Usually not. A blue screen doesn't erase anything by itself, but a dying hard drive can. If the drive is failing, we copy your files off first, before any repair." },
+      { q: "Is a blue screen serious?", a: "Once can be a fluke. If it keeps happening, something is failing, and a hard drive problem gets worse every time the computer runs. Back up what matters and get it checked." },
+      { q: "Why is my Windows 11 screen black instead of blue?", a: "Newer versions of Windows 11 show the same crash screen in black. It means the same thing as a blue screen and is fixed the same way." },
+      { q: "Can you fix it the same day?", a: `Often, yes. Driver and Windows problems are usually fixed in one visit. If it needs a new drive or memory, we order it for your computer and come back. Call ${SITE.phone.display}.` },
+      NO_FIX_FAQ,
+      MAC_FAQ,
+      WHERE_FAQ("We fix blue screens"),
+      PAY_FAQ,
+    ],
+    value: 150,
+    seo: {
+      title: "Blue Screen of Death Repair in Tampa, St. Pete & Orlando",
+      description: `Windows crashing to a blue screen? We find the cause and fix it at your door in Tampa, St. Pete, Brandon and Orlando. From ${usd(pcRepair.price)}. Call or text.`,
+    },
+  },
+  {
+    slug: "hard-drive-replacement",
+    path: "/hard-drive-replacement-tampa",
+    name: "Hard drive replacement Tampa",
+    service: "hard drive replacement",
+    category: "pc_repair",
+    booking: IT_BOOKING,
+    chip: "Laptops & desktops · Tampa Bay to Orlando",
+    h1: ["Hard drive failing?", "Hard drive replacement and file rescue in Tampa Bay."],
+    lede: "Clicking, freezing, \"no bootable device\" or a drive that's suddenly slow? We copy your files off while the drive still reads, put in a fast new SSD, reinstall or move Windows, and get you working again at your home or business from Tampa to Orlando. You get the price by text before anything is ordered.",
+    promises: ["Your files copied off first", "New SSD at today's cost, quoted first", "We come to you", "Old drive wiped or destroyed"],
+    pricesLede: "Drive prices change week to week, so the new drive is quoted at today's cost before we order it. Labor is set: you get one total by text first.",
+    prices: [ssd, dataMove, diagnosis, pcRepair],
+    words: { ...REPAIR_WORDS, ask: "Hi Chris! I think my hard drive is failing." },
+    textFirst: { sms: "Hi Chris, I think my hard drive is failing. My computer and what it's doing: " },
+    callCard: "Clicking or not detected? Call before it gets worse.",
+    cityLinks: "computer",
+    guides: ["why-is-my-laptop-so-slow", "how-to-wipe-computer-before-recycling"],
+    textNote: "Tell us what it's doing: clicking, freezing, an error at startup. A photo helps.",
+    email: repairEmail("Hard drive"),
+    final: REPAIR_FINAL("hard drive"),
+    jobs: [
+      { id: "click", label: "Clicking or grinding noise" },
+      { id: "noboot", label: "\"No bootable device\" or won't start" },
+      { id: "slow", label: "Very slow, freezing" },
+      { id: "warning", label: "Drive warning or errors" },
+      { id: "files", label: "I need my files back" },
+      { id: "upgrade", label: "Upgrade to a fast SSD" },
+    ],
+    questions: [DEVICE, { id: "files", label: "Are your files backed up?", short: "Backup", options: [{ id: "no", label: "No" }, { id: "some", label: "Some of them" }, { id: "yes", label: "Yes" }] }, PLACE],
+    includes: ["Drive health tested (SMART and read test)", "Files, photos and email copied off first", "New SSD installed for your computer", "Windows moved over or freshly installed", "Your files put back and checked with you", "Old drive wiped or drilled in front of you"],
+    steps: [
+      { title: "Tell us what it's doing", body: "Clicking, freezing or an error. Stop using it if it's clicking." },
+      { title: "One price by text", body: "Labor plus the new drive at today's cost. Nothing ordered until you say yes." },
+      { title: "Files safe, new drive in", body: "We copy your files, install the SSD, test it with you, then you pay." },
+    ],
+    factsTitle: "Signs your hard drive is failing",
+    factsLede: "Drives usually warn you before they die. Act on the first sign, while your files can still be copied.",
+    facts: [
+      { title: "Clicking or grinding", body: "A clicking hard drive is often physically damaged. Turn it off: every minute it spins can make it worse. Tell us, and we'll tell you honestly if it needs a data recovery lab instead." },
+      { title: "\"No bootable device\"", body: "The computer can't find Windows. Sometimes it's a loose cable or settings, often the drive itself." },
+      { title: "Slow, freezing, files missing", body: "A drive with bad sectors freezes when it hits them. Files that won't open or vanish are a warning sign." },
+      { title: "SSDs fail too", body: "SSDs are faster and have no moving parts, but they wear out. A drive warning in Windows or the BIOS means back up now." },
+    ],
+    faqs: [
+      { q: "How much does hard drive replacement cost?", a: `${usd(ssd.price)} and up for the labor (files moved and Windows set up on the new drive), plus the new SSD at today's cost. Drive prices have gone up, so you get the drive price by text before we order it. Text ${SITE.phone.display}.` },
+      { q: "Can you get my files off a failing hard drive?", a: "If the drive still reads, yes: we copy your files off before anything else. If it's clicking, grinding or not detected at all, the safest move is a professional data recovery lab, and we'll tell you that honestly instead of risking your files." },
+      { q: "How do I know if my hard drive is failing?", a: "Clicking or grinding noises, a \"no bootable device\" message, freezing, very slow startups, files that won't open, or a drive warning in Windows. If you see any of these, back up now." },
+      { q: "Should I replace a hard drive with an SSD?", a: "Yes, for almost every Windows laptop and desktop. An SSD starts Windows in seconds, has no moving parts to click or break, and makes an older computer feel new." },
+      { q: "What happens to my old drive?", a: "It's yours. We can hand it back, wipe it, or drill it in front of you so nobody can read it. Free." },
+      { q: "Do you do desktops and gaming PCs?", a: `Yes. Laptops, desktops and gaming PCs, including adding a second drive for more space. Desktop work is ${usd(desktopRepair.price)} and up.` },
+      NO_FIX_FAQ,
+      MAC_FAQ,
+      WHERE_FAQ("We replace hard drives"),
+      PAY_FAQ,
+    ],
+    value: 200,
+    seo: {
+      title: "Hard Drive Replacement & File Rescue: Tampa to Orlando",
+      description: "Hard drive clicking, failing or not detected? Files copied, a fast SSD installed and Windows set up at your door in Tampa, St. Pete, Brandon and Orlando.",
+    },
+  },
+  {
+    slug: "virus-removal",
+    path: "/virus-removal-tampa",
+    name: "Virus removal Tampa",
+    service: "virus removal",
+    category: "pc_repair",
+    booking: IT_BOOKING,
+    remote: { question: "how", inPerson: "inperson" },
+    chip: "Remote anywhere · in person Tampa Bay to Orlando",
+    h1: ["Virus or scam pop-ups?", "Virus and malware removal in Tampa Bay."],
+    lede: "Pop-ups saying your computer is infected, a browser that keeps redirecting, or someone you let into your computer on a scam call? We remove the viruses, malware and remote-access apps, lock your accounts back down and set up protection. Remote anywhere, or at your home or business from Tampa to Orlando.",
+    promises: ["Price by text before any work", "Remote or at your door", "Scam remote-access apps removed", "Pay after it's clean"],
+    pricesLede: "One price for the cleanup, by text before we start. Remote is cheaper when the computer still gets online.",
+    prices: [virus, remoteSpeed, homeSpeed],
+    words: { ...REPAIR_WORDS, ask: "Hi Chris! I think my computer has a virus." },
+    textFirst: { sms: "Hi Chris, I think my computer has a virus. What I'm seeing: " },
+    callCard: "Scam pop-up on your screen? Don't call that number. Call us.",
+    cityLinks: "computer",
+    guides: ["why-is-my-laptop-so-slow", "computer-repair-vs-replace"],
+    textNote: "Don't call the number in a pop-up. Text us a photo of it instead.",
+    email: repairEmail("Virus removal"),
+    final: REPAIR_FINAL("computer"),
+    jobs: [
+      { id: "popups", label: "Pop-ups or \"your PC is infected\" warnings" },
+      { id: "scam", label: "I let a scammer into my computer" },
+      { id: "redirect", label: "Browser redirects or new toolbars" },
+      { id: "slow", label: "Suddenly slow or acting strange" },
+      { id: "email", label: "My email or accounts were hacked" },
+      { id: "protect", label: "Set up protection" },
+    ],
+    questions: [REMOTE_OR_HOME, DEVICE],
+    includes: ["Viruses, malware and adware removed", "Scam remote-access apps found and removed", "Browsers cleaned and reset", "Windows updated and Microsoft Defender set up", "Password and account clean-up guidance", "Tips to spot the next scam"],
+    steps: [
+      { title: "Tell us what you see", body: "A photo of the pop-up or what happened. Don't pay or call the number on it." },
+      { title: "Price by text", body: "Remote or in person, you get the price before we start." },
+      { title: "Cleaned and protected", body: "We remove it, set up protection and show you it's clean, then you pay." },
+    ],
+    factsTitle: "Is it a virus or a scam?",
+    factsLede: "Most \"your computer is infected\" screens are scams trying to get you to call or pay.",
+    facts: [
+      { title: "Fake warning pop-ups", body: "Microsoft doesn't put phone numbers in warnings. A full-screen alert with a number to call is a tech support scam. Close the browser and don't call." },
+      { title: "Let a scammer in?", body: "If someone connected to your computer, they may have left a remote-access app behind. Disconnect from the internet and have it cleaned before you use it for banking." },
+      { title: "Real infections", body: "Redirects, new toolbars, a sudden slowdown and friends getting strange emails from you are signs of real malware." },
+      { title: "Protection is built in", body: "Windows includes Microsoft Defender. Kept on and updated, it stops most threats without paying for extra antivirus." },
+    ],
+    faqs: [
+      { q: "How much does virus removal cost?", a: `${usd(virus.price)} for virus and pop-up removal with protection set up. If the computer still gets online, a remote cleanup starts at ${usd(remoteSpeed.price)}. Text ${SITE.phone.display} for your price.` },
+      { q: "Can you remove a virus remotely?", a: "Yes, if the computer still connects to the internet. We connect with a screen share you can watch and end any time. If someone scammed their way in, we come in person or have you disconnect first." },
+      { q: "I let a scammer into my computer. What do I do?", a: "Disconnect from the internet, don't log into your bank on that computer, and call your bank if you shared card details. Then call us: we remove the remote-access apps they left and check the computer is clean." },
+      { q: "Is the \"your computer is infected\" pop-up real?", a: "Almost never. Microsoft and real antivirus don't show a phone number to call. Close the browser (hold the power button if it won't close) and don't call the number." },
+      { q: "Do I need to buy antivirus?", a: "Usually not. Microsoft Defender is built into Windows and works well when it's on and updated. We set it up and check it before we leave." },
+      { q: "Will I lose my files?", a: "No. Virus removal keeps your files, photos and programs. We only remove what's harmful." },
+      MAC_FAQ,
+      WHERE_FAQ("In person, we come"),
+      PAY_FAQ,
+    ],
+    value: 150,
+    seo: {
+      title: "Virus & Malware Removal: Tampa, St. Pete, Brandon & Remote",
+      description: `Scam pop-ups, viruses or a scammer got into your computer? Cleaned remotely or at your door in Tampa, St. Pete, Brandon and Orlando. ${usd(virus.price)}. Call or text.`,
+    },
+  },
+  {
+    slug: "slow-computer-repair",
+    path: "/slow-computer-repair-tampa",
+    name: "Slow computer repair Tampa",
+    service: "a slow computer fix",
+    category: "pc_repair",
+    booking: IT_BOOKING,
+    remote: { question: "how", inPerson: "inperson" },
+    chip: "Remote anywhere · in person Tampa Bay to Orlando",
+    h1: ["Computer slow or freezing?", "Slow computer repair in Tampa Bay."],
+    lede: "Takes forever to start, freezes, or the fan is always loud? Most slow Windows computers don't need replacing. We clean out startup junk, fix Windows, check the drive and, if it's an old hard drive, move you to a fast SSD. Remote anywhere, or at your door from Tampa to Orlando.",
+    promises: ["Price by text before any work", "Remote or at your door", "Your files left alone", "Pay after it's fast"],
+    pricesLede: "Most slow computers are fixed with a speed-up. An SSD is only suggested when the drive is the real problem, and the drive is quoted at today's cost.",
+    prices: [homeSpeed, remoteSpeed, ssd],
+    words: { ...REPAIR_WORDS, ask: "Hi Chris! My computer is really slow." },
+    textFirst: { sms: "Hi Chris, my computer is really slow. My computer and what it's doing: " },
+    callCard: "Slow, freezing computer? Call now for your price.",
+    cityLinks: "computer",
+    guides: ["why-is-my-laptop-so-slow", "computer-repair-vs-replace"],
+    textNote: REPAIR_NOTE,
+    email: repairEmail("Slow computer"),
+    final: REPAIR_FINAL("computer"),
+    jobs: [
+      { id: "boot", label: "Takes forever to start" },
+      { id: "freeze", label: "Freezes or hangs" },
+      { id: "fan", label: "Loud fan, runs hot" },
+      { id: "full", label: "Disk full or 100% disk" },
+      { id: "popups", label: "Pop-ups or junk programs" },
+      { id: "old", label: "Old computer, want it fast" },
+    ],
+    questions: [REMOTE_OR_HOME, DEVICE],
+    includes: ["Startup apps and junk cleaned out", "Windows and drivers updated and repaired", "Drive health and disk space checked", "Malware and adware scan", "Dust and temps checked (in person)", "Speed checked with you before and after"],
+    steps: [
+      { title: "Tell us what it's doing", body: "Slow start, freezing, loud fan. A few taps or a call." },
+      { title: "Price by text", body: "Remote or in person, you get the price first." },
+      { title: "Fast again", body: "We clean it up, test it with you, then you pay." },
+    ],
+    faqs: [
+      { q: "How much does it cost to fix a slow computer?", a: `${usd(remoteSpeed.price)} and up remotely, ${usd(homeSpeed.price)} and up at your door. If the old hard drive is the problem, an SSD upgrade is ${usd(ssd.price)} and up plus the drive at today's cost. You get the price by text first.` },
+      { q: "Why is my computer so slow?", a: "The usual causes are an old spinning hard drive, too many apps starting with Windows, a nearly full disk, malware, or dust making it overheat and throttle. We check each one instead of guessing." },
+      { q: "Is it worth fixing an old computer?", a: "Usually. A speed-up or an SSD costs a fraction of a new computer and often makes a five-year-old laptop feel new. If it can't run a supported Windows version, we'll tell you it's time to replace it." },
+      { q: "Can you speed up my computer remotely?", a: "Yes. We connect over the internet with a screen share you can end any time and clean it up while you watch. It works anywhere in the US on Windows." },
+      { q: "Will you delete my files or programs?", a: "No. We only remove junk and programs you agree to remove. Your files, photos and the apps you use stay." },
+      MAC_FAQ,
+      WHERE_FAQ("In person, we come"),
+      PAY_FAQ,
+    ],
+    value: 140,
+    seo: {
+      title: "Slow Computer Repair: Tampa, St. Pete, Brandon & Remote",
+      description: `Slow, freezing Windows computer? Sped up remotely or at your door in Tampa, St. Pete, Brandon and Orlando, with SSD upgrades. From ${usd(remoteSpeed.price)}. Call or text.`,
+    },
+  },
+  {
+    slug: "computer-wont-turn-on",
+    path: "/computer-wont-turn-on-tampa",
+    name: "Computer won't turn on Tampa",
+    topic: "Dead computer repair",
+    service: "a computer that won't turn on",
+    category: "pc_repair",
+    booking: IT_BOOKING,
+    chip: "Laptops, desktops & gaming PCs · Tampa Bay to Orlando",
+    h1: ["Computer won't turn on?", "Laptop and desktop power repair in Tampa Bay."],
+    lede: "No lights, fans spin but a black screen, or it turns on and shuts right off? We find out if it's the charger, battery, power supply, memory or the drive, fix it at your home or business from Tampa to Orlando, and rescue your files if the computer can't be saved.",
+    promises: REPAIR_PROMISES,
+    pricesLede: "You get the price by text before any work. Parts like a power supply or charger are extra, at cost, and only if you say yes.",
+    prices: [pcRepair, desktopRepair, diagnosis, dataMove],
+    words: { ...REPAIR_WORDS, ask: "Hi Chris! My computer won't turn on." },
+    textFirst: { sms: "Hi Chris, my computer won't turn on. My computer and what happens when I press power: " },
+    callCard: "Dead computer? Call now for your price.",
+    cityLinks: "computer",
+    guides: ["computer-wont-turn-on", "computer-repair-vs-replace"],
+    textNote: "Tell us what happens when you press power: nothing, lights, fans or beeps.",
+    email: repairEmail("Computer won't turn on"),
+    final: REPAIR_FINAL("computer"),
+    jobs: [
+      { id: "dead", label: "Nothing happens at all" },
+      { id: "black", label: "Lights or fans, black screen" },
+      { id: "off", label: "Turns on, then shuts off" },
+      { id: "beeps", label: "Beeps or blinking lights" },
+      { id: "spill", label: "After a spill or a drop" },
+      { id: "files", label: "I need my files saved" },
+    ],
+    questions: [DEVICE, PLACE],
+    includes: ["Charger, battery and outlet tested", "Power supply and motherboard checked", "Memory and drive tested", "Display and cable checked for black screens", "Files rescued if it can't be saved", "Tested with you before we leave"],
+    steps: [
+      { title: "Tell us what happens", body: "No lights, black screen, beeps or shuts off. A call or a few taps." },
+      { title: "Price by text", body: "You get the price before we come. Parts only if you say yes." },
+      { title: "Back on", body: "We find the cause, fix it, test it with you, then you pay." },
+    ],
+    faqs: [
+      { q: "How much does it cost to fix a computer that won't turn on?", a: `${usd(pcRepair.price)} and up for laptops, ${usd(desktopRepair.price)} and up for desktops and gaming PCs, at your door. Parts like a power supply or charger are extra at cost and you approve them first. Text ${SITE.phone.display}.` },
+      { q: "Why won't my laptop turn on?", a: "Most often it's the charger or battery, then memory, the drive or the motherboard. Try a different outlet and hold the power button for 30 seconds with the charger unplugged. Still dead? Call us." },
+      { q: "My computer turns on but the screen is black. Why?", a: "If you hear fans or see lights, the problem is often memory, the graphics card or the cable to the monitor, not the screen itself. We test each one at your place." },
+      { q: "Can you get my files off a dead computer?", a: "Usually, yes. The drive is often fine even when the computer isn't, so we can copy your files to a new computer or a backup drive." },
+      { q: "Is it worth fixing?", a: "If it's the charger, battery, power supply, memory or drive, almost always. If the motherboard failed on an older laptop, replacing it often makes more sense, and we'll tell you straight." },
+      NO_FIX_FAQ,
+      MAC_FAQ,
+      WHERE_FAQ("We fix computers"),
+      PAY_FAQ,
+    ],
+    value: 150,
+    seo: {
+      title: "Computer Won't Turn On? Repair in Tampa, St. Pete & Orlando",
+      description: `Laptop or desktop dead, black screen or shutting off? Fixed at your door in Tampa, St. Pete, Brandon and Orlando, files rescued. From ${usd(pcRepair.price)}. Call or text.`,
+    },
+  },
+);
+
+export const pageTopic = (p: Pick<InstallPage, "topic" | "name">) => p.topic ?? p.name.replace(/ Tampa$/, "");
 
 export const INSTALL_PATHS = INSTALL_PAGES.map((p) => p.path);
 export const installPage = (path: string) => INSTALL_PAGES.find((p) => p.path === path.replace(/\/$/, ""));

@@ -167,7 +167,7 @@ describe("Tampa move", () => {
 describe("Tampa install pages", () => {
   it("has a page for computer setup, security cameras and Wi-Fi, each with per-unit prices", async () => {
     const { INSTALL_PAGES } = await import("@/content/install-pages");
-    expect(INSTALL_PAGES.map((p) => p.path)).toEqual(["/computer-setup-tampa", "/security-camera-installation-tampa", "/wifi-installation-tampa", "/business-tech-setup-tampa", "/gaming-pc-fps-boost", "/phone-repair-tampa", "/electronics-recycling-tampa"]);
+    expect(INSTALL_PAGES.map((p) => p.path)).toEqual(["/computer-setup-tampa", "/security-camera-installation-tampa", "/wifi-installation-tampa", "/business-tech-setup-tampa", "/gaming-pc-fps-boost", "/phone-repair-tampa", "/electronics-recycling-tampa", "/blue-screen-repair-tampa", "/hard-drive-replacement-tampa", "/virus-removal-tampa", "/slow-computer-repair-tampa", "/computer-wont-turn-on-tampa"]);
     for (const p of INSTALL_PAGES) expect(p.prices.length, p.path).toBeGreaterThan(1);
     const cams = INSTALL_PAGES[1];
     expect(cams.prices.map((x) => x.id)).toEqual(["cam-doorbell", "cam-wifi"]);

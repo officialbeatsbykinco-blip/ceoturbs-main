@@ -62,6 +62,11 @@ const INSTALL_OG: Record<string, string> = {
   "wifi-installation": "/og/wifi.jpg",
   "business-tech-setup": "/og/business-tech.jpg",
   "fps-boost": "/og/gaming-pc.jpg",
+  "blue-screen-repair": IT_OG.repair,
+  "hard-drive-replacement": IT_OG.repair,
+  "virus-removal": IT_OG.repair,
+  "slow-computer-repair": IT_OG.repair,
+  "computer-wont-turn-on": IT_OG.repair,
 };
 /** Office and computer setup services get the IT pictures; marketing services the "more calls" one. */
 const serviceOgImage = (slug: string) =>

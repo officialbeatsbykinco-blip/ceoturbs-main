@@ -14,7 +14,7 @@ import { AcceptsChecker } from "@/components/tech/AcceptsChecker";
 import { CustomerReview, FounderBadge } from "@/components/tech/FounderBadge";
 import { InstallCalEmbed } from "@/components/booking/InstallCalEmbed";
 import { INSTALL_BOOKING, SITE } from "@/config/site";
-import { INSTALL_PAGES, installPage, quizWords } from "@/content/install-pages";
+import { INSTALL_PAGES, installPage, pageTopic, quizWords } from "@/content/install-pages";
 import { priceTag } from "@/content/pricing";
 import { smsHref } from "@/lib/sms";
 import { OFFICE_FROM, OfficePrices } from "@/components/blocks/OfficePrices";
@@ -22,13 +22,6 @@ import { BeforeAfter, OFFICE_BEFORE_AFTER } from "@/components/visuals/BeforeAft
 import { OFFICE_SETUP_PATH } from "@/content/tech-pages";
 import { newEventId, serverTrack, track } from "@/lib/track";
 import { ReviewCardStrip } from "@/components/blocks/ReviewCardBlocks";
-
-/** Articles that answer the same questions as each page. */
-const GUIDES_FOR: Record<string, string[]> = {
-  "phone-repair": ["cracked-phone-screen-repair-or-replace", "phone-battery-draining-fast"],
-  "tech-recycling": ["where-to-recycle-electronics-tampa-bay", "how-to-wipe-computer-before-recycling"],
-  "computer-setup": ["how-to-wipe-computer-before-recycling", "computer-repair-vs-replace"],
-};
 
 const STEP_ICONS = [MessageSquare, ClipboardCheck, Home];
 const PROMISES = ["Price up front, before any work", "We come to your home or business", "Tested with you before we leave", "Pay after it works"];
@@ -44,7 +37,10 @@ export default function InstallPage({ path }: { path: string }) {
 
   const business = page.audience === "business";
   const words = quizWords(page);
-  const emailHref = `mailto:${SITE.email}?subject=${encodeURIComponent(`${page.name}: pickup request`)}&body=${encodeURIComponent("Hi Chris, here's what I have and my city/ZIP: ")}`;
+  const topic = pageTopic(page);
+  const email = page.email ?? { subject: `${page.name}: price request`, body: "Hi Chris, what I need and my city/ZIP: " };
+  const emailHref = `mailto:${SITE.email}?subject=${encodeURIComponent(email.subject)}&body=${encodeURIComponent(email.body)}`;
+  const final = page.final ?? { title: "Get your price today.", line: `Text or call ${SITE.phone.display}. Price up front, pay after it works.` };
   const textLink = page.textFirst && (
     <a href={smsHref(page.textFirst.sms)} data-call-location={`${page.slug} text`} className="btn-chrome inline-flex items-center justify-center gap-2 !py-4 !text-lg sm:hidden">
       <MessageSquare className="h-5 w-5" aria-hidden /> Text us a photo
@@ -66,7 +62,7 @@ export default function InstallPage({ path }: { path: string }) {
               <span className="text-chrome-grad">{page.h1[0]}</span> <span className="text-turbo-grad">{page.h1[1]}</span>
             </h1>
             <p className="mt-4 max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg">{page.lede}</p>
-            {page.slug === "phone-repair" && <CallNowCard where="phone-repair" headline="Cracked screen or dead battery? Call now for your price." className="mt-5 max-w-xl" />}
+            {page.callCard && <CallNowCard where={page.slug} headline={page.callCard} className="mt-5 max-w-xl" />}
             {business && (
               <>
                 <BeforeAfter {...OFFICE_BEFORE_AFTER} label="business hero" priority className="mt-6" />
@@ -100,8 +96,8 @@ export default function InstallPage({ path }: { path: string }) {
               </CallLink>
               {textLink}
             </div>
-            {page.textFirst && <p className="mt-3 text-[15px] text-muted-foreground">Call or text <span className="font-semibold text-foreground">{SITE.phone.display}</span>, or email <a href={emailHref} className="font-semibold text-foreground underline underline-offset-2">{SITE.email}</a>. A photo of the pile is all we need.</p>}
-            <FounderBadge className="mt-5 max-w-xl" line={business ? "I do the setup myself and give you a written price first. Call and you get me." : page.textFirst ? "I do the pickups myself. Call or text and you get me, not a call center." : page.remote ? "I tune your PC myself, live with you. Call and you get me, not a call center." : "I come out and do the work myself. Call and you get me, not a call center."} />
+            {page.textFirst && <p className="mt-3 text-[15px] text-muted-foreground">Call or text <span className="font-semibold text-foreground">{SITE.phone.display}</span>, or email <a href={emailHref} className="font-semibold text-foreground underline underline-offset-2">{SITE.email}</a>.{page.textNote && ` ${page.textNote}`}</p>}
+            <FounderBadge className="mt-5 max-w-xl" line={page.founderLine ?? (business ? "I do the setup myself and give you a written price first. Call and you get me." : page.remote ? "I tune your PC myself, live with you. Call and you get me, not a call center." : "I come out and do the work myself. Call and you get me, not a call center.")} />
             {/* The review mentions phones: keep it off the business-only (Google Ads) page. */}
             {!business && <CustomerReview className="mt-3 max-w-xl" />}
             <ul className="mt-6 grid max-w-xl gap-x-4 gap-y-2 text-[15px] text-muted-foreground sm:grid-cols-2">
@@ -145,7 +141,7 @@ export default function InstallPage({ path }: { path: string }) {
 
       <section className="section border-t border-border" aria-labelledby="prices">
         <div className="container-x">
-          <SectionHeader title={<span id="prices">Prices</span>} lede={business ? "Three simple prices. Cameras, Wi-Fi and TV mounts are priced per item on your call." : page.pricesLede ?? "Labor, per unit, so you can add it up yourself. Equipment is yours, or we buy it at cost and show you the receipt. You get the total before we start."} />
+          <SectionHeader title={<span id="prices">{topic} prices in Tampa Bay</span>} lede={business ? "Three simple prices. Cameras, Wi-Fi and TV mounts are priced per item on your call." : page.pricesLede ?? "Labor, per unit, so you can add it up yourself. Equipment is yours, or we buy it at cost and show you the receipt. You get the total before we start."} />
           {business ? (
             <OfficePrices className="mt-10" />
           ) : page.prices.length > 0 && (
@@ -169,7 +165,7 @@ export default function InstallPage({ path }: { path: string }) {
 
       <section className="section border-t border-border" aria-labelledby="included">
         <div className="container-x">
-          <SectionHeader title={<span id="included">What's included</span>} />
+          <SectionHeader title={<span id="included">What's included with {topic.toLowerCase()}</span>} />
           <ul className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {page.includes.map((t) => (
               <li key={t} className="panel flex items-start gap-3 p-5 text-base">
@@ -184,7 +180,7 @@ export default function InstallPage({ path }: { path: string }) {
       {page.facts && (
         <section className="section border-t border-border" aria-labelledby="why">
           <div className="container-x">
-            <SectionHeader title={<span id="why">Why old tech can't go in the trash</span>} lede="Recycling keeps Florida clean, keeps fires out of garbage trucks and keeps your data private." />
+            <SectionHeader title={<span id="why">{page.factsTitle ?? "Good to know"}</span>} lede={page.factsLede} />
             <div className="mt-8 grid gap-4 sm:grid-cols-2">
               {page.facts.map((f) => (
                 <div key={f.title} className="panel p-6">
@@ -199,7 +195,7 @@ export default function InstallPage({ path }: { path: string }) {
 
       <section className="section border-t border-border" aria-labelledby="how">
         <div className="container-x">
-          <SectionHeader title={<span id="how">How it works</span>} lede="Three steps, no surprises." />
+          <SectionHeader title={<span id="how">How {topic.toLowerCase()} works</span>} lede="Three steps, no surprises." />
           <ol className="mt-10 grid gap-4 md:grid-cols-3">
             {page.steps.map((s, i) => {
               const Icon = STEP_ICONS[i] ?? Wrench;
@@ -237,8 +233,7 @@ export default function InstallPage({ path }: { path: string }) {
       <section className="section border-t border-border" aria-labelledby="area">
         <div className="container-x">
           <SectionHeader title={<span id="area">{page.remote ? "Where we work" : "Where we come to you"}</span>} lede={page.areaLede ?? "Anywhere within about 1.5 hours of Temple Terrace: Tampa Bay, Orlando, Lakeland, Winter Haven, Sarasota and everywhere in between."} />
-          {page.slug === "phone-repair" && <RepairCityLinks first="phone" className="mt-8" />}
-          {page.slug === "tech-recycling" && <RepairCityLinks first="recycle" className="mt-8" />}
+          {page.cityLinks && <RepairCityLinks first={page.cityLinks} className="mt-8" />}
           <ServiceAreaList className="mt-8" />
           {page.farther && (
             <div className="panel mt-4 p-5 sm:p-6">
@@ -257,8 +252,8 @@ export default function InstallPage({ path }: { path: string }) {
         </div>
       </section>
 
-      <FAQList faqs={page.faqs} title="Quick answers" />
-      {GUIDES_FOR[page.slug] && <GuideLinks slugs={GUIDES_FOR[page.slug]} />}
+      <FAQList faqs={page.faqs} title={`${topic} questions`} />
+      {page.guides && <GuideLinks slugs={page.guides} />}
 
       {!business && (
       <section className="section border-t border-border" aria-labelledby="more">
@@ -281,8 +276,8 @@ export default function InstallPage({ path }: { path: string }) {
       <section className="section border-t border-border" aria-labelledby="final">
         <div className="container-x">
           <div className="panel p-6 text-center sm:p-10">
-            <h2 id="final" className="h-section">{page.textFirst ? "Get your old tech picked up." : "Get your price today."}</h2>
-            <p className="lede mx-auto">{page.textFirst ? `Call or text ${SITE.phone.display}. Free pickup, drives wiped, nothing in the landfill.` : `Text or call ${SITE.phone.display}. Price up front, pay after it works.`}</p>
+            <h2 id="final" className="h-section">{final.title}</h2>
+            <p className="lede mx-auto">{final.line}</p>
             <div className="mt-7 grid gap-3 sm:flex sm:justify-center">
               <a href="#book" className="btn-ignite inline-flex items-center justify-center gap-2 !py-4 !text-lg">
                 <Calendar className="hidden h-5 w-5 sm:block" aria-hidden />

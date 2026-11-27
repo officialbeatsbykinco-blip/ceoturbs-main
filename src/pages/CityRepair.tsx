@@ -1,3 +1,4 @@
+import { ProblemLinks } from "@/components/tech/ProblemLinks";
 // /computer-repair-<city>-fl: in-home computer AND phone repair for one city (data in content/city-repair.ts).
 // Built for the searches people make by town ("computer repair Brandon FL", "phone screen repair Lakeland"):
 // the city in the title, H1, first paragraph, a direct answer block, the drive and ZIP codes, city FAQs, then the
@@ -152,6 +153,7 @@ export default function CityRepair({ c }: { c: RepairCity }) {
             ))}
           </div>
           <p className="mt-4 text-sm text-muted-foreground">Windows PCs only (no Macs or laptop screens). Phone and tablet repairs cover iPhone, Samsung, Pixel and iPad.</p>
+          <ProblemLinks className="mt-8" title={`Computer problems we fix in ${c.city}`} />
         </div>
       </section>
 
