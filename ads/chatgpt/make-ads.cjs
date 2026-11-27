@@ -63,6 +63,25 @@ const ads = {
     </g>
     ${pill(790, "No fix, no repair bill", 760)}
     ${footer}`,
+  // Phone & tablet repair (/phone-repair-tampa): cracked screen + battery, fixed at the customer's door.
+  "ad-phone-repair": `
+    ${bg}
+    <text x="540" y="140" font-family="${F}" font-size="84" font-weight="800" fill="#fff" text-anchor="middle">Cracked screen?</text>
+    <text x="540" y="235" font-family="${F}" font-size="84" font-weight="800" fill="#ff8a3d" text-anchor="middle">Dead battery?</text>
+    <g transform="translate(540 515)">
+      <rect x="-125" y="-215" width="250" height="430" rx="38" fill="#1b2233" stroke="#3a4560" stroke-width="7"/>
+      <rect x="-106" y="-190" width="212" height="380" rx="22" fill="#0f1830"/>
+      <path d="M-106 -120 L-30 -40 L-60 20 L20 80 L-10 190 M-30 -40 L70 -90 L106 -60 M20 80 L106 110 M-60 20 L-106 40" fill="none" stroke="#dfe7ff" stroke-width="5" stroke-linecap="round" opacity="0.9"/>
+      <rect x="-34" y="-205" width="68" height="12" rx="6" fill="#3a4560"/>
+      <g transform="translate(150 -150)">
+        <rect x="-38" y="-62" width="76" height="124" rx="12" fill="#1b2233" stroke="#ff5a4e" stroke-width="7"/>
+        <rect x="-16" y="-76" width="32" height="14" rx="4" fill="#ff5a4e"/>
+        <rect x="-24" y="34" width="48" height="16" rx="4" fill="#ff5a4e"/>
+      </g>
+    </g>
+    ${fixedBadge(720, 650)}
+    ${pill(790, "Fixed at your door", 700)}
+    <text x="540" y="1030" font-family="${F}" font-size="36" font-weight="600" fill="#b9c6e4" text-anchor="middle">Phones &amp; tablets · Central Florida</text>`,
 };
 
 (async () => {
