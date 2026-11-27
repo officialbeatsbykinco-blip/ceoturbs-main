@@ -89,10 +89,8 @@ export function Layout({ children }: { children: ReactNode }) {
   const soft = SOFT.test(pathname) || isTechGuide(pathname);
   return (
     <>
-      {/* display: contents keeps the fixed header's layout; the light colors still inherit down. */}
-      <div className={soft ? "theme-soft contents" : "contents"}>
-        <Header />
-      </div>
+      {/* The header keeps the dark navy bar on every page, light pages included. */}
+      <Header />
       {/* overflow-x-clip: edge-sliding animations (the review-card phone) never make phones scroll sideways; clip keeps sticky working. */}
       {/* max-lg:pt: room for the phone nav bar under the header (Header QuickNav, 52px). */}
       <main id="main" className={cn("overflow-x-clip pt-[52px] lg:pt-11", soft && "theme-soft")}>
