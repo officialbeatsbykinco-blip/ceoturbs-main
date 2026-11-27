@@ -20,7 +20,7 @@ const hd = (name: string, alt: string): GalleryItem => ({
 });
 
 export const GALLERY: GalleryItem[] = [
-  hd("card-hero", "NFC Google review card, both sides: white Review Us On Google front and black NFC back"),
+  hd("card-hero", "NFC Google review card, both sides: white front and black back, both say Review Us On Google"),
   // A real photo, not a render: the founder holding the card customers get.
   {
     src: `${IMG}/founder-card.jpg`,
@@ -35,7 +35,7 @@ export const GALLERY: GalleryItem[] = [
   hd("card-counter", "Google review card lying on a shop counter next to the register"),
   hd("card-stack-5", "Five NFC Google review cards fanned out"),
   hd("card-size", "Credit-card size: 85.5 mm by 54 mm, shown next to a phone"),
-  hd("card-specs", "Review card specs: white matte front, black NFC back, NTAG215 chip, 504 bytes, waterproof PVC, 85.5 × 54 × 0.76 mm"),
+  hd("card-specs", "Review card specs: white matte front, black back (both say Review Us On Google), NTAG215 chip, 504 bytes, waterproof PVC, 85.5 × 54 × 0.76 mm"),
   { src: `${IMG}/feed-white.jpg`, thumb: `${IMG}/card-3d-thumb.webp`, alt: "Spin the review card in 3D", live3d: true, w: 1200, h: 1200 },
 ];
 
@@ -49,7 +49,7 @@ export const STAND_GALLERY: Record<"stand" | "kit", GalleryItem[]> = {
   kit: [
     hd("kit", "Google review kit: counter stand plus two NFC review cards"),
     hd("stand-tap", "Phone next to the counter stand with the Google review form open"),
-    hd("card-hero", "The two NFC review cards in the kit: white front, black NFC back"),
+    hd("card-hero", "The two NFC review cards in the kit: white front, black back, both say Review Us On Google"),
     hd("stand-angle", "Google review counter stand from the side"),
   ],
 };
@@ -106,7 +106,7 @@ export const SHOP_FAQS: FAQ[] = [
   { q: "Will it work through a phone case?", a: "Through most cases, yes. Very thick, metal or magnetic wallet cases can block NFC — the customer just slips the phone out." },
   { q: "How long does shipping take?", a: `${REVIEW_CARD.shipping.processing}, and it ${REVIEW_CARD.shipping.delivery.toLowerCase()}. ${REVIEW_CARD.shipping.free ? "Shipping is free in the US." : ""}` },
   { q: "What if my card doesn't work?", a: REVIEW_CARD.guarantee },
-  { q: "What are the card specs?", a: `${REVIEW_CARD.specs.chip} with ${REVIEW_CARD.specs.memory}, ${REVIEW_CARD.specs.material.toLowerCase()}, ${REVIEW_CARD.specs.size}. White matte front with “Review Us On Google”, black back with the Google G.` },
+  { q: "What are the card specs?", a: `${REVIEW_CARD.specs.chip} with ${REVIEW_CARD.specs.memory}, ${REVIEW_CARD.specs.material.toLowerCase()}, ${REVIEW_CARD.specs.size}. White matte front with “Review Us On Google”, black back with “Review Us On Google” in white text, so it works either side up.` },
   { q: "Is this card made by Google?", a: `No. CEO Turbo review cards are an independent product that links to your Google review page. Google is a trademark of Google LLC; we're not affiliated with or endorsed by Google. Cards start at ${fromPriceLabel}.` },
 ];
 

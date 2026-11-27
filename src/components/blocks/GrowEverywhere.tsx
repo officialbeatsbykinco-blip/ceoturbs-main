@@ -166,7 +166,7 @@ export function ReviewCardPacks({ where, id = "review-cards", className }: { whe
             height={1600}
             loading="lazy"
             decoding="async"
-            alt="NFC Google review card, both sides: white Review Us On Google front and black NFC back"
+            alt="NFC Google review card, both sides: white front and black back, both say Review Us On Google"
             className="w-full rounded-3xl ring-1 ring-border"
           />
         </div>

@@ -23,7 +23,7 @@ NFC Google Review Card – Tap to Review, Works on iPhone & Android, No App
   <li><strong>One tap opens your Google review form</strong> — the fastest way for a happy customer to post a review.</li>
   <li><strong>Works on iPhone &amp; Android</strong> — every iPhone XS or newer and NFC-enabled Android phones. Customers need no app.</li>
   <li><strong>Pay once, use forever</strong> — no subscription. Re-program it anytime, for any location.</li>
-  <li><strong>Looks premium on any counter</strong> — matte white “Review Us On Google” front, sleek black NFC back.</li>
+  <li><strong>Looks premium on any counter</strong> — “Review Us On Google” on both sides: matte white front, sleek black back with white text.</li>
   <li><strong>Built to last</strong> — waterproof PVC, credit-card size, wipe-clean.</li>
 </ul>
 
@@ -42,7 +42,7 @@ NFC Google Review Card – Tap to Review, Works on iPhone & Android, No App
   <li>Chip: NTAG215 NFC (504 bytes user memory)</li>
   <li>Size: 85.5 × 54 mm (credit-card size), 0.76 mm thick</li>
   <li>Material: waterproof PVC, matte finish</li>
-  <li>Front: white “Review Us On Google” · Back: black NFC side</li>
+  <li>Front: white with “Review Us On Google” · Back: black with “Review Us On Google” in white text</li>
   <li>Compatible: iPhone XS and newer (iPhone 7–X via the NFC Tag Reader), NFC-enabled Android phones</li>
 </ul>
 

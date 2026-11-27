@@ -766,7 +766,7 @@ export const GUIDES: Guide[] = [
     published: DATE2,
     updated: DATE2,
     readMinutes: 7,
-    image: { src: "/og/guides/nfc-google-review-cards.jpg", alt: "White Review Us On Google NFC card and black NFC back side" },
+    image: { src: "/og/guides/nfc-google-review-cards.jpg", alt: "Review Us On Google NFC cards: white front and black back" },
     sections: [
       {
         h2: "What is an NFC Google review card?",

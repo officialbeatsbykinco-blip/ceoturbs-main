@@ -43,14 +43,14 @@ ${stars(742, 58, 10)}`,
     "Front of the review card: Review Us On Google, NFC tap",
   );
 
-/** Black NFC back with the G in a white ring. */
+/** Black back: the same "Review Us On Google" design as the front, in white text on black. */
 export const cardBack = () =>
   wrap(
     `<rect width="${CARD_W}" height="${CARD_H}" rx="44" fill="#08080a"/>
-<rect x="20" y="20" width="${CARD_W - 40}" height="${CARD_H - 40}" rx="28" fill="none" stroke="#f2f2f2" stroke-width="5"/>
-<circle cx="270" cy="370" r="170" fill="#fff"/>
-${g(150, 250, 240)}
-${nfc(270, 618, "#ffffff")}
-${stars(732, 58, 10)}`,
-    "Back of the review card: black NFC side with the Google G",
+<text x="270" y="150" text-anchor="middle" font-family="${FONT}" font-weight="500" font-size="50" fill="#ffffff">Review Us On</text>
+<text x="270" y="245" text-anchor="middle" font-family="${FONT}" font-weight="600" font-size="92" letter-spacing="-2" fill="#ffffff">Google</text>
+${g(115, 300, 310)}
+${nfc(270, 640, "#ffffff")}
+${stars(742, 58, 10)}`,
+    "Back of the review card: black, Review Us On Google in white text, NFC tap",
   );

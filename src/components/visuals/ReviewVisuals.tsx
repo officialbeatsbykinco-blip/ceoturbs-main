@@ -109,7 +109,7 @@ export function ReviewCard3D({ className, tap = false, priority = false }: { cla
       onPointerMove={onMove}
       onPointerLeave={onLeave}
       role="img"
-      aria-label="NFC Google review card turning in 3D: white “Review Us On Google” front and black NFC back"
+      aria-label="NFC Google review card turning in 3D: white front and black back, both saying “Review Us On Google”"
     >
       <button type="button" onClick={() => setFlipped((f) => !f)} className="relative block w-full cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-turbo focus-visible:ring-offset-4 focus-visible:ring-offset-background rounded-[8%/5%]" aria-label={flipped ? "Show the front of the card" : "Show the back of the card"} {...(priority ? { "data-priority": "true" } : {})}>
         <div ref={tiltRef} className="rc-tilt" data-active="false">

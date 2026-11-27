@@ -159,7 +159,7 @@ export const REVIEW_CARD = {
   fullName: "NFC Google Review Card",
   sku: "CT-NFC-REVIEW",
   currency: "USD",
-  /** One double-sided card: white matte "Review Us On Google" front, black NFC back. */
+  /** One double-sided card: "Review Us On Google" on both sides, white matte front and black back (white text). */
   finish: "White front · black back",
   image: "/img/review-cards/feed-white.jpg",
   packs: REVIEW_PACKS,
