@@ -5,7 +5,7 @@ export const SITE = {
   name: "CEO Turbo",
   url: "https://www.ceoturbo.com",
   /** dateModified for page schema. Bump when page copy is refreshed (guides carry their own dates). */
-  contentUpdated: "2026-11-03",
+  contentUpdated: "2026-11-26",
   tagline: "Florida IT support from Tampa Bay to Orlando: we fix it, set it up and keep it running, then help you get customers.",
   description:
     "CEO Turbo is a Florida IT support and growth company based in Tampa Bay. We repair Windows laptops and desktops at your door or remotely (speed-ups, blue screens, computers that won't turn on), set up phones, tablets, cameras and offices, and build websites and ads that bring in customers. In person across Tampa Bay and Central Florida, anywhere within about 1.5 hours of Temple Terrace: Tampa, St. Pete, Clearwater, Orlando, Lakeland, Sarasota and Ocala.",

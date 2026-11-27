@@ -59,13 +59,18 @@ for (const page of pages) {
 const notFound = await render("/__not-found__");
 await writeFile(path.join(DIST, "404.html"), template.replace("<!--head-->", head("/404")).replace("<!--app-->", notFound));
 
-// sitemap.xml — indexable pages only
+// sitemap.xml — indexable pages only. lastmod is the page's own dateModified (WebPage / Article schema), not the
+// build date: Google and Bing ignore lastmod on sites where it changes on every deploy.
+const lastmod = (p) => {
+  const dates = p.schema.map((n) => n.dateModified).filter((d) => typeof d === "string" && /^\d{4}-\d{2}-\d{2}/.test(d));
+  return dates.length ? dates.sort().at(-1).slice(0, 10) : TODAY;
+};
 const urls = pages
   .filter((p) => !p.noindex && !p.canonical)
   .map(
     (p) => `  <url>
     <loc>${SITE}${p.path === "/" ? "/" : p.path}</loc>
-    <lastmod>${TODAY}</lastmod>
+    <lastmod>${lastmod(p)}</lastmod>
     <changefreq>${p.changefreq}</changefreq>
     <priority>${p.priority.toFixed(1)}</priority>
   </url>`,
@@ -83,6 +88,13 @@ if (WATCH) {
   const v = ssr.pitchVideo;
   const esc = (t) => t.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   // The founder video (self-hosted) plus every YouTube video embedded on /watch.
+  const ytEntry = (y) =>
+    `    <video:video>\n      <video:thumbnail_loc>https://i.ytimg.com/vi/${y.id}/hqdefault.jpg</video:thumbnail_loc>\n      <video:title>${esc(y.title)}</video:title>\n      <video:description>${esc(y.summary)}</video:description>\n      <video:player_loc>https://www.youtube-nocookie.com/embed/${y.id}</video:player_loc>\n      <video:duration>${y.seconds}</video:duration>\n      <video:publication_date>${y.uploadDate}</video:publication_date>\n      <video:family_friendly>yes</video:family_friendly>\n    </video:video>\n`;
+  // Guides that embed one of our videos: listed under the guide's own URL too, so it can show as a video result.
+  const guideVideos = (guides || [])
+    .filter((g) => g.video && (ssr.youtubeVideos || []).some((y) => y.id === g.video))
+    .map((g) => `  <url>\n    <loc>${SITE}${g.path ?? `/guides/${g.slug}`}</loc>\n${ytEntry(ssr.youtubeVideos.find((y) => y.id === g.video))}  </url>\n`)
+    .join("");
   const yt = (ssr.youtubeVideos || [])
     .map(
       (y) =>
@@ -91,7 +103,7 @@ if (WATCH) {
     .join("");
   await writeFile(
     path.join(DIST, "video-sitemap.xml"),
-    `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">\n  <url>\n    <loc>${SITE}/watch</loc>\n    <video:video>\n      <video:thumbnail_loc>${SITE}${v.poster}</video:thumbnail_loc>\n      <video:title>${esc(v.title)}</video:title>\n      <video:description>${esc(v.description)}</video:description>\n      <video:content_loc>${SITE}${v.src}</video:content_loc>\n      <video:duration>${v.seconds}</video:duration>\n      <video:publication_date>2026-10-10</video:publication_date>\n      <video:family_friendly>yes</video:family_friendly>\n    </video:video>\n${yt}  </url>\n</urlset>\n`,
+    `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">\n  <url>\n    <loc>${SITE}/watch</loc>\n    <video:video>\n      <video:thumbnail_loc>${SITE}${v.poster}</video:thumbnail_loc>\n      <video:title>${esc(v.title)}</video:title>\n      <video:description>${esc(v.description)}</video:description>\n      <video:content_loc>${SITE}${v.src}</video:content_loc>\n      <video:duration>${v.seconds}</video:duration>\n      <video:publication_date>2026-10-10</video:publication_date>\n      <video:family_friendly>yes</video:family_friendly>\n    </video:video>\n${yt}  </url>\n${guideVideos}</urlset>\n`,
   );
 }
 

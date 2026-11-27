@@ -81,14 +81,33 @@ for (const file of files) {
   const body = html.slice(html.indexOf("<body"));
   const h1s = (body.match(/<h1[\s>]/g) || []).length;
   if (h1s !== 1) err(route, `${h1s} <h1> tags (need exactly 1)`);
+  // Heading outline: starts at the H1, never skips a level going down (H2 → H4), no empty headings.
+  let prevLevel = 0;
+  const indexable = !/noindex/.test(html.match(/<meta[^>]+name="robots"[^>]*>/)?.[0] ?? "");
+  if (indexable) for (const m of body.matchAll(/<h([1-6])\b[^>]*>([\s\S]*?)<\/h\1>/g)) {
+    const level = Number(m[1]);
+    const text = m[2].replace(/<[^>]+>/g, "").trim();
+    if (!prevLevel && level !== 1) err(route, `first heading is <h${level}>, not the <h1>`);
+    if (prevLevel && level > prevLevel + 1) err(route, `heading skips a level: <h${prevLevel}> → <h${level}> "${text.slice(0, 50)}"`);
+    if (!text) err(route, `empty <h${level}>`);
+    prevLevel = level;
+  }
 
+  const types = [];
   for (const m of html.matchAll(/<script type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/g)) {
     try {
-      JSON.parse(m[1]);
+      const j = JSON.parse(m[1]);
+      for (const n of j["@graph"] ?? [j]) {
+        types.push([].concat(n["@type"]).join("/"));
+        if (n["@type"] === "FAQPage" && !n.mainEntity?.length) err(route, "FAQPage schema with no questions");
+        if (n["@type"] === "VideoObject" && !(n.name && n.description && n.thumbnailUrl && n.uploadDate)) err(route, "VideoObject missing name, description, thumbnailUrl or uploadDate");
+      }
     } catch (e) {
       err(route, `invalid JSON-LD: ${e.message}`);
     }
   }
+  // Google rejects a page with two FAQPage (or two BreadcrumbList) blocks: "Duplicate field".
+  for (const t of ["FAQPage", "BreadcrumbList"]) if (types.filter((x) => x === t).length > 1) err(route, `${t} schema appears more than once`);
 
   for (const m of body.matchAll(/<img\b[^>]*>/g)) {
     const tag = m[0];

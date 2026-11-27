@@ -2,6 +2,7 @@ import { useEffect, useId, useState } from "react";
 import { ExternalLink, Loader2, ShieldCheck } from "lucide-react";
 import { INSTALL_BOOKING, type CalEvent } from "@/config/site";
 import { calTheme, mountInstallBooking } from "@/lib/cal";
+import { onEngaged } from "@/lib/engaged";
 import { track, serverTrack } from "@/lib/track";
 
 export function InstallCalEmbed({
@@ -27,20 +28,26 @@ export function InstallCalEmbed({
     let active = true;
     setScheme(calTheme());
 
-    mountInstallBooking(calId, note, uid, booking).then((r) => {
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    // The Cal.com iframe mounts on the visitor's first move, scroll, tap or key. Crawlers don't interact, so they
+    // never load it: the booking page inside has its own <h1>, which Bing's checker counted as a second H1 here.
+    const cancelEngaged = onEngaged(() => {
       if (!active) return;
-      setCalReady(true);
-      setShowFallback(r !== "ready");
+      mountInstallBooking(calId, note, uid, booking).then((r) => {
+        if (!active) return;
+        setCalReady(true);
+        setShowFallback(r !== "ready");
+      });
+      // Ad blockers or slow networks: stop blocking the view and surface text/open-in-tab shortcuts.
+      timer = setTimeout(() => {
+        if (!active) return;
+        setCalReady(true);
+      }, 2500);
     });
-
-    // Ad blockers or slow networks: stop blocking the view and surface text/open-in-tab shortcuts.
-    const timer = setTimeout(() => {
-      if (!active) return;
-      setCalReady(true);
-    }, 2500);
 
     return () => {
       active = false;
+      cancelEngaged();
       clearTimeout(timer);
     };
   }, [note, calId, uid, booking]);

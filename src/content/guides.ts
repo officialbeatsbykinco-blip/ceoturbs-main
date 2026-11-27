@@ -3,7 +3,7 @@ import { itPrice } from "./pricing";
 
 /** Repair & recycling guides (Nov 25, 2026): consumer searches that lead to a call or text. */
 /** Repair and recycling articles: they get the tech pages' light look and Fix my tech / Call / Text bar, not the marketing one. */
-export const TECH_GUIDE_SLUGS = ["computer-repair-vs-replace", "why-is-my-laptop-so-slow", "computer-wont-turn-on", "cracked-phone-screen-repair-or-replace", "phone-battery-draining-fast", "how-to-wipe-computer-before-recycling", "where-to-recycle-electronics-tampa-bay"];
+export const TECH_GUIDE_SLUGS = ["computer-repair-vs-replace", "why-is-my-laptop-so-slow", "computer-wont-turn-on", "cracked-phone-screen-repair-or-replace", "phone-battery-draining-fast", "how-to-wipe-computer-before-recycling", "where-to-recycle-electronics-tampa-bay", "how-to-remove-cpu-from-motherboard"];
 export const isTechGuide = (p: string) => TECH_GUIDE_SLUGS.some((s) => p.replace(/\/$/, "") === `/guides/${s}`);
 const TECH_DATE = "2026-11-25";
 const CITIES = "Tampa, St. Pete, Clearwater, Brandon, Lakeland, Winter Haven and Orlando";
@@ -1485,6 +1485,147 @@ export const GUIDES: Guide[] = [
       { q: "Is it the screen or the computer?", a: "Plug in an external monitor or TV with HDMI. If the picture shows up there, the laptop's screen or screen cable is the problem, not the computer itself." },
       { q: "How much does it cost to fix a computer that won't turn on?", a: `Diagnosis is ${itPrice("it-visit")}, credited toward the repair. Repairs start at ${itPrice("it-pc-repair")} and desktop repairs at ${itPrice("it-desktop")}. Parts like power supplies or drives are extra, at cost, and you get the price first.` },
       { q: "Do you come to me?", a: `Yes. We come to homes and businesses in ${CITIES} and everywhere within about 1.5 hours of Temple Terrace, usually the same or next day.` },
+    ],
+    related: TECH_RELATED,
+  },
+  {
+    slug: "how-to-remove-cpu-from-motherboard",
+    title: "How to remove a CPU from a motherboard (Intel and AMD)",
+    metaTitle: "How to Remove a CPU From a Motherboard: Step by Step Guide",
+    metaDescription: "Remove a CPU safely: unplug the PC, take off the cooler, lift the socket lever and load plate, lift the chip straight out by its edges. Intel and AMD steps",
+    summary:
+      "To remove a CPU from a motherboard, shut down and unplug the computer, ground yourself, unscrew the CPU cooler and twist it gently off, then press the socket lever down and out to release it, lift the lever and the load plate, and lift the processor straight up by its edges. Clean the old thermal paste off with isopropyl alcohol before you reuse, sell or store it.",
+    audience: "local",
+    published: "2026-11-26",
+    updated: "2026-11-26",
+    readMinutes: 7,
+    video: "Et5210f74c8",
+    howTo: {
+      name: "How to remove a CPU from a motherboard",
+      steps: [
+        ["Shut down and unplug", "Shut the computer down, switch off the power supply, unplug the power cord and press the power button once to drain leftover power."],
+        ["Ground yourself", "Touch bare metal on the case, or wear an anti-static wrist strap, before you touch anything inside."],
+        ["Remove the CPU cooler", "Unplug the fan cable from the CPU_FAN header, loosen the cooler screws a few turns at a time in a cross pattern, then twist the cooler gently and lift it off."],
+        ["Release the socket lever", "Press the metal lever beside the socket down and slightly out to free it from its hook, then lift it all the way up."],
+        ["Open the load plate", "On Intel and AMD AM5 boards, swing the metal load plate up and open. On AMD AM4 the lever alone releases the chip."],
+        ["Lift the CPU straight out", "Hold the processor by its edges and lift it straight up without tilting or sliding it. Never touch the gold contacts or the socket pins."],
+        ["Clean and store it", "Wipe the old thermal paste off with isopropyl alcohol on a lint-free pad, put it in an anti-static tray or clamshell, and close the socket or refit its plastic cover."],
+      ],
+    },
+    sources: [
+      { label: "Intel: processor integration overview for LGA1155 and LGA1156 (removal steps)", url: "https://www.intel.com/content/www/us/en/support/articles/000007603/processors.html" },
+      { label: "Intel: how to install LGA115x and LGA1200 processors", url: "https://www.intel.com/content/www/us/en/support/articles/000005762/processors.html" },
+      { label: "AMD: processor handling guidance", url: "https://www.amd.com/en/resources/support-articles/faqs/CPU-100.html" },
+      { label: "AMD: how to install or remove an AMD CPU cooler", url: "https://www.amd.com/en/resources/support-articles/faqs/CPU-7.html" },
+      { label: "Dell: OptiPlex 5080 Tower, removing the processor fan and heat sink", url: "https://www.dell.com/support/manuals/en-us/optiplex-5080-desktop/optiplex5080_mt_sm/removing-the-processor-fan-and-heat-sink-assembly?guid=guid-cbc11e3b-965c-4640-8ea1-f5a3f60bce52&lang=en-us" },
+    ],
+    sections: [
+      {
+        h2: "How do you remove a CPU from a motherboard?",
+        answer:
+          "Unplug the computer and ground yourself, take off the CPU cooler, then release the socket lever, lift the load plate and lift the processor straight up by its edges. On most desktops it takes 10 to 15 minutes and a Phillips screwdriver. The video above shows every step on a real Dell desktop with an Intel processor.",
+        bullets: [
+          "Tools: a Phillips #2 screwdriver, 90% or stronger isopropyl alcohol, lint-free pads or coffee filters",
+          "Nice to have: an anti-static wrist strap and an anti-static tray or the CPU's original clamshell",
+          "Time: about 10 to 15 minutes, plus a few minutes for cleaning paste",
+        ],
+      },
+      {
+        h2: "What should you do before you open the computer?",
+        answer:
+          "Shut Windows down, flip the switch on the back of the power supply to off, unplug the power cord, then press the power button once to drain what's left in the capacitors. Work on a table, not carpet, and touch bare metal on the case so static from your body doesn't reach the board.",
+        body: [
+          "If the computer was just running, give the cooler a few minutes. Dell's service manuals warn that the heat sink gets hot in normal use. Laptops are a different job: most laptop processors are soldered to the board and can't be removed at home.",
+        ],
+      },
+      {
+        h2: "How do you take off the CPU cooler?",
+        answer:
+          "Unplug the fan cable from the header marked CPU_FAN, then loosen the screws that hold the cooler down. Loosen them a couple of turns each in a cross pattern, not one at a time, so the cooler comes up level. Then twist the cooler gently side to side to break the paste seal and lift it off.",
+        body: [
+          "The cooler in our video is a simple four screw design, the same style Dell lists in its OptiPlex manuals: disconnect the fan cable, loosen the four captive screws, lift the assembly. Other coolers use push pins (turn each pin a quarter turn, then pull) or a clip lever on AMD brackets. Set the cooler down paste side up so you don't smear paste on anything.",
+        ],
+      },
+      {
+        h2: "How do you open the socket and lift the CPU out?",
+        answer:
+          "Press the metal lever beside the socket down and slightly outward until it slips free of its hook, then raise it. Swing the load plate open. Hold the processor by its edges and lift it straight up, keeping it level. Intel's own removal steps say to lift vertically so the socket contacts aren't damaged.",
+        steps: [
+          "Press the socket lever down and out, then let it rise",
+          "Lift the lever all the way up so the load plate is free",
+          "Swing the load plate open",
+          "Grip the CPU by the two edges without notches and lift straight up",
+          "Set it in an anti-static tray or clamshell, contacts down and untouched",
+        ],
+      },
+      {
+        h2: "Is removing an AMD CPU different from Intel?",
+        answer:
+          "Yes, a little. Intel desktops and AMD AM5 boards (Ryzen 7000 and newer) use LGA sockets: the pins are in the socket and a load plate holds the chip. Older AMD AM4 Ryzen chips have the pins on the CPU itself and only a lever holds them, so a cooler pulled straight up can rip the CPU out still stuck to it.",
+        table: {
+          head: ["Socket", "Where the pins are", "What holds the CPU", "Biggest risk"],
+          rows: [
+            ["Intel LGA (1151, 1200, 1700, 1851)", "In the motherboard socket", "Lever and load plate", "Bent socket pins from a dropped or tilted chip"],
+            ["AMD AM5", "In the motherboard socket", "Lever and load plate", "Same as Intel: bent socket pins"],
+            ["AMD AM4", "On the bottom of the CPU", "Lever only", "CPU pulled out stuck to the cooler, bent CPU pins"],
+          ],
+        },
+        body: [
+          "On AM4, warm the paste first by running the computer for five minutes, then twist the cooler before you lift. If the CPU comes out stuck to the cooler anyway, don't pry it: slide a thin plastic card or dental floss between them, and check the pins before you put it back.",
+        ],
+      },
+      {
+        h2: "How do you clean thermal paste off a CPU?",
+        answer:
+          "Put a few drops of 90% or stronger isopropyl alcohol on a lint-free pad, cotton pad or coffee filter and wipe the metal top of the CPU until it shines. Do the same to the bottom of the cooler. Keep alcohol off the contacts and let everything dry for a minute before new paste goes on.",
+        bullets: [
+          "Wipe from the edges toward the middle so paste doesn't get pushed over the side",
+          "Use a plastic card for thick, dried paste, never a metal blade",
+          "Always use fresh paste when the cooler goes back on, even on the same CPU",
+        ],
+      },
+      {
+        h2: "What are the most common mistakes when removing a CPU?",
+        answer:
+          "Pulling the cooler straight up without twisting, touching the gold contacts or socket pins, tilting the chip as it comes out, and leaving the socket open afterward. Each one can bend pins or ruin the processor. A bent socket pin is the usual reason a board won't boot after a CPU swap.",
+        bullets: [
+          "Forcing the lever: it needs a push down and out, not upward force",
+          "Dropping a screw onto the board and leaving it there",
+          "Storing the CPU loose in a drawer or a plain plastic bag",
+          "Throwing away the plastic socket cover: Intel says to put it back on, and board makers often want it for warranty returns",
+        ],
+      },
+      {
+        h2: "What can you do with the CPU after you remove it?",
+        answer:
+          "Reuse it in a compatible board, sell it, keep it as a spare, or recycle it. A CPU only fits boards with the same socket and a supported chipset and BIOS, and AMD notes that a BIOS update may be needed first. If the whole computer is being retired, recycle it rather than trashing it.",
+        links: [
+          { label: "Free electronics recycling pickup", to: "/electronics-recycling-tampa" },
+          { label: "How to wipe a computer before you recycle it", to: "/guides/how-to-wipe-computer-before-recycling" },
+        ],
+      },
+      {
+        h2: "Can a tech swap or remove the CPU for me?",
+        answer: `Yes. CEO Turbo repairs and upgrades Windows desktops at your home or business in ${CITIES}: processor swaps, coolers, fresh thermal paste, memory, power supplies and graphics cards. Desktop repairs and upgrades start at ${itPrice("it-desktop")}, you get the price first, and we test it with you before we leave.`,
+        links: [
+          { label: "Computer repair at your door", to: "/computer-repair-tampa" },
+          { label: "Shop tested desktops and laptops", to: "/computers" },
+        ],
+      },
+    ],
+    faqs: [
+      { q: "Is it safe to remove a CPU yourself?", a: "Yes, if the computer is unplugged, you're grounded and you lift the chip straight up by its edges. The parts that get damaged are the pins: in the socket on Intel and AMD AM5 boards, on the CPU itself on AMD AM4. Go slowly and never force the lever or the chip." },
+      { q: "Do I need to remove the motherboard to take out the CPU?", a: "No. On a desktop the CPU comes out with the motherboard still in the case. You only remove the cooler first. Some small cases are easier to work in with the side panel and a drive cage out of the way." },
+      { q: "Can you remove a CPU from a laptop?", a: "Usually not. Most laptop processors are soldered to the motherboard (BGA) and aren't meant to be removed. Upgrading a laptop usually means more memory or a faster SSD instead." },
+      { q: "Why won't my CPU come out of the socket?", a: "On Intel and AM5 the lever or load plate is probably still closed: lift the lever fully and swing the plate open. On AM4 the lever must be raised all the way to 90 degrees. Never pull a CPU against a closed lever." },
+      { q: "My CPU came out stuck to the cooler. What now?", a: "Common on AMD AM4. Don't pull them apart by force. Twist gently, or slide a plastic card or dental floss through the paste to separate them, then inspect the CPU pins. A slightly bent pin can sometimes be straightened with a mechanical pencil tube." },
+      { q: "Do I have to clean off the thermal paste?", a: "Yes, if the CPU is going back in or being stored. Old paste dries out, and new paste only works on a clean surface. Isopropyl alcohol and a lint-free pad take it off in a minute." },
+      { q: "What can I use instead of an anti-static wrist strap?", a: "Touch bare metal on the computer case before you start and every so often while you work, and stay off carpet. That keeps you at the same charge as the case." },
+      { q: "Does removing the CPU erase my files?", a: "No. Your files live on the hard drive or SSD, not the processor. Swapping the CPU doesn't touch your data, though Windows may need to reactivate if you change the motherboard." },
+      { q: "How do I know which CPU fits my motherboard?", a: "Look up the board's model on the manufacturer's CPU support list. The socket has to match, and the board may need a BIOS update before it recognizes a newer processor." },
+      { q: "Will my computer start without a CPU?", a: "No. Fans may spin and lights may come on, but nothing will show on screen and some boards flash a CPU error light. Put the processor back, or a compatible one, before you power it up." },
+      { q: "How long does it take to remove a CPU?", a: "About 10 to 15 minutes on most desktops, including taking off the cooler and cleaning the paste. Big tower coolers or cramped small cases can take longer." },
+      { q: "Do you come to me to swap or upgrade a CPU?", a: `Yes. We upgrade and repair Windows desktops at homes and businesses in ${CITIES} and everywhere within about 1.5 hours of Temple Terrace. Call or text and you get the price first.` },
     ],
     related: TECH_RELATED,
   },

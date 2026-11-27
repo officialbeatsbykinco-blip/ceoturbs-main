@@ -402,7 +402,7 @@ export default function ComputerRepair() {
       </section>
 
       <FAQList faqs={REPAIR_FAQS} title="Quick answers" />
-      <GuideLinks slugs={["why-is-my-laptop-so-slow", "computer-wont-turn-on", "computer-repair-vs-replace", "how-to-wipe-computer-before-recycling"]} />
+      <GuideLinks slugs={["why-is-my-laptop-so-slow", "computer-wont-turn-on", "computer-repair-vs-replace", "how-to-remove-cpu-from-motherboard"]} />
 
       <section className="section border-t border-border" aria-labelledby="final">
         <div className="container-x">

@@ -8,7 +8,7 @@ export type YouTubeVideo = {
   uploadDate: string;
   /** Seconds. */
   seconds: number;
-  topic: "reviews" | "websites" | "ads" | "restaurants";
+  topic: "reviews" | "websites" | "ads" | "restaurants" | "repair";
   /** Short (vertical, under a minute). */
   short?: boolean;
 };
@@ -23,6 +23,7 @@ export const VIDEOS: YouTubeVideo[] = [
   { id: "wlHjfso8jqs", title: "How To Get More Google Reviews (The One-Tap Method)", summary: "Why happy customers don't leave Google reviews, and the one-tap fix: ask at the high point, hand them an NFC review card that opens your review form, and put one wherever the job ends.", uploadDate: "2026-11-20T11:26:22-08:00", seconds: 66, topic: "reviews" },
   { id: "frU4xpu7u2k", title: "Websites + Ads That Make the Phone Ring", summary: "When someone searches “plumber near me” they call whoever shows up first. CEO Turbo builds the website, the Google profile and the ads that put you there.", uploadDate: "2026-11-13T12:36:45-08:00", seconds: 42, topic: "websites", short: true },
   { id: "mF1pkMsQxec", title: "Nice Website… Zero Calls? Here's the Fix", summary: "A nice website doesn't help if nobody calls. We build the site, then run the ads that bring people to it.", uploadDate: "2026-11-14T10:06:19-08:00", seconds: 20, topic: "websites", short: true },
+  { id: "Et5210f74c8", title: "How To Remove A CPU From A Motherboard", summary: "Taking an Intel processor out of a Dell desktop step by step: remove the four-screw CPU cooler, release the socket latch, lift the load plate, lift the CPU out by its edges and clean off the old thermal paste with isopropyl alcohol.", uploadDate: "2026-11-26T12:22:52-08:00", seconds: 93, topic: "repair" },
 ];
 
 export const videosFor = (topic: YouTubeVideo["topic"]) => VIDEOS.filter((v) => v.topic === topic);

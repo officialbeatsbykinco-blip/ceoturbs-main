@@ -61,4 +61,4 @@ export async function loadComputers() {
 
 export const head = (path: string) => renderHead(pageFor(path) ?? NOT_FOUND_META);
 export const pages = PAGES;
-export const guides = GUIDES.map((g) => ({ path: guidePath(g), title: g.title, summary: g.summary }));
+export const guides = GUIDES.map((g) => ({ path: guidePath(g), title: g.title, summary: g.summary, video: g.video }));

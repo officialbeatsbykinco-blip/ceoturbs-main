@@ -23,6 +23,9 @@ import { computerPageFor } from "./computers";
 import { COMPUTERS_PATH, SHOP_FAQS as SHOP_COMPUTER_FAQS } from "@/content/computer-shop";
 import { PHONE_REPAIR_TAMPA, RECYCLING_TAMPA, REPAIR_CITIES, cityRepairPath, phoneFaqs, phoneRepairPath, recycleFaqs, recyclingPath } from "@/content/city-repair";
 
+/** Last real content change on the city computer, phone and recycling pages (schema dateModified + sitemap lastmod). */
+const CITY_PAGES_UPDATED = "2026-11-26";
+
 export type PageMeta = {
   path: string;
   title: string;
@@ -462,7 +465,7 @@ function build(): PageMeta[] {
       group: "Services",
       schema: [
         ...base(),
-        S.webPage(path, `Computer and phone repair in ${c.city}, FL`, `In-home Windows computer repair and phone and tablet screen and battery repair at homes and businesses in ${c.city}, ${c.county}, Florida.`),
+        S.webPage(path, `Computer and phone repair in ${c.city}, FL`, `In-home Windows computer repair and phone and tablet screen and battery repair at homes and businesses in ${c.city}, ${c.county}, Florida.`, "WebPage", CITY_PAGES_UPDATED),
         S.breadcrumbs([
           { name: "Computer repair", path: "/computer-repair-tampa" },
           { name: `${c.city}, FL`, path },
@@ -493,7 +496,7 @@ function build(): PageMeta[] {
       group: "Services",
       schema: [
         ...base(),
-        S.webPage(path, `Phone and tablet repair in ${c.city}, FL`, `iPhone, Samsung, Pixel and iPad screen and battery replacement at homes and businesses in ${c.city}, ${c.county}, Florida.`),
+        S.webPage(path, `Phone and tablet repair in ${c.city}, FL`, `iPhone, Samsung, Pixel and iPad screen and battery replacement at homes and businesses in ${c.city}, ${c.county}, Florida.`, "WebPage", CITY_PAGES_UPDATED),
         S.breadcrumbs([
           { name: "Phone repair", path: PHONE_REPAIR_TAMPA },
           { name: `${c.city}, FL`, path },
@@ -524,7 +527,7 @@ function build(): PageMeta[] {
       group: "Services",
       schema: [
         ...base(),
-        S.webPage(path, `Electronics recycling in ${c.city}, FL`, `Free pickup and recycling of old computers, phones, tablets, TVs, monitors and printers at homes and businesses in ${c.city}, ${c.county}, Florida, with every hard drive wiped or destroyed.`),
+        S.webPage(path, `Electronics recycling in ${c.city}, FL`, `Free pickup and recycling of old computers, phones, tablets, TVs, monitors and printers at homes and businesses in ${c.city}, ${c.county}, Florida, with every hard drive wiped or destroyed.`, "WebPage", CITY_PAGES_UPDATED),
         S.breadcrumbs([
           { name: "Tech recycling", path: RECYCLING_TAMPA },
           { name: `${c.city}, FL`, path },

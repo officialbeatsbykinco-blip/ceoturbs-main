@@ -24,6 +24,7 @@ const HEADLINES = {
   "why-competitor-ranks-higher-google-maps": ["Why they rank", "first on Maps"],
   "how-to-sell-beats-online": ["How to sell", "beats online"],
   "computer-repair-vs-replace": ["Repair or", "replace it?"],
+  "how-to-remove-cpu-from-motherboard": ["Remove a CPU", "step by step"],
   "seo-vs-aeo-vs-geo": ["SEO vs AEO", "vs GEO"],
   "facebook-ads-cost-per-lead": ["Facebook ads:", "cost per lead"],
   "how-to-get-recommended-by-chatgpt": ["Get recommended", "by ChatGPT"],
