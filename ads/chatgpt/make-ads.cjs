@@ -1,4 +1,4 @@
-const sharp = require("/Users/alhamdulillah/Desktop/Websites/ceoturbs/.claude/worktrees/navy-nav-bar-all-pages-1c38e1/node_modules/sharp");
+const sharp = require("sharp");
 const out = __dirname + "/";
 const F = "Helvetica Neue, Helvetica, Arial, sans-serif";
 
@@ -48,7 +48,7 @@ const ads = {
     <text x="540" y="250" font-family="${F}" font-size="92" font-weight="800" fill="#fff" text-anchor="middle">Won't start?</text>
     ${laptop(540, 520, 1)}
     ${fixedBadge(770, 380)}
-    ${pill(790, "No fix, no charge")}
+    ${pill(790, "No fix, no repair bill", 760)}
     ${footer}`,
   // Convenience-first
   "ad-at-your-door": `
@@ -61,7 +61,7 @@ const ads = {
         <path d="M236 ${385 + i * 100} l10 11 l20 -22" fill="none" stroke="#fff" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
         <text x="305" y="${404 + i * 100}">${t}</text>`).join("")}
     </g>
-    ${pill(790, "No fix, no charge")}
+    ${pill(790, "No fix, no repair bill", 760)}
     ${footer}`,
 };
 
