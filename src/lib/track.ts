@@ -10,6 +10,7 @@
 
 import { gaEvent, googleAdsConversion } from "@/lib/ga";
 import { redditEvent } from "@/lib/reddit";
+import { openAiEvent } from "@/lib/openai-ads";
 import { uetEvent } from "@/lib/uet";
 import { tiktokEvent } from "@/lib/tiktok";
 import { clarityEvent } from "@/lib/clarity";
@@ -225,6 +226,8 @@ export function track(event: string, params: Record<string, unknown> = {}, opts:
   gaEvent(event, { event_id, ...params, ...(ecommerce ?? {}) });
   googleAdsConversion(event, { eventId: event_id, value: ecommerce?.value ?? params.value, currency: ecommerce?.currency ?? params.currency, email: user?.email, phone: e164(user?.phone) });
   redditEvent(event, { value: ecommerce?.value ?? params.value, currency: ecommerce?.currency ?? params.currency }, event_id, user ? { email: user.email, phone: e164(user.phone), externalId: user.externalId } : undefined);
+
+  openAiEvent(event, { value: ecommerce?.value ?? params.value, currency: ecommerce?.currency ?? params.currency }, event_id);
 
   if (CLARITY_EVENTS.has(event)) clarityEvent(event);
 

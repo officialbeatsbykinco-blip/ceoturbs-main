@@ -21,6 +21,7 @@ import { onEngaged } from "@/lib/engaged";
 import { startUet } from "@/lib/uet";
 import { startTiktok, tiktokPageView } from "@/lib/tiktok";
 import { startReddit, redditPageView } from "@/lib/reddit";
+import { startOpenAiPixel, startOpenAiPixelIfAdClick } from "@/lib/openai-ads";
 import { startClarity } from "@/lib/clarity";
 import { isTechGuide } from "@/content/guides";
 
@@ -77,11 +78,15 @@ export function Layout({ children }: { children: ReactNode }) {
         startUet();
         startTiktok();
         startReddit();
+        startOpenAiPixel();
         startClarity();
         startSpotlight();
       }, TAG_FALLBACK_MS),
     [],
   );
+
+  // A ChatGPT ad click carries ?oppref=; the pixel must see it before any in-site navigation drops it.
+  useEffect(() => startOpenAiPixelIfAdClick(), []);
 
   // Warm up the booking embed on the first interaction, so the first "Book" tap opens fast.
   useEffect(() => onEngaged(() => void loadCal()), []);
