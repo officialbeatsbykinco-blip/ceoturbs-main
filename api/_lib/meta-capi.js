@@ -156,7 +156,8 @@ export async function sendMetaEvents(events, testEventCode) {
 /** Ad click ids / UTMs posted by the browser (src/lib/track.ts attribution()). */
 export function cleanAttribution(a) {
   if (!a || typeof a !== "object") return {};
-  const ids = { fbp: metaId(a.fbp), fbc: metaId(a.fbc), fbclid: metaId(a.fbclid), fbi: cleanIp(a.fbi) };
+  // oppref/obref: the ChatGPT ads pixel's click and browser ids (api/_lib/openai-capi.js), also kept unmodified.
+  const ids = { fbp: metaId(a.fbp), fbc: metaId(a.fbc), fbclid: metaId(a.fbclid), fbi: cleanIp(a.fbi), oppref: metaId(a.oppref), obref: metaId(a.obref) };
   const keys = ["gclid", "gbraid", "wbraid", "msclkid", "ttclid", "ttp", "utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term", "landing"];
   const rest = keys.map((k) => [k, clean(a[k], 300).replace(/[\u0000-\u001f<>]/g, "")]);
   return Object.fromEntries([...Object.entries(ids), ...rest].filter(([, v]) => v));

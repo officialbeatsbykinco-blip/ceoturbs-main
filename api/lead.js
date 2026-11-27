@@ -4,6 +4,7 @@ import { cleanLead, forwardLead, isBot, scoreLead } from "./_lib/leads.js";
 import { readJson, send, clientIp, rateLimited, sameOrigin, isJson } from "./_lib/http.js";
 import { buildEvent, cleanAttribution, requestSignals, sendMetaEvents, withSignals, requestCountry } from "./_lib/meta-capi.js";
 import { buildTiktokEvent, sendTiktokEvents } from "./_lib/tiktok-events.js";
+import { buildOpenAiEvent, openAiAttribution, sendOpenAiEvents } from "./_lib/openai-capi.js";
 
 const text = (v, max) => (typeof v === "string" ? v.replace(/[\u0000-\u001f\u007f<>]/g, " ").trim().slice(0, max) : "");
 
@@ -113,6 +114,10 @@ export default async function handler(req, res) {
   const tiktok = sendTiktokEvents([
     buildTiktokEvent({ event: "Lead", eventId, url, user, attribution: attr, ip, userAgent: req.headers["user-agent"], properties: { content_name: install ? install.contentName || "Installation Tampa" : officeQuiz ? "Office setup Tampa" : tech ? "Computer repair Tampa" : quiz ? "Brand Boost quiz" : dev ? "Developer intake" : type, ...(value ? { value, currency: "USD" } : {}) } }),
   ]);
+  // ChatGPT ads: same id as the browser pixel's lead_created (src/lib/openai-ads.ts), so OpenAI de-duplicates.
+  const openai = sendOpenAiEvents([
+    buildOpenAiEvent({ type: "lead_created", id: eventId, url, user, attribution: openAiAttribution(body.attribution, req), ip, userAgent: req.headers["user-agent"] }),
+  ]);
   const { stored } = await forwardLead({
     type,
     ...lead,
@@ -131,6 +136,6 @@ export default async function handler(req, res) {
     eventId,
     ...attr,
   });
-  const [meta] = await Promise.all([capi, tiktok]);
+  const [meta] = await Promise.all([capi, tiktok, openai]);
   return send(res, 200, { ok: true, stored: !!stored, meta: !!meta.sent });
 }

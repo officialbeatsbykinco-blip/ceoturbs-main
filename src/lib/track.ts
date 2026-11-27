@@ -319,8 +319,9 @@ export function trackBooked(via: string, uid?: string, user?: UserData) {
 // Shopify orders can be tied back to the ad that drove them.
 
 const ATTR_KEY = "ct_attr";
-const ATTR_PARAMS = ["gclid", "gbraid", "wbraid", "fbclid", "msclkid", "ttclid", "utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term", "test_event_code"] as const;
-export type Attribution = Partial<Record<(typeof ATTR_PARAMS)[number] | "landing" | "fbp" | "fbc" | "fbi" | "ttp", string>>;
+// oppref: the ChatGPT ads click id, sent unmodified to OpenAI's Conversions API (api/_lib/openai-capi.js).
+const ATTR_PARAMS = ["gclid", "gbraid", "wbraid", "fbclid", "msclkid", "ttclid", "oppref", "utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term", "test_event_code"] as const;
+export type Attribution = Partial<Record<(typeof ATTR_PARAMS)[number] | "landing" | "fbp" | "fbc" | "fbi" | "ttp" | "obref", string>>;
 
 const decode = (v = "") => {
   try {
@@ -411,7 +412,10 @@ export function attribution(): Attribution {
   const fbc = cookie("_fbc");
   const fbi = cookie("_fbi");
   const ttp = cookie("_ttp");
-  return { ...stored, ...(fbp ? { fbp } : {}), ...(fbc ? { fbc } : {}), ...(fbi ? { fbi: decode(fbi) } : {}), ...(ttp ? { ttp } : {}) };
+  // The ChatGPT ads pixel's own cookies: its browser id, and a fresher click id than the stored landing one.
+  const obref = cookie("__obref");
+  const oppref = cookie("__oppref");
+  return { ...stored, ...(fbp ? { fbp } : {}), ...(fbc ? { fbc } : {}), ...(fbi ? { fbi: decode(fbi) } : {}), ...(ttp ? { ttp } : {}), ...(obref ? { obref: decode(obref) } : {}), ...(oppref ? { oppref: decode(oppref) } : {}) };
 }
 
 /** Events the server also sends to the Conversions API (same event_id, so Meta de-duplicates). */

@@ -5,6 +5,7 @@
 import { readJson, send, clientIp, rateLimited, sameOrigin, isJson } from "./_lib/http.js";
 import { forwardLead } from "./_lib/leads.js";
 import { buildEvent, cleanAttribution, postedUser, requestCountry, requestSignals, sendMetaEvents, withSignals } from "./_lib/meta-capi.js";
+import { buildOpenAiEvent, openAiAttribution, sendOpenAiEvents } from "./_lib/openai-capi.js";
 
 const EVENTS = {
   page_view: "PageView",
@@ -127,6 +128,11 @@ export default async function handler(req, res) {
   // Sheet row for call/text taps; a tighter per-visitor limit keeps a bot from flooding the sheet.
   const tap = tapRecord(body, attr, eventId);
   const sheet = tap && !rateLimited(`tap:${clientIp(req)}`, 6, 10 * 60_000) ? forwardLead(tap) : null;
-  const [meta] = await Promise.all([sendMetaEvents(events, testCode), sheet]);
+  // ChatGPT ads: a phone call/text tap is a lead, same id as the browser pixel's lead_created.
+  const openai =
+    body.event === "click_to_call" || body.event === "click_to_text"
+      ? sendOpenAiEvents([buildOpenAiEvent({ type: "lead_created", id: eventId, url: sourceUrl(body.page), user, attribution: openAiAttribution(body.attribution, req), ip: signals.ip || clientIp(req), userAgent: req.headers["user-agent"] })])
+      : null;
+  const [meta] = await Promise.all([sendMetaEvents(events, testCode), sheet, openai]);
   return send(res, 200, { ok: true, meta: !!meta.sent });
 }

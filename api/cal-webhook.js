@@ -12,6 +12,7 @@ import { send } from "./_lib/http.js";
 import { forwardLead, scoreLead } from "./_lib/leads.js";
 import { buildEvent, cleanAttribution, sendMetaEvents } from "./_lib/meta-capi.js";
 import { buildTiktokEvent, sendTiktokEvents } from "./_lib/tiktok-events.js";
+import { buildOpenAiEvent, sendOpenAiEvents } from "./_lib/openai-capi.js";
 
 async function readRaw(req, limit = 200_000) {
   if (typeof req.body === "string") return req.body;
@@ -123,8 +124,16 @@ export default async function handler(req, res) {
     }),
   ];
   const testCode = b.attribution?.test_event_code;
-  const [capi, , sheet] = await Promise.all([
+  // ChatGPT ads: a booking is a scheduled appointment and a lead, same ids as the browser pixel
+  // (src/lib/openai-ads.ts). Cal.com posts from its own server, so the click id comes from the booking's attribution.
+  const openaiEvents = eventId
+    ? ["appointment_scheduled", "lead_created"].map((type, i) =>
+        buildOpenAiEvent({ type, id: i === 0 ? eventId : `${eventId}_lead_created`, eventTime: body.createdAt, url, user, attribution: b.attribution, userAgent: b.ua || undefined }),
+      )
+    : [];
+  const [capi, , , sheet] = await Promise.all([
     sendMetaEvents(metaEvents, testCode),
+    sendOpenAiEvents(openaiEvents),
     sendTiktokEvents([buildTiktokEvent({ event: "Schedule", eventId, eventTime: body.createdAt, url, user, attribution: b.attribution, userAgent: b.ua || undefined, properties: { content_name: b.title || "Brand Boost call", ...worth } })]),
     forwardLead({ type: "booking", name: b.name, email: b.email, phone: b.phone, startTime: b.startTime, endTime: b.endTime, timeZone: b.timeZone, meetingLink: b.meetingLink, event: b.title, notes: b.notes, businessName: b.businessName, whatTheyDo: b.whatTheyDo, stage: b.stage, website: b.website, goal: b.goal, budget: b.budget, blockers: b.blockers, timeline: b.timeline, move: b.move, value: b.value, ...scoreLead(b), quizId: b.quizId, source: b.source, page: b.page, uid: b.uid, ...b.attribution }),
   ]);
