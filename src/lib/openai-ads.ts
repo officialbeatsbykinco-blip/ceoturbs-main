@@ -10,14 +10,20 @@ const raw = import.meta.env.VITE_OPENAI_PIXEL_ID as string | undefined;
 const PIXEL_ID = raw && /^[a-z0-9_-]{4,}$/i.test(raw.trim()) ? raw.trim() : undefined;
 let started = false;
 
-/** dataLayer event → OpenAI standard event. Only real leads and sales, so ChatGPT learns to buy those. */
-const EVENTS: Record<string, "lead_created" | "appointment_scheduled" | "order_created"> = {
-  generate_lead: "lead_created",
+type OaiEvent = "lead_created" | "appointment_scheduled" | "order_created";
+
+/**
+ * dataLayer event → OpenAI standard event(s). Only real leads and sales, so ChatGPT learns to buy those.
+ * A booking is also a lead (like Meta's Schedule + Lead): the campaign's conversion is lead_created, and a
+ * desktop visitor's main way to convert is booking a visit on the calendar.
+ */
+const EVENTS: Record<string, OaiEvent[]> = {
+  generate_lead: ["lead_created"],
   // Call/text taps are only sent as these events from phones (a desktop click is contact_intent).
-  click_to_call: "lead_created",
-  click_to_text: "lead_created",
-  book_call: "appointment_scheduled",
-  purchase: "order_created",
+  click_to_call: ["lead_created"],
+  click_to_text: ["lead_created"],
+  book_call: ["appointment_scheduled", "lead_created"],
+  purchase: ["order_created"],
 };
 
 const win = () => (typeof window === "undefined" ? null : (window as unknown as { oaiq?: Oaiq }));
@@ -46,13 +52,16 @@ export function startOpenAiPixelIfAdClick() {
 
 /** Fires the matching OpenAI event with our event_id, so a later Conversions API copy is de-duplicated. */
 export function openAiEvent(event: string, params: { value?: unknown; currency?: unknown }, eventId: string) {
-  const name = EVENTS[event];
-  if (!PIXEL_ID || !name) return;
+  const names = EVENTS[event];
+  if (!PIXEL_ID || !names) return;
   // Queued calls replay once the SDK loads, so an event before the first tap is kept, not lost.
   if (!started) startOpenAiPixel();
-  const data =
-    name === "order_created"
-      ? { type: "contents", amount: Math.round((Number(params.value) || 0) * 100), currency: typeof params.currency === "string" ? params.currency : "USD" }
-      : { type: "customer_action" };
-  win()?.oaiq?.("measure", name, data, { event_id: eventId });
+  names.forEach((name, i) => {
+    const data =
+      name === "order_created"
+        ? { type: "contents", amount: Math.round((Number(params.value) || 0) * 100), currency: typeof params.currency === "string" ? params.currency : "USD" }
+        : { type: "customer_action" };
+    // Each extra event gets its own id, or OpenAI would de-duplicate it against the first.
+    win()?.oaiq?.("measure", name, data, { event_id: i === 0 ? eventId : `${eventId}_${name}` });
+  });
 }

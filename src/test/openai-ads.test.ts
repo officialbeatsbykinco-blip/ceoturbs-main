@@ -31,6 +31,7 @@ describe("ChatGPT ads pixel", () => {
     expect(q.slice(1)).toEqual([
       ["measure", "lead_created", { type: "customer_action" }, { event_id: "call_1" }],
       ["measure", "appointment_scheduled", { type: "customer_action" }, { event_id: "book_1" }],
+      ["measure", "lead_created", { type: "customer_action" }, { event_id: "book_1_lead_created" }],
       ["measure", "order_created", { type: "contents", amount: 2599, currency: "USD" }, { event_id: "order_1" }],
     ]);
     expect(document.head.querySelectorAll('script[src="https://bzrcdn.openai.com/sdk/oaiq.min.js"]').length).toBe(1);
