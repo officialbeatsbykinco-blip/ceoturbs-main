@@ -4,7 +4,9 @@ import { BadgeCheck, Phone } from "lucide-react";
 import { SITE } from "@/config/site";
 import { cn } from "@/lib/utils";
 
-export function CallNowCard({ where, headline, className }: { where: string; headline: string; className?: string }) {
+const REPAIR_POINTS = ["You talk to the tech, not a call center", "Price on the phone, before any work", "We come to your home or work"];
+
+export function CallNowCard({ where, headline, points = REPAIR_POINTS, className }: { where: string; headline: string; points?: string[]; className?: string }) {
   return (
     <div className={cn("rounded-3xl border-2 border-turbo/40 bg-turbo/[0.06] p-4 sm:p-5", className)}>
       <p className="font-display text-lg font-bold leading-snug sm:text-xl">{headline}</p>
@@ -21,7 +23,7 @@ export function CallNowCard({ where, headline, className }: { where: string; hea
         </span>
       </a>
       <ul className="mt-3 grid gap-1.5 text-[15px] sm:grid-cols-3 sm:gap-3 sm:text-sm">
-        {["You talk to the tech, not a call center", "Price on the phone, before any work", "We come to your home or work"].map((t) => (
+        {points.map((t) => (
           <li key={t} className="flex items-start gap-1.5">
             <BadgeCheck className="mt-0.5 h-4 w-4 shrink-0 text-turbo" aria-hidden />
             {t}

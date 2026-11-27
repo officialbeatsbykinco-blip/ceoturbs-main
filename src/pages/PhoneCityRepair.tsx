@@ -15,7 +15,7 @@ import { CallNowCard } from "@/components/tech/CallNowCard";
 import { FounderBadge } from "@/components/tech/FounderBadge";
 import { ReviewSummary, ReviewWall } from "@/components/tech/ReviewWall";
 import { IT_BOOKING, SITE } from "@/config/site";
-import { PHONE_REPAIR_TAMPA, REPAIR_CITIES, cityRepairPath, phoneFaqs, phoneRepairPath, type RepairCity } from "@/content/city-repair";
+import { PHONE_REPAIR_TAMPA, REPAIR_CITIES, cityRepairPath, phoneFaqs, phoneRepairPath, recyclingPath, type RepairCity } from "@/content/city-repair";
 import { smsHref } from "@/lib/sms";
 import { newEventId, serverTrack, track } from "@/lib/track";
 import { cn } from "@/lib/utils";
@@ -139,6 +139,11 @@ export default function PhoneCityRepair({ c }: { c: RepairCity }) {
             Computer trouble too?{" "}
             <Link to={cityRepairPath(c)} className="font-semibold text-turbo hover:underline">
               Computer repair in {c.city} <ArrowRight className="inline h-4 w-4" aria-hidden />
+            </Link>
+            <br />
+            Old phone you don't need?{" "}
+            <Link to={recyclingPath(c)} className="font-semibold text-turbo hover:underline">
+              Free tech recycling in {c.city} <ArrowRight className="inline h-4 w-4" aria-hidden />
             </Link>
           </p>
         </div>

@@ -1,17 +1,18 @@
-// Links to every city repair page (content/city-repair.ts), for the main computer and phone repair pages.
+// Links to every city repair and recycling page (content/city-repair.ts), for the main computer and phone repair pages.
 // `first` puts the list that matches the page on top.
 import { Link } from "react-router-dom";
-import { REPAIR_CITIES, cityRepairPath, phoneRepairPath } from "@/content/city-repair";
+import { REPAIR_CITIES, cityRepairPath, phoneRepairPath, recyclingPath } from "@/content/city-repair";
 
 const pill = "inline-flex min-h-[48px] items-center rounded-full px-5 text-base font-semibold ring-1 ring-border hover:bg-white/5";
 
 /** Links to every city page, for the main repair pages. */
-export function RepairCityLinks({ className, first = "computer" }: { className?: string; first?: "computer" | "phone" }) {
+export function RepairCityLinks({ className, first = "computer" }: { className?: string; first?: "computer" | "phone" | "recycle" }) {
   const lists = [
     { key: "computer", title: "Computer repair by city", path: cityRepairPath },
     { key: "phone", title: "Phone & tablet repair by city", path: phoneRepairPath },
+    { key: "recycle", title: "Free tech recycling pickup by city", path: recyclingPath },
   ] as const;
-  const ordered = first === "phone" ? [lists[1], lists[0]] : lists;
+  const ordered = [...lists.filter((l) => l.key === first), ...lists.filter((l) => l.key !== first)];
   return (
     <nav aria-label="Repair by city" className={className}>
       {ordered.map((l, i) => (

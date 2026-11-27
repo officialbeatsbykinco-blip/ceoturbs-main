@@ -9,7 +9,7 @@ import { HOME_FAQS, AUDIT_FAQS, BOOK_FAQS, ADS_NOT_CONVERTING_FAQS } from "@/con
 import { SHOP_FAQS, SETUP_FAQS, SHOP_PATH, SETUP_PATH } from "@/content/review-cards";
 import { SHIRT_FAQS, SHIRTS_PATH } from "@/content/company-shirts";
 import { MERCH_FAQS, ARTIST_MERCH_PATH } from "@/content/artist-merch";
-import { INSTALL_PRICES, IT_SERVICES, PHONE_REPAIR, PRICING_FAQS, byId, price } from "@/content/pricing";
+import { INSTALL_PRICES, IT_SERVICES, PHONE_REPAIR, PRICING_FAQS, RECYCLING_PRICES, byId, price } from "@/content/pricing";
 import { OFFICE_FAQS, REPAIR_FAQS } from "@/content/tech-faqs";
 import { INSTALL_PAGES } from "@/content/install-pages";
 
@@ -21,7 +21,7 @@ import * as S from "./schema";
 import { VIDEOS } from "@/content/videos";
 import { computerPageFor } from "./computers";
 import { COMPUTERS_PATH, SHOP_FAQS as SHOP_COMPUTER_FAQS } from "@/content/computer-shop";
-import { PHONE_REPAIR_TAMPA, REPAIR_CITIES, cityRepairPath, phoneFaqs, phoneRepairPath } from "@/content/city-repair";
+import { PHONE_REPAIR_TAMPA, RECYCLING_TAMPA, REPAIR_CITIES, cityRepairPath, phoneFaqs, phoneRepairPath, recycleFaqs, recyclingPath } from "@/content/city-repair";
 
 export type PageMeta = {
   path: string;
@@ -507,6 +507,37 @@ function build(): PageMeta[] {
           extraCities: [c.city, ...c.nearby.filter((n) => !/ (Pete|St\.)|Downtown|Old |South |Seven|Meadow|Wiregrass|Kenwood|Bloomingdale|FishHawk|Highland/.test(n))],
         }),
         S.faqPage(phoneFaqs(c), path),
+      ],
+    });
+  }
+
+  // One page per city for free tech recycling pickup. No phone number in the title or description.
+  for (const c of REPAIR_CITIES) {
+    const path = recyclingPath(c);
+    pages.push({
+      path,
+      title: `Free Electronics & Computer Recycling in ${c.city}, FL`,
+      description: `Free pickup of old computers, laptops, phones and TVs at your home or business in ${c.city}, FL. Hard drives wiped or destroyed. Call, text or email.`,
+      ogImage: INSTALL_OG["tech-recycling"] ?? SITE.ogImage,
+      priority: 0.8,
+      changefreq: "monthly",
+      group: "Services",
+      schema: [
+        ...base(),
+        S.webPage(path, `Electronics recycling in ${c.city}, FL`, `Free pickup and recycling of old computers, phones, tablets, TVs, monitors and printers at homes and businesses in ${c.city}, ${c.county}, Florida, with every hard drive wiped or destroyed.`),
+        S.breadcrumbs([
+          { name: "Tech recycling", path: RECYCLING_TAMPA },
+          { name: `${c.city}, FL`, path },
+        ]),
+        S.localService({
+          path,
+          name: `Free electronics recycling pickup in ${c.city}, FL`,
+          serviceType: "Electronics recycling",
+          description: `Free pickup of old computers, laptops, phones, tablets, monitors, flat-screen TVs, printers and cables at homes and businesses in ${c.city} and nearby (${c.nearby.join(", ")}). Hard drives wiped or destroyed, everything reused or recycled.`,
+          prices: RECYCLING_PRICES,
+          extraCities: [c.city, ...c.nearby.filter((n) => !/ (Pete|St\.)|Downtown|Old |South |Seven|Meadow|Wiregrass|Kenwood|Bloomingdale|FishHawk|Highland/.test(n))],
+        }),
+        S.faqPage(recycleFaqs(c), path),
       ],
     });
   }

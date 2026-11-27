@@ -230,3 +230,25 @@ describe("Tampa install pages", () => {
     expect(installFields({ contentName: "Security cameras Tampa", jobs: "Install new cameras", answers: "Cameras: 3–4 | For: Home", when: "ASAP", zip: "33511" }).note).toBe("Service: Security cameras Tampa | Need: Install new cameras | Cameras: 3–4 | For: Home | When: ASAP | ZIP: 33511");
   });
 });
+
+describe("tech recycling city pages", () => {
+  it("has one recycling page per city with the city in the title, schema and FAQs, and calls, texts or emails", async () => {
+    const { REPAIR_CITIES, recyclingPath, recyclingCity, isRepairPage, recycleFaqs } = await import("@/content/city-repair");
+    const { pageFor } = await import("@/seo/pages");
+    const { techBooking } = await import("@/content/tech-pages");
+    expect(REPAIR_CITIES.map(recyclingPath)).toContain("/electronics-recycling-brandon-fl");
+    for (const c of REPAIR_CITIES) {
+      const path = recyclingPath(c);
+      expect(recyclingCity(path)?.slug).toBe(c.slug);
+      expect(isRepairPage(path)).toBe(true);
+      expect(techBooking(path)?.sms).toContain(c.city);
+      expect(c.recycleLocal.length).toBeGreaterThan(80);
+      const meta = pageFor(path)!;
+      expect(meta.title).toContain(`${c.city}, FL`);
+      expect(meta.title.length).toBeLessThanOrEqual(60);
+      expect(meta.description).not.toMatch(/\(\d{3}\)/);
+      expect(JSON.stringify(meta.schema)).toContain("Electronics recycling");
+      expect(recycleFaqs(c)[0].a).toMatch(/email/);
+    }
+  });
+});

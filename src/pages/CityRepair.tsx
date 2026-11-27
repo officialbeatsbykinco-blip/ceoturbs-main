@@ -13,7 +13,7 @@ import { CallLink } from "@/components/site/CallLink";
 import { FounderBadge } from "@/components/tech/FounderBadge";
 import { ReviewSummary, ReviewWall } from "@/components/tech/ReviewWall";
 import { IT_BOOKING, SITE } from "@/config/site";
-import { REPAIR_CITIES, cityRepairPath, phoneRepairPath, type RepairCity } from "@/content/city-repair";
+import { REPAIR_CITIES, cityRepairPath, phoneRepairPath, recyclingPath, type RepairCity } from "@/content/city-repair";
 import { CallNowCard } from "@/components/tech/CallNowCard";
 import { itPrice } from "@/content/pricing";
 import { IT_SERVICES_PATH } from "@/content/tech-pages";
@@ -220,6 +220,11 @@ export default function CityRepair({ c }: { c: RepairCity }) {
             Just a phone or iPad?{" "}
             <Link to={phoneRepairPath(c)} className="font-semibold text-turbo hover:underline">
               Phone &amp; tablet repair in {c.city} <ArrowRight className="inline h-4 w-4" aria-hidden />
+            </Link>
+            <br />
+            Too old to fix?{" "}
+            <Link to={recyclingPath(c)} className="font-semibold text-turbo hover:underline">
+              Free tech recycling pickup in {c.city} <ArrowRight className="inline h-4 w-4" aria-hidden />
             </Link>
           </p>
           <h2 id="cities" className="font-display text-xl font-bold">Computer &amp; phone repair near {c.city}</h2>

@@ -238,6 +238,7 @@ export default function InstallPage({ path }: { path: string }) {
         <div className="container-x">
           <SectionHeader title={<span id="area">{page.remote ? "Where we work" : "Where we come to you"}</span>} lede={page.areaLede ?? "Anywhere within about 1.5 hours of Temple Terrace: Tampa Bay, Orlando, Lakeland, Winter Haven, Sarasota and everywhere in between."} />
           {page.slug === "phone-repair" && <RepairCityLinks first="phone" className="mt-8" />}
+          {page.slug === "tech-recycling" && <RepairCityLinks first="recycle" className="mt-8" />}
           <ServiceAreaList className="mt-8" />
           {page.farther && (
             <div className="panel mt-4 p-5 sm:p-6">

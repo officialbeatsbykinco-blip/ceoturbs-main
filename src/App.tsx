@@ -1,6 +1,6 @@
 import { lazy, Suspense } from "react";
 import { Routes, Route } from "react-router-dom";
-import { REPAIR_CITIES, cityRepairPath, phoneRepairPath } from "@/content/city-repair";
+import { REPAIR_CITIES, cityRepairPath, phoneRepairPath, recyclingPath } from "@/content/city-repair";
 import { Layout } from "@/components/site/Layout";
 import Home from "./pages/Home";
 import { INSTALL_PATHS } from "@/content/install-pages";
@@ -32,6 +32,7 @@ const GoogleAdsLocal = lazy(() => import("./pages/GoogleAdsLocal"));
 const ComputerRepair = lazy(() => import("./pages/ComputerRepair"));
 const CityRepair = lazy(() => import("./pages/CityRepair"));
 const PhoneCityRepair = lazy(() => import("./pages/PhoneCityRepair"));
+const RecyclingCity = lazy(() => import("./pages/RecyclingCity"));
 const ComputerShop = lazy(() => import("./pages/ComputerShop"));
 const ComputerProduct = lazy(() => import("./pages/ComputerProduct"));
 const OfficeSetup = lazy(() => import("./pages/OfficeSetup"));
@@ -80,6 +81,9 @@ export default function App() {
           ))}
           {REPAIR_CITIES.map((c) => (
             <Route key={`phone-${c.slug}`} path={phoneRepairPath(c)} element={<PhoneCityRepair c={c} />} />
+          ))}
+          {REPAIR_CITIES.map((c) => (
+            <Route key={`recycle-${c.slug}`} path={recyclingPath(c)} element={<RecyclingCity c={c} />} />
           ))}
           <Route path="/computers" element={<ComputerShop />} />
           <Route path="/computers/:handle" element={<ComputerProduct />} />
