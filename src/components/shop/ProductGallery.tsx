@@ -62,7 +62,7 @@ export function ProductGallery({ items, badge, live3d, className }: { items: Gal
         <div className="no-scrollbar -mx-1 mt-3 hidden snap-x sm:flex gap-2 overflow-x-auto px-1 pb-1 sm:gap-2.5">
           {items.map((g, n) => (
             <button key={g.src + n} type="button" onClick={() => setI(n)} aria-label={`Show photo ${n + 1}: ${g.alt}`} aria-current={n === i} className={cn("aspect-square w-[60px] shrink-0 snap-start overflow-hidden rounded-xl bg-white ring-2 transition-all duration-200 sm:w-[68px] lg:w-[calc((100%-7*0.625rem)/8)] lg:min-w-[56px]", n === i ? "ring-turbo" : "ring-black/5 opacity-75 hover:opacity-100")}>
-              <img src={g.thumb} alt="" width={200} height={200} loading="lazy" decoding="async" className={cn("h-full w-full object-cover", g.live3d && "bg-[#0b1018]")} />
+              <img src={g.thumb} alt={g.alt} width={200} height={200} loading="lazy" decoding="async" className={cn("h-full w-full object-cover", g.live3d && "bg-[#0b1018]")} />
             </button>
           ))}
         </div>

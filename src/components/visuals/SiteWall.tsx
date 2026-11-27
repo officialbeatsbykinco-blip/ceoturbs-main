@@ -64,7 +64,7 @@ function Tile({ client, eager, hidden }: { client: Client; eager: boolean; hidde
       </div>
       <img
         src={`/img/work/${client.slug}-640.webp`}
-        alt={hidden ? "" : `${client.name} website homepage designed by CEO Turbo`}
+        alt={`${client.name} website homepage designed by CEO Turbo`}
         width={640}
         height={400}
         loading={eager ? "eager" : "lazy"}

@@ -112,6 +112,8 @@ for (const file of files) {
   for (const m of body.matchAll(/<img\b[^>]*>/g)) {
     const tag = m[0];
     if (!/\balt="/.test(tag)) err(route, `img without alt: ${tag.slice(0, 90)}`);
+    // Bing's site scan reports alt="" as "Alt attribute for images is missing", so every image gets real alt text.
+    else if (/\balt=""/.test(tag)) err(route, `img with empty alt (Bing counts it as missing): ${tag.slice(0, 90)}`);
     if (!/\bwidth="/.test(tag) || !/\bheight="/.test(tag)) warn(route, `img without width/height (layout shift): ${attr(tag, "src")}`);
   }
 

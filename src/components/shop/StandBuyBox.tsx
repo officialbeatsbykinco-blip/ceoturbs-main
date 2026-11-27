@@ -63,7 +63,7 @@ export function StandBuyBox({ business }: { business: string }) {
             {STAND_OPTIONS.map((o) => (
               <button key={o.id} type="button" role="radio" aria-checked={o.id === id} onClick={() => setId(o.id)} className={cn("pack-opt", o.id === id && "is-on")}>
                 {"best" in o && o.best && <span className="pack-tag pack-tag-best">Best value</span>}
-                <img src={STAND_GALLERY[o.id][0].thumb} alt="" width={200} height={200} loading="lazy" decoding="async" className="mx-auto hidden h-16 w-16 rounded-lg object-cover sm:block" />
+                <img src={STAND_GALLERY[o.id][0].thumb} alt={`Google review ${o.name.toLowerCase()}`} width={200} height={200} loading="lazy" decoding="async" className="mx-auto hidden h-16 w-16 rounded-lg object-cover sm:block" />
                 <span className="block text-sm font-semibold sm:mt-1.5">{o.name}</span>
                 <span className="block font-display text-base font-bold tabular-nums">{money2(o.price)}</span>
                 <span className="block px-1 text-[11px] leading-snug text-muted-foreground">{o.id === "kit" ? "Stand + 2 cards" : "Stand only"}</span>

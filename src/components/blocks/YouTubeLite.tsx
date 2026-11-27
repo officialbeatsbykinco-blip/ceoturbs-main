@@ -33,7 +33,7 @@ export function YouTubeLite({ video, className, where = "page" }: { video: YouTu
             className="absolute inset-0 h-full w-full"
             aria-label={`Play video: ${video.title}`}
           >
-            <img src={youtubeThumb(video.id)} alt="" loading="lazy" decoding="async" width={480} height={360} className="h-full w-full object-cover opacity-90 transition duration-300 group-hover:scale-[1.02] group-hover:opacity-100" />
+            <img src={youtubeThumb(video.id)} alt={`${video.title}: video thumbnail`} loading="lazy" decoding="async" width={480} height={360} className="h-full w-full object-cover opacity-90 transition duration-300 group-hover:scale-[1.02] group-hover:opacity-100" />
             <span className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" aria-hidden />
             <span className="absolute left-1/2 top-1/2 grid h-14 w-14 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full bg-[hsl(var(--ignite))] text-white shadow-lg transition-transform duration-300 group-hover:scale-110 sm:h-16 sm:w-16" aria-hidden>
               <Play className="ml-0.5 h-6 w-6 fill-current sm:h-7 sm:w-7" />

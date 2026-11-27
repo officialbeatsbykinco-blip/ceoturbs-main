@@ -76,7 +76,7 @@ export function GuidesHub() {
             {GUIDES.map((g) => (
               <li key={g.slug}>
                 <Link to={guidePath(g)} className="panel flex h-full flex-col overflow-hidden transition-shadow hover:shadow-[0_0_0_1px_hsl(var(--turbo)/0.5)]">
-                  <img src={guideImage(g).src} alt="" width={1200} height={630} loading="lazy" decoding="async" className="aspect-[1200/630] w-full object-cover" />
+                  <img src={guideImage(g).src} alt={guideImage(g).alt} width={1200} height={630} loading="lazy" decoding="async" className="aspect-[1200/630] w-full object-cover" />
                   <div className="flex flex-1 flex-col p-6">
                   <p className="text-sm text-muted-foreground">{g.readMinutes} min read</p>
                   <h2 className="mt-2 text-xl font-semibold leading-snug">{g.title}</h2>

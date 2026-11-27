@@ -175,7 +175,7 @@ export function BuyBox({
                 return (
                   <button key={p.id} type="button" role="radio" aria-checked={on} onClick={() => setPackId(p.id)} className={cn("pack-opt", on && "is-on")}>
                     {tag && <span className={cn("pack-tag", p.id === "10" ? "pack-tag-best" : "pack-tag-pop")}>{tag}</span>}
-                    <img src={`/img/review-cards/shop-${p.qty}-thumb.webp`} alt="" width={200} height={200} loading="lazy" decoding="async" className="mx-auto hidden h-16 w-16 rounded-lg object-cover sm:block" />
+                    <img src={`/img/review-cards/shop-${p.qty}-thumb.webp`} alt={`Pack of ${p.label}: NFC Google review cards`} width={200} height={200} loading="lazy" decoding="async" className="mx-auto hidden h-16 w-16 rounded-lg object-cover sm:block" />
                     <span className="block text-sm font-semibold sm:mt-1.5">{p.label}</span>
                     <span className="block font-display text-base font-bold tabular-nums">{money2(p.price)}</span>
                     <span className="block text-[11px] text-muted-foreground">{p.qty > 1 ? `${money2(p.price / p.qty)}/card` : "Single card"}</span>
@@ -220,7 +220,7 @@ export function BuyBox({
             <label className={cn("stand-add mt-2", withStand && "is-on")}>
               <input type="checkbox" checked={withStand} onChange={(e) => setWithStand(e.target.checked)} className="sr-only" />
               <span className="stand-add-box" aria-hidden>{withStand && <Check className="h-3.5 w-3.5" strokeWidth={3} />}</span>
-              <img src="/img/review-cards/hd/stand-front-thumb.webp" alt="" width={200} height={200} loading="lazy" decoding="async" className="h-11 w-11 shrink-0 rounded-lg object-cover" />
+              <img src="/img/review-cards/hd/stand-front-thumb.webp" alt="Google review card counter stand" width={200} height={200} loading="lazy" decoding="async" className="h-11 w-11 shrink-0 rounded-lg object-cover" />
               <span className="min-w-0 flex-1 text-sm leading-tight">
                 <span className="block font-semibold">Add a counter stand</span>
                 <span className="block text-xs text-muted-foreground">{asKit ? `Kit price: you save ${money2(standSave)}` : "For a shop counter. Tap or scan."}</span>
@@ -313,7 +313,7 @@ export function BuyBox({
       {stickyBar && (
         <div className={cn("pb-safe fixed inset-x-0 bottom-0 z-40 border-t border-border/80 bg-background/90 px-3 pt-3 backdrop-blur-xl transition-transform duration-300 lg:pb-3", showBar ? "translate-y-0" : "translate-y-full")} aria-hidden={!showBar}>
           <div className="container-x flex items-center gap-3 !px-0 lg:!px-8">
-            <img src="/img/review-cards/hd/card-hero-thumb.webp" alt="" width={200} height={200} className="h-11 w-11 shrink-0 rounded-lg object-cover" />
+            <img src="/img/review-cards/hd/card-hero-thumb.webp" alt="CEO Turbo NFC Google review card" width={200} height={200} className="h-11 w-11 shrink-0 rounded-lg object-cover" />
             <div className="min-w-0 flex-1">
               <p className="truncate text-sm font-semibold">
                 {pack.label}
