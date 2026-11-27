@@ -18,7 +18,7 @@ const pill = (y, text, w = 640) => `
   <rect x="${540 - w / 2}" y="${y}" width="${w}" height="104" rx="52" fill="#ff6a13"/>
   <text x="540" y="${y + 70}" font-family="${F}" font-size="50" font-weight="800" fill="#fff" text-anchor="middle">${text}</text>`;
 
-const footer = `<text x="540" y="1030" font-family="${F}" font-size="36" font-weight="600" fill="#b9c6e4" text-anchor="middle">Tampa Bay · Orlando · We come to you</text>`;
+const footer = `<text x="540" y="1030" font-family="${F}" font-size="36" font-weight="600" fill="#b9c6e4" text-anchor="middle">Central Florida · We come to you</text>`;
 
 // Laptop with a blue screen
 const laptop = (cx, cy, s = 1) => `
